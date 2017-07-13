@@ -20,7 +20,6 @@ namespace GEM
 		enum ActionResult
 		{
 			AR_OK,///! Everything is fine.
-			AR_OK_TERMINATE,///! Everything is fine, but we must terminate. Well, we must do it sometimes, don't we?
 			AR_ERROR///! Something's gone bad it we must terminate
 		};
 
