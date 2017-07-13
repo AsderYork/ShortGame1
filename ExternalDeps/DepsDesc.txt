@@ -1,0 +1,23 @@
+#LogForCpp
+include/log4cpp
+debug log4cpp.lib, log4cpp.pdb
+release log4cpp.lib
+
+#Ogre3D v2.1
+OGRE_HOME
+OIS_HOME
+
+#CEGUI (default branch. Commit e220263)
+CEGUI_HOME
+CEGUI_INSTALL_HOME
+
+#Cereal 1.2.2
+//It's a header-only library. So just headers
+
+#OpenSSL 1.1.0e
+
+#Boost 1.64.0
+BOOST_HOME
+
+#Doxygen
+//I guess any will do

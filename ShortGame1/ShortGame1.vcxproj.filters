@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="LogHelper">
+      <UniqueIdentifier>{cdc32473-2078-4886-9a5d-bf184dabbc7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{5161b6c7-2c2d-4ca0-8ead-e5186aa3b2fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PrecompiledHeader">
+      <UniqueIdentifier>{ba7e6bd6-9b0c-47d2-bef3-f025b43cc626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineController">
+      <UniqueIdentifier>{b276e375-2382-4c38-9c0b-d265be40ea6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDL2Connectors">
+      <UniqueIdentifier>{20d9f027-05d8-4612-918e-6eefdf8dc135}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LogHelper.h">
+      <Filter>LogHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>PrecompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>PrecompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineController.h">
+      <Filter>EngineController</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL2_WindowCreate.h">
+      <Filter>SDL2Connectors</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LogHelper.cpp">
+      <Filter>LogHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="ShortGame1.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>PrecompiledHeader</Filter>
+    </ClCompile>
+    <ClCompile Include="SDL2_WindowCreate.cpp">
+      <Filter>SDL2Connectors</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineController.cpp">
+      <Filter>EngineController</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
