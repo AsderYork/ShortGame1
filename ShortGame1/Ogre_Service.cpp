@@ -8,6 +8,7 @@ namespace GEM
 		m_ogreLog.connectToOgreLog();
 
 		m_root = std::make_unique<Ogre::Root>("plugins.cfg", "ogre.cfg");
+
 		return ActionResult::AR_OK;
 	}
 
@@ -29,5 +30,8 @@ namespace GEM
 	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::postFrame(double timeDelta)
 	{
 		return ActionResult();
+	}
+	Ogre_Service::Ogre_Service(SDL_Controller * SDL) : m_sdlController(SDL)
+	{
 	}
 }

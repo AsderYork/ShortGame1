@@ -4,21 +4,15 @@
 #include "Ogre_Service.h"
 
 
-void StopPoint()
-{
-	printf("And were done!'n");
-}
+
 
 
 int main(int argc, char *argv[])
 {
 	
-	
-	std::atexit(StopPoint);
-
 	GEM::EngineController Controller;
-	Controller.AddService<GEM::SDL_Controller>();
-	Controller.AddService<GEM::Ogre_Service>();
+	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
+	auto OgreController = Controller.AddService<GEM::Ogre_Service>(SDLController);
     return Controller.start();
 }
 

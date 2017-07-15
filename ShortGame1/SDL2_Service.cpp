@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SDL2_Service.h"
+#include <cassert>
 
 namespace GEM
 {
@@ -23,18 +24,29 @@ namespace GEM
 		}
 		SDL_Quit();
 	}
-	bool SDL_Controller::MakeWindow()
+	std::string SDL_Controller::MakeWindow(int sizeX, int sizeY, bool fullscreen)
 	{
+		assert(m_sdlWindow == nullptr);//There can't be more then one window!
+
+
 		int posX = SDL_WINDOWPOS_CENTERED_DISPLAY(1);
 		int posY = SDL_WINDOWPOS_CENTERED_DISPLAY(1);
 
 		m_sdlWindow = SDL_CreateWindow("A window",
 			posX,               // initial x position
 			posY,               // initial y position
-			320,              // width, in pixels
-			480,             // height, in pixels
-			SDL_WINDOW_SHOWN);
-		return false;
+			sizeX,              // width, in pixels
+			sizeY,             // height, in pixels
+			SDL_WINDOW_SHOWN | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0));
+
+		SDL_VERSION(&m_windowInfo.version);
+		if (SDL_GetWindowWMInfo(m_sdlWindow, &m_windowInfo) == SDL_FALSE)
+		{
+			LOGCATEGORY("SDL_Controller/MakeWindow").crit("Can't get info about window. %s", SDL_GetError());
+			return std::string();
+		}
+		
+		return std::to_string((uintptr_t)m_windowInfo.info.win.window);
 	}
 	bool SDL_Controller::processEvents()
 	{

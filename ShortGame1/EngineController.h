@@ -70,7 +70,7 @@ namespace GEM
 		during creation that way. Actually, services do not need any parameters on initialization time. They now better, how they shold be created.
 		*/
 		template<class ServiceClass, typename ...Args>
-		void AddService(Args ...args);
+		ServiceClass* AddService(Args ...args);
 
 		/**
 		If we need to start shuting down after this frame, this method should be called.
@@ -107,10 +107,11 @@ namespace GEM
 	};
 
 	template<class ServiceClass, typename ...Args>
-	void EngineController::AddService(Args ...args)
+	ServiceClass* EngineController::AddService(Args ...args)
 	{
 		auto ServiceObj = static_cast<Service*>(new ServiceClass(args...));
 		ServiceObj->setEngineController(this);
 		m_servicesVector.push_back(std::unique_ptr<Service>(ServiceObj));
+		return static_cast<ServiceClass*>(ServiceObj);
 	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL2\SDL.h>
+#include <SDL2\SDL_syswm.h>
 #include "EngineController.h"
 
 namespace GEM
@@ -27,13 +28,22 @@ namespace GEM
 		SDL_Controller();
 		~SDL_Controller();
 
-		bool MakeWindow();
+		/**!
+		\brief Creates a window.
+		\param[in] sizeX A width of window. In pixels
+		\param[in] sizeY A height of window. In pixels
+		\param[in] fullscreen Set to true, to make window occupy the entire screen, otherwise it'll be just a window. 
+		\note SizeX and SizeY do set the resolution. Becouse how you'll show a 640x280 set of pixels in 10x10 window?
+		\returns Returns HWND of the window as a string, or returns empty string, if window wasn't created.
+		*/
+		std::string MakeWindow(int sizeX=320, int sizeY=480, bool fullscreen=false);
 		bool processEvents();
 
 	private:
 		//The data, that is useful for window construction
 		int m_residentScreen;//Screen on which window must appear. 0 for default one.
 		SDL_Window *m_sdlWindow;
+		SDL_SysWMinfo m_windowInfo;
 		
 
 
