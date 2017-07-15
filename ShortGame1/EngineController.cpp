@@ -1,14 +1,22 @@
 #include "stdafx.h"
 #include "EngineController.h"
 
+
 int GEM::EngineController::start()
 {
+	GEM::logHelper::setLog("laststart.log");
+	LOGCATEGORY("EngineController/start").info("Log is set and start have begun!");
+
 	if (!initializeServices()){
 		shutdownServices();
 		LOGCATEGORY("EngineController/start").crit("Can't even initialize services. Terminating.");
 		return 0;
 	}
 
+	
+
+
+	LOGCATEGORY("EngineController/start").info("Everything is ready for a main loop!");
 	//Main loop!
 	double timeDelta = 1;
 	bool TerminateUnexpected = false;//Set to true if termination was not becouse of terminate() call;
@@ -19,13 +27,20 @@ int GEM::EngineController::start()
 		if (!doPostFrame(timeDelta)) { TerminateUnexpected = true; break; }
 	}
 
+	if(TerminateUnexpected)
+	{//If reaction to normal and abnormal termination is practicly simmilar, then what's the point of differentiation?
+		LOGCATEGORY("EngineController/start").error("Termination was unexpected. Probably something bad happened!");
+	}
 
+
+	LOGCATEGORY("EngineController/start").info("All work is done. Terminating!");
 	shutdownServices();
 	return 0;
 }
 
 void GEM::EngineController::shutdown()
 {
+	LOGCATEGORY("EngineController/shutdown").info("Shutdown gets called");
 	m_shouldTerminate = true;
 }
 

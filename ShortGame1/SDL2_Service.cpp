@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "SDL2_WindowCreate.h"
+#include "SDL2_Service.h"
 
 namespace GEM
 {
@@ -61,6 +61,7 @@ namespace GEM
 			LOGCATEGORY("SDL_Cntroller/Constructor").crit("%s", SDL_GetError());
 			return ActionResult::AR_ERROR;
 		}
+		MakeWindow();
 		return  ActionResult::AR_OK;
 	}
 	void SDL_Controller::shutdown()
@@ -84,7 +85,8 @@ namespace GEM
 			case SDL_WINDOWEVENT:
 				break;
 			case SDL_QUIT:
-				return ActionResult::AR_OK_TERMINATE;
+				LOGCATEGORY("SDL_Controller/preFrame").info("Quit event is cought! Ah, that was a beautiful time!");
+				getEngineController()->shutdown();
 				break;
 			default:
 				break;

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "EngineController.h"
-#include "SDL2_WindowCreate.h"
+#include "SDL2_Service.h"
+#include "Ogre_Service.h"
+
 
 void StopPoint()
 {
@@ -10,13 +12,13 @@ void StopPoint()
 
 int main(int argc, char *argv[])
 {
+	
+	
 	std::atexit(StopPoint);
-
-	GEM::SDL_Controller SDLController;
-	SDLController.MakeWindow();
 
 	GEM::EngineController Controller;
 	Controller.AddService<GEM::SDL_Controller>();
+	Controller.AddService<GEM::Ogre_Service>();
     return Controller.start();
 }
 
