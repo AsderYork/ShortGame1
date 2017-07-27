@@ -307,32 +307,18 @@ namespace GEM
 		Ogre::Archive *archiveLibrary = Ogre::ArchiveManager::getSingletonPtr()->load(
 			dataFolder + "Hlms/Common/" + shaderSyntax,
 			"FileSystem", true);
-		Ogre::Archive *archiveLibraryAny = Ogre::ArchiveManager::getSingletonPtr()->load(
-			dataFolder + "Hlms/Common/Any",
-			"FileSystem", true);
+
 		Ogre::Archive *archivePbsLibraryAny = Ogre::ArchiveManager::getSingletonPtr()->load(
 			dataFolder + "Hlms/Pbs/Any",
-			"FileSystem", true);
-		Ogre::Archive *archiveUnlitLibraryAny = Ogre::ArchiveManager::getSingletonPtr()->load(
-			dataFolder + "Hlms/Unlit/Any",
 			"FileSystem", true);
 
 		Ogre::ArchiveVec library;
 		library.push_back(archiveLibrary);
-		library.push_back(archiveLibraryAny);
-
-		Ogre::Archive *archiveUnlit = Ogre::ArchiveManager::getSingletonPtr()->load(
-			dataFolder + "Hlms/Unlit/" + shaderSyntax,
-			"FileSystem", true);
-
-		library.push_back(archiveUnlitLibraryAny);
-		Ogre::HlmsUnlit *hlmsUnlit = OGRE_NEW Ogre::HlmsUnlit(archiveUnlit, &library);
-		Ogre::Root::getSingleton().getHlmsManager()->registerHlms(hlmsUnlit);
-		library.pop_back();
 
 		Ogre::Archive *archivePbs = Ogre::ArchiveManager::getSingletonPtr()->load(
 			dataFolder + "Hlms/Pbs/" + shaderSyntax,
 			"FileSystem", true);
+
 		library.push_back(archivePbsLibraryAny);
 		Ogre::HlmsPbs *hlmsPbs = OGRE_NEW Ogre::HlmsPbs(archivePbs, &library);
 		Ogre::Root::getSingleton().getHlmsManager()->registerHlms(hlmsPbs);
@@ -350,7 +336,6 @@ namespace GEM
 			if (!supportsNoOverwriteOnTextureBuffers)
 			{
 				hlmsPbs->setTextureBufferDefaultSize(512 * 1024);
-				hlmsUnlit->setTextureBufferDefaultSize(512 * 1024);
 			}
 		}
 	}
