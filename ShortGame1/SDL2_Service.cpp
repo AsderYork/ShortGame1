@@ -73,7 +73,6 @@ namespace GEM
 			LOGCATEGORY("SDL_Cntroller/Constructor").crit("%s", SDL_GetError());
 			return ActionResult::AR_ERROR;
 		}
-		MakeWindow();
 		return  ActionResult::AR_OK;
 	}
 	void SDL_Controller::shutdown()

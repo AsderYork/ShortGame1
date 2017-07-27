@@ -27,8 +27,25 @@ namespace GEM
 		GEM::OgreLogToLogForCpp m_ogreLog;
 
 		std::unique_ptr<Ogre::Root> m_root;
+		Ogre::RenderWindow* m_renderWindow;
+		Ogre::SceneManager* m_sceneManager;
+		Ogre::Camera* m_camera;
+		Ogre::CompositorWorkspace* m_workspace;
+		Ogre::SceneNode* m_node;
 
 		SDL_Controller* m_sdlController;
+
+		/**! 
+		Retrives width and height from Ogre's config. If it can't get this values, 1280x720 get's returned.
+		*/
+		std::pair<int, int> getWidthHeighgtFromConfig();
+		void chooseSceneManager();
+		void createCamera();
+		Ogre::CompositorWorkspace* createWorkspace();
+		void CreateCube();
+		void CreateCubeFromMesh();
+		Ogre::IndexBufferPacked* createIndexBuffer();
+		void RegisterHLMS();
 	};
 
 }
