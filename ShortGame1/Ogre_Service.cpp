@@ -36,7 +36,7 @@ namespace GEM
 
 		m_root = std::make_unique<Ogre::Root>("plugins.cfg", "ogre.cfg");
 
-		if ( !m_root->restoreConfig())
+		if ( (!m_root->restoreConfig()) || (true))
 		{
 			if (!m_root->showConfigDialog())
 			{
@@ -71,6 +71,14 @@ namespace GEM
 		createCamera();
 		m_workspace = createWorkspace();
 		CreateCube();
+
+		Ogre::Light *light = m_sceneManager->createLight();
+		Ogre::SceneNode *lightNode = m_sceneManager->getRootSceneNode()->createChildSceneNode();
+		lightNode->attachObject(light);
+		light->setPowerScale(Ogre::Math::PI); //Since we don't do HDR, counter the PBS' division by PI
+		light->setType(Ogre::Light::LT_DIRECTIONAL);
+		light->setDirection(Ogre::Vector3(-1, -1, -1).normalisedCopy());
+
 		return ActionResult::AR_OK;
 	}
 

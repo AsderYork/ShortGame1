@@ -261,7 +261,4 @@ __pycache__/
 *.pyc
 
 #ignore game resoucres. Even shaders.
-./build/Resources/
-/build/Resources/media/Hlms
-/build/Resources/media/Hlms
-/build/Resources/media/Hlms
+build/

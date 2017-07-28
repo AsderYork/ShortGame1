@@ -142,7 +142,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>log4cpp.lib;OgreMain_d.lib;CEGUIBase-9999_d.lib;CEGUIOgreRenderer-9999_d.lib;SDL2.lib;SDL2main.lib;OgreHlmsPbs.lib;OgreHlmsUnlit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>log4cpp.lib;OgreMain.lib;CEGUIBase-9999.lib;CEGUIOgreRenderer-9999.lib;SDL2.lib;SDL2main.lib;OgreHlmsPbs.lib;OgreHlmsUnlit.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
