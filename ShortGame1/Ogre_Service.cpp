@@ -106,6 +106,10 @@ namespace GEM
 	Ogre_Service::Ogre_Service(SDL_Controller * SDL) : m_sdlController(SDL)
 	{
 	}
+	Ogre::Root* Ogre_Service::getRoot()
+	{
+		return m_root.get();
+	}
 	std::pair<int, int> Ogre_Service::getWidthHeighgtFromConfig()
 	{
 		Ogre::ConfigOptionMap& cfgOpts = m_root->getRenderSystem()->getConfigOptions(); 
@@ -221,11 +225,17 @@ namespace GEM
 		mesh->_setBoundingSphereRadius(1.732f);
 
 
-		Ogre::Item *item = m_sceneManager->createItem(mesh, Ogre::SCENE_DYNAMIC);
+		/*Ogre::Item *item = m_sceneManager->createItem(mesh, Ogre::SCENE_DYNAMIC);
 		Ogre::SceneNode *sceneNode = m_sceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->
 			createChildSceneNode(Ogre::SCENE_DYNAMIC);
 		sceneNode->attachObject(item);
 		sceneNode->setPosition(-6, 0, 0);
+
+		Ogre::Item *item2 = m_sceneManager->createItem("ACube");
+		Ogre::SceneNode *sceneNode2 = m_sceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->
+			createChildSceneNode(Ogre::SCENE_DYNAMIC);
+		sceneNode2->attachObject(item2);
+		sceneNode2->setPosition(6, 0, 0);*/
 	}
 	void Ogre_Service::CreateCubeFromMesh()
 	{
@@ -360,7 +370,7 @@ namespace GEM
 	}
 	void MovableCamera::AjustPosition(float timeDelta)
 	{
-		m_camera->moveRelative(m_positionChange * timeDelta * 0.01);
+		m_camera->moveRelative(m_positionChange * timeDelta * 0.03);
 		m_camera->yaw(Ogre::Radian(1)*m_yaw*timeDelta*0.001);
 		m_camera->pitch(Ogre::Radian(1)*m_pitch*timeDelta*0.001);
 		m_yaw = 0;

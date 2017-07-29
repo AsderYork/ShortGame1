@@ -54,6 +54,8 @@ namespace GEM
 
 		Ogre_Service(SDL_Controller* SDL);
 
+		Ogre::Root* getRoot();
+
 
 	private:
 		/*Ogre uses its own logging system. Won't tolerate that! This thing redirects ogre log messages to log4cpp, which is */
