@@ -36,7 +36,7 @@ namespace GEM
 
 		m_root = std::make_unique<Ogre::Root>("plugins.cfg", "ogre.cfg");
 
-		if ( (!m_root->restoreConfig()) || (true))
+		if ( (!m_root->restoreConfig()) || (false))
 		{
 			if (!m_root->showConfigDialog())
 			{
@@ -89,6 +89,7 @@ namespace GEM
 
 	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::preFrame(double timeDelta)
 	{
+		tmpCamera.AjustPosition(timeDelta);
 		return ActionResult();
 	}
 
@@ -147,14 +148,8 @@ namespace GEM
 	}
 	void Ogre_Service::createCamera()
 	{
-		m_camera = m_sceneManager->createCamera("Main Camera");
-
-		m_camera->setPosition(Ogre::Vector3(0, 0, 15));
-		// Look back along -Z
-		m_camera->lookAt(Ogre::Vector3(0, 0, 0));
-		m_camera->setNearClipDistance(0.2f);
-		m_camera->setFarClipDistance(1000.0f);
-		m_camera->setAutoAspectRatio(true);
+		tmpCamera.SetCamera(m_sceneManager, m_sdlController);
+		
 	}
 	Ogre::CompositorWorkspace * Ogre_Service::createWorkspace()
 	{
@@ -166,7 +161,7 @@ namespace GEM
 			compositorManager->createBasicWorkspaceDef(workspaceName, Ogre::ColourValue(0.2f, 0.4f, 0.6f), Ogre::IdString());
 		}
 
-		return compositorManager->addWorkspace(m_sceneManager, m_renderWindow, m_camera, workspaceName, true);
+		return compositorManager->addWorkspace(m_sceneManager, m_renderWindow, tmpCamera.getCamera(), workspaceName, true);
 	}
 	void Ogre_Service::CreateCube()
 	{
@@ -346,5 +341,80 @@ namespace GEM
 				hlmsPbs->setTextureBufferDefaultSize(512 * 1024);
 			}
 		}
+	}
+	
+	//TEMPORAL CAMERA.
+	void MovableCamera::SetCamera(Ogre::SceneManager * sceneManager, SDL_Controller * SDLController)
+	{
+		m_camera = sceneManager->createCamera("Main Camera");
+
+		m_camera->setPosition(Ogre::Vector3(0, 0, 15));
+		// Look back along -Z
+		m_camera->lookAt(Ogre::Vector3(0, 0, 0));
+		m_camera->setNearClipDistance(0.2f);
+		m_camera->setFarClipDistance(1000.0f);
+		m_camera->setAutoAspectRatio(true);
+
+		SDLController->registerKeyboardListener(this);
+		SDLController->registerMouseListener(this);
+	}
+	void MovableCamera::AjustPosition(float timeDelta)
+	{
+		m_camera->moveRelative(m_positionChange * timeDelta * 0.01);
+		m_camera->yaw(Ogre::Radian(1)*m_yaw*timeDelta*0.001);
+		m_camera->pitch(Ogre::Radian(1)*m_pitch*timeDelta*0.001);
+		m_yaw = 0;
+		m_pitch = 0;
+	}
+	Ogre::Camera * MovableCamera::getCamera()
+	{
+		return m_camera;
+	}
+	void MovableCamera::textInput(const SDL_TextInputEvent & arg)
+	{
+	}
+	void MovableCamera::keyPressed(const SDL_KeyboardEvent & arg)
+	{
+		switch (arg.keysym.sym)
+		{
+		case SDLK_w:
+			m_positionChange.z = -1;
+			break;
+		case SDLK_s:
+			m_positionChange.z = 1;
+			break;
+		case SDLK_a:
+			m_positionChange.x = -1;
+			break;
+		case SDLK_d:
+			m_positionChange.x = 1;
+			break;
+		}
+		
+	}
+	void MovableCamera::keyReleased(const SDL_KeyboardEvent & arg)
+	{
+		switch (arg.keysym.sym)
+		{
+		case SDLK_w:
+		case SDLK_s:
+			m_positionChange.z = 0;
+			break;
+		case SDLK_a:
+		case SDLK_d:
+			m_positionChange.x = 0;
+			break;
+		}
+	}
+	void MovableCamera::mouseMoved(const SDL_Event & arg)
+	{
+		m_yaw -= arg.motion.xrel;
+		m_pitch -= arg.motion.yrel;
+	}
+	void MovableCamera::mousePressed(const SDL_MouseButtonEvent & arg)
+	{
+	}
+	void MovableCamera::mouseReleased(const SDL_MouseButtonEvent & arg)
+	{
 	}
 }

@@ -7,6 +7,39 @@
 
 namespace GEM
 {
+	/**
+	Temporary class. Allow camera to be moved with mouse and keys!
+	*/
+	class MovableCamera : public SDL_KeyboardListener, public SDL_MouseListener
+	{
+	public:
+		//crates the camera; Call in Initialize of OgreService
+		void SetCamera(Ogre::SceneManager* sceneManager, SDL_Controller* SDLController);
+		//Applys changes to a camera position. Call in preframe
+		void AjustPosition(float timeDelta);
+
+		Ogre::Camera* getCamera();
+
+	private:
+		Ogre::Camera* m_camera;
+
+		//Change of position and rotation since last frame;
+		Ogre::Vector3 m_positionChange = Ogre::Vector3::ZERO;
+		float m_yaw = 0;
+		float m_pitch = 0;
+
+		// Унаследовано через SDL_KeyboardListener
+		virtual void textInput(const SDL_TextInputEvent & arg) override;
+		virtual void keyPressed(const SDL_KeyboardEvent & arg) override;
+		virtual void keyReleased(const SDL_KeyboardEvent & arg) override;
+
+		// Унаследовано через SDL_MouseListener
+		virtual void mouseMoved(const SDL_Event & arg) override;
+		virtual void mousePressed(const SDL_MouseButtonEvent & arg) override;
+		virtual void mouseReleased(const SDL_MouseButtonEvent & arg) override;
+	};
+
+
 	/**!
 	This class allows controll of SDL. Creation of window, OS Messages processing and user input
 	*/
@@ -29,10 +62,9 @@ namespace GEM
 		std::unique_ptr<Ogre::Root> m_root;
 		Ogre::RenderWindow* m_renderWindow;
 		Ogre::SceneManager* m_sceneManager;
-		Ogre::Camera* m_camera;
 		Ogre::CompositorWorkspace* m_workspace;
 		Ogre::SceneNode* m_node;
-
+		MovableCamera tmpCamera;
 		SDL_Controller* m_sdlController;
 
 		/**! 

@@ -71,6 +71,8 @@
     <ClCompile Include="SDL2_Service.cpp">
       <Filter>SDL2_Service</Filter>
     </ClCompile>
-    <ClCompile Include="Ogre_Service.cpp" />
+    <ClCompile Include="Ogre_Service.cpp">
+      <Filter>Ogre\Ogre_Service</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

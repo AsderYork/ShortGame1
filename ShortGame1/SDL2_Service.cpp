@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SDL2_Service.h"
 #include <cassert>
+#include <algorithm>
 
 namespace GEM
 {
@@ -29,8 +30,8 @@ namespace GEM
 		assert(m_sdlWindow == nullptr);//There can't be more then one window!
 
 
-		int posX = SDL_WINDOWPOS_CENTERED_DISPLAY(1);
-		int posY = SDL_WINDOWPOS_CENTERED_DISPLAY(1);
+		int posX = SDL_WINDOWPOS_CENTERED_DISPLAY(0);
+		int posY = SDL_WINDOWPOS_CENTERED_DISPLAY(0);
 
 		m_sdlWindow = SDL_CreateWindow("A window",
 			posX,               // initial x position
@@ -45,8 +46,18 @@ namespace GEM
 			LOGCATEGORY("SDL_Controller/MakeWindow").crit("Can't get info about window. %s", SDL_GetError());
 			return std::string();
 		}
-		
+
+		SDL_SetRelativeMouseMode(m_captureMouse ? SDL_TRUE : SDL_FALSE);
+		//SDL_CaptureMouse( m_captureMouse ? SDL_TRUE : SDL_FALSE );
 		return std::to_string((uintptr_t)m_windowInfo.info.win.window);
+	}
+	void SDL_Controller::registerMouseListener(SDL_MouseListener * listener)
+	{
+		m_mouseVector.push_back(listener);
+	}
+	void SDL_Controller::registerKeyboardListener(SDL_KeyboardListener * listener)
+	{
+		m_keyboardVector.push_back(listener);
 	}
 	bool SDL_Controller::processEvents()
 	{
@@ -58,15 +69,46 @@ namespace GEM
 			case SDL_WINDOWEVENT:
 				break;
 			case SDL_QUIT:
+				LOGCATEGORY("SDL_Controller/preFrame").info("Quit event is cought! Ah, that was a beautiful time!");
 				return false;
 				break;
+
+			case SDL_MOUSEBUTTONDOWN:
+				for (auto& obj : m_mouseVector) { obj->mousePressed(evt.button); }
+				break;
+
+			case SDL_MOUSEBUTTONUP:
+				for (auto& obj : m_mouseVector) { obj->mouseReleased(evt.button); }
+				break;
+
+			case SDL_MOUSEWHEEL://MousseMoved realy takes Mousewheel and mousemotion's events
+			case SDL_MOUSEMOTION:
+				for (auto& obj : m_mouseVector) { obj->mouseMoved(evt); }
+				break;
+
+			case SDL_KEYDOWN:
+				if(evt.key.keysym.scancode == SDL_SCANCODE_F1){//if F1 - do reverse of mouse capturing
+					m_captureMouse = !m_captureMouse;
+					SDL_SetRelativeMouseMode(m_captureMouse ? SDL_TRUE : SDL_FALSE);
+				}
+				for (auto& obj : m_keyboardVector) { obj->keyPressed(evt.key); }
+				break;
+
+			case SDL_KEYUP:
+				for (auto& obj : m_keyboardVector) { obj->keyReleased(evt.key); }
+				break;
+
+			case SDL_TEXTINPUT:
+				for (auto& obj : m_keyboardVector) { obj->textInput(evt.text); }
+				break;
+
 			default:
 				break;
 			}
 		}
 		return true;
 	}
-	
+
 	GEM::Service::ActionResult SDL_Controller::initialize()
 	{
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -88,20 +130,9 @@ namespace GEM
 	}
 	GEM::Service::ActionResult SDL_Controller::preFrame(double timeDelta)
 	{
-		SDL_Event evt;
-		while (SDL_PollEvent(&evt))
+		if (!processEvents())
 		{
-			switch (evt.type)
-			{
-			case SDL_WINDOWEVENT:
-				break;
-			case SDL_QUIT:
-				LOGCATEGORY("SDL_Controller/preFrame").info("Quit event is cought! Ah, that was a beautiful time!");
-				getEngineController()->shutdown();
-				break;
-			default:
-				break;
-			}
+			getEngineController()->shutdown();
 		}
 		return ActionResult::AR_OK;
 	}
