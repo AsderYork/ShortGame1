@@ -65,8 +65,10 @@ namespace GEM
 			(fullscreen == "Yes" ? true : false),
 			&params);
 
-
+		setupResources();
 		RegisterHLMS();
+
+		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups(true);
 		chooseSceneManager();
 		createCamera();
 		m_workspace = createWorkspace();
@@ -89,6 +91,7 @@ namespace GEM
 
 	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::preFrame(double timeDelta)
 	{
+		LOGCATEGORY("FPS").info("%10.8f", 1/timeDelta);
 		tmpCamera.AjustPosition(timeDelta);
 		return ActionResult();
 	}
@@ -149,6 +152,9 @@ namespace GEM
 		//Set sane defaults for proper shadow mapping
 		m_sceneManager->setShadowDirectionalLightExtrusionDistance(500.0f);
 		m_sceneManager->setShadowFarDistance(500.0f);
+		//m_sceneManager->setAmbientLight(Ogre::ColourValue(0.8, 0.8, 0.8, 1), Ogre::ColourValue(0.8, 0.8, 0.8, 1), Ogre::Vector3(0, 1, 0));
+
+		m_sceneManager->setAmbientLight(Ogre::ColourValue(1,1,1, 1), Ogre::ColourValue(1, 1, 1, 1), Ogre::Vector3(0, 1, 0));
 	}
 	void Ogre_Service::createCamera()
 	{
@@ -225,17 +231,6 @@ namespace GEM
 		mesh->_setBoundingSphereRadius(1.732f);
 
 
-		/*Ogre::Item *item = m_sceneManager->createItem(mesh, Ogre::SCENE_DYNAMIC);
-		Ogre::SceneNode *sceneNode = m_sceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->
-			createChildSceneNode(Ogre::SCENE_DYNAMIC);
-		sceneNode->attachObject(item);
-		sceneNode->setPosition(-6, 0, 0);
-
-		Ogre::Item *item2 = m_sceneManager->createItem("ACube");
-		Ogre::SceneNode *sceneNode2 = m_sceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->
-			createChildSceneNode(Ogre::SCENE_DYNAMIC);
-		sceneNode2->attachObject(item2);
-		sceneNode2->setPosition(6, 0, 0);*/
 	}
 	void Ogre_Service::CreateCubeFromMesh()
 	{
@@ -352,6 +347,33 @@ namespace GEM
 			}
 		}
 	}
+
+	void Ogre_Service::setupResources()
+	{ // Load resource paths from config file
+		Ogre::ConfigFile cf;
+		cf.load("resources2.cfg");
+
+		// Go through all sections & settings in the file
+		Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
+
+		Ogre::String secName, typeName, archName;
+		while (seci.hasMoreElements())
+		{
+			secName = seci.peekNextKey();
+			Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
+
+			if (secName != "Hlms")
+			{
+				Ogre::ConfigFile::SettingsMultiMap::iterator i;
+				for (i = settings->begin(); i != settings->end(); ++i)
+				{
+					typeName = i->first;
+					archName = i->second;
+					Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
+				}
+			}
+		}
+	}
 	
 	//TEMPORAL CAMERA.
 	void MovableCamera::SetCamera(Ogre::SceneManager * sceneManager, SDL_Controller * SDLController)
@@ -370,9 +392,11 @@ namespace GEM
 	}
 	void MovableCamera::AjustPosition(float timeDelta)
 	{
-		m_camera->moveRelative(m_positionChange * timeDelta * 0.03);
-		m_camera->yaw(Ogre::Radian(1)*m_yaw*timeDelta*0.001);
-		m_camera->pitch(Ogre::Radian(1)*m_pitch*timeDelta*0.001);
+		float MoveSpeed = 7;
+		float TurnSpeed = 0.1;
+		m_camera->moveRelative(m_positionChange * timeDelta * MoveSpeed);
+		m_camera->yaw(Ogre::Radian(1)*m_yaw*timeDelta*TurnSpeed);
+		m_camera->pitch(Ogre::Radian(1)*m_pitch*timeDelta*TurnSpeed);
 		m_yaw = 0;
 		m_pitch = 0;
 	}

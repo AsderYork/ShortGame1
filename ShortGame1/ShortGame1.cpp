@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
 	auto OgreController = Controller.AddService<GEM::Ogre_Service>(SDLController);
-	auto MarchingVis = Controller.AddService<GEM::MarchingToOgre>("ACube", OgreController, &Calc, 6, 1);
+	auto MarchingVis = Controller.AddService<GEM::MarchingToOgre>("Cube_d.mesh", OgreController, &Calc, 6, 1);
 
     return Controller.start();
 }

@@ -1,12 +1,13 @@
 #pragma once
 #include "Ogre_Service.h"
+#include "SDL2_Service.h"
 #include "MarchingCubes.h"
 #include "EngineController.h"
 #include <string>
 
 namespace GEM
 {
-	class MarchingToOgre : public Service
+	class MarchingToOgre : public Service, public SDL_MouseListener
 	{
 	public:
 		/**
@@ -14,13 +15,23 @@ namespace GEM
 		*/
 		MarchingToOgre(std::string MeshName, Ogre_Service* OgreService, MarchingCubesCalculator* Calc, int MapScale, int MeshScale);
 
+		/**
+		Changes the colour of meshes to match the values in map
+		It is required, that size of map remains the same!
+		*/
+		void updatePrepresentation();
+
 		// Унаследовано через Service
 		virtual ActionResult initialize();
 		virtual void shutdown();
 		virtual ActionResult preFrame(double timeDelta) override;
 		virtual ActionResult frame(double timeDelta) override;
 		virtual ActionResult postFrame(double timeDelta) override;
+
 	private:
+
+		void CreateOrUpdateDatablock(int id, float value);
+
 		int m_mapScale;
 		int m_meshScale;
 		std::string m_meshName;
@@ -28,5 +39,10 @@ namespace GEM
 		MarchingCubesCalculator* m_calc;
 		std::vector<Ogre::Item*> m_itemsVector;
 		std::vector<Ogre::SceneNode*> m_nodesVector;
+
+		// Унаследовано через SDL_MouseListener
+		virtual void mouseMoved(const SDL_Event & arg) override;
+		virtual void mousePressed(const SDL_MouseButtonEvent & arg) override;
+		virtual void mouseReleased(const SDL_MouseButtonEvent & arg) override;
 	};
 }

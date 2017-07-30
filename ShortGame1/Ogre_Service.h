@@ -80,6 +80,7 @@ namespace GEM
 		void CreateCubeFromMesh();
 		Ogre::IndexBufferPacked* createIndexBuffer();
 		void RegisterHLMS();
+		void setupResources();
 	};
 
 }

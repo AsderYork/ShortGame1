@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EngineController.h"
+#include <chrono>
 
 
 int GEM::EngineController::start()
@@ -19,12 +20,22 @@ int GEM::EngineController::start()
 	LOGCATEGORY("EngineController/start").info("Everything is ready for a main loop!");
 	//Main loop!
 	double timeDelta = 1;
+
+	std::chrono::time_point<std::chrono::system_clock> start, end;
+
 	bool TerminateUnexpected = false;//Set to true if termination was not becouse of terminate() call;
 	while(!m_shouldTerminate)
 	{
+		start = std::chrono::system_clock::now();
+
 		if (!doPreFrame(timeDelta)) { TerminateUnexpected = true; break; }
 		if (!doFrame(timeDelta)) { TerminateUnexpected = true; break; }
 		if (!doPostFrame(timeDelta)) { TerminateUnexpected = true; break; }
+
+		end = std::chrono::system_clock::now();
+
+		timeDelta = std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count();
+		if (timeDelta > 1) { timeDelta = 1; }//So that nothing would brake on debug stoppages
 	}
 
 	if(TerminateUnexpected)
