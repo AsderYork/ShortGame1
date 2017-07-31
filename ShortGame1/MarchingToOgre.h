@@ -31,6 +31,7 @@ namespace GEM
 	private:
 
 		void CreateOrUpdateDatablock(int id, float value);
+		void CreateSelectionDatablock();
 
 		int m_mapScale;
 		int m_meshScale;
@@ -39,6 +40,8 @@ namespace GEM
 		MarchingCubesCalculator* m_calc;
 		std::vector<Ogre::Item*> m_itemsVector;
 		std::vector<Ogre::SceneNode*> m_nodesVector;
+		Ogre::Item* m_SelectionCountur;
+		Ogre::SceneNode* m_SelectionCounturNode;
 
 		// Унаследовано через SDL_MouseListener
 		virtual void mouseMoved(const SDL_Event & arg) override;

@@ -4,16 +4,15 @@
 #include <OGRE\OgreMaterialManager.h>
 #include <OGRE\OgreMaterial.h>
 
-#include <OGRE\OgreMeshManager2.h>
-#include <OGRE\OgreMesh2.h>
-#include <OGRE\OgreSubMesh2.h>
-#include <OGRE\OgreSubItem.h>
-#include <OGRE\OgreEntity.h>
 
 #include <OGRE\OgreHlms.h>
 #include <OGRE\OgreHlmsDatablock.h>
 #include <OGRE\Hlms\Pbs\OgreHlmsPbsDatablock.h>
 #include <OGRE\OgreHlmsManager.h>
+
+#include <OGRE\OgreCamera.h>
+#include <OGRE\OgreSceneQuery.h>
+
 
 GEM::MarchingToOgre::MarchingToOgre(std::string MeshName, Ogre_Service* OgreService, MarchingCubesCalculator * Calc, int MapScale, int MeshScale)
 	:m_meshName(MeshName), m_ogreService(OgreService), m_calc(Calc), m_mapScale(MapScale), m_meshScale(MeshScale)
@@ -41,6 +40,7 @@ GEM::Service::ActionResult GEM::MarchingToOgre::initialize()
 {
 	auto SceneMap = m_calc->getMap();
 	auto SceneManager = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance");
+
 	
 	int id = 0;
 	for (int i = 0; i < SceneMap.size(); i++)
@@ -50,23 +50,9 @@ GEM::Service::ActionResult GEM::MarchingToOgre::initialize()
 			for (int k = 0; k < SceneMap[i][j].size(); k++)
 			{
 				Ogre::Item *tmpItem = SceneManager->createItem(m_meshName);
-				Ogre::SceneNode *tmpSceneNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);
-				//Makes different material for different meshes
-				std::string matName("MarchingMat" + std::to_string(m_itemsVector.size()));
-				//auto MatForObject = DefaultMat->clone(matName);
-				//auto Colortoset = Ogre::ColourValue(SceneMap[i][j][k] / 256.0, SceneMap[i][j][k] / 256.0, SceneMap[i][j][k] / 256.0, 1);
-
-				auto Colortoset = Ogre::ColourValue(1, 1, 0, 1);
-				//MatForObject->setAmbient(Colortoset);
-				//tmpItem->setMaterial(MatForObject);
-
-				LOGCATEGORY("MATINUSE").info("%s", tmpItem->getMesh()->getSubMesh(0)->getMaterialName().c_str());
-				//auto Colortoset = Ogre::ColourValue(1, 1, 0, 1);
+				Ogre::SceneNode *tmpSceneNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);			
 				CreateOrUpdateDatablock(id, SceneMap[i][j][k] / 256.0);
-				tmpItem->setDatablock("Test" + std::to_string(id));
-				
-
-				tmpItem->getMesh()->getSubMesh(0)->getMaterialName().c_str();
+				tmpItem->setDatablock("Test" + std::to_string(id));	
 
 				tmpSceneNode->attachObject(tmpItem);
 				tmpSceneNode->setScale(Ogre::Vector3(m_meshScale, m_meshScale, m_meshScale));
@@ -78,6 +64,14 @@ GEM::Service::ActionResult GEM::MarchingToOgre::initialize()
 			}
 		}
 	}
+
+	CreateSelectionDatablock();
+	m_SelectionCountur = SceneManager->createItem(m_meshName);
+	m_SelectionCountur->setDatablock("Picking");
+	m_SelectionCounturNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);
+	m_SelectionCounturNode->setScale(Ogre::Vector3(m_meshScale*1.08, m_meshScale*1.08, m_meshScale*1.08));
+	m_SelectionCounturNode->setPosition(0, 0,0);
+	m_SelectionCounturNode->attachObject(m_SelectionCountur);
 	
 	return ActionResult();
 }
@@ -139,10 +133,48 @@ void GEM::MarchingToOgre::CreateOrUpdateDatablock(int id, float value)
 				Ogre::HlmsMacroblock(),
 				Ogre::HlmsBlendblock(),
 				Ogre::HlmsParamVec()));
+
+		datablock->setDiffuse(Ogre::Vector3(0.7f, 0.7f, 0.1f));
+		Ogre::HlmsMacroblock macro = *(datablock->getMacroblock());
+		macro.mCullMode = Ogre::CULL_NONE;
+		datablock->setMacroblock(macro);
+
+		datablock->setTransparency(0.8);
+
 	}
 
 	datablock->setDiffuse(Ogre::Vector3(0.0f, value, 0.0f));
-	datablock->setTransparency(0.8);
+
+}
+
+void GEM::MarchingToOgre::CreateSelectionDatablock()
+{
+	Ogre::HlmsManager *hlmsManager = m_ogreService->getRoot()->getHlmsManager();
+	Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+
+	auto hlmsPbs = hlmsManager->getHlms(Ogre::HLMS_PBS);
+
+	Ogre::String datablockName = "Picking";
+
+	Ogre::HlmsPbsDatablock *datablock;
+	datablock = static_cast<Ogre::HlmsPbsDatablock*>(hlmsPbs->getDatablock(datablockName));
+	if (datablock == nullptr)
+	{
+		datablock = static_cast<Ogre::HlmsPbsDatablock*>(
+			hlmsPbs->createDatablock(datablockName,
+				datablockName,
+				Ogre::HlmsMacroblock(),
+				Ogre::HlmsBlendblock(),
+				Ogre::HlmsParamVec()));
+	}
+
+	datablock->setDiffuse(Ogre::Vector3(1.0f, 1.0f, 1.0f));
+	datablock->setRoughness(0.0f);
+	datablock->setBrdf(Ogre::PbsBrdf::BlinnPhongFullLegacy);
+
+	Ogre::HlmsMacroblock macro = *(datablock->getMacroblock());
+	macro.mCullMode = Ogre::CULL_ANTICLOCKWISE;
+	datablock->setMacroblock(macro);
 
 }
 
@@ -154,7 +186,12 @@ void GEM::MarchingToOgre::mousePressed(const SDL_MouseButtonEvent & arg)
 {
 	if (arg.button == SDL_BUTTON_LEFT)
 	{
-
+	 auto ray =	m_ogreService->getCamera()->getCameraToViewportRay(0.5, 0.5);
+	 Ogre::RaySceneQuery *Querry = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance")->createRayQuery(ray);
+	 
+	 auto Result = Querry->execute();
+	// Result.
+	 
 	}
 }
 

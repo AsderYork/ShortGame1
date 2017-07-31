@@ -55,6 +55,7 @@ namespace GEM
 		Ogre_Service(SDL_Controller* SDL);
 
 		Ogre::Root* getRoot();
+		Ogre::Camera* getCamera();
 
 
 	private:

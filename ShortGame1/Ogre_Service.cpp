@@ -91,7 +91,6 @@ namespace GEM
 
 	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::preFrame(double timeDelta)
 	{
-		LOGCATEGORY("FPS").info("%10.8f", 1/timeDelta);
 		tmpCamera.AjustPosition(timeDelta);
 		return ActionResult();
 	}
@@ -112,6 +111,10 @@ namespace GEM
 	Ogre::Root* Ogre_Service::getRoot()
 	{
 		return m_root.get();
+	}
+	Ogre::Camera * Ogre_Service::getCamera()
+	{
+		return tmpCamera.getCamera();
 	}
 	std::pair<int, int> Ogre_Service::getWidthHeighgtFromConfig()
 	{
@@ -154,7 +157,7 @@ namespace GEM
 		m_sceneManager->setShadowFarDistance(500.0f);
 		//m_sceneManager->setAmbientLight(Ogre::ColourValue(0.8, 0.8, 0.8, 1), Ogre::ColourValue(0.8, 0.8, 0.8, 1), Ogre::Vector3(0, 1, 0));
 
-		m_sceneManager->setAmbientLight(Ogre::ColourValue(1,1,1, 1), Ogre::ColourValue(1, 1, 1, 1), Ogre::Vector3(0, 1, 0));
+		m_sceneManager->setAmbientLight(Ogre::ColourValue(1 ,1 ,1, 1), Ogre::ColourValue(1, 1, 1, 1), Ogre::Vector3(0, 1, 0));
 	}
 	void Ogre_Service::createCamera()
 	{
