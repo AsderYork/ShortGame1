@@ -4,6 +4,8 @@
 #include <OGRE\OgreMaterialManager.h>
 #include <OGRE\OgreMaterial.h>
 
+#include <cmath>
+
 
 #include <OGRE\OgreHlms.h>
 #include <OGRE\OgreHlmsDatablock.h>
@@ -68,10 +70,12 @@ GEM::Service::ActionResult GEM::MarchingToOgre::initialize()
 	CreateSelectionDatablock();
 	m_SelectionCountur = SceneManager->createItem(m_meshName);
 	m_SelectionCountur->setDatablock("Picking");
+
 	m_SelectionCounturNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);
 	m_SelectionCounturNode->setScale(Ogre::Vector3(m_meshScale*1.08, m_meshScale*1.08, m_meshScale*1.08));
 	m_SelectionCounturNode->setPosition(0, 0,0);
 	m_SelectionCounturNode->attachObject(m_SelectionCountur);
+	m_SelectionCounturNode->setVisible(false);
 	
 	return ActionResult();
 }
@@ -190,8 +194,37 @@ void GEM::MarchingToOgre::mousePressed(const SDL_MouseButtonEvent & arg)
 	 Ogre::RaySceneQuery *Querry = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance")->createRayQuery(ray);
 	 
 	 auto Result = Querry->execute();
-	// Result.
-	 
+	 if (Result.size() > 0)
+	 {
+		 m_SelectionCounturNode->setPosition( Result.front().movable->getParentNode()->getPosition());
+		 m_SelectionCounturNode->setVisible(true);
+	 }
+	 else
+	 {
+		 m_SelectionCounturNode->setVisible(false);
+	 }
+	}
+
+	if (arg.button == SDL_BUTTON_RIGHT)
+	{
+		if (m_SelectionCountur->isVisible())//If something is chosen
+		{
+			int x, y, z;//Position of node in a map
+			
+			auto SceneNodePose = m_SelectionCounturNode->getPosition();
+			x = std::round(SceneNodePose.x / m_mapScale);
+			y = std::round(SceneNodePose.y / m_mapScale);
+			z = std::round(SceneNodePose.z / m_mapScale);
+
+			if (m_calc->getValueOfNode(x, y, z) != 0)
+			{
+				m_calc->setValueOfNode(x, y, z, 0);
+			}
+			else
+			{
+				m_calc->setValueOfNode(x, y, z, 255);
+			}
+		}
 	}
 }
 

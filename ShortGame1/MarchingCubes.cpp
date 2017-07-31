@@ -20,18 +20,26 @@ namespace GEM
 			}
 		}
 
-		m_map[1][1][1] = 100;
-		m_map[1][2][1] = 100;
-		m_map[1][1][2] = 100;
-		m_map[1][2][2] = 100;
+		m_map[1][1][1] = 255;
+		m_map[1][2][1] = 255;
+		m_map[1][1][2] = 255;
+		m_map[1][2][2] = 255;
 
-		m_map[2][1][1] = 100;
-		m_map[2][2][1] = 100;
-		m_map[2][1][2] = 100;
-		m_map[2][2][2] = 100;
+		m_map[2][1][1] = 255;
+		m_map[2][2][1] = 255;
+		m_map[2][1][2] = 255;
+		m_map[2][2][2] = 255;
 	}
 	const std::vector<std::vector<std::vector<MarchingCubesCalculator::VoxelValue>>> MarchingCubesCalculator::getMap()
 	{
 		return m_map;
+	}
+	void MarchingCubesCalculator::setValueOfNode(int x, int y, int z, VoxelValue value)
+	{
+		m_map[x][y][z] = value;
+	}
+	int MarchingCubesCalculator::getValueOfNode(int x, int y, int z)
+	{
+		return m_map[x][y][z];
 	}
 }
