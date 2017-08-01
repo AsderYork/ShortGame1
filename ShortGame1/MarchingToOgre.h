@@ -49,8 +49,8 @@ namespace GEM
 		Ogre::Item* m_SelectionCountur;
 		Ogre::SceneNode* m_SelectionCounturNode;
 
-		Ogre::Item* m_MarchingCubesItem;
-		Ogre::SceneNode* m_MarchingCubeNode;
+		Ogre::Item* m_MarchingCubesItem = nullptr;
+		Ogre::SceneNode* m_MarchingCubeNode = nullptr;
 
 
 		// Унаследовано через SDL_MouseListener

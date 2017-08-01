@@ -241,8 +241,16 @@ void GEM::MarchingToOgre::CreateMarchingCubeDatablock()
 
 void GEM::MarchingToOgre::CreateMesh()
 {
+	if (m_MarchingCubesItem)	{delete m_MarchingCubesItem;}
+	if (m_MarchingCubeNode) { delete m_MarchingCubeNode; }
+
 	Ogre::RenderSystem *renderSystem = m_ogreService->getRoot()->getRenderSystem();
 	Ogre::VaoManager *vaoManager = renderSystem->getVaoManager();
+
+	if (Ogre::MeshManager::getSingleton().resourceExists("MarchingCubies"))
+	{
+		Ogre::MeshManager::getSingleton().remove(Ogre::MeshManager::getSingleton().getByName("MarchingCubies"));
+	}
 
 	Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().createManual("MarchingCubies", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 	Ogre::SubMesh *subMesh = mesh->createSubMesh();
@@ -394,10 +402,14 @@ void GEM::MarchingToOgre::mousePressed(const SDL_MouseButtonEvent & arg)
 			{
 				m_calc->setValueOfNode(x, y, z, 255);
 			}
+
+			m_calc->calculateMesh(0, 0, m_mapScale);
+			CreateMesh();
 		}
 	}
 }
 
 void GEM::MarchingToOgre::mouseReleased(const SDL_MouseButtonEvent & arg)
 {
+
 }

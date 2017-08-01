@@ -38,7 +38,10 @@ namespace GEM
 	}
 	void MarchingCubesCalculator::calculateMesh(float posx, float posy, float scale)
 	{
-		Vector3d<Cube> Cubes;
+		m_VertexVector.clear();
+		m_IndexVector.clear();
+		
+		//Vector3d<Cube> Cubes;
 
 		int edgeTable[256] = {
 			0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
@@ -335,10 +338,8 @@ namespace GEM
 		{ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 } };
 
 
-		Cubes.resize(m_map.size() - 1);
 		for (int x = 0; x < m_map.size() - 1; x++)
 		{
-			Cubes[x].resize(m_map[x].size() - 1);
 			for (int y = 0; y < m_map[x].size() - 1;y++)
 			{
 				for (int z = 0; z < m_map[x][y].size() - 1;z++)
@@ -366,8 +367,7 @@ namespace GEM
 					if (tmpCube.n5.value != 0) { tmpCube.CubeValue |= 0x00000001 << 5; }
 					if (tmpCube.n6.value != 0) { tmpCube.CubeValue |= 0x00000001 << 6; }
 					if (tmpCube.n7.value != 0) { tmpCube.CubeValue |= 0x00000001 << 7; }
-
-					Cubes[x][y].push_back(tmpCube);
+						
 
 
 					//Set IntermediatePoints and fill Vertex and Index arrays
