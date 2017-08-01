@@ -33,6 +33,10 @@ namespace GEM
 		void CreateOrUpdateDatablock(int id, float value);
 		void CreateSelectionDatablock();
 
+		void CreateMarchingCubeDatablock();
+
+		void CreateMesh();
+		Ogre::IndexBufferPacked* createIndexBuffer();
 	
 
 		int m_mapScale;
@@ -44,6 +48,9 @@ namespace GEM
 		std::vector<Ogre::SceneNode*> m_nodesVector;
 		Ogre::Item* m_SelectionCountur;
 		Ogre::SceneNode* m_SelectionCounturNode;
+
+		Ogre::Item* m_MarchingCubesItem;
+		Ogre::SceneNode* m_MarchingCubeNode;
 
 
 		// Унаследовано через SDL_MouseListener

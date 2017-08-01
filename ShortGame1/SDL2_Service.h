@@ -93,7 +93,7 @@ namespace GEM
 		SDL_Window *m_sdlWindow;
 		SDL_SysWMinfo m_windowInfo;
 		//Capture mouse, and prevent it from moving outside of the window, or let it go freely. 
-		bool m_captureMouse = true;
+		bool m_captureMouse = false;
 		
 		std::vector<SDL_MouseListener*> m_mouseVector;
 		std::vector<SDL_KeyboardListener*> m_keyboardVector;
