@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <OGRE\OgreVector3.h>
 
 namespace GEM
 {
@@ -12,22 +13,15 @@ namespace GEM
 		using VoxelValue = unsigned char;
 
 
-		struct Vector3 {
-			float x;
-			float y;
-			float z;
-			Vector3() : x(0), y(0), z(0) {}
-			Vector3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
-		};
-
 
 		struct EdgePoint
 		{
-			Vector3 pos;//Position of intermediate point
+			Ogre::Vector3 pos;//Position of intermediate point
 			int Index;//Index in index array, if this point is used. Otherwise index must be -1;
+			Ogre::Vector3 Normal;
 
 			EdgePoint() : Index(-1) {  }
-			EdgePoint(int _index, Vector3 _pos) : Index(_index), pos(_pos){  }
+			EdgePoint(int _index, Ogre::Vector3 _pos) : Index(_index), pos(_pos){  }
 		};
 
 		struct Node
@@ -80,9 +74,9 @@ namespace GEM
 		*/
 		void calculateMesh(float posx, float posy, float scale);
 
-		std::vector<Vector3> &getVertexes();
+		std::vector<Ogre::Vector3> &getVertexes();
 		std::vector<int> &getIndexes();
-
+		std::vector<Ogre::Vector3> &getNormals();
 
 		void setValueOfNode(int x, int y, int z, VoxelValue value);
 		int getValueOfNode(int x, int y, int z);
@@ -91,7 +85,7 @@ namespace GEM
 		template<class T>
 		using Vector3d = std::vector<std::vector<std::vector<T>>>;
 
-		Vector3 FindEdgePointPosition(Node node1, Node node2, float Scale);
+		Ogre::Vector3 FindEdgePointPosition(Node node1, Node node2, float Scale);
 		
 		
 		/**
@@ -109,10 +103,12 @@ namespace GEM
 		This method must be called only for Edges, that really appear in a mesh. Otherwise unused Edgepoints will be indexed
 		*/
 		int SetEdgePoint(Cube &Cube, int EdegeID, float Scale);
+		void AddValueInNormalsVectorByIndex(int index, Ogre::Vector3 value);
 
 		std::vector<std::vector<std::vector<Node>>> m_map;
 
-		std::vector<Vector3> m_VertexVector;
+		std::vector<Ogre::Vector3> m_VertexVector;
+		std::vector<Ogre::Vector3> m_NormalsVector;
 		std::vector<int> m_IndexVector;
 	};
 

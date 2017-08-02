@@ -227,22 +227,27 @@ void GEM::MarchingToOgre::CreateMarchingCubeDatablock()
 				Ogre::HlmsBlendblock(),
 				Ogre::HlmsParamVec()));
 
-		datablock->setDiffuse(Ogre::Vector3(0.1f, 0.1f, 0.8f));
+		datablock->setDiffuse(Ogre::Vector3(0.2f, 0.2f, 2.0f));
 		Ogre::HlmsMacroblock macro = *(datablock->getMacroblock());
 		macro.mCullMode = Ogre::CULL_NONE;
 		datablock->setMacroblock(macro);
 
-		datablock->setTransparency(0.5);
+		datablock->setTransparency(0.7);
 
 	}
 
-	datablock->setDiffuse(Ogre::Vector3(0.3f, 0.3, 0.8f));
 }
 
 void GEM::MarchingToOgre::CreateMesh()
 {
-	if (m_MarchingCubesItem)	{delete m_MarchingCubesItem;}
-	if (m_MarchingCubeNode) { delete m_MarchingCubeNode; }
+	if (m_MarchingCubesItem) {
+		delete m_MarchingCubesItem;
+		m_MarchingCubesItem = nullptr;
+	}
+	if (m_MarchingCubeNode) {
+		delete m_MarchingCubeNode;
+		m_MarchingCubeNode = nullptr;
+	}
 
 	Ogre::RenderSystem *renderSystem = m_ogreService->getRoot()->getRenderSystem();
 	Ogre::VaoManager *vaoManager = renderSystem->getVaoManager();
@@ -250,6 +255,11 @@ void GEM::MarchingToOgre::CreateMesh()
 	if (Ogre::MeshManager::getSingleton().resourceExists("MarchingCubies"))
 	{
 		Ogre::MeshManager::getSingleton().remove(Ogre::MeshManager::getSingleton().getByName("MarchingCubies"));
+	}
+
+	if (m_calc->getVertexes().size() == 0)
+	{//Then mesh is empty. Don't do it
+		return;
 	}
 
 	Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().createManual("MarchingCubies", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
@@ -268,9 +278,9 @@ void GEM::MarchingToOgre::CreateMesh()
 		meshVertices[i].py = (m_calc->getVertexes())[i].y;
 		meshVertices[i].pz = (m_calc->getVertexes())[i].z;
 
-		meshVertices[i].nx = 0.0f;
-		meshVertices[i].ny = 1.0f;
-		meshVertices[i].nz = 0.0f;
+		meshVertices[i].nx = (m_calc->getNormals())[i].x;
+		meshVertices[i].ny = (m_calc->getNormals())[i].y;
+		meshVertices[i].nz = (m_calc->getNormals())[i].z;
 	}
 
 	Ogre::VertexBufferPacked *vertexBuffer = 0;

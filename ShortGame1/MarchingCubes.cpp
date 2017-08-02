@@ -2,6 +2,9 @@
 #include "MarchingCubes.h"
 #include <cassert>
 
+//Used for vector operations
+#include <OGRE\OgreVector3.h>
+
 
 namespace GEM
 {
@@ -31,6 +34,7 @@ namespace GEM
 		m_map[2][2][1].value = 255;
 		m_map[2][1][2].value = 255;
 		m_map[2][2][2].value = 255;
+
 	}
 	const std::vector<std::vector<std::vector<MarchingCubesCalculator::Node>>> MarchingCubesCalculator::getMap()
 	{
@@ -40,6 +44,7 @@ namespace GEM
 	{
 		m_VertexVector.clear();
 		m_IndexVector.clear();
+		m_NormalsVector.clear();
 		
 		//Vector3d<Cube> Cubes;
 
@@ -425,7 +430,24 @@ namespace GEM
 					}
 
 					for (int i = 0; triTable[tmpCube.CubeValue][i] != -1;i += 3) {
-						//
+						//Calc normals;
+						Ogre::Vector3 NormalVector;
+
+						Ogre::Vector3 From1To2, From1To3;
+
+						From1To2 = GetEdgepointByNumber(tmpCube, triTable[tmpCube.CubeValue][i + 1]).pos - 
+							GetEdgepointByNumber(tmpCube, triTable[tmpCube.CubeValue][i]).pos;
+
+						From1To3 = GetEdgepointByNumber(tmpCube, triTable[tmpCube.CubeValue][i + 2]).pos -
+							GetEdgepointByNumber(tmpCube, triTable[tmpCube.CubeValue][i]).pos;
+
+						NormalVector = From1To2*From1To3;
+
+						AddValueInNormalsVectorByIndex(GetEdgepointByNumber(tmpCube, triTable[tmpCube.CubeValue][i]).Index, NormalVector);
+						AddValueInNormalsVectorByIndex(GetEdgepointByNumber(tmpCube, triTable[tmpCube.CubeValue][i + 1]).Index, NormalVector);
+						AddValueInNormalsVectorByIndex(GetEdgepointByNumber(tmpCube, triTable[tmpCube.CubeValue][i + 2]).Index, NormalVector);
+						
+
 						m_IndexVector.push_back(GetEdgepointByNumber(tmpCube, triTable[tmpCube.CubeValue][i]).Index);
 						m_IndexVector.push_back(GetEdgepointByNumber(tmpCube, triTable[tmpCube.CubeValue][i + 1]).Index);
 						m_IndexVector.push_back(GetEdgepointByNumber(tmpCube, triTable[tmpCube.CubeValue][i + 2]).Index);
@@ -433,16 +455,23 @@ namespace GEM
 				}
 			}
 		}
-
-
+		for (auto &normal : m_NormalsVector)
+		{
+			normal.normalise();
+		}
+		
 	}
-	std::vector<MarchingCubesCalculator::Vector3>& MarchingCubesCalculator::getVertexes()
+	std::vector<Ogre::Vector3>& MarchingCubesCalculator::getVertexes()
 	{
 		return m_VertexVector;
 	}
 	std::vector<int>& MarchingCubesCalculator::getIndexes()
 	{
 		return m_IndexVector;
+	}
+	std::vector<Ogre::Vector3>& MarchingCubesCalculator::getNormals()
+	{
+		return m_NormalsVector;
 	}
 	void MarchingCubesCalculator::setValueOfNode(int x, int y, int z, VoxelValue value)
 	{
@@ -454,9 +483,9 @@ namespace GEM
 	}
 
 
-	MarchingCubesCalculator::Vector3 MarchingCubesCalculator::FindEdgePointPosition(Node node1, Node node2, float Scale)
+	Ogre::Vector3 MarchingCubesCalculator::FindEdgePointPosition(Node node1, Node node2, float Scale)
 	{
-		return Vector3((node1.posX + node2.posX)*Scale / 2, (node1.posY + node2.posY)*Scale / 2, (node1.posZ + node2.posZ)*Scale / 2);
+		return Ogre::Vector3((node1.posX + node2.posX)*Scale / 2, (node1.posY + node2.posY)*Scale / 2, (node1.posZ + node2.posZ)*Scale / 2);
 	}
 
 	MarchingCubesCalculator::EdgePoint & MarchingCubesCalculator::GetEdgepointByNumber(Cube & Cube, int id)
@@ -545,6 +574,14 @@ namespace GEM
 		}
 
 		return EdgePoint.Index;
+	}
+
+	void MarchingCubesCalculator::AddValueInNormalsVectorByIndex(int index, Ogre::Vector3 value)
+	{
+		int MissingElements = index - m_NormalsVector.size() + 1;//Index 
+		for (int i = 0; i < MissingElements; i++) { m_NormalsVector.push_back(Ogre::Vector3::ZERO); }
+		m_NormalsVector[index] += value;
+
 	}
 
 }
