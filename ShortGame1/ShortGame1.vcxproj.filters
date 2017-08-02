@@ -25,6 +25,12 @@
     <Filter Include="Ogre\Ogre_Service">
       <UniqueIdentifier>{ee39a5da-852b-41e8-a28c-920f88987c76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Marching Cubes">
+      <UniqueIdentifier>{6e87ed7b-33b9-4b68-9b39-9c695b9a794c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Marching Cubes\MarchingToOgre">
+      <UniqueIdentifier>{e6c7d901-c673-4548-b3da-6352b5e9ae80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -51,6 +57,12 @@
     <ClInclude Include="Ogre_Service.h">
       <Filter>Ogre\Ogre_Service</Filter>
     </ClInclude>
+    <ClInclude Include="MarchingCubes.h">
+      <Filter>Marching Cubes</Filter>
+    </ClInclude>
+    <ClInclude Include="MarchingToOgre.h">
+      <Filter>Marching Cubes\MarchingToOgre</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogHelper.cpp">
@@ -73,6 +85,12 @@
     </ClCompile>
     <ClCompile Include="Ogre_Service.cpp">
       <Filter>Ogre\Ogre_Service</Filter>
+    </ClCompile>
+    <ClCompile Include="MarchingCubes.cpp">
+      <Filter>Marching Cubes</Filter>
+    </ClCompile>
+    <ClCompile Include="MarchingToOgre.cpp">
+      <Filter>Marching Cubes\MarchingToOgre</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
