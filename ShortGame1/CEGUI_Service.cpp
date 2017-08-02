@@ -16,7 +16,7 @@ namespace GEM
 	{
 		try
 		{
-			CEGUI::OgreRenderer* renderer = &CEGUI::OgreRenderer::bootstrapSystem( *(m_ogreService->getRoot()->getRenderTarget("A window")) );
+			//CEGUI::OgreRenderer* renderer = &CEGUI::OgreRenderer::bootstrapSystem( *(m_ogreService->getRoot()->getRenderTarget("A window")) );
 		}
 		catch (std::exception &e)
 		{

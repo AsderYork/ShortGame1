@@ -227,7 +227,7 @@ void GEM::MarchingToOgre::CreateMarchingCubeDatablock()
 				Ogre::HlmsBlendblock(),
 				Ogre::HlmsParamVec()));
 
-		datablock->setDiffuse(Ogre::Vector3(0.2f, 0.2f, 2.0f));
+		datablock->setDiffuse(Ogre::Vector3(0.6f, 0.6f, 2.0f));
 		Ogre::HlmsMacroblock macro = *(datablock->getMacroblock());
 		macro.mCullMode = Ogre::CULL_NONE;
 		datablock->setMacroblock(macro);
