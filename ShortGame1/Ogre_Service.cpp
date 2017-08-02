@@ -34,7 +34,17 @@ namespace GEM
 	{
 		m_ogreLog.connectToOgreLog();
 
-		m_root = std::make_unique<Ogre::Root>("plugins.cfg", "ogre.cfg");
+		m_root = std::make_unique<Ogre::Root>("", "ogre.cfg");
+
+#ifdef _DEBUG
+		m_root->loadPlugin("RenderSystem_Direct3D11_d");
+		m_root->loadPlugin("RenderSystem_GL3Plus_d");
+		m_root->loadPlugin("Plugin_ParticleFX_d");
+#else
+		m_root->loadPlugin("RenderSystem_Direct3D11");
+		m_root->loadPlugin("RenderSystem_GL3Plus");
+		m_root->loadPlugin("Plugin_ParticleFX");
+#endif
 
 		if ( (!m_root->restoreConfig()) || (false))
 		{
@@ -64,6 +74,7 @@ namespace GEM
 		m_renderWindow = Ogre::Root::getSingleton().createRenderWindow("A window", WidthHeight.first, WidthHeight.second,
 			(fullscreen == "Yes" ? true : false),
 			&params);
+
 
 		setupResources();
 		RegisterHLMS();

@@ -150,6 +150,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CEGUI_Service.h" />
     <ClInclude Include="EngineController.h" />
     <ClInclude Include="LogHelper.h" />
     <ClInclude Include="MarchingCubes.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CEGUI_Service.cpp" />
     <ClCompile Include="EngineController.cpp" />
     <ClCompile Include="LogHelper.cpp" />
     <ClCompile Include="MarchingCubes.cpp" />
