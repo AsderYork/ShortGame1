@@ -7,7 +7,7 @@
 
 namespace GEM
 {
-	class MarchingToOgre : public Service, public SDL_MouseListener
+	class MarchingToOgre : public Service, public SDL_MouseListener, public SDL_KeyboardListener
 	{
 	public:
 		/**
@@ -52,10 +52,17 @@ namespace GEM
 		Ogre::Item* m_MarchingCubesItem = nullptr;
 		Ogre::SceneNode* m_MarchingCubeNode = nullptr;
 
+		bool m_ShowNodes = true;
+
 
 		// Унаследовано через SDL_MouseListener
 		virtual void mouseMoved(const SDL_Event & arg) override;
 		virtual void mousePressed(const SDL_MouseButtonEvent & arg) override;
 		virtual void mouseReleased(const SDL_MouseButtonEvent & arg) override;
+
+		// Унаследовано через SDL_KeyboardListener
+		virtual void textInput(const SDL_TextInputEvent & arg) override;
+		virtual void keyPressed(const SDL_KeyboardEvent & arg) override;
+		virtual void keyReleased(const SDL_KeyboardEvent & arg) override;
 	};
 }

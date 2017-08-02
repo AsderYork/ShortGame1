@@ -423,3 +423,23 @@ void GEM::MarchingToOgre::mouseReleased(const SDL_MouseButtonEvent & arg)
 {
 
 }
+
+void GEM::MarchingToOgre::textInput(const SDL_TextInputEvent & arg)
+{
+}
+
+void GEM::MarchingToOgre::keyPressed(const SDL_KeyboardEvent & arg)
+{
+	if (arg.keysym.scancode == SDL_SCANCODE_Q)
+	{
+		m_ShowNodes = !m_ShowNodes;
+		for (auto& Node : m_nodesVector)
+		{
+			Node->setVisible(m_ShowNodes);
+		}
+	}
+}
+
+void GEM::MarchingToOgre::keyReleased(const SDL_KeyboardEvent & arg)
+{
+}
