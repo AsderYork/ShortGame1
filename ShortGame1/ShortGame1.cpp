@@ -5,6 +5,7 @@
 #include "MarchingCubes.h"
 #include "MarchingToOgre.h"
 #include "CEGUI_Service.h"
+#include "FPS_Layout.h"
 
 
 
@@ -21,6 +22,8 @@ int main(int argc, char *argv[])
 
 	SDLController->registerMouseListener(MarchingVis);
 	SDLController->registerKeyboardListener(MarchingVis);
+
+	CEGUIController->AddLayout<GEM::FPS_Layout>(1);
 
     return Controller.start();
 }

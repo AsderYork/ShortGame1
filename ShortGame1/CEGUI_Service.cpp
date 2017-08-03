@@ -9,19 +9,32 @@ namespace GEM
 		m_ogreService(ogreService),
 		m_sdlController(sdlController)
 	{
-		
 
 	}
 	Service::ActionResult CEGUI_Service::initialize()
 	{
 		try
 		{
-			//CEGUI::OgreRenderer* renderer = &CEGUI::OgreRenderer::bootstrapSystem( *(m_ogreService->getRoot()->getRenderTarget("A window")) );
+			CEGUI::OgreRenderer* renderer = &CEGUI::OgreRenderer::bootstrapSystem( *(m_ogreService->getRoot()->getRenderTarget("A window")) );
+			CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
+			auto myRoot = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "_MasterRoot");
+			CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(myRoot);
 		}
 		catch (std::exception &e)
 		{
 			LOGCATEGORY("CEGUI_Service/init").error("Failed to initialize:%s", e.what());
+			return ActionResult::AR_ERROR;
 		}
+
+		for (auto& Layout : m_layoutsVector)
+		{
+			if (!Layout->Initialize())
+			{
+				LOGCATEGORY("CEGUI_Service/init").error("One of the layouts failed initialization");
+				return ActionResult::AR_ERROR;
+			}
+		}
+
 
 		return ActionResult();
 	}
@@ -32,6 +45,10 @@ namespace GEM
 
 	Service::ActionResult CEGUI_Service::preFrame(double timeDelta)
 	{
+		for (auto& Layout : m_layoutsVector)
+		{
+			Layout->PreFrame(timeDelta);
+		}
 		return ActionResult();
 	}
 

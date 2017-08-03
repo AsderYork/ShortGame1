@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="CEGUI_Service.h" />
     <ClInclude Include="EngineController.h" />
+    <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="LogHelper.h" />
     <ClInclude Include="MarchingCubes.h" />
     <ClInclude Include="MarchingToOgre.h" />
@@ -164,6 +165,7 @@
   <ItemGroup>
     <ClCompile Include="CEGUI_Service.cpp" />
     <ClCompile Include="EngineController.cpp" />
+    <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="LogHelper.cpp" />
     <ClCompile Include="MarchingCubes.cpp" />
     <ClCompile Include="MarchingToOgre.cpp" />

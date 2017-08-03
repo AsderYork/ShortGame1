@@ -34,6 +34,9 @@
     <Filter Include="CEGUI_Service">
       <UniqueIdentifier>{fb9a5a95-2548-4d75-9dfe-364aea282c18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CEGUI_Layout">
+      <UniqueIdentifier>{fc44955e-e307-4bda-918d-3498d3a17591}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -69,6 +72,9 @@
     <ClInclude Include="CEGUI_Service.h">
       <Filter>CEGUI_Service</Filter>
     </ClInclude>
+    <ClInclude Include="FPS_Layout.h">
+      <Filter>CEGUI_Layout</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogHelper.cpp">
@@ -98,6 +104,11 @@
     <ClCompile Include="MarchingToOgre.cpp">
       <Filter>Marching Cubes\MarchingToOgre</Filter>
     </ClCompile>
-    <ClCompile Include="CEGUI_Service.cpp" />
+    <ClCompile Include="CEGUI_Service.cpp">
+      <Filter>CEGUI_Service</Filter>
+    </ClCompile>
+    <ClCompile Include="FPS_Layout.cpp">
+      <Filter>CEGUI_Layout</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
