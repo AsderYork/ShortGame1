@@ -155,6 +155,7 @@
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="LogHelper.h" />
     <ClInclude Include="MarchingCubes.h" />
+    <ClInclude Include="MarchingCubesNodeController.h" />
     <ClInclude Include="MarchingToOgre.h" />
     <ClInclude Include="OgreLogRedirection.h" />
     <ClInclude Include="Ogre_Service.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="LogHelper.cpp" />
     <ClCompile Include="MarchingCubes.cpp" />
+    <ClCompile Include="MarchingCubesNodeController.cpp" />
     <ClCompile Include="MarchingToOgre.cpp" />
     <ClCompile Include="OgreLogRedirection.cpp" />
     <ClCompile Include="Ogre_Service.cpp" />

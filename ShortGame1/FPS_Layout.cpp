@@ -15,6 +15,7 @@ namespace GEM
 			FPS_Window = CEGUI::WindowManager::getSingleton().loadLayoutFromFile("FPS.layout");
 			auto DefWindow = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 			DefWindow->addChild(FPS_Window);
+			m_turnedOn = true;
 		}
 		catch (std::exception &e)
 		{

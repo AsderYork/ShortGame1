@@ -18,6 +18,13 @@ namespace GEM
 		//Applys changes to a camera position. Call in preframe
 		void AjustPosition(float timeDelta);
 
+		/**
+		\brief Controls wether camera should recive input, or should ignore it
+		\param[in] State - true for reciving input, false for ignoring it
+		*/
+		void ShouldReciveInput(bool State);
+		bool isRecivingInput();
+
 		Ogre::Camera* getCamera();
 
 	private:
@@ -27,6 +34,7 @@ namespace GEM
 		Ogre::Vector3 m_positionChange = Ogre::Vector3::ZERO;
 		float m_yaw = 0;
 		float m_pitch = 0;
+		bool m_reciveInput = true;
 
 		// Унаследовано через SDL_KeyboardListener
 		virtual void textInput(const SDL_TextInputEvent & arg) override;
@@ -56,6 +64,9 @@ namespace GEM
 
 		Ogre::Root* getRoot();
 		Ogre::Camera* getCamera();
+
+		void AllowCameraMovement(bool State);
+		bool isCameraAllowedToMove();
 
 
 	private:

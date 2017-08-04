@@ -37,6 +37,12 @@
     <Filter Include="CEGUI_Layout">
       <UniqueIdentifier>{fc44955e-e307-4bda-918d-3498d3a17591}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CEGUI_Layout\FPS">
+      <UniqueIdentifier>{d696c2f8-52ce-448c-9d27-6b32293e2e38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CEGUI_Layout\MarchingCubesNodeController">
+      <UniqueIdentifier>{ff61bcaa-6410-447f-aa9b-2b834e02accf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -73,7 +79,10 @@
       <Filter>CEGUI_Service</Filter>
     </ClInclude>
     <ClInclude Include="FPS_Layout.h">
-      <Filter>CEGUI_Layout</Filter>
+      <Filter>CEGUI_Layout\FPS</Filter>
+    </ClInclude>
+    <ClInclude Include="MarchingCubesNodeController.h">
+      <Filter>CEGUI_Layout\MarchingCubesNodeController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -108,7 +117,10 @@
       <Filter>CEGUI_Service</Filter>
     </ClCompile>
     <ClCompile Include="FPS_Layout.cpp">
-      <Filter>CEGUI_Layout</Filter>
+      <Filter>CEGUI_Layout\FPS</Filter>
+    </ClCompile>
+    <ClCompile Include="MarchingCubesNodeController.cpp">
+      <Filter>CEGUI_Layout\MarchingCubesNodeController</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

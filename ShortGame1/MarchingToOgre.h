@@ -3,7 +3,10 @@
 #include "SDL2_Service.h"
 #include "MarchingCubes.h"
 #include "EngineController.h"
+#include "MarchingCubesNodeController.h"
 #include <string>
+#include "MarchingCubesNodeController.h"
+#include "CEGUI_Service.h"
 
 namespace GEM
 {
@@ -13,7 +16,7 @@ namespace GEM
 		/**
 		draws a map of MarchingCubes, using mesh, assessed by MeshName
 		*/
-		MarchingToOgre(std::string MeshName, Ogre_Service* OgreService, MarchingCubesCalculator* Calc, int MapScale, int MeshScale);
+		MarchingToOgre(std::string MeshName, Ogre_Service* OgreService, MarchingCubesCalculator* Calc, SDL_Controller* SDLController, CEGUI_Service* CEGUI_Service, int MapScale, int MeshScale);
 
 		/**
 		Changes the colour of meshes to match the values in map
@@ -37,13 +40,15 @@ namespace GEM
 
 		void CreateMesh();
 		Ogre::IndexBufferPacked* createIndexBuffer();
-	
+		MarchingCubeController* m_MenuOverlay;
 
 		int m_mapScale;
 		int m_meshScale;
 		std::string m_meshName;
 		Ogre_Service* m_ogreService;
 		MarchingCubesCalculator* m_calc;
+		SDL_Controller* m_sdlController;
+		CEGUI_Service* m_ceguiService;
 		std::vector<Ogre::Item*> m_itemsVector;
 		std::vector<Ogre::SceneNode*> m_nodesVector;
 		Ogre::Item* m_SelectionCountur;
@@ -53,6 +58,17 @@ namespace GEM
 		Ogre::SceneNode* m_MarchingCubeNode = nullptr;
 
 		bool m_ShowNodes = true;
+
+		/**
+		For precise controll of node value and over parameters, menu is needed. But it's hard to work with it, when camera is moving along.
+		When menu is active, camera movement is desabled and overlay became active;
+		*/
+		bool m_showMenu = false;
+
+		/**
+		performs all menu popping in and out. Must be called to change menu state;
+		*/
+		void ChangeStateOfMenu();
 
 
 		// Унаследовано через SDL_MouseListener

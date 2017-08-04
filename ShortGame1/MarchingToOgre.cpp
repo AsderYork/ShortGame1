@@ -36,8 +36,9 @@ struct MeshVertices
 };
 
 
-GEM::MarchingToOgre::MarchingToOgre(std::string MeshName, Ogre_Service* OgreService, MarchingCubesCalculator * Calc, int MapScale, int MeshScale)
-	:m_meshName(MeshName), m_ogreService(OgreService), m_calc(Calc), m_mapScale(MapScale), m_meshScale(MeshScale)
+GEM::MarchingToOgre::MarchingToOgre(std::string MeshName, Ogre_Service* OgreService, MarchingCubesCalculator * Calc, SDL_Controller* SDLController, CEGUI_Service* CEGUI_Service, int MapScale, int MeshScale)
+	:m_meshName(MeshName), m_ogreService(OgreService), m_calc(Calc), m_mapScale(MapScale), m_meshScale(MeshScale), m_sdlController(SDLController),
+	m_ceguiService(CEGUI_Service)
 {
 
 }
@@ -63,6 +64,12 @@ GEM::Service::ActionResult GEM::MarchingToOgre::initialize()
 	m_calc->calculateMesh(0, 0, m_mapScale);
 	auto SceneMap = m_calc->getMap();
 	auto SceneManager = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance");
+
+	m_sdlController->registerMouseListener(this);
+	m_sdlController->registerKeyboardListener(this);
+
+	m_MenuOverlay = static_cast<MarchingCubeController*>(m_ceguiService->AddLayout<MarchingCubeController>());
+	
 
 	
 	int id = 0;
@@ -364,6 +371,32 @@ Ogre::IndexBufferPacked * GEM::MarchingToOgre::createIndexBuffer()
 	return indexBuffer;
 }
 
+void GEM::MarchingToOgre::ChangeStateOfMenu()
+{
+	m_showMenu = !m_showMenu;
+
+	if (m_showMenu)
+	{
+		if (!m_ogreService->isCameraAllowedToMove())
+		{
+			LOGCATEGORY("MarchingToOgre/ChangeStateOfMenu").error("Camera is allready locked! No menu will be shown!");
+			m_showMenu = false;
+			return;
+		}
+		m_ogreService->AllowCameraMovement(false);
+		m_MenuOverlay->turnOn();
+	}
+	else
+	{		
+		m_ogreService->AllowCameraMovement(true);
+		m_MenuOverlay->turnOff();
+	}
+
+
+
+
+}
+
 void GEM::MarchingToOgre::mouseMoved(const SDL_Event & arg)
 {
 }
@@ -429,7 +462,7 @@ void GEM::MarchingToOgre::textInput(const SDL_TextInputEvent & arg)
 }
 
 void GEM::MarchingToOgre::keyPressed(const SDL_KeyboardEvent & arg)
-{
+{	
 	if (arg.keysym.scancode == SDL_SCANCODE_Q)
 	{
 		m_ShowNodes = !m_ShowNodes;
@@ -437,6 +470,11 @@ void GEM::MarchingToOgre::keyPressed(const SDL_KeyboardEvent & arg)
 		{
 			Node->setVisible(m_ShowNodes);
 		}
+	}
+
+	if (arg.keysym.scancode == SDL_SCANCODE_Z)
+	{
+		ChangeStateOfMenu();
 	}
 }
 

@@ -127,6 +127,14 @@ namespace GEM
 	{
 		return tmpCamera.getCamera();
 	}
+	void Ogre_Service::AllowCameraMovement(bool State)
+	{
+		tmpCamera.ShouldReciveInput(State);
+	}
+	bool Ogre_Service::isCameraAllowedToMove()
+	{
+		return tmpCamera.isRecivingInput();
+	}
 	std::pair<int, int> Ogre_Service::getWidthHeighgtFromConfig()
 	{
 		Ogre::ConfigOptionMap& cfgOpts = m_root->getRenderSystem()->getConfigOptions(); 
@@ -406,6 +414,7 @@ namespace GEM
 	}
 	void MovableCamera::AjustPosition(float timeDelta)
 	{
+		if (!m_reciveInput) { m_positionChange = Ogre::Vector3::ZERO; m_yaw = 0; m_pitch = 0;return; }
 		float MoveSpeed = 7;
 		float TurnSpeed = 0.1;
 		m_camera->moveRelative(m_positionChange * timeDelta * MoveSpeed);
@@ -414,10 +423,19 @@ namespace GEM
 		m_yaw = 0;
 		m_pitch = 0;
 	}
+	void MovableCamera::ShouldReciveInput(bool State)
+	{
+		m_reciveInput = State;
+	}
+	bool MovableCamera::isRecivingInput()
+	{
+		return m_reciveInput;
+	}
 	Ogre::Camera * MovableCamera::getCamera()
 	{
 		return m_camera;
 	}
+
 	void MovableCamera::textInput(const SDL_TextInputEvent & arg)
 	{
 	}
