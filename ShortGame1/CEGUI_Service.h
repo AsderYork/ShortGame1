@@ -65,7 +65,6 @@ namespace GEM
 		Ogre_Service* m_ogreService;
 		SDL_Controller* m_sdlController;
 		std::unique_ptr<CEGUI::InputAggregator> m_inputAgregator;
-		bool isInitialized = false;
 
 		std::vector<CEGUI_Layout*> m_layoutsVector;
 		std::queue<CEGUI_Layout*> m_UninitedLayoutsQueue;

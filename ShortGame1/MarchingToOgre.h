@@ -59,6 +59,12 @@ namespace GEM
 
 		bool m_ShowNodes = true;
 
+		/*
+		Querries should not be performed before all bounding boxes are set up.
+		It is expected, that they will be set, after all the initialization. That's why this flag exists;
+		*/
+		bool m_initialized = false;
+
 		/**
 		For precise controll of node value and over parameters, menu is needed. But it's hard to work with it, when camera is moving along.
 		When menu is active, camera movement is desabled and overlay became active;

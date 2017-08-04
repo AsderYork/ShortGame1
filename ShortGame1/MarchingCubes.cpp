@@ -485,7 +485,14 @@ namespace GEM
 
 	Ogre::Vector3 MarchingCubesCalculator::FindEdgePointPosition(Node node1, Node node2, float Scale)
 	{
-		return Ogre::Vector3((node1.posX + node2.posX)*Scale / 2, (node1.posY + node2.posY)*Scale / 2, (node1.posZ + node2.posZ)*Scale / 2);
+		float InterpolationFactor = (node1.value/255.0f + node2.value/255.0f)/2;
+		float MiddleX = node2.posX + (node1.posX - node2.posX)*InterpolationFactor;
+		float MiddleY = node2.posY + (node1.posY - node2.posY)*InterpolationFactor;
+		float MiddleZ = node2.posZ + (node1.posZ - node2.posZ)*InterpolationFactor;
+
+
+		return Ogre::Vector3(MiddleX*Scale, MiddleY*Scale, MiddleZ*Scale);
+	//	return Ogre::Vector3((node1.posX + node2.posX)*Scale / 2, (node1.posY + node2.posY)*Scale / 2, (node1.posZ + node2.posZ)*Scale / 2);
 	}
 
 	MarchingCubesCalculator::EdgePoint & MarchingCubesCalculator::GetEdgepointByNumber(Cube & Cube, int id)
@@ -523,7 +530,7 @@ namespace GEM
 		}
 
 		case 1: {
-			EdgePoint.pos = FindEdgePointPosition(Cube.n1, Cube.n2, Scale); break;
+			EdgePoint.pos = FindEdgePointPosition(Cube.n2, Cube.n1, Scale); break;
 		}
 
 		case 2: {
@@ -535,7 +542,7 @@ namespace GEM
 		}
 
 		case 4: {
-			EdgePoint.pos = FindEdgePointPosition(Cube.n4, Cube.n5, Scale); break;
+			EdgePoint.pos = FindEdgePointPosition(Cube.n5, Cube.n4, Scale); break;
 		}
 
 		case 5: {
@@ -543,27 +550,27 @@ namespace GEM
 		}
 
 		case 6: {
-			EdgePoint.pos = FindEdgePointPosition(Cube.n6, Cube.n7, Scale); break;
+			EdgePoint.pos = FindEdgePointPosition(Cube.n7, Cube.n6, Scale); break;
 		}
 
 		case 7: {
-			EdgePoint.pos = FindEdgePointPosition(Cube.n7, Cube.n4, Scale); break;
+			EdgePoint.pos = FindEdgePointPosition(Cube.n4, Cube.n7, Scale); break;
 		}
 
 		case 8: {
-			EdgePoint.pos = FindEdgePointPosition(Cube.n0, Cube.n4, Scale); break;
+			EdgePoint.pos = FindEdgePointPosition(Cube.n4, Cube.n0, Scale); break;
 		}
 
 		case 9: {
-			EdgePoint.pos = FindEdgePointPosition(Cube.n1, Cube.n5, Scale); break;
+			EdgePoint.pos = FindEdgePointPosition(Cube.n5, Cube.n1, Scale); break;
 		}
 
 		case 10: {
-			EdgePoint.pos = FindEdgePointPosition(Cube.n2, Cube.n6, Scale); break;
+			EdgePoint.pos = FindEdgePointPosition(Cube.n6, Cube.n2, Scale); break;
 		}
 
 		case 11: {
-			EdgePoint.pos = FindEdgePointPosition(Cube.n3, Cube.n7, Scale); break;
+			EdgePoint.pos = FindEdgePointPosition(Cube.n7, Cube.n3, Scale); break;
 		}
 
 		default:	break;

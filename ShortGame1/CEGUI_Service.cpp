@@ -19,6 +19,18 @@ namespace GEM
 		case SDL_SCANCODE_F7: return CEGUI::Key::Scan::F7;
 		case SDL_SCANCODE_F8: return CEGUI::Key::Scan::F8;
 		case SDL_SCANCODE_F9: return CEGUI::Key::Scan::F9;
+		case SDL_SCANCODE_1: return CEGUI::Key::Scan::One;
+		case SDL_SCANCODE_2: return CEGUI::Key::Scan::Two;
+		case SDL_SCANCODE_3: return CEGUI::Key::Scan::Three;
+		case SDL_SCANCODE_4: return CEGUI::Key::Scan::Four;
+		case SDL_SCANCODE_5: return CEGUI::Key::Scan::Five;
+		case SDL_SCANCODE_6: return CEGUI::Key::Scan::Six;
+		case SDL_SCANCODE_7: return CEGUI::Key::Scan::Seven;
+		case SDL_SCANCODE_8: return CEGUI::Key::Scan::Eight;
+		case SDL_SCANCODE_9: return CEGUI::Key::Scan::Nine;
+		case SDL_SCANCODE_0: return CEGUI::Key::Scan::Zero;
+		case SDL_SCANCODE_RETURN: return CEGUI::Key::Scan::Return;
+		case SDL_SCANCODE_BACKSPACE: return CEGUI::Key::Scan::Backspace;
 		default: return CEGUI::Key::Scan::Unknown;
 		}
 	}
@@ -61,6 +73,7 @@ namespace GEM
 			auto myRoot = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "_MasterRoot");
 			CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(myRoot);
 			CEGUI::System::getSingleton().getDefaultGUIContext().getCursor().setDefaultImage("TaharezLook/MouseArrow");
+			CEGUI::System::getSingleton().getDefaultGUIContext().getCursor().setVisible(false);
 
 			m_inputAgregator = std::make_unique<CEGUI::InputAggregator>(&(CEGUI::System::getSingleton().getDefaultGUIContext()));
 			m_inputAgregator->initialise();
@@ -77,8 +90,6 @@ namespace GEM
 		if (!InitializeLayouts())
 			return ActionResult::AR_ERROR;
 		
-
-		isInitialized = true;
 		return ActionResult();
 	}
 
@@ -124,9 +135,18 @@ namespace GEM
 	}
 	void CEGUI_Service::mouseMoved(const SDL_Event & arg)
 	{
-		
-		m_inputAgregator->injectMousePosition(arg.motion.x, arg.motion.y);
-		m_inputAgregator->injectMouseWheelChange(arg.wheel.y);
+		switch (arg.type)
+		{
+		case SDL_MOUSEWHEEL: {
+			m_inputAgregator->injectMouseWheelChange(arg.wheel.y);
+			break;
+		}
+
+		case SDL_MOUSEMOTION: {
+			m_inputAgregator->injectMousePosition(arg.motion.x, arg.motion.y);
+			break;
+		}
+		}
 	}
 	void CEGUI_Service::mousePressed(const SDL_MouseButtonEvent & arg)
 	{

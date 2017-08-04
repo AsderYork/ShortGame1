@@ -109,6 +109,7 @@ GEM::Service::ActionResult GEM::MarchingToOgre::initialize()
 	CreateMarchingCubeDatablock();
 	CreateMesh();
 
+	m_initialized = true;
 	return ActionResult();
 }
 
@@ -137,6 +138,26 @@ GEM::Service::ActionResult GEM::MarchingToOgre::preFrame(double timeDelta)
 			}
 		}
 	}
+
+
+	if (m_MenuOverlay->isActive()) {
+		if (m_SelectionCountur->isVisible())//If something is chosen
+		{
+			int x, y, z;//Position of node in a map
+
+			auto SceneNodePose = m_SelectionCounturNode->getPosition();
+			x = std::round(SceneNodePose.x / m_mapScale);
+			y = std::round(SceneNodePose.y / m_mapScale);
+			z = std::round(SceneNodePose.z / m_mapScale);
+
+			if (m_calc->getValueOfNode(x, y, z) == m_MenuOverlay->getChosedValue()) { return ActionResult::AR_OK; }
+
+				m_calc->setValueOfNode(x, y, z, m_MenuOverlay->getChosedValue());
+			m_calc->calculateMesh(0, 0, m_mapScale);
+			CreateMesh();
+		}
+
+		}
 	return ActionResult();
 }
 
@@ -405,6 +426,7 @@ void GEM::MarchingToOgre::mousePressed(const SDL_MouseButtonEvent & arg)
 {
 	if (arg.button == SDL_BUTTON_LEFT)
 	{
+		if (!m_initialized) { return; }
 	 auto ray =	m_ogreService->getCamera()->getCameraToViewportRay(0.5, 0.5);
 	 Ogre::RaySceneQuery *Querry = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance")->createRayQuery(ray);
 
@@ -426,8 +448,9 @@ void GEM::MarchingToOgre::mousePressed(const SDL_MouseButtonEvent & arg)
 	 m_ogreService->getRoot()->getSceneManager("ExampleSMInstance")->destroyQuery(Querry);
 	}
 
-	if (arg.button == SDL_BUTTON_RIGHT)
+	else if (arg.button == SDL_BUTTON_RIGHT)
 	{
+		if (m_MenuOverlay->isActive()) { return; }
 		if (m_SelectionCountur->isVisible())//If something is chosen
 		{
 			int x, y, z;//Position of node in a map
@@ -436,6 +459,8 @@ void GEM::MarchingToOgre::mousePressed(const SDL_MouseButtonEvent & arg)
 			x = std::round(SceneNodePose.x / m_mapScale);
 			y = std::round(SceneNodePose.y / m_mapScale);
 			z = std::round(SceneNodePose.z / m_mapScale);
+
+			m_MenuOverlay->setChosedValue(m_calc->getValueOfNode(x, y, z));
 
 			if (m_calc->getValueOfNode(x, y, z) != 0)
 			{

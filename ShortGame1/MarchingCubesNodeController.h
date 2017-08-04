@@ -15,7 +15,14 @@ namespace GEM {
 		virtual void turnOff() override;
 		virtual void PreFrame(float delta) override;
 
+		void setChosedValue(int val);
+		int getChosedValue();
+		bool isActive();
+
+
 	private:
-		CEGUI::Window* m_Window;
+		CEGUI::Window* m_window;
+		CEGUI::Spinner* m_spinner;
+		//CEGUI::Scrollbar* m_scrollbar;
 	};
 }
