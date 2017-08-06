@@ -16,7 +16,7 @@ namespace GEM
 		/**
 		draws a map of MarchingCubes, using mesh, assessed by MeshName
 		*/
-		MarchingToOgre(std::string MeshName, Ogre_Service* OgreService, MarchingCubesCalculator* Calc, SDL_Controller* SDLController, CEGUI_Service* CEGUI_Service, int MapScale, int MeshScale);
+		MarchingToOgre(std::string MeshName, Ogre_Service* OgreService, MarchingCubiesMeshCalc* Calc, SDL_Controller* SDLController, CEGUI_Service* CEGUI_Service, float MapScale, float MeshScale);
 
 		/**
 		Changes the colour of meshes to match the values in map
@@ -42,11 +42,11 @@ namespace GEM
 		Ogre::IndexBufferPacked* createIndexBuffer();
 		MarchingCubeController* m_MenuOverlay;
 
-		int m_mapScale;
-		int m_meshScale;
+		float m_mapScale;
+		float m_meshScale;
 		std::string m_meshName;
 		Ogre_Service* m_ogreService;
-		MarchingCubesCalculator* m_calc;
+		MarchingCubiesMeshCalc* m_calc;
 		SDL_Controller* m_sdlController;
 		CEGUI_Service* m_ceguiService;
 		std::vector<Ogre::Item*> m_itemsVector;

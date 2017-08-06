@@ -23,6 +23,7 @@ struct MeshVertices
 {
 	float px, py, pz;   //Position
 	float nx, ny, nz;   //Normals
+	float nu=0, nv=0; //Texture Coordinates 1
 
 	MeshVertices() {}
 	MeshVertices(float _px, float _py, float _pz,
@@ -36,7 +37,7 @@ struct MeshVertices
 };
 
 
-GEM::MarchingToOgre::MarchingToOgre(std::string MeshName, Ogre_Service* OgreService, MarchingCubesCalculator * Calc, SDL_Controller* SDLController, CEGUI_Service* CEGUI_Service, int MapScale, int MeshScale)
+GEM::MarchingToOgre::MarchingToOgre(std::string MeshName, Ogre_Service* OgreService, MarchingCubiesMeshCalc * Calc, SDL_Controller* SDLController, CEGUI_Service* CEGUI_Service, float MapScale, float MeshScale)
 	:m_meshName(MeshName), m_ogreService(OgreService), m_calc(Calc), m_mapScale(MapScale), m_meshScale(MeshScale), m_sdlController(SDLController),
 	m_ceguiService(CEGUI_Service)
 {
@@ -45,7 +46,7 @@ GEM::MarchingToOgre::MarchingToOgre(std::string MeshName, Ogre_Service* OgreServ
 
 void GEM::MarchingToOgre::updatePrepresentation()
 {
-	auto SceneMap = m_calc->getMap();
+	/*auto SceneMap = m_calc->getMap();
 	int ObjNum = 0;
 	for (int i = 0; i < SceneMap.size(); i++)
 	{
@@ -56,13 +57,13 @@ void GEM::MarchingToOgre::updatePrepresentation()
 				ObjNum++;
 			}
 		}
-	}
+	}*/
 }
 
 GEM::Service::ActionResult GEM::MarchingToOgre::initialize()
 {
-	m_calc->calculateMesh(0, 0, m_mapScale);
-	auto SceneMap = m_calc->getMap();
+	m_calc->CalculateMesh(m_mapScale, 0, 0);
+	//auto SceneMap = m_calc->getMap();
 	auto SceneManager = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance");
 
 	m_sdlController->registerMouseListener(this);
@@ -73,11 +74,11 @@ GEM::Service::ActionResult GEM::MarchingToOgre::initialize()
 
 	
 	int id = 0;
-	for (int i = 0; i < SceneMap.size(); i++)
+	for (int i = 0; i < m_calc->getMapSize(); i++)
 	{
-		for (int j = 0; j < SceneMap[i].size(); j++)
+		for (int j = 0; j < m_calc->getMapSize(); j++)
 		{
-			for (int k = 0; k < SceneMap[i][j].size(); k++)
+			for (int k = 0; k < m_calc->getMapSize(); k++)
 			{
 				Ogre::Item *tmpItem = SceneManager->createItem(m_meshName);
 				Ogre::SceneNode *tmpSceneNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);			
@@ -123,41 +124,30 @@ void GEM::MarchingToOgre::shutdown()
 
 GEM::Service::ActionResult GEM::MarchingToOgre::preFrame(double timeDelta)
 {
-	int id = 0;
-	auto SceneMap = m_calc->getMap();
-
-
-	for (int i = 0; i < SceneMap.size(); i++)
+	
+/*
+int id = 0;
+	for (int i = 0; i < m_calc->getMapSize(); i++)
 	{
-		for (int j = 0; j < SceneMap[i].size(); j++)
+		for (int j = 0; j < m_calc->getMapSize(); j++)
 		{
-			for (int k = 0; k < SceneMap[i][j].size(); k++)
+			for (int k = 0; k <  m_calc->getMapSize(); k++)
 			{
 				CreateOrUpdateDatablock(id, m_calc->getValueOfNode(i, j, k) / 256.0);
 				id++;
 			}
 		}
 	}
-
+	/*
 
 	if (m_MenuOverlay->isActive()) {
 		if (m_SelectionCountur->isVisible())//If something is chosen
 		{
-			int x, y, z;//Position of node in a map
-
-			auto SceneNodePose = m_SelectionCounturNode->getPosition();
-			x = std::round(SceneNodePose.x / m_mapScale);
-			y = std::round(SceneNodePose.y / m_mapScale);
-			z = std::round(SceneNodePose.z / m_mapScale);
-
-			if (m_calc->getValueOfNode(x, y, z) == m_MenuOverlay->getChosedValue()) { return ActionResult::AR_OK; }
-
-				m_calc->setValueOfNode(x, y, z, m_MenuOverlay->getChosedValue());
-			m_calc->calculateMesh(0, 0, m_mapScale);
-			CreateMesh();
+			
 		}
 
-		}
+
+		}*/
 	return ActionResult();
 }
 
@@ -297,18 +287,24 @@ void GEM::MarchingToOgre::CreateMesh()
 	Ogre::VertexElement2Vec vertexElements;
 	vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_POSITION));
 	vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_NORMAL));
+	vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES));
 
 	MeshVertices *meshVertices = reinterpret_cast<MeshVertices*>(OGRE_MALLOC_SIMD(sizeof(MeshVertices) * m_calc->getVertexes().size(), Ogre::MEMCATEGORY_GEOMETRY));
 
 	for (int i = 0; i < m_calc->getVertexes().size(); i++)
 	{
-		meshVertices[i].px = (m_calc->getVertexes())[i].x;
-		meshVertices[i].py = (m_calc->getVertexes())[i].y;
-		meshVertices[i].pz = (m_calc->getVertexes())[i].z;
+		meshVertices[i].px = (m_calc->getVertexes())[i].pos.x;
+		meshVertices[i].py = (m_calc->getVertexes())[i].pos.y;
+		meshVertices[i].pz = (m_calc->getVertexes())[i].pos.z;
 
-		meshVertices[i].nx = (m_calc->getNormals())[i].x;
-		meshVertices[i].ny = (m_calc->getNormals())[i].y;
-		meshVertices[i].nz = (m_calc->getNormals())[i].z;
+		meshVertices[i].nx = (m_calc->getVertexes())[i].normal.x;
+		meshVertices[i].ny = (m_calc->getVertexes())[i].normal.y;
+		meshVertices[i].nz = (m_calc->getVertexes())[i].normal.z;
+
+
+
+		meshVertices[i].nu = (m_calc->getVertexes())[i].TextureCord.x;
+		meshVertices[i].nv = (m_calc->getVertexes())[i].TextureCord.y;
 	}
 
 	Ogre::VertexBufferPacked *vertexBuffer = 0;
@@ -335,7 +331,7 @@ void GEM::MarchingToOgre::CreateMesh()
 	subMesh->mVao[Ogre::VpShadow].push_back(vao);
 
 	//Set the bounds to get frustum culling and LOD to work correctly.
-	float meshSize = m_calc->getMap().size()*m_mapScale;
+	float meshSize = m_calc->getMapSize()*m_mapScale;
 	mesh->_setBounds(Ogre::Aabb(Ogre::Vector3::ZERO, Ogre::Vector3::UNIT_SCALE*meshSize), false);
 	mesh->_setBoundingSphereRadius(meshSize);
 
@@ -348,8 +344,7 @@ void GEM::MarchingToOgre::CreateMesh()
 	m_MarchingCubeNode->attachObject(m_MarchingCubesItem);
 	m_MarchingCubeNode->setPosition(0, 0, 0);
 
-	m_MarchingCubesItem->setDatablock("MarchingCubesBlob");
-
+	m_MarchingCubesItem->setDatablock("HlmsPbs1");
 
 
 
@@ -440,6 +435,20 @@ void GEM::MarchingToOgre::mousePressed(const SDL_MouseButtonEvent & arg)
 			 {
 				 m_SelectionCounturNode->setPosition(ResultObj.movable->getParentNode()->getPosition());
 				 m_SelectionCounturNode->setVisible(true);
+
+				 int x, y, z;//Position of node in a map
+
+				 auto SceneNodePose = m_SelectionCounturNode->getPosition();
+				 x = std::round(SceneNodePose.x / m_mapScale);
+				 y = std::round(SceneNodePose.y / m_mapScale);
+				 z = std::round(SceneNodePose.z / m_mapScale);
+
+				 if (m_calc->getValueOfNode(x, y, z) == m_MenuOverlay->getChosedValue()) { return; }
+
+				 m_calc->setValueOfNode(x, y, z, m_MenuOverlay->getChosedValue());
+				 m_calc->CalculateMesh(m_mapScale, 0, 0);
+				 CreateMesh();
+
 				 break;
 			 }
 		 }
@@ -471,7 +480,7 @@ void GEM::MarchingToOgre::mousePressed(const SDL_MouseButtonEvent & arg)
 				m_calc->setValueOfNode(x, y, z, 255);
 			}
 
-			m_calc->calculateMesh(0, 0, m_mapScale);
+			m_calc->CalculateMesh(m_mapScale, 0, 0);
 			CreateMesh();
 		}
 	}
