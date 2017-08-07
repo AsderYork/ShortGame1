@@ -151,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEGUI_Service.h" />
+    <ClInclude Include="ChunkLoader.h" />
     <ClInclude Include="EngineController.h" />
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="LogHelper.h" />
@@ -162,9 +163,11 @@
     <ClInclude Include="SDL2_Service.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="VoxelMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEGUI_Service.cpp" />
+    <ClCompile Include="ChunkLoader.cpp" />
     <ClCompile Include="EngineController.cpp" />
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="LogHelper.cpp" />

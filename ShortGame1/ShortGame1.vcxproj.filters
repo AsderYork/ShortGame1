@@ -43,6 +43,12 @@
     <Filter Include="CEGUI_Layout\MarchingCubesNodeController">
       <UniqueIdentifier>{ff61bcaa-6410-447f-aa9b-2b834e02accf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VoxelMap">
+      <UniqueIdentifier>{f11fbeb4-6094-4324-85fb-117df1dc8547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VoxelMap\ChunkLoader">
+      <UniqueIdentifier>{0bf60dc1-c952-4273-9386-b13a88aa2501}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -84,6 +90,12 @@
     <ClInclude Include="MarchingCubesNodeController.h">
       <Filter>CEGUI_Layout\MarchingCubesNodeController</Filter>
     </ClInclude>
+    <ClInclude Include="VoxelMap.h">
+      <Filter>VoxelMap</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkLoader.h">
+      <Filter>VoxelMap\ChunkLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogHelper.cpp">
@@ -121,6 +133,9 @@
     </ClCompile>
     <ClCompile Include="MarchingCubesNodeController.cpp">
       <Filter>CEGUI_Layout\MarchingCubesNodeController</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkLoader.cpp">
+      <Filter>VoxelMap\ChunkLoader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

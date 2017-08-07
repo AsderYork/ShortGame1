@@ -7,11 +7,17 @@
 #include "CEGUI_Service.h"
 
 #include "FPS_Layout.h"
-
+#include "ChunkLoader.h"
 
 
 int main(int argc, char *argv[])
 {
+	GEM::ChunkLoader chunkLoader;
+	chunkLoader.InitializeChunkLoader();
+	auto chunk = chunkLoader.getChunk(GEM::intpos2(0, 0));
+	delete chunk;
+	chunkLoader.SaveMagistral();
+
 	GEM::MarchingCubiesMeshCalc Calc;
 
 
