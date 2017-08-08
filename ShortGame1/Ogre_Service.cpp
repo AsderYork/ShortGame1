@@ -402,7 +402,7 @@ namespace GEM
 	{
 		m_camera = sceneManager->createCamera("Main Camera");
 
-		m_camera->setPosition(Ogre::Vector3(0, 0, 15));
+		m_camera->setPosition(Ogre::Vector3(0, 10, 15));
 		// Look back along -Z
 		m_camera->lookAt(Ogre::Vector3(0, 0, 0));
 		m_camera->setNearClipDistance(0.2f);

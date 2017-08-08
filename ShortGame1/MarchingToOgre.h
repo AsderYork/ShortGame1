@@ -7,6 +7,7 @@
 #include <string>
 #include "MarchingCubesNodeController.h"
 #include "CEGUI_Service.h"
+#include "ChunkLoader.h"
 
 namespace GEM
 {

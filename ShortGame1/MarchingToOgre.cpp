@@ -74,11 +74,11 @@ GEM::Service::ActionResult GEM::MarchingToOgre::initialize()
 
 	
 	int id = 0;
-	for (int i = 0; i < m_calc->getMapSize(); i++)
+	/*for (int i = 0; i < m_calc->getMapSizeX(); i++)
 	{
-		for (int j = 0; j < m_calc->getMapSize(); j++)
+		for (int j = 0; j < m_calc->getMapHeight(); j++)
 		{
-			for (int k = 0; k < m_calc->getMapSize(); k++)
+			for (int k = 0; k < m_calc->getMapSizeX(); k++)
 			{
 				Ogre::Item *tmpItem = SceneManager->createItem(m_meshName);
 				Ogre::SceneNode *tmpSceneNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);			
@@ -95,7 +95,7 @@ GEM::Service::ActionResult GEM::MarchingToOgre::initialize()
 				id++;
 			}
 		}
-	}
+	}*/
 
 	CreateSelectionDatablock();
 	m_SelectionCountur = SceneManager->createItem(m_meshName);
@@ -331,7 +331,7 @@ void GEM::MarchingToOgre::CreateMesh()
 	subMesh->mVao[Ogre::VpShadow].push_back(vao);
 
 	//Set the bounds to get frustum culling and LOD to work correctly.
-	float meshSize = m_calc->getMapSize()*m_mapScale;
+	float meshSize = m_calc->getMapHeight()*m_mapScale;
 	mesh->_setBounds(Ogre::Aabb(Ogre::Vector3::ZERO, Ogre::Vector3::UNIT_SCALE*meshSize), false);
 	mesh->_setBoundingSphereRadius(meshSize);
 

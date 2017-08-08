@@ -20,6 +20,13 @@ namespace GEM {
 	{
 		assert(m_singleton == nullptr);//Otherwise singleton is allready set up
 		m_singleton = this;
+		InitializeChunkLoader();
+	}
+
+	ChunkLoader * ChunkLoader::GetOrCreateChunkLoader()
+	{
+		if(m_singleton == nullptr)
+		return new ChunkLoader;
 	}
 
 	ChunkLoader::~ChunkLoader()
@@ -27,7 +34,7 @@ namespace GEM {
 		SaveMagistral();
 	}
 
-	bool ChunkLoader::InitializeChunkLoader()
+	void ChunkLoader::InitializeChunkLoader()
 	{
 		m_mapFolder = "../Map/";
 
@@ -44,23 +51,35 @@ namespace GEM {
 
 
 
-		return false;
 	}
 
-	Chunk * ChunkLoader::getChunk(intpos2 pos)
+	std::shared_ptr<Chunk> ChunkLoader::getChunk(intpos2 pos)
 	{
 		//Check if chunk is allready loaded;
-		auto loadedIter = m_loadedChunks.find(pos);
+		auto loadedIter = std::find_if(m_loadedChunks.begin(), m_loadedChunks.end(), [pos](std::pair<std::weak_ptr<Chunk>, intpos2> Obj) {return (Obj.second == pos);});
 			//if it is, return it
-			if (loadedIter != m_loadedChunks.end()) {return loadedIter->second;}
+			if (loadedIter != m_loadedChunks.end())
+			{
+				assert(!loadedIter->first.expired());//Chunks that are epired MUST remove themself before they get expired, so thay should not be expired
+				return loadedIter->first.lock();
+			}
 
-		//if it's not, check if it's in magistral
+		//if it's not, check if it's in magistral. It also means that it will involve loading
+			std::shared_ptr<Chunk> ChunkPtr;
 		auto magistralIter = std::find(m_magistral.begin(), m_magistral.end(), pos);
 			//If it is, load it, add to a pool of loaded chunks, and then return. P.S. loadChunk do perform write in a pool
-			if (magistralIter != m_magistral.end()) { return loadChunk(pos); }
+			if (magistralIter != m_magistral.end())
+			{
+				ChunkPtr = std::shared_ptr<Chunk>(loadChunk(pos));
+			}
+			else//if it's not in a magistral, create chunk, and add it to a pool
+			{
+				ChunkPtr = std::shared_ptr<Chunk>(CreateChunk(pos));
+			}
+			//Push chunk in a pool
+			m_loadedChunks.push_back(std::make_pair(std::weak_ptr<Chunk>(ChunkPtr), pos));
+			return ChunkPtr;
 
-		//if it's not in a magistral, create chunk, and add it to a pool
-		return CreateChunk(pos);
 	}
 
 	void ChunkLoader::SaveMagistral()
@@ -85,9 +104,7 @@ namespace GEM {
 		cereal::BinaryInputArchive ChunkArchive(inputChunk);
 		Chunk* loadedChunk = new Chunk;
 
-		ChunkArchive.loadBinary(loadedChunk, sizeof(Chunk));
-
-		m_loadedChunks.insert(std::make_pair(loadedChunk->ChunkPos, loadedChunk));
+		ChunkArchive(*loadedChunk);
 		return loadedChunk;
 	}
 
@@ -104,15 +121,16 @@ namespace GEM {
 		std::ofstream outputChunk(m_mapFolder + "chunk" + std::to_string(chunk->id), std::ios::binary);		
 		cereal::BinaryOutputArchive ChunkArchive(outputChunk);
 
-		ChunkArchive.saveBinary(chunk, sizeof(Chunk));
+		ChunkArchive(*chunk);
+		//ChunkArchive.saveBinary(chunk, sizeof(Chunk));
 	}
 
-	Chunk * ChunkLoader::CreateChunk(intpos2)
+	Chunk * ChunkLoader::CreateChunk(intpos2 pos)
 	{
 		Chunk* loadedChunk = new Chunk;
 		for (int x = 0; x < CHUNK_SIZE; x++)
 		{
-			for (int y = 0; y < CHUNK_HEIGHT/2; y++)
+			for (int y = 0; y < 3; y++)
 			{
 				for (int z = 0; z < CHUNK_SIZE; z++)
 				{
@@ -120,17 +138,21 @@ namespace GEM {
 				}
 			}
 		}
-		m_loadedChunks.insert(std::make_pair(loadedChunk->ChunkPos, loadedChunk));
+		loadedChunk->ChunkPos = pos;
+		loadedChunk->id = IDfromXY(pos);
+
 		return loadedChunk;
 	}
+
 
 
 	Chunk::~Chunk()
 	{//Chunk should be saved before destruction
 		ChunkLoader::m_singleton->SaveChunk(this);
 		//And it should remove itself from a chunk pool
-		auto iter = ChunkLoader::m_singleton->m_loadedChunks.find(this->ChunkPos);
-
+		auto iter = std::find_if(ChunkLoader::m_singleton->m_loadedChunks.begin(), ChunkLoader::m_singleton->m_loadedChunks.end(),
+			[pos = ChunkPos](std::pair<std::weak_ptr<Chunk>, intpos2> Obj) {return (Obj.second == pos);}
+		);
 #ifdef _DEBUG
 		if (iter == ChunkLoader::m_singleton->m_loadedChunks.end())
 		{

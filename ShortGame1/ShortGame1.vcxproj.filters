@@ -25,12 +25,6 @@
     <Filter Include="Ogre\Ogre_Service">
       <UniqueIdentifier>{ee39a5da-852b-41e8-a28c-920f88987c76}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Marching Cubes">
-      <UniqueIdentifier>{6e87ed7b-33b9-4b68-9b39-9c695b9a794c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Marching Cubes\MarchingToOgre">
-      <UniqueIdentifier>{e6c7d901-c673-4548-b3da-6352b5e9ae80}</UniqueIdentifier>
-    </Filter>
     <Filter Include="CEGUI_Service">
       <UniqueIdentifier>{fb9a5a95-2548-4d75-9dfe-364aea282c18}</UniqueIdentifier>
     </Filter>
@@ -48,6 +42,12 @@
     </Filter>
     <Filter Include="VoxelMap\ChunkLoader">
       <UniqueIdentifier>{0bf60dc1-c952-4273-9386-b13a88aa2501}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VoxelMap\Marching Cubes">
+      <UniqueIdentifier>{6e87ed7b-33b9-4b68-9b39-9c695b9a794c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VoxelMap\Marching Cubes\MarchingToOgre">
+      <UniqueIdentifier>{e6c7d901-c673-4548-b3da-6352b5e9ae80}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,10 +76,10 @@
       <Filter>Ogre\Ogre_Service</Filter>
     </ClInclude>
     <ClInclude Include="MarchingCubes.h">
-      <Filter>Marching Cubes</Filter>
+      <Filter>VoxelMap\Marching Cubes</Filter>
     </ClInclude>
     <ClInclude Include="MarchingToOgre.h">
-      <Filter>Marching Cubes\MarchingToOgre</Filter>
+      <Filter>VoxelMap\Marching Cubes\MarchingToOgre</Filter>
     </ClInclude>
     <ClInclude Include="CEGUI_Service.h">
       <Filter>CEGUI_Service</Filter>
@@ -120,10 +120,10 @@
       <Filter>Ogre\Ogre_Service</Filter>
     </ClCompile>
     <ClCompile Include="MarchingCubes.cpp">
-      <Filter>Marching Cubes</Filter>
+      <Filter>VoxelMap\Marching Cubes</Filter>
     </ClCompile>
     <ClCompile Include="MarchingToOgre.cpp">
-      <Filter>Marching Cubes\MarchingToOgre</Filter>
+      <Filter>VoxelMap\Marching Cubes\MarchingToOgre</Filter>
     </ClCompile>
     <ClCompile Include="CEGUI_Service.cpp">
       <Filter>CEGUI_Service</Filter>
@@ -136,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="ChunkLoader.cpp">
       <Filter>VoxelMap\ChunkLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="VoxelMap.cpp">
+      <Filter>VoxelMap</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

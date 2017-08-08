@@ -179,6 +179,7 @@
     <ClCompile Include="SDL2_Service.cpp" />
     <ClCompile Include="ShortGame1.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="VoxelMap.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
