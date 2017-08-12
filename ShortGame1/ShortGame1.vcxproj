@@ -151,35 +151,29 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEGUI_Service.h" />
+    <ClInclude Include="ChunkFormat.h" />
     <ClInclude Include="ChunkLoader.h" />
     <ClInclude Include="EngineController.h" />
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="LogHelper.h" />
-    <ClInclude Include="MarchingCubes.h" />
-    <ClInclude Include="MarchingCubesNodeController.h" />
-    <ClInclude Include="MarchingToOgre.h" />
+    <ClInclude Include="MapSystem.h" />
     <ClInclude Include="OgreLogRedirection.h" />
     <ClInclude Include="Ogre_Service.h" />
     <ClInclude Include="SDL2_Service.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="VoxelMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEGUI_Service.cpp" />
-    <ClCompile Include="ChunkLoader.cpp" />
     <ClCompile Include="EngineController.cpp" />
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="LogHelper.cpp" />
-    <ClCompile Include="MarchingCubes.cpp" />
-    <ClCompile Include="MarchingCubesNodeController.cpp" />
-    <ClCompile Include="MarchingToOgre.cpp" />
+    <ClCompile Include="MapSystem.cpp" />
     <ClCompile Include="OgreLogRedirection.cpp" />
     <ClCompile Include="Ogre_Service.cpp" />
     <ClCompile Include="SDL2_Service.cpp" />
     <ClCompile Include="ShortGame1.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="VoxelMap.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

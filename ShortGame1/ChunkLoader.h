@@ -1,110 +1,117 @@
 #pragma once
-
-#include <string>
-#include <vector>
-#include <map>
+#include "stdafx.h"
 #include <memory>
+#include <vector>
+#include <string>
+#include <fstream>
+#include <iostream>
 
-#define CHUNK_SIZE 32
-#define CHUNK_HEIGHT 128
-
-/**
-The map is not endless.
-*/
-#define MAP_SIZE 2048
-
-
-
+#include <cereal\cereal.hpp>
+#include <cereal\archives\binary.hpp>
+#include <cereal\types\vector.hpp>
+#include <cereal\types\utility.hpp>
 
 namespace GEM
 {
-	struct intpos2 {
-		int x = 0;
-		int y = 0;
-		intpos2() {}
-		intpos2(int _x, int _y) : x(_x), y(_y) {}
-		inline bool operator==(const intpos2& rhs) const { return ((x == rhs.x) && (y == rhs.y)) ? true : false; }
-		inline bool operator!=(const intpos2& rhs) const { return ((x == rhs.x) && (y == rhs.y)) ? false : true; }
-		//std::map uses this operator
-		inline bool operator<(const intpos2& rhs) const { return ((x*MAP_SIZE + y) < (rhs.x*MAP_SIZE + rhs.y)) ? true : false; } ;
-		inline int SqueredistanceTo(const intpos2& rhs) const { return (x - rhs.x)*(x - rhs.x) + (y - rhs.y)*(y - rhs.y); };
-
-		template<class Archive>
-		void serialize(Archive & archive){archive(x, y);}
-	};
-
-	struct MapNode {
-		unsigned char Value=0;
-		template<class Archive>
-		void serialize(Archive & archive) { archive(Value); }
-	};
-	struct Chunk {
-		MapNode Nodes[CHUNK_SIZE][CHUNK_HEIGHT][CHUNK_SIZE];
-		/*
-		Chinks have a position; The position of a chunk, is the x,z cordinates of back, left block.
-		*/
-		intpos2 ChunkPos;
-		long long id;
-
-		template<class Archive>
-		void serialize(Archive & archive) { 
-			archive(Nodes, sizeof(MapNode)*CHUNK_SIZE*CHUNK_SIZE*CHUNK_HEIGHT);
-			archive(ChunkPos);
-			archive(id, sizeof(long long));
-		}
-
-		~Chunk();
-	};
-
 	/**
-	Loads chunks.
-	It's a singleton class.
-	Creation is not thread-safe. But the Loader itself do uses threads.
-
-	Chunk loader do loads chunks. It's even can save them! But it knows nothing about which chunk should be loaded.
-	When you load up a chunk, it will remain in memory. Even if you'll try to recive it again, you'll only get another shared_ptr to a same block
-	of memory. But if noone currently holds a pointer, the chunk will fall into the oblivion! preliminarily saved.
-
+	Loads chunks. Uses Cereal.
+	Chunks of any type can be loaded!
+	ChunkType MUST be cereal-serializeble!
+	If chunk is not loaded, it must be created somehow! I don't know how
 	*/
-
-	class ChunkLoader {
+	template <class ChunkType>
+	class ChunkLoader
+	{
 	public:
-		ChunkLoader();
-		static ChunkLoader* GetOrCreateChunkLoader();
+		using CordShared = std::pair<std::pair<int, int>, std::shared_ptr<ChunkType>>;
+		using CordWeak = std::pair<std::pair<int, int>, std::weak_ptr<ChunkType>>;
 
-		~ChunkLoader();
-		std::shared_ptr<Chunk> getChunk(intpos2 pos);
+		ChunkLoader(std::string chunkPath, std::string ChunkPostfix);
+
+		/**
+		Returns a shared_ptr to a chunk located at x,y. While at least someone holds a shared_ptr to this chunk, it will remain loaded and
+		evry call to this method will return shared_ptr to exactly that chunk. But if all shared_ptr's to a particualar chunk is destroyed,
+		chunk will be unloaded(with save) and call to a GetChunk again for this chunk will be much slower.
+		*/
+		std::shared_ptr<ChunkType> GetChunk(int x, int y);
+		/**
+		Forces chunk to be saved
+		*/
+		//void SaveChunk(std::shared_ptr<ChunkType> Chunk);
+	private:
+
+		//List of all chunks were created and actually exist.
+		std::vector<std::pair<int, int>> m_magistral;
+		//List of all chunks, that are actually loaded.
+		std::vector<CordWeak> m_loadedChunks;
+
+		//Prefix to chunk names
+		std::string m_chunksPath;
+		//Postfix to chunk names
+		std::string m_chunksPostfix;
+
+		//Loads magistral. Must be called before chunk-loading!
+		void LoadMagistral();
+		//Save magistral. Shuld be called, so that newely created chunk would actually exist.
 		void SaveMagistral();
 
+		//Loads chunk from disk. if chunk exists, otherwise nullptr
+		CordShared LoadChunk(int x, int y)
+		{
+			return CordShared();
+		}
 
-	private:
-		inline int IDfromXY(intpos2 XY) {
-			return XY.x*MAP_SIZE + XY.y;
-		};
+		//Creates chunk from scratch. if chunk exists, otherwise nullptr
+		//CordShared CreateChunk(int x, int y);
 
-		void InitializeChunkLoader();
-		Chunk* loadChunk(intpos2 pos);
-		void SaveChunk(Chunk* chunk);
-
-		/**If there is no chank, it's possible to create it*/
-		Chunk* CreateChunk(intpos2 pos);
-
-
-		/**
-		When map is loaded or created, it contains a list of all chunks, that it have. Here it is
-		*/
-		std::vector<intpos2> m_magistral;		
-
-		static ChunkLoader* m_singleton;
-		std::string m_mapFolder;
-
-
-		/**
-		All chunks, that is loaded right now, contains here
-		*/
-		std::vector<std::pair<std::weak_ptr<Chunk>, intpos2>> m_loadedChunks;
-
-		friend struct Chunk;
 	};
+
+	
+
+	template<class ChunkType>
+	inline ChunkLoader<ChunkType>::ChunkLoader(std::string chunkPath, std::string ChunkPostfix) :
+		m_chunksPath(chunkPath),
+		m_chunksPostfix(ChunkPostfix)
+	{
+		LoadMagistral();
+		m_magistral.push_back(std::make_pair(12, 44));
+		SaveMagistral();
+	}
+
+	template<class ChunkType>
+	inline std::shared_ptr<ChunkType> ChunkLoader<ChunkType>::GetChunk(int x, int y)
+	{
+		for (auto &aChunk : m_loadedChunks)
+		{
+			if ((aChunk.first.first == x) && (aChunk.first.first == y))
+			{
+				assert(!aChunk.second.expired());//Chunk can't be expired in this list!
+
+
+			}
+		}
+		return std::shared_ptr<ChunkType>();
+	}
+
+	template<class ChunkType>
+	inline void ChunkLoader<ChunkType>::LoadMagistral()
+	{
+		std::ifstream inputMagistral(m_chunksPath + "magistral" + m_chunksPostfix, std::ios::binary);
+		if (!inputMagistral.is_open())
+		{
+			LOGCATEGORY("ChunkLoader/LoadMagistral").warn("Magistral file is not exist. It will be created on save. <prefix:%s; postfix:%s;>", m_chunksPath.c_str(), m_chunksPostfix.c_str());
+			return;
+		}
+		cereal::BinaryInputArchive MagistralArchive(inputMagistral);
+		MagistralArchive(m_magistral);
+	}
+
+	template<class ChunkType>
+	inline void ChunkLoader<ChunkType>::SaveMagistral()
+	{
+		std::ofstream outputMagistral(m_chunksPath + "magistral" + m_chunksPostfix, std::ios::binary);
+		cereal::BinaryOutputArchive MagistralArchive(outputMagistral);
+		MagistralArchive(m_magistral);
+	}
 
 }
