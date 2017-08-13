@@ -6,23 +6,40 @@
 #include "ChunkLoader.h"
 #include "FPS_Layout.h"
 
-struct ChunkTest {
+struct ChunkTest : public GEM::ChunkBase {
+public:
+	
 	int a=1;
 	float b=2;
+
+	template <class Archive>
+	void serialize(Archive & ar)
+	{
+		ar(a, b);
+	}
+
+
+
+	// Унаследовано через ChunkBase
+	virtual void generateNewChunk() override
+	{
+		a = -getCords().x;
+		b = -getCords().y;
+	}
 };
 
 int main(int argc, char *argv[])
 {
 	GEM::ChunkLoader<ChunkTest> loader("../Map/", "");
-	auto Loaded1 = loader.GetChunk(0, 0);
+	{
+		auto Chunkerson = loader.getChunk(12, 43);
+		auto Chunkersonder = loader.getChunk(12, 44);
+
+		auto ChunkersonYonger = loader.getChunk(12, 43);
+	}
+	auto ChunkersonReincarnate = loader.getChunk(12, 43);
 	
-
-	//GEM::VoxelMap VoxelMap;
-	//VoxelMap.SetPlayerPos(0, 0);
-
-	
-	//GEM::MarchingCubiesMeshCalc Calc;
-
+	loader.saveMagistral();
 
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
