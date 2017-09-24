@@ -46,9 +46,21 @@
     <Filter Include="MapSystem\ChunkLoader">
       <UniqueIdentifier>{29251546-88cf-4d88-8f17-6880241ac6c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MapSystem\NodeChunk">
+      <UniqueIdentifier>{429a4299-9faa-4c8a-8398-f83a65d3163a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapSystem\NodesToMC">
+      <UniqueIdentifier>{0b797901-2030-45fb-8b27-49e6087bd447}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapSystemV2">
+      <UniqueIdentifier>{388b16f3-a950-41d1-b0e3-ec5bd63f5627}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="MapSystemV2Excuse.txt">
+      <Filter>MapSystemV2</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogHelper.h">
@@ -87,6 +99,12 @@
     <ClInclude Include="ChunkLoader.h">
       <Filter>MapSystem\ChunkLoader</Filter>
     </ClInclude>
+    <ClInclude Include="NodeChunk.h">
+      <Filter>MapSystem\NodeChunk</Filter>
+    </ClInclude>
+    <ClInclude Include="NodesToMC.h">
+      <Filter>MapSystem\NodesToMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogHelper.cpp">
@@ -119,5 +137,9 @@
     <ClCompile Include="MapSystem.cpp">
       <Filter>MapSystem\MapSystem</Filter>
     </ClCompile>
+    <ClCompile Include="NodeChunk.cpp">
+      <Filter>MapSystem\NodeChunk</Filter>
+    </ClCompile>
+    <ClCompile Include="NodesToMC.cpp" />
   </ItemGroup>
 </Project>

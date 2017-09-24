@@ -148,7 +148,7 @@ namespace GEM
 		{
 			if (chunk.second.lock().get()->cords == intcord2(x, y))
 			{
-				assert(!chunk.second.expired());//Chunk can't be expired!
+				//assert(!chunk.second.expired());//Chunk can't be expired!
 				return chunk.second.lock();
 			}
 		}

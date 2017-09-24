@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="MapSystemV2Excuse.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,8 @@
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="LogHelper.h" />
     <ClInclude Include="MapSystem.h" />
+    <ClInclude Include="NodeChunk.h" />
+    <ClInclude Include="NodesToMC.h" />
     <ClInclude Include="OgreLogRedirection.h" />
     <ClInclude Include="Ogre_Service.h" />
     <ClInclude Include="SDL2_Service.h" />
@@ -170,6 +173,8 @@
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="LogHelper.cpp" />
     <ClCompile Include="MapSystem.cpp" />
+    <ClCompile Include="NodeChunk.cpp" />
+    <ClCompile Include="NodesToMC.cpp" />
     <ClCompile Include="OgreLogRedirection.cpp" />
     <ClCompile Include="Ogre_Service.cpp" />
     <ClCompile Include="SDL2_Service.cpp" />

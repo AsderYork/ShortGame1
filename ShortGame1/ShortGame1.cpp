@@ -3,43 +3,18 @@
 #include "SDL2_Service.h"
 #include "Ogre_Service.h"
 #include "CEGUI_Service.h"
-#include "ChunkLoader.h"
 #include "FPS_Layout.h"
 
-struct ChunkTest : public GEM::ChunkBase {
-public:
-	
-	int a=1;
-	float b=2;
 
-	template <class Archive>
-	void serialize(Archive & ar)
-	{
-		ar(a, b);
-	}
-
-
-
-	// Унаследовано через ChunkBase
-	virtual void generateNewChunk() override
-	{
-		a = -getCords().x;
-		b = -getCords().y;
-	}
-};
+#include "NodeChunk.h"
+#include "NodesToMC.h"
 
 int main(int argc, char *argv[])
 {
-	GEM::ChunkLoader<ChunkTest> loader("../Map/", "");
-	{
-		auto Chunkerson = loader.getChunk(12, 43);
-		auto Chunkersonder = loader.getChunk(12, 44);
+	GEM::ChunkLoader<GEM::NodeChunk> loader("../Map/", ".map");
 
-		auto ChunkersonYonger = loader.getChunk(12, 43);
-	}
-	auto ChunkersonReincarnate = loader.getChunk(12, 43);
-	
-	loader.saveMagistral();
+	GEM::NodesToMCGenerator Generator(&loader);
+	Generator.GenerateFromScratch(0, 0);
 
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
