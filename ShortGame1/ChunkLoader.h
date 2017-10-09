@@ -22,6 +22,9 @@ namespace GEM
 	template<class ChunkType>
 	class ChunkLoader;
 
+	/**!
+	defines a pair(x,y) of integers, so that they could be serialized and compared
+	*/
 	struct intcord2
 	{
 		int x;
@@ -40,7 +43,7 @@ namespace GEM
 
 	};
 
-	/**
+	/**!
 	\brief Base for all the chunks, that should be controlled by a ChunkLoader
 
 	If something is want to use ChunkLoader system, it must derive from this class.
@@ -78,18 +81,14 @@ namespace GEM
 
 		/**
 		Get's called in the destructor and removes object from ChunkLoader's pool
+		This callback contains reference to a ChunkLoader that created this chunk
 		*/
 		std::function<void()> m_deleteCallback;
-
-		/** Pointer to a ChunkLoader that owns this chunk. Used for removing chunk from chunklist when it get's destroyed*/
-
-		//template<class ChunkType>
-		//ChunkLoader* m_owner;
 	};
 
 	/**
-	Loads chunks. It can hash chunk pointers, so that chunk will stay loaded, while someone is using it. Prevents from nultiple copies
-	of a chunk in memory. It also make aquireing of chunk opaque to a user, so that it'll make no difference to them, where chunk existed, before
+	Loads chunks. It can keep chunk pointers, so that chunk will stay loaded, while someone is using it, preventing multiple copies
+	of a chunk in memory beeing made. Its also makes aquireing of chunk opaque to a user, so that it'll make no difference to them, whether chunk existed before
 	they asked for them, or it were created just now(except speed of course, I'm not a magician after all)
 	*/
 	template<class ChunkType>
@@ -97,17 +96,36 @@ namespace GEM
 	{
 		static_assert(std::is_base_of<ChunkBase, ChunkType>::value);/**ChunkLoader can use only childrens of a ChunkBase as a template Parameter! */
 	public:
+		/**!
+		ChunkLoader Constructor.
+		\tparam ChunkBaseType Determines, what should be used as a chunk in this loader
+		\param[in] prefix Sets the prefix for names of files, that chunkLoader will use
+		\param[in] postfix Sets the postfix for names of files, that chunkLoader will use
+		\note Prefixes and postfixes allow user to differentiate between multiple ChunkLoaders. All the files, that ChunkLoader uses arranged in a single level.
+		It is possible, to use prefixes, to locate files in a specific folder.
+		*/
 		ChunkLoader(std::string preftx, std::string postfix) : m_prefix(preftx), m_postfix(postfix) { loadMagistral(); }
 
-		/**
+		/**!
 		\brief Returns a chunk with said position. If this chunk was never existed before, it will be created, if it's allready exists, it will be
 		loaded and returned. If it's allready loaded, it will be just returned, without load of another instance! So be carefult, it's shared!
+		\param[in] x X cord of a chunk
+		\param[in] y Y cord of a chunk
+		\returns Returns a shared_ptr to a created chunk.
 		*/
 		std::shared_ptr<ChunkType> getChunk(int x, int y);
 
-		/**
+		/**!
 		Saves a chunk. Chunks also get saved when they removed from memory, but if you, for some reason,
 		thinks it must be saved RIGHT NOW!!!!!11!! it's possible
+		Chunk gets saved as is. If this chunk haven't been added to a magistral yet, it will.
+		\param[in] Chunk A raw pointer to a chunk to be saved.
+		\warning No checks gets performed, about weather or not chunk is actually one of chunks from chunk pool! And so if a raw pointer comes not from
+		a shared one in the pool, it can silently overwrite chunk on a disk, but leaving chunk unaltered in a chunk_pool.
+		So please, do not pass chunks, that is not in a chunk pool
+		\note Chunks are shared, and so if this method get's called on a chunk, that is beeng changed by someone else simultaneously
+		then load might be incorrect. So you probably, should use this function at all, an just let chunks be saved when they no in use and hence
+		can't be changed. So, probably, later, this fucntion will became private, so that it can be used only in lambda, that is created in CreateChunk
 		*/
 		void saveChunk(ChunkType* Chunk);
 
@@ -119,7 +137,6 @@ namespace GEM
 
 	private:
 
-		//std::vector<std::weak_ptr<ChunkType>> m_chunkPool;
 		std::vector<std::pair<intcord2, std::weak_ptr<ChunkType>>> m_chunkPool;
 		std::vector<intcord2> m_magistral;
 

@@ -8,6 +8,7 @@ namespace GEM
 	/**
 	The second generation of a map system.
 	This class controlls, the appearance of a game map.
+	Its a GEM_Service. It depends on Ogre_Service for map rendering, and on CEGUI_Service for debug overlays
 	*/
 	class MapSystem {
 	public:

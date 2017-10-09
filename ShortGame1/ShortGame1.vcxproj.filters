@@ -43,17 +43,17 @@
     <Filter Include="MapSystem\MapSystem">
       <UniqueIdentifier>{bf5df743-78d9-4dfc-8bd2-c1e35a069a86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MapSystem\ChunkLoader">
-      <UniqueIdentifier>{29251546-88cf-4d88-8f17-6880241ac6c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MapSystem\NodeChunk">
-      <UniqueIdentifier>{429a4299-9faa-4c8a-8398-f83a65d3163a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MapSystem\NodesToMC">
       <UniqueIdentifier>{0b797901-2030-45fb-8b27-49e6087bd447}</UniqueIdentifier>
     </Filter>
     <Filter Include="MapSystemV2">
       <UniqueIdentifier>{388b16f3-a950-41d1-b0e3-ec5bd63f5627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapSystemV2\ChunkLoader">
+      <UniqueIdentifier>{29251546-88cf-4d88-8f17-6880241ac6c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapSystemV2\NodeChunk">
+      <UniqueIdentifier>{429a4299-9faa-4c8a-8398-f83a65d3163a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -97,10 +97,10 @@
       <Filter>MapSystem</Filter>
     </ClInclude>
     <ClInclude Include="ChunkLoader.h">
-      <Filter>MapSystem\ChunkLoader</Filter>
+      <Filter>MapSystemV2\ChunkLoader</Filter>
     </ClInclude>
     <ClInclude Include="NodeChunk.h">
-      <Filter>MapSystem\NodeChunk</Filter>
+      <Filter>MapSystemV2\NodeChunk</Filter>
     </ClInclude>
     <ClInclude Include="NodesToMC.h">
       <Filter>MapSystem\NodesToMC</Filter>
@@ -138,7 +138,7 @@
       <Filter>MapSystem\MapSystem</Filter>
     </ClCompile>
     <ClCompile Include="NodeChunk.cpp">
-      <Filter>MapSystem\NodeChunk</Filter>
+      <Filter>MapSystemV2\NodeChunk</Filter>
     </ClCompile>
     <ClCompile Include="NodesToMC.cpp" />
   </ItemGroup>

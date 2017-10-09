@@ -16,7 +16,7 @@ namespace GEM
 	void MapSystem::DrawMap()
 	{
 		//Remove chunks, that is now should not be visible.
-		//Add chunks, that now isi visible.
+		//Add chunks, that now is visible.
 
 		//Create a list of all chunks, that needs to be updated
 			//All the chunks, that just been added, are automaticaly here.
