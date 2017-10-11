@@ -16,3 +16,8 @@ So MCToMesh should keep intermediate data, like cube-list, cube-values and every
 3.4) Update MCToMesh to update only cubes which values were changed. A difficult task, btw. definitely would require to use reference-list
 
 2)Create MarchingCubesToMesh block and the MarchingBlock data format. MarchingB
+
+Some more things.
+1) The Cubie structure is in a process of being abandoned. Instead, Nodes will be accessed as part of the cubies by a special function. MidPoints
+also will be in a separate vector, which is kinda duplicates the NodeMap, but without NodeValues so they will be accesed in a similar to Nodes way, through
+a special function

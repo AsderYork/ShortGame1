@@ -1,17 +1,24 @@
 #pragma once
 #include "NodeChunk.h"
 #include <cassert>
+#include <array>
 
 namespace GEM
 {
-	/**
-	Generates MarchingCubes Mesh out of NodeChunk
-
-	Generator actually pulls chunks from chunkLoader by itself. This is done so that later it could store
-	mesh-related data and do a quick rebuilding of a mesh, or just return a pre-built version of it
+	/**!
+	Holds all needed data to generate one MarchingCube Nesh for one chunk.
+	
+	The idea is that GeneratorController will create Generator for every chunk that should be created, provide them with all needed data
+	and then lets them generate meshes
 	*/
-	class NodesToMCGenerator {
-	public:
+	class NodesToMCGenerator
+	{
+	private:
+		//A chunks. From them a mesh will be generated
+		std::shared_ptr<GEM::NodeChunk> ChunkCentre, ChunkRight, ChunkFront, ChunkFrontRight;
+		
+		//DimXZ - Dimensions X and Z of a NodeChunk. Just in case if they would change. DimY is the same, but for Y		
+		int DimXZ, DimY;
 
 		/**!
 		We actually wants to find a points on edges of cubes, that would be a part of iso-surface.
@@ -23,95 +30,144 @@ namespace GEM
 			MidPoint(float _x, float _y) : x(_x), y(_y) {}
 			MidPoint() : x(-1), y(-1) {}
 		};
-		
+
 		/**!
 		Nodes that comes from MapGenerator contains only things, specific to that node. But we also need some way to access mid-points, associated
 		with given node. So we just do an envelope that includes that midpoints.
 		According to a paper about MarchingCubes, Midpoints that are represented here lays on a 0,3,8
-		MidPoints should be set to a value, that is weighted average of nodes on their edge, assuming that node [x][y][z] have cordinates(x;y;z) 
+		MidPoints should be set to a value, that is weighted average of nodes on their edge, assuming that node [x][y][z] have cordinates(x;y;z)
 		*/
 		struct NodeEnvelope {
-			Node* N = nullptr;
-			MidPoint Right, Back, Top;
-
-			NodeEnvelope() {}
-			NodeEnvelope(Node* _N) : N(_N) {}
-
-
-			/**!
-			Returns a node for a given Cube and NodeID
-			\param[in] CubeX X-cordinate of a cubie
-			\param[in] CubeY Y-cordinate of a cubie
-			\param[in] CubeZ Z-cordinate of a cubie
-			\param[in] NodeID ID of a node, accordig to a MarchngCubes paper
-			\param[in] NodeMap A head pointer of 3-dimensional array of standartized size. Yes I tryed with std::array, everything just became worse
-			*/
-			inline Node& GetNode(int cubeX, int CubeY, int CubeZ, int NodeID, Node*** NodeMap)
-			{
-				switch (NodeID)
-				{
-				case 0: return NodeMap[cubeX][CubeY][CubeZ];
-				case 1: return NodeMap[cubeX + 1][CubeY][CubeZ];
-				case 2: return NodeMap[cubeX + 1][CubeY][CubeZ + 1];
-				case 3: return NodeMap[cubeX][CubeY][CubeZ + 1];
-
-				case 4: return NodeMap[cubeX][CubeY + 1][CubeZ];
-				case 5: return NodeMap[cubeX + 1][CubeY + 1][CubeZ];
-				case 6: return NodeMap[cubeX + 1][CubeY + 1][CubeZ + 1];
-				case 7: return NodeMap[cubeX][CubeY + 1][CubeZ + 1];
-				}
-			}
-
-
+			MidPoint Right, Back, Top;			
 		};
+
+
+		std::vector<std::vector<std::vector<NodeEnvelope>>> NodeEnvelopeVec;
 
 		/**!
-		A cubie. Contains pointers to a node envelopers
-		This is done, becouse Cubie is actually just a way of representation of nodes, and multiple cubies can(and usually do) include same nodes.
-		The only problem is processor cache. Yeah. Two layers of pointers in ~32000 operations. But I just don't see any better solutions. The tests will show,
-		how bad its actually is
+		Acesses node from multiple NodeMap as they are one big NodeMap.
+		\param[in] NodeX Position of a node in a big NodeMap
+		\param[in] NodeY Position of a node in a big NodeMap
+		\param[in] NodeZ Position of a node in a big NodeMap		
+
+		\note This method have really narrow contract. It assumes, that user insert correct data and does not perform any checks.
+		It also actively uses data of instance that it's called from, so...
+		NodeX MUST be between 0 and DimXZ+1;
+		NodeZ MUST be between 0 and DimXZ+1;
+		NodeY MUST be between 0 and DimY;
 		*/
-		struct Cubie {
-			/**
-			ID's from http://paulbourke.net/geometry/polygonise/
-			And all the scheme, actually; And (0,0,0) node is left front bottom
-			*/
-
-			//Cubie nodes
-			NodeEnvelope* N0;
-			NodeEnvelope* N1;
-			NodeEnvelope* N2;
-			NodeEnvelope* N3;
-
-			NodeEnvelope* N4;
-			NodeEnvelope* N5;
-			NodeEnvelope* N6;
-			NodeEnvelope* N7;
-
-			unsigned short cubeval = 0;
-
-			/**!
-			Calculates cubeval. All nodes must be set before this function get's called!
-			*/
-			void CalculateCubeval()
+		inline Node& GetNode(int NodeX, int NodeY, int NodeZ)
+		{
+			if ((NodeX > DimXZ))
 			{
-			/*	assert((N0.N != nullptr) && (N1.N != nullptr) && (N2.N != nullptr) && (N3.N != nullptr) && (N4.N != nullptr) && (N5.N != nullptr) && (N6.N != nullptr) && (N7.N != nullptr));
-				/*Some of nodes not beeing set!*/
-			/*	cubeval = 0;
-				if (N0.N->Value > 0) cubeval |= 1;
-				if (N1.N->Value > 0) cubeval |= 2;
-				if (N2.N->Value > 0) cubeval |= 4;
-				if (N3.N->Value > 0) cubeval |= 8;
-				if (N4.N->Value > 0) cubeval |= 16;
-				if (N5.N->Value > 0) cubeval |= 32;
-				if (N6.N->Value > 0) cubeval |= 64;
-				if (N7.N->Value > 0) cubeval |= 128;*/
+				if ((NodeZ > DimXZ))
+				{
+					return ChunkFrontRight->NodeMap[NodeX - DimXZ][NodeY][NodeZ - DimXZ];
+				}
+				else
+				{
+					return ChunkRight->NodeMap[NodeX - DimXZ][NodeY][NodeZ];
+				}
 			}
+			else if (NodeZ > DimXZ)
+			{
+				return ChunkFront->NodeMap[NodeX][NodeY][NodeZ - DimXZ];
+			}
+			else
+			{
+				return ChunkCentre->NodeMap[NodeX][NodeY][NodeZ - DimXZ];
+			}
+		}
 
-		};
-		NodesToMCGenerator(ChunkLoader<NodeChunk>* chunkLoader);
+		/**!
+		Access Nodes as they are in a Cubie.
+		\param[in] CubeX X-cordinate of a cubie
+		\param[in] CubeY Y-cordinate of a cubie
+		\param[in] CubeZ Z-cordinate of a cubie
+		\param[in] NodeID Id of a node in a cubie, according to a MarchingCubes paper
+		*/
+		inline Node& GetNodeAsCubie(int CubeX, int CubeY, int CubeZ, int NodeID)
+		{
+			switch (NodeID)
+			{
+			case 0: return GetNode(CubeX, CubeY, CubeZ);
+			case 1: return GetNode(CubeX + 1, CubeY, CubeZ);
+			case 2: return GetNode(CubeX + 1, CubeY, CubeZ + 1);
+			case 3: return GetNode(CubeX, CubeY, CubeZ + 1);
 
-				/**
+			case 4: return GetNode(CubeX, CubeY + 1, CubeZ);
+			case 5: return GetNode(CubeX + 1, CubeY + 1, CubeZ);
+			case 6: return GetNode(CubeX + 1, CubeY + 1, CubeZ + 1);
+			case 7: return GetNode(CubeX, CubeY + 1, CubeZ + 1);
+			}
+		}
+
+		inline MidPoint& GetMidPoint(int CubeX, int CubeY, int CubeZ, int EdgeID, std::vector<std::vector<std::vector<NodeEnvelope>>> &NodeEnvelopeVec)
+		{
+			/**!
+			So we're trying to do another Map, that contains only EdgePoint, but positionally similar to NodeMap, so that we could use the same trick
+			and access Edges like they are in Cubie
+			*/
+			switch (EdgeID)
+			{
+			case 0: return NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right;
+			case 1: return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back;
+			case 2: return NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right;
+			case 3: return NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back;
+
+			case 4: return NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right;
+			case 5: return NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back;
+			case 6: return NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right;
+			case 7: return NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back;
+
+			case 8: return NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top;
+			case 9: return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top;
+			case 10: return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top;
+			case 11: return NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top;
+			}
+		}
+
+
+
+
+	public:
+		NodesToMCGenerator(std::shared_ptr<GEM::NodeChunk> _ChunkCentre, std::shared_ptr<GEM::NodeChunk> _ChunkRight, std::shared_ptr<GEM::NodeChunk> _ChunkFront, std::shared_ptr<GEM::NodeChunk> _ChunkCentreFront, int _DimXZ, int _DimY)
+		:
+			ChunkCentre(_ChunkCentre),
+			ChunkRight(_ChunkRight),
+			ChunkFront(_ChunkFront),
+			ChunkFrontRight(_ChunkCentreFront),
+			DimXZ(_DimXZ),
+			DimY(_DimY)
+		{
+			NodeEnvelopeVec.resize(DimXZ + 1);
+			for (int x = 0; x < DimXZ + 1; x++)
+			{
+				NodeEnvelopeVec[x].resize(DimY);
+				for (int y = 0; y < DimY; y++)
+				{
+					NodeEnvelopeVec[x][y].resize(DimXZ + 1);
+				}
+			}
+						
+		}
+	
+		void Generate();
+	
+	};
+
+	/**
+	Generates MarchingCubes Mesh out of NodeChunk
+
+	Generator actually pulls chunks from chunkLoader by itself. This is done so that later it could store
+	mesh-related data and do a quick rebuilding of a mesh, or just return a pre-built version of it
+	*/
+	class NodesToMCGeneratorController {
+	public:
+
+		NodesToMCGeneratorController(ChunkLoader<NodeChunk>* chunkLoader);
+
+		/**
 		Generates chunk just from nodes
 		*/
 		void GenerateFromScratch(int x, int y);
@@ -126,20 +182,11 @@ namespace GEM
 
 		Cubies don't have to have cubevalue, it will be assigned inside.
 		*/
-		void ProcessCube(std::vector<std::vector<std::vector<Cubie>>> &Cubies, int x, int y, int z);
-
-		/**!
-		Allows access to a specified MidPoint, by Cube cordiantes and Edge ID
-		\param[in] Cubies A reference to a cubies array
-		\param[in] CubeX X-cordinate of a cube
-		\param[in] CubeY Y-cordinate of a cube
-		\param[in] CubeZ X-cordinate of a cube
-		\param[in] EdegeID ID of an edge. According to MarchingCube paper
-		\returns Returns a reference to a requested midpoint
-		*/
-		MidPoint& getMidPoint(std::vector<std::vector<std::vector<Cubie>>> &cubies, int cubeX, int cubeY, int cubeZ, int edgeID);
+		//void ProcessCube(Node*** NodeMap, int x, int y, int z);
 
 		ChunkLoader<NodeChunk>* m_chunkLoader;
 
 	};
+
+
 }
