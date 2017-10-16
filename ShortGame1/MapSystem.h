@@ -2,6 +2,7 @@
 #include "CEGUI_Service.h"
 #include "Ogre_Service.h"
 #include <OGRE\OgreVector2.h>
+#include "NodesToMC.h"
 
 namespace GEM
 {

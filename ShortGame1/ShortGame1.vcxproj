@@ -155,12 +155,16 @@
     <ClInclude Include="CEGUI_Service.h" />
     <ClInclude Include="ChunkFormat.h" />
     <ClInclude Include="ChunkLoader.h" />
+    <ClInclude Include="DebugLayout.h" />
     <ClInclude Include="EngineController.h" />
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="LogHelper.h" />
+    <ClInclude Include="MapService.h" />
     <ClInclude Include="MapSystem.h" />
+    <ClInclude Include="MCToMesh.h" />
     <ClInclude Include="NodeChunk.h" />
     <ClInclude Include="NodesToMC.h" />
+    <ClInclude Include="NodesToMCGenerator.h" />
     <ClInclude Include="OgreLogRedirection.h" />
     <ClInclude Include="Ogre_Service.h" />
     <ClInclude Include="SDL2_Service.h" />
@@ -169,12 +173,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEGUI_Service.cpp" />
+    <ClCompile Include="DebugLayout.cpp" />
     <ClCompile Include="EngineController.cpp" />
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="LogHelper.cpp" />
+    <ClCompile Include="MapService.cpp" />
     <ClCompile Include="MapSystem.cpp" />
+    <ClCompile Include="MCToMesh.cpp" />
     <ClCompile Include="NodeChunk.cpp" />
     <ClCompile Include="NodesToMC.cpp" />
+    <ClCompile Include="NodesToMCGenerator.cpp" />
     <ClCompile Include="OgreLogRedirection.cpp" />
     <ClCompile Include="Ogre_Service.cpp" />
     <ClCompile Include="SDL2_Service.cpp" />
