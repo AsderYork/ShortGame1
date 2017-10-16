@@ -26,5 +26,14 @@ namespace GEM
 			}
 
 		}
+
+		NodeMap[7][40][7].Value = 255;
+		NodeMap[7][40][8].Value = 255;
+		NodeMap[7][40][9].Value = 255;
+
+
+		NodeMap[9][40][7].Value = 255;
+		NodeMap[9][40][8].Value = 255;
+		NodeMap[9][40][9].Value = 255;
 	}
 }

@@ -1,7 +1,7 @@
 #pragma once
 
-#define CHUNK_SIZE 32
-#define CHUNK_HEIGHT 128
+//#define CHUNK_SIZE 32
+//#define CHUNK_HEIGHT 128
 
 namespace GEM
 {

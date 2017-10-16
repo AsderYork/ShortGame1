@@ -17,8 +17,9 @@ namespace GEM
 		case 0: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 0);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 1);
-
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right.x = (CubeX*(N1.Value / 255.0f) + (CubeX + 1)*(N1.Value / 255.0f)) / 2.0f;
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
+			
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right.x = (float)CubeX + midval;
 			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right.y = (float)CubeY;
 			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right.z = (float)CubeZ;
 
@@ -28,10 +29,11 @@ namespace GEM
 		case 1: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 1);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 2);
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
 			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back.x = (float)CubeX + 1;
 			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back.y = (float)CubeY;
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back.z = (CubeZ*(N1.Value / 255.0f) + (CubeZ + 1)*(N1.Value / 255.0f)) / 2.0f;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back.z = (float)CubeZ + midval;
 
 			return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back;
 		}
@@ -39,8 +41,9 @@ namespace GEM
 		case 2: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 3);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 2);
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right.x = (CubeX*(N1.Value / 255.0f) + (CubeX + 1)*(N1.Value / 255.0f)) / 2.0f;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right.x = (float)CubeX + midval;
 			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right.y = (float)CubeY;
 			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right.z = (float)CubeZ + 1;
 
@@ -50,10 +53,11 @@ namespace GEM
 		case 3: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 0);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 3);
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
 			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back.x = (float)CubeX;
 			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back.y = (float)CubeY;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back.z = (CubeZ*(N1.Value / 255.0f) + (CubeZ + 1)*(N1.Value / 255.0f)) / 2.0f;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back.z = (float)CubeZ + midval;
 
 			return NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back;
 		}
@@ -61,8 +65,9 @@ namespace GEM
 		case 4: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 4);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 5);
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right.x = (CubeX*(N1.Value / 255.0f) + (CubeX + 1)*(N1.Value / 255.0f)) / 2.0f;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right.x = (float)CubeX + midval;
 			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right.y = (float)CubeY + 1;
 			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right.z = (float)CubeZ;
 
@@ -72,10 +77,11 @@ namespace GEM
 		case 5: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 5);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 6);
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
 			NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back.x = (float)CubeX + 1;
 			NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back.y = (float)CubeY + 1;
-			NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back.z = (CubeZ*(N1.Value / 255.0f) + (CubeZ + 1)*(N1.Value / 255.0f)) / 2.0f;
+			NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back.z = (float)CubeZ + midval;
 
 			return NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back;
 		}
@@ -83,8 +89,9 @@ namespace GEM
 		case 6: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 7);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 6);
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right.x = (CubeX*(N1.Value / 255.0f) + (CubeX + 1)*(N1.Value / 255.0f)) / 2.0f;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right.x = (float)CubeX + midval;
 			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right.y = (float)CubeY + 1;
 			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right.z = (float)CubeZ + 1;
 
@@ -105,9 +112,10 @@ namespace GEM
 		case 8: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 0);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 4);
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
 			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top.x = (float)CubeX;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top.y = (CubeY*(N1.Value / 255.0f) + CubeY*(N2.Value / 255.0f)) / 2.0f;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top.y = (float)CubeY + midval;
 			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top.z = (float)CubeZ;
 
 			return NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top;
@@ -116,9 +124,10 @@ namespace GEM
 		case 9: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 1);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 5);
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
 			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top.x = (float)CubeX + 1;
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top.y = (CubeY*(N1.Value / 255.0f) + CubeY*(N2.Value / 255.0f)) / 2.0f;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top.y = (float)CubeY + midval;
 			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top.z = (float)CubeZ;
 
 			return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top;
@@ -127,9 +136,10 @@ namespace GEM
 		case 10: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 2);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 6);
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
 			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top.x = (float)CubeX + 1;
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top.y = (CubeY*(N1.Value / 255.0f) + CubeY*(N2.Value / 255.0f)) / 2.0f;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top.y = (float)CubeY + midval;
 			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top.z = (float)CubeZ + 1;
 
 			return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top;
@@ -138,9 +148,10 @@ namespace GEM
 		case 11: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 3);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 7);
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
 			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top.x = (float)CubeX;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top.y = (CubeY*(N1.Value / 255.0f) + CubeY*(N2.Value / 255.0f)) / 2.0f;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top.y = (float)CubeY + midval;
 			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top.z = (float)CubeZ + 1;
 
 			return NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top;
@@ -411,7 +422,7 @@ namespace GEM
 		{ 0, 3, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
 		{ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 } };
 
-		for (int i = 0;triTable[cubeval][i] != -1;i += 3) {
+		for (int i = 0; triTable[cubeval][i] != -1;i += 3) {
 			auto& p1 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i]);
 			if (p1.VertexVectorPosition == -1)
 			{

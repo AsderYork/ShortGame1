@@ -19,9 +19,6 @@ int main(int argc, char *argv[])
 
 	auto MapService = Controller.AddService<GEM::MapService>(OgreController);
 
-	//Generator.GenerateFromScratch(0, 0, OgreController);
-//	auto MarchingVis = Controller.AddService<GEM::MarchingToOgre>("Cube_d.mesh", OgreController, VoxelMap.getMeshCalc(), SDLController, CEGUIController, 1, 0.1);
-
 	CEGUIController->AddLayout<GEM::DebugLayout>(1, OgreController);
 
     return Controller.start();
