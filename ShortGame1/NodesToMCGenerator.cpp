@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "NodesToMCGenerator.h"
+#include <OGRE\OgreVector3.h>
+
 namespace GEM
 {
 	NodesToMCGenerator::MidPoint & NodesToMCGenerator::CalcMidPoint(int CubeX, int CubeY, int CubeZ, int EdgeID)
@@ -441,10 +443,23 @@ namespace GEM
 				p3.VertexVectorPosition = VertexVector.size();
 				VertexVector.push_back(&p3);
 			}
+			//Calculate normals
+			Ogre::Vector3 P1Vec(p1.x, p1.y, p1.z);
+			Ogre::Vector3 P2Vec(p2.x, p2.y, p2.z);
+			Ogre::Vector3 P3Vec(p3.x, p3.y, p3.z);
 
 			IndexVector.push_back(p1.VertexVectorPosition);
 			IndexVector.push_back(p2.VertexVectorPosition);
 			IndexVector.push_back(p3.VertexVectorPosition);
+
+			auto& From1To2 = P1Vec - P2Vec;
+			auto& From1To3 = P1Vec - P3Vec;
+
+			Ogre::Vector3 Normal = From1To2.crossProduct(From1To3);
+			p1.nx = Normal.x;	p2.nx = Normal.x;	p3.nx = Normal.x;
+			p1.ny = Normal.y;	p2.ny = Normal.y;	p3.ny = Normal.y;
+			p1.nz = Normal.z;	p2.nz = Normal.z;	p3.nz = Normal.z;
+
 
 		}
 
@@ -462,6 +477,16 @@ namespace GEM
 					ProcessCube(x, y, z);
 				}
 			}
+		}
+
+		//Normalize stage
+		for (auto Vertex : VertexVector)
+		{
+			Ogre::Vector3 normal(Vertex->nx, Vertex->ny, Vertex->nz);
+			normal.normalise();
+			Vertex->nx = normal.x;
+			Vertex->ny = normal.y;
+			Vertex->nz = normal.z;
 		}
 	}
 	std::vector<NodesToMCGenerator::MidPoint*>& NodesToMCGenerator::getVertexVector()

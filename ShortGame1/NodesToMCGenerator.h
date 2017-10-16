@@ -25,6 +25,8 @@ namespace GEM
 		*/
 		struct MidPoint {
 			float x, y, z;
+			float nx=0, ny=1, nz=0;
+
 			int VertexVectorPosition = -1;//Position in a VVP this point occupy(Or -1 if it's not in a vector). Used to avoid multiple enterence
 			MidPoint(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
 			MidPoint() : x(-1), y(-1), z(-1) {}

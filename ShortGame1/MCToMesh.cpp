@@ -88,10 +88,10 @@ namespace GEM
 			meshVertices[i].py = (Generator.getVertexVector())[i]->y;
 			meshVertices[i].pz = (Generator.getVertexVector())[i]->z;
 
-			//For now there is no normals
-			//meshVertices[i].nx = (m_calc->getVertexes())[i].normal.x;
-			//meshVertices[i].ny = (m_calc->getVertexes())[i].normal.y;
-			//meshVertices[i].nz = (m_calc->getVertexes())[i].normal.z;
+			
+			meshVertices[i].nx = (Generator.getVertexVector())[i]->nx;
+			meshVertices[i].ny = (Generator.getVertexVector())[i]->ny;
+			meshVertices[i].nz = (Generator.getVertexVector())[i]->nz;
 
 
 			//And no Texture cordinates
