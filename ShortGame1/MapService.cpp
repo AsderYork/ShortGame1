@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MapService.h"
 #include "NodesToMC.h"
+#include <chrono>
 
 namespace GEM
 {
@@ -8,7 +9,11 @@ namespace GEM
 	{
 		GEM::ChunkLoader<GEM::NodeChunk> loader("../Map/", ".map");
 		GEM::NodesToMCGeneratorController Generator(&loader);
+
+		auto start = std::chrono::steady_clock::now();
 		Generator.GenerateFromScratch(0, 0, m_ogreService);
+		Generator.GenerateFromScratch(1, 0, m_ogreService);
+
 
 		return ActionResult();
 	}

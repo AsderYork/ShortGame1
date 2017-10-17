@@ -78,7 +78,7 @@ namespace GEM
 			return;
 		}
 
-		Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().createManual("MarchingCubies", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().createManual("MarchingCubies"+ std::to_string(PosX) + "X" + std::to_string(PosZ), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 		Ogre::SubMesh *subMesh = mesh->createSubMesh();
 
 		//Vertex declaration
@@ -92,9 +92,9 @@ namespace GEM
 		//Translate VertexList from Generator to Ogre
 		for (int i = 0; i < Generator.getVertexVector().size(); i++)
 		{
-			meshVertices[i].px = (Generator.getVertexVector())[i]->x;
+			meshVertices[i].px = (Generator.getVertexVector())[i]->x + PosX;
 			meshVertices[i].py = (Generator.getVertexVector())[i]->y;
-			meshVertices[i].pz = (Generator.getVertexVector())[i]->z;
+			meshVertices[i].pz = (Generator.getVertexVector())[i]->z + PosZ;
 
 			
 			meshVertices[i].nx = (Generator.getVertexVector())[i]->nx;
@@ -154,7 +154,7 @@ namespace GEM
 
 		auto SceneManager = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance");
 
-		m_MarchingCubesItem = SceneManager->createItem("MarchingCubies");
+		m_MarchingCubesItem = SceneManager->createItem("MarchingCubies" + std::to_string(PosX) + "X" + std::to_string(PosZ));
 		m_MarchingCubeNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);
 
 		m_MarchingCubeNode->attachObject(m_MarchingCubesItem);
