@@ -16,6 +16,8 @@ namespace GEM
 
 		Ogre::IndexBufferPacked* createIndexBuffer(NodesToMCGenerator &Generator);
 
+		void CreateMarchingCubeDatablock();
+
 	public:
 		MCToMesh(Ogre_Service* ogreService) : m_ogreService(ogreService) {}
 

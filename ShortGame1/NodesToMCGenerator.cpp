@@ -103,10 +103,12 @@ namespace GEM
 		case 7: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 4);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 7);
+			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
+
 
 			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back.x = (float)CubeX;
 			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back.y = (float)CubeY + 1;
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back.z = (CubeZ*(N1.Value / 255.0f) + (CubeZ + 1)*(N1.Value / 255.0f)) / 2.0f;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back.z = (float)CubeZ + midval;
 
 			return NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back;
 		}
@@ -426,40 +428,85 @@ namespace GEM
 
 		for (int i = 0; triTable[cubeval][i] != -1;i += 3) {
 			auto& p1 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i]);
-			if (p1.VertexVectorPosition == -1)
-			{
-				p1.VertexVectorPosition = VertexVector.size();
-				VertexVector.push_back(&p1);
-			}
 			auto& p2 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i + 1]);
-			if (p2.VertexVectorPosition == -1)
-			{
-				p2.VertexVectorPosition = VertexVector.size();
-				VertexVector.push_back(&p2);
-			}
 			auto& p3 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i + 2]);
-			if (p3.VertexVectorPosition == -1)
-			{
-				p3.VertexVectorPosition = VertexVector.size();
-				VertexVector.push_back(&p3);
-			}
+
+			//Used to ease access to these points
+			MidPoint* Ps[3] = { &p1, &p2, &p3 };
+
 			//Calculate normals
 			Ogre::Vector3 P1Vec(p1.x, p1.y, p1.z);
 			Ogre::Vector3 P2Vec(p2.x, p2.y, p2.z);
 			Ogre::Vector3 P3Vec(p3.x, p3.y, p3.z);
-
-			IndexVector.push_back(p1.VertexVectorPosition);
-			IndexVector.push_back(p2.VertexVectorPosition);
-			IndexVector.push_back(p3.VertexVectorPosition);
-
+			
 			auto& From1To2 = P1Vec - P2Vec;
 			auto& From1To3 = P1Vec - P3Vec;
 
 			Ogre::Vector3 Normal = From1To2.crossProduct(From1To3);
-			p1.nx = Normal.x;	p2.nx = Normal.x;	p3.nx = Normal.x;
-			p1.ny = Normal.y;	p2.ny = Normal.y;	p3.ny = Normal.y;
-			p1.nz = Normal.z;	p2.nz = Normal.z;	p3.nz = Normal.z;
+			Normal.normalise();
+			for (auto& p : Ps)
+			{
+				p->nx += Normal.x;
+				p->ny += Normal.y;
+				p->nz += Normal.z;
 
+				p->uvx = p->x;
+				p->uvy = p->y;
+				p->uvz = p->z;
+			}
+			//p1.nx = -Normal.x;	p2.nx = -Normal.x;	p3.nx = -Normal.x;
+			//p1.ny = -Normal.y;	p2.ny = -Normal.y;	p3.ny = -Normal.y;
+			//p1.nz = -Normal.z;	p2.nz = -Normal.z;	p3.nz = -Normal.z;
+
+			//Check for UpDown flavor
+
+			//If flavor is UpDown
+
+			float VorValResY = abs(90 - Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees());
+			float ValResY = Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees();
+			//if (ValResY <= 140) { return; }//Drop edges, oriented up 
+
+			if (abs(90 - Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees()) >= 30 )
+			{
+				for (auto& p : Ps)
+				{
+					//If it's not marked as UpDown flavored
+					if (p->FlavorUpDown == -1)
+					{
+						p->FlavorUpDown = VertexVector.size();
+						VertexVector.push_back(p);
+					}
+					IndexVector.push_back(p->FlavorUpDown);
+				}				
+			}
+			//if flavor is LeftRight
+			else if (abs(90 - Normal.angleBetween(Ogre::Vector3(1, 0, 0)).valueDegrees()) > 45)
+			{
+				for (auto& p : Ps)
+				{
+					//If it's not marked as UpDown flavored
+					if (p->FlavorLeftRight == -1)
+					{
+						p->FlavorLeftRight = VertexVector.size();
+						VertexVector.push_back(p);
+					}
+					IndexVector.push_back(p->FlavorLeftRight);
+				}
+			}
+			//Then it's FrontBack
+			else
+			{
+				for (auto& p : Ps)
+				{
+					//If it's not marked as UpDown flavored
+					if (p->FlavorFrontBack == -1)
+					{
+						p->FlavorFrontBack = VertexVector.size();
+						VertexVector.push_back(p);
+					}
+					IndexVector.push_back(p->FlavorFrontBack);
+				}
+			}
 
 		}
 

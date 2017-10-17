@@ -27,7 +27,21 @@ namespace GEM
 			float x, y, z;
 			float nx=0, ny=1, nz=0;
 
-			int VertexVectorPosition = -1;//Position in a VVP this point occupy(Or -1 if it's not in a vector). Used to avoid multiple enterence
+			//Texture cordinate are actually 3d. But with a help of a flavors ony 2 of cordinate will end in actual mesh
+			float uvx = 0, uvy = 0, uvz = 0;
+
+			/**
+			Every flavor points to a position in a VertexArray where this particular midpoint were used as UpDown, LeftRight or FrontBack vertex.
+			That's why VertexList MUST have no more then 3 occurences of a single Vertex. And every accurance must be flavored uniquely so that there shouldn't
+			be two UpDown or something like that.
+
+			This also means that MCToMesh should be able to work differetiate flavors correctly, choosing right u,v pair for a given flavor.
+			*/
+			int FlavorUpDown = -1;
+			int FlavorLeftRight = -1;
+			int FlavorFrontBack = -1;
+
+			//int VertexVectorPosition = -1;//Position in a VVP this point occupy(Or -1 if it's not in a vector). Used to avoid multiple enterence
 			MidPoint(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
 			MidPoint() : x(-1), y(-1), z(-1) {}
 		};

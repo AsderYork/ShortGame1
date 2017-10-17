@@ -6,6 +6,14 @@
 #include <OGRE\OgreSubMesh2.h>
 #include <OGRE\OgreItem.h>
 
+#include <OGRE\OgreMaterialManager.h>
+#include <OGRE\OgreMaterial.h>
+
+#include <OGRE\OgreHlms.h>
+#include <OGRE\OgreHlmsDatablock.h>
+#include <OGRE\Hlms\Pbs\OgreHlmsPbsDatablock.h>
+#include <OGRE\OgreHlmsManager.h>
+
 namespace GEM
 {
 	struct MeshVertices
@@ -95,8 +103,24 @@ namespace GEM
 
 
 			//And no Texture cordinates
-			//meshVertices[i].nu = (m_calc->getVertexes())[i].TextureCord.x;
-			//meshVertices[i].nv = (m_calc->getVertexes())[i].TextureCord.y;
+			//Check for flavors
+			if((Generator.getVertexVector())[i]->FlavorUpDown == i)
+			{
+				meshVertices[i].nu = (Generator.getVertexVector())[i]->uvx;
+				meshVertices[i].nv = (Generator.getVertexVector())[i]->uvz;
+			}
+			else if ((Generator.getVertexVector())[i]->FlavorFrontBack == i)
+			{
+				meshVertices[i].nu = (Generator.getVertexVector())[i]->uvy;
+				meshVertices[i].nv = (Generator.getVertexVector())[i]->uvx;
+			}
+			else
+			{
+				meshVertices[i].nu = (Generator.getVertexVector())[i]->uvy;
+				meshVertices[i].nv = (Generator.getVertexVector())[i]->uvz;
+			}
+
+			
 		}
 
 		Ogre::VertexBufferPacked *vertexBuffer = 0;
@@ -135,6 +159,39 @@ namespace GEM
 
 		m_MarchingCubeNode->attachObject(m_MarchingCubesItem);
 		m_MarchingCubeNode->setPosition(0, 0, 0);
+
+		m_MarchingCubesItem->setDatablock("HlmsPbs1");
+
+	}
+
+	void GEM::MCToMesh::CreateMarchingCubeDatablock()
+	{
+		/*Ogre::HlmsManager *hlmsManager = m_ogreService->getRoot()->getHlmsManager();
+		Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+
+		auto hlmsPbs = hlmsManager->getHlms(Ogre::HLMS_PBS);
+
+		Ogre::String datablockName = "MarchingCubesBlob";
+
+		Ogre::HlmsPbsDatablock *datablock;
+		datablock = static_cast<Ogre::HlmsPbsDatablock*>(hlmsPbs->getDatablock(datablockName));
+		if (datablock == nullptr)
+		{
+			datablock = static_cast<Ogre::HlmsPbsDatablock*>(
+				hlmsPbs->createDatablock(datablockName,
+					datablockName,
+					Ogre::HlmsMacroblock(),
+					Ogre::HlmsBlendblock(),
+					Ogre::HlmsParamVec()));
+
+			datablock->setDiffuse(Ogre::Vector3(0.6f, 0.6f, 2.0f));
+			//Ogre::HlmsMacroblock macro = *(datablock->getMacroblock());
+			//macro.mCullMode = Ogre::CULL_NONE;
+			//datablock->setMacroblock(macro);
+
+			//datablock->setTransparency(0.7);
+
+		}*/
 
 	}
 }
