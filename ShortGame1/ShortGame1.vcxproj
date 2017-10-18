@@ -155,6 +155,7 @@
     <ClInclude Include="CEGUI_Service.h" />
     <ClInclude Include="ChunkFormat.h" />
     <ClInclude Include="ChunkLoader.h" />
+    <ClInclude Include="DebugMapGraphicsService.h" />
     <ClInclude Include="DebugLayout.h" />
     <ClInclude Include="EngineController.h" />
     <ClInclude Include="FPS_Layout.h" />
@@ -174,6 +175,7 @@
   <ItemGroup>
     <ClCompile Include="CEGUI_Service.cpp" />
     <ClCompile Include="DebugLayout.cpp" />
+    <ClCompile Include="DebugMapGraphicsService.cpp" />
     <ClCompile Include="EngineController.cpp" />
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="LogHelper.cpp" />

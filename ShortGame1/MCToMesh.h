@@ -16,10 +16,21 @@ namespace GEM
 
 		Ogre::IndexBufferPacked* createIndexBuffer(NodesToMCGenerator &Generator);
 
-		void CreateMarchingCubeDatablock();
+		int m_posX;
+		int m_posZ;
+		int m_scale;
+
+		NodesToMCGenerator* m_generator = nullptr;
+
 
 	public:
-		MCToMesh(Ogre_Service* ogreService) : m_ogreService(ogreService) {}
+		MCToMesh(Ogre_Service* ogreService, NodesToMCGenerator* Generator, int PosX, int PosZ, int Scale) :
+			m_ogreService(ogreService),
+			m_generator(Generator),
+			m_posX(PosX),
+			m_posZ(PosZ),
+			m_scale(Scale)
+			{}
 
 		/**!
 		Creates a mesh from Vertex and Index vector calculated by specified generator.
@@ -29,6 +40,7 @@ namespace GEM
 		\param[in] PosZ Z-coordinate of (0,0) corner of a chunk
 		\param[in] Scale Scale of a chunk across X,Y and Z axis
 		*/
-		void GenerateMesh(NodesToMCGenerator &Generator, int PosX, int PosZ, int Scale);
+		void GenerateMesh();
+
 	};
 }

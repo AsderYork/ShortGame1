@@ -515,6 +515,14 @@ namespace GEM
 
 	void NodesToMCGenerator::Generate()
 	{
+		//Clear for regeneration
+		VertexVector.clear();
+		IndexVector.clear();
+		VertexVector.clear();
+
+		NodeEnvelopeVec.clear();
+		regenerateEnvelope();
+
 		for (int x = 0; x < DimXZ; x++)
 		{
 			for (int y = 0; y < DimY - 1; y++)
@@ -535,6 +543,14 @@ namespace GEM
 			Vertex->ny = normal.y;
 			Vertex->nz = normal.z;
 		}
+	}
+	int const NodesToMCGenerator::getChunkX()
+	{
+		return m_chunkPosX;
+	}
+	int const NodesToMCGenerator::getChunkZ()
+	{
+		return m_chunkPosZ;
 	}
 	std::vector<NodesToMCGenerator::MidPoint*>& NodesToMCGenerator::getVertexVector()
 	{

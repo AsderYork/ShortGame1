@@ -122,38 +122,8 @@ namespace GEM
 			}
 		}
 
-		/*
-		inline MidPoint& GetMidPoint(int CubeX, int CubeY, int CubeZ, int EdgeID)
-		{
-			/**!
-			So we're trying to do another Map, that contains only EdgePoint, but positionally similar to NodeMap, so that we could use the same trick
-			and access Edges like they are in Cubie
-			*/
-			/*switch (EdgeID)
-			{
-			case 0: return NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right;
-			case 1: return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back;
-			case 2: return NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right;
-			case 3: return NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back;
-
-			case 4: return NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right;
-			case 5: return NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back;
-			case 6: return NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right;
-			case 7: return NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back;
-
-			case 8: return NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top;
-			case 9: return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top;
-			case 10: return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top;
-			case 11: return NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top;
-			}
-		}*/
-
 		/**!
-		Calculates a CubeValue for a cubie
-		\param[in] CubeX X-cordinate of a cube
-		\param[in] CubeY Y-cordinate of a cube
-		\param[in] CubeZ Z-cordinate of a cube
-		\returns CubeValue of a Cubie
+		Finds a value of a cube, according to a paper
 		*/
 		inline int GetCubieValue(int CubeX, int CubeY, int CubeZ)
 		{
@@ -183,15 +153,11 @@ namespace GEM
 		*/
 		void ProcessCube(int CubeX, int CubeY, int CubeZ);
 
-	public:
-		NodesToMCGenerator(std::shared_ptr<GEM::NodeChunk> _ChunkCentre, std::shared_ptr<GEM::NodeChunk> _ChunkRight, std::shared_ptr<GEM::NodeChunk> _ChunkFront, std::shared_ptr<GEM::NodeChunk> _ChunkCentreFront, int _DimXZ, int _DimY)
-			:
-			ChunkCentre(_ChunkCentre),
-			ChunkRight(_ChunkRight),
-			ChunkFront(_ChunkFront),
-			ChunkFrontRight(_ChunkCentreFront),
-			DimXZ(_DimXZ),
-			DimY(_DimY)
+		/**!
+		Creates new envelope.
+		Assuming that it's empty
+		*/
+		inline void regenerateEnvelope()
 		{
 			NodeEnvelopeVec.resize(DimXZ + 1);
 			for (int x = 0; x < DimXZ + 1; x++)
@@ -202,10 +168,29 @@ namespace GEM
 					NodeEnvelopeVec[x][y].resize(DimXZ + 1);
 				}
 			}
+		}
 
+		int m_chunkPosX, m_chunkPosZ;
+
+	public:
+		NodesToMCGenerator(std::shared_ptr<GEM::NodeChunk> _ChunkCentre, std::shared_ptr<GEM::NodeChunk> _ChunkRight, std::shared_ptr<GEM::NodeChunk> _ChunkFront, std::shared_ptr<GEM::NodeChunk> _ChunkCentreFront, int _DimXZ, int _DimY, int ChunkX, int ChunkZ)
+			:
+			ChunkCentre(_ChunkCentre),
+			ChunkRight(_ChunkRight),
+			ChunkFront(_ChunkFront),
+			ChunkFrontRight(_ChunkCentreFront),
+			DimXZ(_DimXZ),
+			DimY(_DimY),
+			m_chunkPosX(ChunkX),
+			m_chunkPosZ(ChunkZ)
+		{
+			regenerateEnvelope();
 		}
 
 		void Generate();
+
+		int const getChunkX();
+		int const getChunkZ();
 
 		std::vector<MidPoint*> &getVertexVector();
 		std::vector<int> &getIndexVector();

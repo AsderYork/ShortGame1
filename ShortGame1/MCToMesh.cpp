@@ -68,17 +68,33 @@ namespace GEM
 		return indexBuffer;
 	}
 
-	void MCToMesh::GenerateMesh(NodesToMCGenerator & Generator, int PosX, int PosZ, int Scale)
+	void MCToMesh::GenerateMesh()
 	{
 		Ogre::RenderSystem *renderSystem = m_ogreService->getRoot()->getRenderSystem();
 		Ogre::VaoManager *vaoManager = renderSystem->getVaoManager();
+		auto SceneManager = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance");
 
-		if (Generator.getVertexVector().size() == 0)//Then there is no vertices to draw!
+		std::string MeshName = "MarchingCubies" + std::to_string(m_posX) + "X" + std::to_string(m_posZ);
+
+		if (m_MarchingCubesItem != nullptr)
+		{
+			m_MarchingCubesItem->detachFromParent();
+			SceneManager->destroyItem(m_MarchingCubesItem);
+		}
+		Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName(MeshName);
+		if (mesh != nullptr)
+		{
+			Ogre::MeshManager::getSingleton().remove(mesh);
+		}
+
+		if (m_generator->getVertexVector().size() == 0)//Then there is no vertices to draw!
 		{
 			return;
 		}
 
-		Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().createManual("MarchingCubies"+ std::to_string(PosX) + "X" + std::to_string(PosZ), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		
+
+		mesh = Ogre::MeshManager::getSingleton().createManual(MeshName, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 		Ogre::SubMesh *subMesh = mesh->createSubMesh();
 
 		//Vertex declaration
@@ -87,37 +103,37 @@ namespace GEM
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_NORMAL));
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES));
 
-		MeshVertices *meshVertices = reinterpret_cast<MeshVertices*>(OGRE_MALLOC_SIMD(sizeof(MeshVertices) * Generator.getVertexVector().size(), Ogre::MEMCATEGORY_GEOMETRY));
+		MeshVertices *meshVertices = reinterpret_cast<MeshVertices*>(OGRE_MALLOC_SIMD(sizeof(MeshVertices) * m_generator->getVertexVector().size(), Ogre::MEMCATEGORY_GEOMETRY));
 
 		//Translate VertexList from Generator to Ogre
-		for (int i = 0; i < Generator.getVertexVector().size(); i++)
+		for (int i = 0; i < m_generator->getVertexVector().size(); i++)
 		{
-			meshVertices[i].px = (Generator.getVertexVector())[i]->x + PosX;
-			meshVertices[i].py = (Generator.getVertexVector())[i]->y;
-			meshVertices[i].pz = (Generator.getVertexVector())[i]->z + PosZ;
+			meshVertices[i].px = (m_generator->getVertexVector())[i]->x + m_posX;
+			meshVertices[i].py = (m_generator->getVertexVector())[i]->y;
+			meshVertices[i].pz = (m_generator->getVertexVector())[i]->z + m_posZ;
 
 			
-			meshVertices[i].nx = (Generator.getVertexVector())[i]->nx;
-			meshVertices[i].ny = (Generator.getVertexVector())[i]->ny;
-			meshVertices[i].nz = (Generator.getVertexVector())[i]->nz;
+			meshVertices[i].nx = (m_generator->getVertexVector())[i]->nx;
+			meshVertices[i].ny = (m_generator->getVertexVector())[i]->ny;
+			meshVertices[i].nz = (m_generator->getVertexVector())[i]->nz;
 
 
 			//And no Texture cordinates
 			//Check for flavors
-			if((Generator.getVertexVector())[i]->FlavorUpDown == i)
+			if((m_generator->getVertexVector())[i]->FlavorUpDown == i)
 			{
-				meshVertices[i].nu = (Generator.getVertexVector())[i]->uvx;
-				meshVertices[i].nv = (Generator.getVertexVector())[i]->uvz;
+				meshVertices[i].nu = (m_generator->getVertexVector())[i]->uvx;
+				meshVertices[i].nv = (m_generator->getVertexVector())[i]->uvz;
 			}
-			else if ((Generator.getVertexVector())[i]->FlavorFrontBack == i)
+			else if ((m_generator->getVertexVector())[i]->FlavorFrontBack == i)
 			{
-				meshVertices[i].nu = (Generator.getVertexVector())[i]->uvy;
-				meshVertices[i].nv = (Generator.getVertexVector())[i]->uvx;
+				meshVertices[i].nu = (m_generator->getVertexVector())[i]->uvy;
+				meshVertices[i].nv = (m_generator->getVertexVector())[i]->uvx;
 			}
 			else
 			{
-				meshVertices[i].nu = (Generator.getVertexVector())[i]->uvy;
-				meshVertices[i].nv = (Generator.getVertexVector())[i]->uvz;
+				meshVertices[i].nu = (m_generator->getVertexVector())[i]->uvy;
+				meshVertices[i].nv = (m_generator->getVertexVector())[i]->uvz;
 			}
 
 			
@@ -127,12 +143,12 @@ namespace GEM
 		try
 		{
 			//Create the actual vertex buffer.
-			vertexBuffer = vaoManager->createVertexBuffer(vertexElements, Generator.getVertexVector().size(), Ogre::BT_IMMUTABLE, meshVertices, false);
+			vertexBuffer = vaoManager->createVertexBuffer(vertexElements, m_generator->getVertexVector().size(), Ogre::BT_IMMUTABLE, meshVertices, false);
 		}
 		catch (Ogre::Exception &e)
 		{
 			OGRE_FREE_SIMD(vertexBuffer, Ogre::MEMCATEGORY_GEOMETRY);
-			LOGCATEGORY("MCToMesh\GenerateMesh").error("Failed to create VertexBuffer for chunk, in position %i, %i", PosX, PosZ);
+			LOGCATEGORY("MCToMesh\GenerateMesh").error("Failed to create VertexBuffer for chunk, in position %i, %i", m_posX, m_posZ);
 			vertexBuffer = 0;
 			throw e;
 		}
@@ -140,7 +156,7 @@ namespace GEM
 		Ogre::VertexBufferPackedVec vertexBuffers;
 		vertexBuffers.push_back(vertexBuffer);
 
-		Ogre::IndexBufferPacked *indexBuffer = createIndexBuffer(Generator); //Create the actual index buffer
+		Ogre::IndexBufferPacked *indexBuffer = createIndexBuffer(*m_generator); //Create the actual index buffer
 		Ogre::VertexArrayObject *vao = vaoManager->createVertexArrayObject(
 			vertexBuffers, indexBuffer, Ogre::OT_TRIANGLE_LIST);
 
@@ -152,9 +168,11 @@ namespace GEM
 		mesh->_setBounds(Ogre::Aabb(Ogre::Vector3::ZERO, Ogre::Vector3::UNIT_SCALE*meshSize), false);
 		mesh->_setBoundingSphereRadius(meshSize);
 
-		auto SceneManager = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance");
+		
 
-		m_MarchingCubesItem = SceneManager->createItem("MarchingCubies" + std::to_string(PosX) + "X" + std::to_string(PosZ));
+		
+
+		m_MarchingCubesItem = SceneManager->createItem("MarchingCubies" + std::to_string(m_posX) + "X" + std::to_string(m_posZ));
 		m_MarchingCubeNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);
 
 		m_MarchingCubeNode->attachObject(m_MarchingCubesItem);
@@ -164,36 +182,6 @@ namespace GEM
 
 	}
 
-	void GEM::MCToMesh::CreateMarchingCubeDatablock()
-	{
-		/*Ogre::HlmsManager *hlmsManager = m_ogreService->getRoot()->getHlmsManager();
-		Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
-
-		auto hlmsPbs = hlmsManager->getHlms(Ogre::HLMS_PBS);
-
-		Ogre::String datablockName = "MarchingCubesBlob";
-
-		Ogre::HlmsPbsDatablock *datablock;
-		datablock = static_cast<Ogre::HlmsPbsDatablock*>(hlmsPbs->getDatablock(datablockName));
-		if (datablock == nullptr)
-		{
-			datablock = static_cast<Ogre::HlmsPbsDatablock*>(
-				hlmsPbs->createDatablock(datablockName,
-					datablockName,
-					Ogre::HlmsMacroblock(),
-					Ogre::HlmsBlendblock(),
-					Ogre::HlmsParamVec()));
-
-			datablock->setDiffuse(Ogre::Vector3(0.6f, 0.6f, 2.0f));
-			//Ogre::HlmsMacroblock macro = *(datablock->getMacroblock());
-			//macro.mCullMode = Ogre::CULL_NONE;
-			//datablock->setMacroblock(macro);
-
-			//datablock->setTransparency(0.7);
-
-		}*/
-
-	}
 }
 
 
