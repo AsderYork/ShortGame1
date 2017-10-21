@@ -8,6 +8,10 @@ namespace GEM
 {
 	struct Node {
 		unsigned char Value=0;
+		/*Nodes can be altered; We track their alteration while they are in memory to ease mesh updates
+		But we don't need this info to be stored on a disk, becouse it is useless to track down changes if no mesh exists
+		*/
+		bool isChanged = false;
 
 		template <class Archive>
 		void serialize(Archive & ar)

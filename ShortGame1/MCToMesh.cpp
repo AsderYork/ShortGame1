@@ -33,15 +33,15 @@ namespace GEM
 			nx(0), ny(1), nz(0) {}
 	};
 
-	Ogre::IndexBufferPacked * MCToMesh::createIndexBuffer(NodesToMCGenerator &Generator)
+	Ogre::IndexBufferPacked * MCToMesh::createIndexBuffer()
 	{
 		Ogre::IndexBufferPacked *indexBuffer = 0;
 
-		Ogre::uint16 *cubeIndices = reinterpret_cast<Ogre::uint16*>(OGRE_MALLOC_SIMD(sizeof(Ogre::uint16) * Generator.getIndexVector().size(),Ogre::MEMCATEGORY_GEOMETRY));
+		Ogre::uint16 *cubeIndices = reinterpret_cast<Ogre::uint16*>(OGRE_MALLOC_SIMD(sizeof(Ogre::uint16) * m_generator->getIndexVectorSize(),Ogre::MEMCATEGORY_GEOMETRY));
 
-		for (int i = 0; i < Generator.getIndexVector().size(); i++)
+		for (int i = 0; i < m_generator->getIndexVectorSize(); i++)
 		{
-			cubeIndices[i] = (Generator.getIndexVector())[i];
+			cubeIndices[i] = m_generator->getIndexVectorElement(i);
 		}
 
 		Ogre::RenderSystem *renderSystem = m_ogreService->getRoot()->getRenderSystem();
@@ -50,7 +50,7 @@ namespace GEM
 		try
 		{
 			indexBuffer = vaoManager->createIndexBuffer(Ogre::IndexBufferPacked::IT_16BIT,
-				Generator.getIndexVector().size(),
+				m_generator->getIndexVectorSize(),
 				Ogre::BT_IMMUTABLE,
 				cubeIndices, true);
 		}
@@ -87,7 +87,7 @@ namespace GEM
 			Ogre::MeshManager::getSingleton().remove(mesh);
 		}
 
-		if (m_generator->getVertexVector().size() == 0)//Then there is no vertices to draw!
+		if (m_generator->getVertexVectorSize() == 0)//Then there is no vertices to draw!
 		{
 			return;
 		}
@@ -103,24 +103,24 @@ namespace GEM
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_NORMAL));
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES));
 
-		MeshVertices *meshVertices = reinterpret_cast<MeshVertices*>(OGRE_MALLOC_SIMD(sizeof(MeshVertices) * m_generator->getVertexVector().size(), Ogre::MEMCATEGORY_GEOMETRY));
+		MeshVertices *meshVertices = reinterpret_cast<MeshVertices*>(OGRE_MALLOC_SIMD(sizeof(MeshVertices) * m_generator->getVertexVectorSize(), Ogre::MEMCATEGORY_GEOMETRY));
 
 		//Translate VertexList from Generator to Ogre
-		for (int i = 0; i < m_generator->getVertexVector().size(); i++)
+		for (int i = 0; i < m_generator->getVertexVectorSize(); i++)
 		{
-			meshVertices[i].px = (m_generator->getVertexVector())[i]->x + m_posX;
-			meshVertices[i].py = (m_generator->getVertexVector())[i]->y;
-			meshVertices[i].pz = (m_generator->getVertexVector())[i]->z + m_posZ;
+			meshVertices[i].px =  m_generator->getVertexVectorElement(i)->x + m_posX;
+			meshVertices[i].py =  m_generator->getVertexVectorElement(i)->y;
+			meshVertices[i].pz = m_generator->getVertexVectorElement(i)->z + m_posZ;
 
 			
-			meshVertices[i].nx = (m_generator->getVertexVector())[i]->nx;
-			meshVertices[i].ny = (m_generator->getVertexVector())[i]->ny;
-			meshVertices[i].nz = (m_generator->getVertexVector())[i]->nz;
+			meshVertices[i].nx = m_generator->getVertexVectorElement(i)->nx;
+			meshVertices[i].ny = m_generator->getVertexVectorElement(i)->ny;
+			meshVertices[i].nz = m_generator->getVertexVectorElement(i)->nz;
 
 
 			//And no Texture cordinates
 			//Check for flavors
-			if((m_generator->getVertexVector())[i]->FlavorUpDown == i)
+			/*if((m_generator->getVertexVector())[i]->FlavorUpDown == i)
 			{
 				meshVertices[i].nu = (m_generator->getVertexVector())[i]->uvx;
 				meshVertices[i].nv = (m_generator->getVertexVector())[i]->uvz;
@@ -134,8 +134,32 @@ namespace GEM
 			{
 				meshVertices[i].nu = (m_generator->getVertexVector())[i]->uvy;
 				meshVertices[i].nv = (m_generator->getVertexVector())[i]->uvz;
-			}
+			}*/
 
+			//This one in case if NaiveGenerator
+			switch (m_generator->getVertexVectorElement(i)->flavor)
+			{
+				case NodeToMCGeneratorNaive::MidPointBase::FLAVOR_UPDOWN:
+				{
+					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->uvx;
+					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->uvz;
+					break;
+				}
+
+				case NodeToMCGeneratorNaive::MidPointBase::FLAVOR_FRONTBACK:
+				{
+					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->uvy;
+					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->uvx;
+					break;
+				}
+
+				case NodeToMCGeneratorNaive::MidPointBase::FLAVOR_LEFTRIGHT:
+				{
+					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->uvy;
+					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->uvz;
+					break;
+				}
+			}
 			
 		}
 
@@ -143,7 +167,7 @@ namespace GEM
 		try
 		{
 			//Create the actual vertex buffer.
-			vertexBuffer = vaoManager->createVertexBuffer(vertexElements, m_generator->getVertexVector().size(), Ogre::BT_IMMUTABLE, meshVertices, false);
+			vertexBuffer = vaoManager->createVertexBuffer(vertexElements, m_generator->getVertexVectorSize(), Ogre::BT_IMMUTABLE, meshVertices, false);
 		}
 		catch (Ogre::Exception &e)
 		{
@@ -156,7 +180,7 @@ namespace GEM
 		Ogre::VertexBufferPackedVec vertexBuffers;
 		vertexBuffers.push_back(vertexBuffer);
 
-		Ogre::IndexBufferPacked *indexBuffer = createIndexBuffer(*m_generator); //Create the actual index buffer
+		Ogre::IndexBufferPacked *indexBuffer = createIndexBuffer(); //Create the actual index buffer
 		Ogre::VertexArrayObject *vao = vaoManager->createVertexArrayObject(
 			vertexBuffers, indexBuffer, Ogre::OT_TRIANGLE_LIST);
 

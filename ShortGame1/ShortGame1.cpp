@@ -6,12 +6,18 @@
 #include "DebugLayout.h"
 #include "DebugMapGraphicsService.h"
 
+#include "NodesToMCGeneratorsTests.h"
+
 
 #include "MapService.h"
 
 int main(int argc, char *argv[])
 {
 
+	//auto Res = GEM::TestSpeed<GEM::NodesToMCGenerator, GEM::NodeToMCGeneratorNaive>(10, 10);
+
+
+	//GEM::InterprateResults(Res);
 
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();

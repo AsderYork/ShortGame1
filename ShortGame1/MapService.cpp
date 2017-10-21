@@ -20,8 +20,24 @@ namespace GEM
 		m_changedChunks.push_back(std::make_pair(ChunkX, ChunkZ));
 
 		Chunk->NodeMap[XInChunk][NodeY][ZInChunk].Value = value;
+		Chunk->NodeMap[XInChunk][NodeY][ZInChunk].isChanged = true;
 
 
+	}
+	unsigned char MapService::getNodeVal(int NodeX, int NodeY, int NodeZ)
+	{
+		//Find a chunk cordinate, where this node should be
+		int ChunkX = (NodeX - 1) / CHUNK_SIZE;
+		if (NodeX < 0) { ChunkX--; }
+		int ChunkZ = (NodeZ - 1) / CHUNK_SIZE;
+		if (ChunkZ < 0) { ChunkZ--; }
+
+		int XInChunk = NodeX - ChunkX*CHUNK_SIZE;
+		int ZInChunk = NodeZ - ChunkZ*CHUNK_SIZE;
+
+		auto Chunk = m_loader.getChunk(ChunkX, ChunkZ);		
+
+		return Chunk->NodeMap[XInChunk][NodeY][ZInChunk].Value;
 	}
 	Service::ActionResult MapService::initialize()
 	{		

@@ -14,17 +14,17 @@ namespace GEM
 		Ogre::Item* m_MarchingCubesItem = nullptr;
 		Ogre::SceneNode* m_MarchingCubeNode = nullptr;
 
-		Ogre::IndexBufferPacked* createIndexBuffer(NodesToMCGenerator &Generator);
+		Ogre::IndexBufferPacked* createIndexBuffer();
 
 		int m_posX;
 		int m_posZ;
 		int m_scale;
 
-		NodesToMCGenerator* m_generator = nullptr;
+		NTMCG_Base* m_generator = nullptr;
 
 
 	public:
-		MCToMesh(Ogre_Service* ogreService, NodesToMCGenerator* Generator, int PosX, int PosZ, int Scale) :
+		MCToMesh(Ogre_Service* ogreService, NTMCG_Base* Generator, int PosX, int PosZ, int Scale) :
 			m_ogreService(ogreService),
 			m_generator(Generator),
 			m_posX(PosX),

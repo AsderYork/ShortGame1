@@ -70,6 +70,9 @@
     <Filter Include="MapSystemV2\DebugMapGraphicsService">
       <UniqueIdentifier>{9e235bd4-d604-47c3-b10d-52c52981e7a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{94595a60-09df-419a-bd39-7a5a2d6e7cdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -134,6 +137,9 @@
     </ClInclude>
     <ClInclude Include="DebugMapGraphicsService.h">
       <Filter>MapSystemV2\DebugMapGraphicsService</Filter>
+    </ClInclude>
+    <ClInclude Include="NodesToMCGeneratorsTests.h">
+      <Filter>Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

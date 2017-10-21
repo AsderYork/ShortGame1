@@ -37,7 +37,7 @@ namespace GEM
 
 		ChunkLoader<NodeChunk>* m_chunkLoader;
 
-		std::vector<std::unique_ptr<NodesToMCGenerator>> m_generatedChunks;
+		std::vector<std::unique_ptr<NTMCG_Base>> m_chunkGenerators;
 		std::vector<std::unique_ptr<MCToMesh>> m_mcToMeshes;
 
 	};

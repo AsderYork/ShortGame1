@@ -32,6 +32,7 @@ namespace GEM
 		\param[in] value A value to be set
 		*/
 		void SetIndividualNode(int NodeX, int NodeY, int NodeZ, unsigned char value);
+		unsigned char getNodeVal(int NodeX, int NodeY, int NodeZ);
 
 		MapService(Ogre_Service* OgreService) :
 			m_ogreService(OgreService),
