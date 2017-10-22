@@ -167,6 +167,8 @@
     <ClInclude Include="NodesToMC.h" />
     <ClInclude Include="NodesToMCGenerator.h" />
     <ClInclude Include="NodesToMCGeneratorsTests.h" />
+    <ClInclude Include="NTMCG_Base.h" />
+    <ClInclude Include="NTMCG_Naive.h" />
     <ClInclude Include="OgreLogRedirection.h" />
     <ClInclude Include="Ogre_Service.h" />
     <ClInclude Include="SDL2_Service.h" />
@@ -186,6 +188,8 @@
     <ClCompile Include="NodeChunk.cpp" />
     <ClCompile Include="NodesToMC.cpp" />
     <ClCompile Include="NodesToMCGenerator.cpp" />
+    <ClCompile Include="NTMCG_Base.cpp" />
+    <ClCompile Include="NTMCG_Naive.cpp" />
     <ClCompile Include="OgreLogRedirection.cpp" />
     <ClCompile Include="Ogre_Service.cpp" />
     <ClCompile Include="SDL2_Service.cpp" />

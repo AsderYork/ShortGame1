@@ -1,11 +1,12 @@
 #include "stdafx.h"
-#include "NodesToMCGenerator.h"
+#include "NTMCG_Naive.h"
+
 #include <OGRE\OgreVector3.h>
 
 namespace GEM
 {
-
-	NodesToMCGenerator::MidPoint & NodesToMCGenerator::CalcMidPoint(int CubeX, int CubeY, int CubeZ, int EdgeID)
+	
+	NodeToMCGeneratorNaive::MidPointBase & NodeToMCGeneratorNaive::CalcMidPoint(int CubeX, int CubeY, int CubeZ, int EdgeID)
 	{
 		/*
 		For Every variant
@@ -162,13 +163,11 @@ namespace GEM
 			return NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top;
 		}
 		}
-
 	}
-
-	void NodesToMCGenerator::CreateCube(int CubeX, int CubeY, int CubeZ)
+	void NodeToMCGeneratorNaive::CreateCube(int CubeX, int CubeY, int CubeZ)
 	{
+
 		auto cubeval = GetCubieValue(CubeX, CubeY, CubeZ);
-		m_cubeValuesCash.push_back(cubeval);
 
 		static int triTable[256][16] =
 		{ { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
@@ -428,13 +427,15 @@ namespace GEM
 		{ 0, 3, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
 		{ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 } };
 
+
+		std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>> Vertices;
 		for (int i = 0; triTable[cubeval][i] != -1;i += 3) {
 			auto& p1 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i]);
 			auto& p2 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i + 1]);
 			auto& p3 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i + 2]);
 
 			//Used to ease access to these points
-			MidPoint* Ps[3] = { &p1, &p2, &p3 };
+			MidPointBase* Ps[3] = { &p1, &p2, &p3 };
 
 			//Calculate normals
 			Ogre::Vector3 P1Vec(p1.x, p1.y, p1.z);
@@ -456,9 +457,6 @@ namespace GEM
 				p->uvy = p->y;
 				p->uvz = p->z;
 			}
-			//p1.nx = -Normal.x;	p2.nx = -Normal.x;	p3.nx = -Normal.x;
-			//p1.ny = -Normal.y;	p2.ny = -Normal.y;	p3.ny = -Normal.y;
-			//p1.nz = -Normal.z;	p2.nz = -Normal.z;	p3.nz = -Normal.z;
 
 			//Check for UpDown flavor
 
@@ -466,414 +464,43 @@ namespace GEM
 
 			float VorValResY = abs(90 - Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees());
 			float ValResY = Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees();
-			//if (ValResY <= 140) { return; }//Drop edges, oriented up 
 
+			MidPointBase::Flavor Flavor;
 			if (abs(90 - Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees()) >= 30)
 			{
-				for (auto& p : Ps)
-				{
-					//If it's not marked as UpDown flavored
-					if (p->FlavorUpDown == -1)
-					{
-						p->FlavorUpDown = VertexVector.size();
-						VertexVector.push_back(p);
-					}
-					IndexVector.push_back(p->FlavorUpDown);
-				}
+				Flavor = MidPointBase::FLAVOR_UPDOWN;
 			}
 			//if flavor is LeftRight
 			else if (abs(90 - Normal.angleBetween(Ogre::Vector3(1, 0, 0)).valueDegrees()) > 45)
 			{
-				for (auto& p : Ps)
-				{
-					//If it's not marked as UpDown flavored
-					if (p->FlavorLeftRight == -1)
-					{
-						p->FlavorLeftRight = VertexVector.size();
-						VertexVector.push_back(p);
-					}
-					IndexVector.push_back(p->FlavorLeftRight);
-				}
+				Flavor = MidPointBase::FLAVOR_LEFTRIGHT;
 			}
 			//Then it's FrontBack
 			else
 			{
-				for (auto& p : Ps)
-				{
-					//If it's not marked as UpDown flavored
-					if (p->FlavorFrontBack == -1)
-					{
-						p->FlavorFrontBack = VertexVector.size();
-						VertexVector.push_back(p);
-					}
-					IndexVector.push_back(p->FlavorFrontBack);
-				}
+				Flavor = MidPointBase::FLAVOR_FRONTBACK;
 			}
 
-		}
-
-	}
-
-	void NodesToMCGenerator::UpdateCube(int CubeX, int CubeY, int CubeZ)
-	{
-		auto cubeval = GetCubieValue(CubeX, CubeY, CubeZ);
-
-		//Check if cubevalue is changed
-		if (m_cubeValuesCash[DimY*DimXZ*CubeX + CubeY*DimY + CubeZ] != cubeval)
-		{
-			//Then remake entire cube
-		}
-		{
-			//Then check if it is update.
-		}
-
-		static int triTable[256][16] =
-		{ { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 1, 9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 8, 3, 9, 8, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 2, 10, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 8, 3, 1, 2, 10, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 2, 10, 0, 2, 9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 2, 8, 3, 2, 10, 8, 10, 9, 8, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 11, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 11, 2, 8, 11, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 9, 0, 2, 3, 11, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 11, 2, 1, 9, 11, 9, 8, 11, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 10, 1, 11, 10, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 10, 1, 0, 8, 10, 8, 11, 10, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 9, 0, 3, 11, 9, 11, 10, 9, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 8, 10, 10, 8, 11, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 7, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 3, 0, 7, 3, 4, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 1, 9, 8, 4, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 1, 9, 4, 7, 1, 7, 3, 1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 2, 10, 8, 4, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 4, 7, 3, 0, 4, 1, 2, 10, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 2, 10, 9, 0, 2, 8, 4, 7, -1, -1, -1, -1, -1, -1, -1 },
-		{ 2, 10, 9, 2, 9, 7, 2, 7, 3, 7, 9, 4, -1, -1, -1, -1 },
-		{ 8, 4, 7, 3, 11, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 11, 4, 7, 11, 2, 4, 2, 0, 4, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 0, 1, 8, 4, 7, 2, 3, 11, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 7, 11, 9, 4, 11, 9, 11, 2, 9, 2, 1, -1, -1, -1, -1 },
-		{ 3, 10, 1, 3, 11, 10, 7, 8, 4, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 11, 10, 1, 4, 11, 1, 0, 4, 7, 11, 4, -1, -1, -1, -1 },
-		{ 4, 7, 8, 9, 0, 11, 9, 11, 10, 11, 0, 3, -1, -1, -1, -1 },
-		{ 4, 7, 11, 4, 11, 9, 9, 11, 10, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 5, 4, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 5, 4, 0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 5, 4, 1, 5, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 8, 5, 4, 8, 3, 5, 3, 1, 5, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 2, 10, 9, 5, 4, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 0, 8, 1, 2, 10, 4, 9, 5, -1, -1, -1, -1, -1, -1, -1 },
-		{ 5, 2, 10, 5, 4, 2, 4, 0, 2, -1, -1, -1, -1, -1, -1, -1 },
-		{ 2, 10, 5, 3, 2, 5, 3, 5, 4, 3, 4, 8, -1, -1, -1, -1 },
-		{ 9, 5, 4, 2, 3, 11, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 11, 2, 0, 8, 11, 4, 9, 5, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 5, 4, 0, 1, 5, 2, 3, 11, -1, -1, -1, -1, -1, -1, -1 },
-		{ 2, 1, 5, 2, 5, 8, 2, 8, 11, 4, 8, 5, -1, -1, -1, -1 },
-		{ 10, 3, 11, 10, 1, 3, 9, 5, 4, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 9, 5, 0, 8, 1, 8, 10, 1, 8, 11, 10, -1, -1, -1, -1 },
-		{ 5, 4, 0, 5, 0, 11, 5, 11, 10, 11, 0, 3, -1, -1, -1, -1 },
-		{ 5, 4, 8, 5, 8, 10, 10, 8, 11, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 7, 8, 5, 7, 9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 3, 0, 9, 5, 3, 5, 7, 3, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 7, 8, 0, 1, 7, 1, 5, 7, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 5, 3, 3, 5, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 7, 8, 9, 5, 7, 10, 1, 2, -1, -1, -1, -1, -1, -1, -1 },
-		{ 10, 1, 2, 9, 5, 0, 5, 3, 0, 5, 7, 3, -1, -1, -1, -1 },
-		{ 8, 0, 2, 8, 2, 5, 8, 5, 7, 10, 5, 2, -1, -1, -1, -1 },
-		{ 2, 10, 5, 2, 5, 3, 3, 5, 7, -1, -1, -1, -1, -1, -1, -1 },
-		{ 7, 9, 5, 7, 8, 9, 3, 11, 2, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 5, 7, 9, 7, 2, 9, 2, 0, 2, 7, 11, -1, -1, -1, -1 },
-		{ 2, 3, 11, 0, 1, 8, 1, 7, 8, 1, 5, 7, -1, -1, -1, -1 },
-		{ 11, 2, 1, 11, 1, 7, 7, 1, 5, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 5, 8, 8, 5, 7, 10, 1, 3, 10, 3, 11, -1, -1, -1, -1 },
-		{ 5, 7, 0, 5, 0, 9, 7, 11, 0, 1, 0, 10, 11, 10, 0, -1 },
-		{ 11, 10, 0, 11, 0, 3, 10, 5, 0, 8, 0, 7, 5, 7, 0, -1 },
-		{ 11, 10, 5, 7, 11, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 10, 6, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 8, 3, 5, 10, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 0, 1, 5, 10, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 8, 3, 1, 9, 8, 5, 10, 6, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 6, 5, 2, 6, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 6, 5, 1, 2, 6, 3, 0, 8, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 6, 5, 9, 0, 6, 0, 2, 6, -1, -1, -1, -1, -1, -1, -1 },
-		{ 5, 9, 8, 5, 8, 2, 5, 2, 6, 3, 2, 8, -1, -1, -1, -1 },
-		{ 2, 3, 11, 10, 6, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 11, 0, 8, 11, 2, 0, 10, 6, 5, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 1, 9, 2, 3, 11, 5, 10, 6, -1, -1, -1, -1, -1, -1, -1 },
-		{ 5, 10, 6, 1, 9, 2, 9, 11, 2, 9, 8, 11, -1, -1, -1, -1 },
-		{ 6, 3, 11, 6, 5, 3, 5, 1, 3, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 8, 11, 0, 11, 5, 0, 5, 1, 5, 11, 6, -1, -1, -1, -1 },
-		{ 3, 11, 6, 0, 3, 6, 0, 6, 5, 0, 5, 9, -1, -1, -1, -1 },
-		{ 6, 5, 9, 6, 9, 11, 11, 9, 8, -1, -1, -1, -1, -1, -1, -1 },
-		{ 5, 10, 6, 4, 7, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 3, 0, 4, 7, 3, 6, 5, 10, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 9, 0, 5, 10, 6, 8, 4, 7, -1, -1, -1, -1, -1, -1, -1 },
-		{ 10, 6, 5, 1, 9, 7, 1, 7, 3, 7, 9, 4, -1, -1, -1, -1 },
-		{ 6, 1, 2, 6, 5, 1, 4, 7, 8, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 2, 5, 5, 2, 6, 3, 0, 4, 3, 4, 7, -1, -1, -1, -1 },
-		{ 8, 4, 7, 9, 0, 5, 0, 6, 5, 0, 2, 6, -1, -1, -1, -1 },
-		{ 7, 3, 9, 7, 9, 4, 3, 2, 9, 5, 9, 6, 2, 6, 9, -1 },
-		{ 3, 11, 2, 7, 8, 4, 10, 6, 5, -1, -1, -1, -1, -1, -1, -1 },
-		{ 5, 10, 6, 4, 7, 2, 4, 2, 0, 2, 7, 11, -1, -1, -1, -1 },
-		{ 0, 1, 9, 4, 7, 8, 2, 3, 11, 5, 10, 6, -1, -1, -1, -1 },
-		{ 9, 2, 1, 9, 11, 2, 9, 4, 11, 7, 11, 4, 5, 10, 6, -1 },
-		{ 8, 4, 7, 3, 11, 5, 3, 5, 1, 5, 11, 6, -1, -1, -1, -1 },
-		{ 5, 1, 11, 5, 11, 6, 1, 0, 11, 7, 11, 4, 0, 4, 11, -1 },
-		{ 0, 5, 9, 0, 6, 5, 0, 3, 6, 11, 6, 3, 8, 4, 7, -1 },
-		{ 6, 5, 9, 6, 9, 11, 4, 7, 9, 7, 11, 9, -1, -1, -1, -1 },
-		{ 10, 4, 9, 6, 4, 10, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 10, 6, 4, 9, 10, 0, 8, 3, -1, -1, -1, -1, -1, -1, -1 },
-		{ 10, 0, 1, 10, 6, 0, 6, 4, 0, -1, -1, -1, -1, -1, -1, -1 },
-		{ 8, 3, 1, 8, 1, 6, 8, 6, 4, 6, 1, 10, -1, -1, -1, -1 },
-		{ 1, 4, 9, 1, 2, 4, 2, 6, 4, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 0, 8, 1, 2, 9, 2, 4, 9, 2, 6, 4, -1, -1, -1, -1 },
-		{ 0, 2, 4, 4, 2, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 8, 3, 2, 8, 2, 4, 4, 2, 6, -1, -1, -1, -1, -1, -1, -1 },
-		{ 10, 4, 9, 10, 6, 4, 11, 2, 3, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 8, 2, 2, 8, 11, 4, 9, 10, 4, 10, 6, -1, -1, -1, -1 },
-		{ 3, 11, 2, 0, 1, 6, 0, 6, 4, 6, 1, 10, -1, -1, -1, -1 },
-		{ 6, 4, 1, 6, 1, 10, 4, 8, 1, 2, 1, 11, 8, 11, 1, -1 },
-		{ 9, 6, 4, 9, 3, 6, 9, 1, 3, 11, 6, 3, -1, -1, -1, -1 },
-		{ 8, 11, 1, 8, 1, 0, 11, 6, 1, 9, 1, 4, 6, 4, 1, -1 },
-		{ 3, 11, 6, 3, 6, 0, 0, 6, 4, -1, -1, -1, -1, -1, -1, -1 },
-		{ 6, 4, 8, 11, 6, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 7, 10, 6, 7, 8, 10, 8, 9, 10, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 7, 3, 0, 10, 7, 0, 9, 10, 6, 7, 10, -1, -1, -1, -1 },
-		{ 10, 6, 7, 1, 10, 7, 1, 7, 8, 1, 8, 0, -1, -1, -1, -1 },
-		{ 10, 6, 7, 10, 7, 1, 1, 7, 3, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 2, 6, 1, 6, 8, 1, 8, 9, 8, 6, 7, -1, -1, -1, -1 },
-		{ 2, 6, 9, 2, 9, 1, 6, 7, 9, 0, 9, 3, 7, 3, 9, -1 },
-		{ 7, 8, 0, 7, 0, 6, 6, 0, 2, -1, -1, -1, -1, -1, -1, -1 },
-		{ 7, 3, 2, 6, 7, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 2, 3, 11, 10, 6, 8, 10, 8, 9, 8, 6, 7, -1, -1, -1, -1 },
-		{ 2, 0, 7, 2, 7, 11, 0, 9, 7, 6, 7, 10, 9, 10, 7, -1 },
-		{ 1, 8, 0, 1, 7, 8, 1, 10, 7, 6, 7, 10, 2, 3, 11, -1 },
-		{ 11, 2, 1, 11, 1, 7, 10, 6, 1, 6, 7, 1, -1, -1, -1, -1 },
-		{ 8, 9, 6, 8, 6, 7, 9, 1, 6, 11, 6, 3, 1, 3, 6, -1 },
-		{ 0, 9, 1, 11, 6, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 7, 8, 0, 7, 0, 6, 3, 11, 0, 11, 6, 0, -1, -1, -1, -1 },
-		{ 7, 11, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 7, 6, 11, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 0, 8, 11, 7, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 1, 9, 11, 7, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 8, 1, 9, 8, 3, 1, 11, 7, 6, -1, -1, -1, -1, -1, -1, -1 },
-		{ 10, 1, 2, 6, 11, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 2, 10, 3, 0, 8, 6, 11, 7, -1, -1, -1, -1, -1, -1, -1 },
-		{ 2, 9, 0, 2, 10, 9, 6, 11, 7, -1, -1, -1, -1, -1, -1, -1 },
-		{ 6, 11, 7, 2, 10, 3, 10, 8, 3, 10, 9, 8, -1, -1, -1, -1 },
-		{ 7, 2, 3, 6, 2, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 7, 0, 8, 7, 6, 0, 6, 2, 0, -1, -1, -1, -1, -1, -1, -1 },
-		{ 2, 7, 6, 2, 3, 7, 0, 1, 9, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 6, 2, 1, 8, 6, 1, 9, 8, 8, 7, 6, -1, -1, -1, -1 },
-		{ 10, 7, 6, 10, 1, 7, 1, 3, 7, -1, -1, -1, -1, -1, -1, -1 },
-		{ 10, 7, 6, 1, 7, 10, 1, 8, 7, 1, 0, 8, -1, -1, -1, -1 },
-		{ 0, 3, 7, 0, 7, 10, 0, 10, 9, 6, 10, 7, -1, -1, -1, -1 },
-		{ 7, 6, 10, 7, 10, 8, 8, 10, 9, -1, -1, -1, -1, -1, -1, -1 },
-		{ 6, 8, 4, 11, 8, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 6, 11, 3, 0, 6, 0, 4, 6, -1, -1, -1, -1, -1, -1, -1 },
-		{ 8, 6, 11, 8, 4, 6, 9, 0, 1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 4, 6, 9, 6, 3, 9, 3, 1, 11, 3, 6, -1, -1, -1, -1 },
-		{ 6, 8, 4, 6, 11, 8, 2, 10, 1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 2, 10, 3, 0, 11, 0, 6, 11, 0, 4, 6, -1, -1, -1, -1 },
-		{ 4, 11, 8, 4, 6, 11, 0, 2, 9, 2, 10, 9, -1, -1, -1, -1 },
-		{ 10, 9, 3, 10, 3, 2, 9, 4, 3, 11, 3, 6, 4, 6, 3, -1 },
-		{ 8, 2, 3, 8, 4, 2, 4, 6, 2, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 4, 2, 4, 6, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 9, 0, 2, 3, 4, 2, 4, 6, 4, 3, 8, -1, -1, -1, -1 },
-		{ 1, 9, 4, 1, 4, 2, 2, 4, 6, -1, -1, -1, -1, -1, -1, -1 },
-		{ 8, 1, 3, 8, 6, 1, 8, 4, 6, 6, 10, 1, -1, -1, -1, -1 },
-		{ 10, 1, 0, 10, 0, 6, 6, 0, 4, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 6, 3, 4, 3, 8, 6, 10, 3, 0, 3, 9, 10, 9, 3, -1 },
-		{ 10, 9, 4, 6, 10, 4, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 9, 5, 7, 6, 11, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 8, 3, 4, 9, 5, 11, 7, 6, -1, -1, -1, -1, -1, -1, -1 },
-		{ 5, 0, 1, 5, 4, 0, 7, 6, 11, -1, -1, -1, -1, -1, -1, -1 },
-		{ 11, 7, 6, 8, 3, 4, 3, 5, 4, 3, 1, 5, -1, -1, -1, -1 },
-		{ 9, 5, 4, 10, 1, 2, 7, 6, 11, -1, -1, -1, -1, -1, -1, -1 },
-		{ 6, 11, 7, 1, 2, 10, 0, 8, 3, 4, 9, 5, -1, -1, -1, -1 },
-		{ 7, 6, 11, 5, 4, 10, 4, 2, 10, 4, 0, 2, -1, -1, -1, -1 },
-		{ 3, 4, 8, 3, 5, 4, 3, 2, 5, 10, 5, 2, 11, 7, 6, -1 },
-		{ 7, 2, 3, 7, 6, 2, 5, 4, 9, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 5, 4, 0, 8, 6, 0, 6, 2, 6, 8, 7, -1, -1, -1, -1 },
-		{ 3, 6, 2, 3, 7, 6, 1, 5, 0, 5, 4, 0, -1, -1, -1, -1 },
-		{ 6, 2, 8, 6, 8, 7, 2, 1, 8, 4, 8, 5, 1, 5, 8, -1 },
-		{ 9, 5, 4, 10, 1, 6, 1, 7, 6, 1, 3, 7, -1, -1, -1, -1 },
-		{ 1, 6, 10, 1, 7, 6, 1, 0, 7, 8, 7, 0, 9, 5, 4, -1 },
-		{ 4, 0, 10, 4, 10, 5, 0, 3, 10, 6, 10, 7, 3, 7, 10, -1 },
-		{ 7, 6, 10, 7, 10, 8, 5, 4, 10, 4, 8, 10, -1, -1, -1, -1 },
-		{ 6, 9, 5, 6, 11, 9, 11, 8, 9, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 6, 11, 0, 6, 3, 0, 5, 6, 0, 9, 5, -1, -1, -1, -1 },
-		{ 0, 11, 8, 0, 5, 11, 0, 1, 5, 5, 6, 11, -1, -1, -1, -1 },
-		{ 6, 11, 3, 6, 3, 5, 5, 3, 1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 2, 10, 9, 5, 11, 9, 11, 8, 11, 5, 6, -1, -1, -1, -1 },
-		{ 0, 11, 3, 0, 6, 11, 0, 9, 6, 5, 6, 9, 1, 2, 10, -1 },
-		{ 11, 8, 5, 11, 5, 6, 8, 0, 5, 10, 5, 2, 0, 2, 5, -1 },
-		{ 6, 11, 3, 6, 3, 5, 2, 10, 3, 10, 5, 3, -1, -1, -1, -1 },
-		{ 5, 8, 9, 5, 2, 8, 5, 6, 2, 3, 8, 2, -1, -1, -1, -1 },
-		{ 9, 5, 6, 9, 6, 0, 0, 6, 2, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 5, 8, 1, 8, 0, 5, 6, 8, 3, 8, 2, 6, 2, 8, -1 },
-		{ 1, 5, 6, 2, 1, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 3, 6, 1, 6, 10, 3, 8, 6, 5, 6, 9, 8, 9, 6, -1 },
-		{ 10, 1, 0, 10, 0, 6, 9, 5, 0, 5, 6, 0, -1, -1, -1, -1 },
-		{ 0, 3, 8, 5, 6, 10, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 10, 5, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 11, 5, 10, 7, 5, 11, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 11, 5, 10, 11, 7, 5, 8, 3, 0, -1, -1, -1, -1, -1, -1, -1 },
-		{ 5, 11, 7, 5, 10, 11, 1, 9, 0, -1, -1, -1, -1, -1, -1, -1 },
-		{ 10, 7, 5, 10, 11, 7, 9, 8, 1, 8, 3, 1, -1, -1, -1, -1 },
-		{ 11, 1, 2, 11, 7, 1, 7, 5, 1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 8, 3, 1, 2, 7, 1, 7, 5, 7, 2, 11, -1, -1, -1, -1 },
-		{ 9, 7, 5, 9, 2, 7, 9, 0, 2, 2, 11, 7, -1, -1, -1, -1 },
-		{ 7, 5, 2, 7, 2, 11, 5, 9, 2, 3, 2, 8, 9, 8, 2, -1 },
-		{ 2, 5, 10, 2, 3, 5, 3, 7, 5, -1, -1, -1, -1, -1, -1, -1 },
-		{ 8, 2, 0, 8, 5, 2, 8, 7, 5, 10, 2, 5, -1, -1, -1, -1 },
-		{ 9, 0, 1, 5, 10, 3, 5, 3, 7, 3, 10, 2, -1, -1, -1, -1 },
-		{ 9, 8, 2, 9, 2, 1, 8, 7, 2, 10, 2, 5, 7, 5, 2, -1 },
-		{ 1, 3, 5, 3, 7, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 8, 7, 0, 7, 1, 1, 7, 5, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 0, 3, 9, 3, 5, 5, 3, 7, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 8, 7, 5, 9, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 5, 8, 4, 5, 10, 8, 10, 11, 8, -1, -1, -1, -1, -1, -1, -1 },
-		{ 5, 0, 4, 5, 11, 0, 5, 10, 11, 11, 3, 0, -1, -1, -1, -1 },
-		{ 0, 1, 9, 8, 4, 10, 8, 10, 11, 10, 4, 5, -1, -1, -1, -1 },
-		{ 10, 11, 4, 10, 4, 5, 11, 3, 4, 9, 4, 1, 3, 1, 4, -1 },
-		{ 2, 5, 1, 2, 8, 5, 2, 11, 8, 4, 5, 8, -1, -1, -1, -1 },
-		{ 0, 4, 11, 0, 11, 3, 4, 5, 11, 2, 11, 1, 5, 1, 11, -1 },
-		{ 0, 2, 5, 0, 5, 9, 2, 11, 5, 4, 5, 8, 11, 8, 5, -1 },
-		{ 9, 4, 5, 2, 11, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 2, 5, 10, 3, 5, 2, 3, 4, 5, 3, 8, 4, -1, -1, -1, -1 },
-		{ 5, 10, 2, 5, 2, 4, 4, 2, 0, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 10, 2, 3, 5, 10, 3, 8, 5, 4, 5, 8, 0, 1, 9, -1 },
-		{ 5, 10, 2, 5, 2, 4, 1, 9, 2, 9, 4, 2, -1, -1, -1, -1 },
-		{ 8, 4, 5, 8, 5, 3, 3, 5, 1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 4, 5, 1, 0, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 8, 4, 5, 8, 5, 3, 9, 0, 5, 0, 3, 5, -1, -1, -1, -1 },
-		{ 9, 4, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 11, 7, 4, 9, 11, 9, 10, 11, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 8, 3, 4, 9, 7, 9, 11, 7, 9, 10, 11, -1, -1, -1, -1 },
-		{ 1, 10, 11, 1, 11, 4, 1, 4, 0, 7, 4, 11, -1, -1, -1, -1 },
-		{ 3, 1, 4, 3, 4, 8, 1, 10, 4, 7, 4, 11, 10, 11, 4, -1 },
-		{ 4, 11, 7, 9, 11, 4, 9, 2, 11, 9, 1, 2, -1, -1, -1, -1 },
-		{ 9, 7, 4, 9, 11, 7, 9, 1, 11, 2, 11, 1, 0, 8, 3, -1 },
-		{ 11, 7, 4, 11, 4, 2, 2, 4, 0, -1, -1, -1, -1, -1, -1, -1 },
-		{ 11, 7, 4, 11, 4, 2, 8, 3, 4, 3, 2, 4, -1, -1, -1, -1 },
-		{ 2, 9, 10, 2, 7, 9, 2, 3, 7, 7, 4, 9, -1, -1, -1, -1 },
-		{ 9, 10, 7, 9, 7, 4, 10, 2, 7, 8, 7, 0, 2, 0, 7, -1 },
-		{ 3, 7, 10, 3, 10, 2, 7, 4, 10, 1, 10, 0, 4, 0, 10, -1 },
-		{ 1, 10, 2, 8, 7, 4, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 9, 1, 4, 1, 7, 7, 1, 3, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 9, 1, 4, 1, 7, 0, 8, 1, 8, 7, 1, -1, -1, -1, -1 },
-		{ 4, 0, 3, 7, 4, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 4, 8, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 10, 8, 10, 11, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 0, 9, 3, 9, 11, 11, 9, 10, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 1, 10, 0, 10, 8, 8, 10, 11, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 1, 10, 11, 3, 10, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 2, 11, 1, 11, 9, 9, 11, 8, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 0, 9, 3, 9, 11, 1, 2, 9, 2, 11, 9, -1, -1, -1, -1 },
-		{ 0, 2, 11, 8, 0, 11, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 3, 2, 11, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 2, 3, 8, 2, 8, 10, 10, 8, 9, -1, -1, -1, -1, -1, -1, -1 },
-		{ 9, 10, 2, 0, 9, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 2, 3, 8, 2, 8, 10, 0, 1, 8, 1, 10, 8, -1, -1, -1, -1 },
-		{ 1, 10, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 1, 3, 8, 9, 1, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 9, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ 0, 3, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		{ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 } };
-
-		for (int i = 0; triTable[cubeval][i] != -1;i += 3) {
-			auto& p1 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i]);
-			auto& p2 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i + 1]);
-			auto& p3 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i + 2]);
-
-			//Used to ease access to these points
-			MidPoint* Ps[3] = { &p1, &p2, &p3 };
-
-			//Calculate normals
-			Ogre::Vector3 P1Vec(p1.x, p1.y, p1.z);
-			Ogre::Vector3 P2Vec(p2.x, p2.y, p2.z);
-			Ogre::Vector3 P3Vec(p3.x, p3.y, p3.z);
-
-			auto& From1To2 = P1Vec - P2Vec;
-			auto& From1To3 = P1Vec - P3Vec;
-
-			Ogre::Vector3 Normal = From1To2.crossProduct(From1To3);
-			Normal.normalise();
 			for (auto& p : Ps)
 			{
-				p->nx += Normal.x;
-				p->ny += Normal.y;
-				p->nz += Normal.z;
-
-				p->uvx = p->x;
-				p->uvy = p->y;
-				p->uvz = p->z;
-			}
-			//p1.nx = -Normal.x;	p2.nx = -Normal.x;	p3.nx = -Normal.x;
-			//p1.ny = -Normal.y;	p2.ny = -Normal.y;	p3.ny = -Normal.y;
-			//p1.nz = -Normal.z;	p2.nz = -Normal.z;	p3.nz = -Normal.z;
-
-			//Check for UpDown flavor
-
-			//If flavor is UpDown
-
-			float VorValResY = abs(90 - Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees());
-			float ValResY = Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees();
-			//if (ValResY <= 140) { return; }//Drop edges, oriented up 
-
-			if (abs(90 - Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees()) >= 30)
-			{
-				for (auto& p : Ps)
-				{
-					//If it's not marked as UpDown flavored
-					if (p->FlavorUpDown == -1)
-					{
-						p->FlavorUpDown = VertexVector.size();
-						VertexVector.push_back(p);
-					}
-					IndexVector.push_back(p->FlavorUpDown);
-				}
-			}
-			//if flavor is LeftRight
-			else if (abs(90 - Normal.angleBetween(Ogre::Vector3(1, 0, 0)).valueDegrees()) > 45)
-			{
-				for (auto& p : Ps)
-				{
-					//If it's not marked as UpDown flavored
-					if (p->FlavorLeftRight == -1)
-					{
-						p->FlavorLeftRight = VertexVector.size();
-						VertexVector.push_back(p);
-					}
-					IndexVector.push_back(p->FlavorLeftRight);
-				}
-			}
-			//Then it's FrontBack
-			else
-			{
-				for (auto& p : Ps)
-				{
-					//If it's not marked as UpDown flavored
-					if (p->FlavorFrontBack == -1)
-					{
-						p->FlavorFrontBack = VertexVector.size();
-						VertexVector.push_back(p);
-					}
-					IndexVector.push_back(p->FlavorFrontBack);
-				}
+				Vertices.push_back(std::make_pair(p, Flavor));
+				//p->flavor = Flavor;
+				//VertexVector.push_back(MidPointBase(*p));
+				//IndexVector.push_back(VertexVector.size()-1);
 			}
 
 		}
+
+		std::list<int>::iterator It;
+		if (!Vertices.empty()) {
+			It = m_actuallyUsedCubes.insert(m_actuallyUsedCubes.end(), XYZToLinearCube(CubeX, CubeY, CubeZ));
+		}
+
+		m_cubeData.emplace_back(Vertices, It);
 	}
 
-
-	void NodesToMCGenerator::Generate()
-	{
-		//Clear for regeneration
+	void NodeToMCGeneratorNaive::UpdateCube(int CubeX, int CubeY, int CubeZ)
+	{//Clear for regeneration
 		VertexVector.clear();
 		IndexVector.clear();
 		VertexVector.clear();
@@ -895,54 +522,178 @@ namespace GEM
 		//Normalize stage
 		for (auto Vertex : VertexVector)
 		{
-			Ogre::Vector3 normal(Vertex->nx, Vertex->ny, Vertex->nz);
+			Ogre::Vector3 normal(Vertex.nx, Vertex.ny, Vertex.nz);
 			normal.normalise();
-			Vertex->nx = normal.x;
-			Vertex->ny = normal.y;
-			Vertex->nz = normal.z;
+			Vertex.nx = normal.x;
+			Vertex.ny = normal.y;
+			Vertex.nz = normal.z;
 		}
 	}
-	void NodesToMCGenerator::Update()
+
+	void NodeToMCGeneratorNaive::Generate()
 	{
+		//Clear for regeneration
+		VertexVector.clear();
+		IndexVector.clear();
+		m_cubeData.clear();
+
+		NodeEnvelopeVec.clear();
+		regenerateEnvelope();
+
 		for (int x = 0; x < DimXZ; x++)
 		{
 			for (int y = 0; y < DimY - 1; y++)
 			{
 				for (int z = 0; z < DimXZ; z++)
 				{
-
 					CreateCube(x, y, z);
 				}
 			}
 		}
 
-		//For every changed cube
-		//Check if cube value stayed the same
-		//If it did, recalculate positions of affected MidPoints
+		//Building Final Vertex&Index vectors stage
+		int Index = 0;
+		for (auto UsedCube : m_actuallyUsedCubes)
+		{
+			for (auto Vertex : m_cubeData[UsedCube].VerticesInUse)
+			{
+				Ogre::Vector3 normal(Vertex.first->nx, Vertex.first->ny, Vertex.first->nz);
+				normal.normalise();
+				Vertex.first->nx = normal.x;
+				Vertex.first->ny = normal.y;
+				Vertex.first->nz = normal.z;
 
-		//If not. remove nodes, 
+				
+				VertexVector.push_back(*(Vertex.first));
+				VertexVector[Index].flavor = Vertex.second;
+				IndexVector.push_back(Index);
+				Index++;
+			}			
+		}
 	}
 
-
-	NTMCG_Base::MidPointBase* NodesToMCGenerator::getVertexVectorElement(int i)
+	void NodeToMCGeneratorNaive::Update()
 	{
-		if (VertexVector[i]->FlavorUpDown == i) { VertexVector[i]->flavor = NTMCG_Base::MidPointBase::Flavor::FLAVOR_UPDOWN; }
-		else if (VertexVector[i]->FlavorFrontBack == i) { VertexVector[i]->flavor = NTMCG_Base::MidPointBase::Flavor::FLAVOR_FRONTBACK; }
-		else { VertexVector[i]->flavor = NTMCG_Base::MidPointBase::Flavor::FLAVOR_LEFTRIGHT; }
-		return VertexVector[i];
+		//For every changed cube
+		for (auto& cubePos : ChangedCubies)
+		{
+			int X = cubePos / DimXZ*(DimY - 1);
+			int Y = (cubePos - X*DimXZ*(DimY - 1)) / (DimY - 1);
+			int Z = ((cubePos - X*DimXZ*(DimY - 1)) - Y*(DimY - 1));
+
+			UpdateCube(X, Y, Z);
+		}
+		ChangedCubies.clear();
 	}
 
-	const int NodesToMCGenerator::getVertexVectorSize()
+	void NodeToMCGeneratorNaive::ChangeNode(int x, int y, int z)
+	{
+		if ((x - 1) >= 0)//Check that cubes to the left from the node are actally exist
+		{
+			if ((y - 1) >= 0)//Check that the cubes below the node do exist
+			{
+				if ((z - 1) >= 0)//Check that the cubes in front of the node do exist
+				{
+					int CubePos = XYZToLinearCube(x - 1, y - 1, z - 1);
+					if (!std::binary_search(ChangedCubies.begin(), ChangedCubies.end(), CubePos))
+					{
+						ChangedCubies.push_back(CubePos);
+						std::sort(ChangedCubies.begin(), ChangedCubies.end());
+					}
+				}
+				if (z < DimXZ)
+				{
+					int CubePos = XYZToLinearCube(x - 1, y - 1, z);
+					if (!std::binary_search(ChangedCubies.begin(), ChangedCubies.end(), CubePos))
+					{
+						ChangedCubies.push_back(CubePos);
+						std::sort(ChangedCubies.begin(), ChangedCubies.end());
+					}
+				}
+			}
+			if (y  < DimY - 1)
+			{
+				if ((z - 1) >= 0)
+				{
+					int CubePos = XYZToLinearCube(x - 1, y, z - 1);
+					if (!std::binary_search(ChangedCubies.begin(), ChangedCubies.end(), CubePos))
+					{
+						ChangedCubies.push_back(CubePos);
+						std::sort(ChangedCubies.begin(), ChangedCubies.end());
+					}
+				}
+				if (z < DimXZ)
+				{
+					int CubePos = XYZToLinearCube(x - 1, y, z);
+					if (!std::binary_search(ChangedCubies.begin(), ChangedCubies.end(), CubePos))
+					{
+						ChangedCubies.push_back(CubePos);
+						std::sort(ChangedCubies.begin(), ChangedCubies.end());
+					}
+				}
+			}
+		}
+		if (x < DimXZ)//Check that cubes to the left from the node are actally exist
+		{
+			if ((y - 1) >= 0)//Check that the cubes below the node do exist
+			{
+				if ((z - 1) >= 0)//Check that the cubes in front of the node do exist
+				{
+					int CubePos = XYZToLinearCube(x, y - 1, z - 1);
+					if (!std::binary_search(ChangedCubies.begin(), ChangedCubies.end(), CubePos))
+					{
+						ChangedCubies.push_back(CubePos);
+						std::sort(ChangedCubies.begin(), ChangedCubies.end());
+					}
+				}
+				if (z < DimXZ)
+				{
+					int CubePos = XYZToLinearCube(x, y - 1, z);
+					if (!std::binary_search(ChangedCubies.begin(), ChangedCubies.end(), CubePos))
+					{
+						ChangedCubies.push_back(CubePos);
+						std::sort(ChangedCubies.begin(), ChangedCubies.end());
+					}
+				}
+			}
+			if (y  < DimY - 1)
+			{
+				if ((z - 1) >= 0)
+				{
+					int CubePos = XYZToLinearCube(x, y, z - 1);
+					if (!std::binary_search(ChangedCubies.begin(), ChangedCubies.end(), CubePos))
+					{
+						ChangedCubies.push_back(CubePos);
+						std::sort(ChangedCubies.begin(), ChangedCubies.end());
+					}
+				}
+				if (z < DimXZ)
+				{
+					int CubePos = XYZToLinearCube(x, y, z);
+					if (!std::binary_search(ChangedCubies.begin(), ChangedCubies.end(), CubePos))
+					{
+						ChangedCubies.push_back(CubePos);
+						std::sort(ChangedCubies.begin(), ChangedCubies.end());
+					}
+				}
+			}
+		}
+
+	}
+
+	NodeToMCGeneratorNaive::MidPointBase* NodeToMCGeneratorNaive::getVertexVectorElement(int i)
+	{
+		return &(VertexVector[i]);
+	}
+	const int NodeToMCGeneratorNaive::getVertexVectorSize()
 	{
 		return VertexVector.size();
 	}
-
-	int NodesToMCGenerator::getIndexVectorElement(int i)
+	int NodeToMCGeneratorNaive::getIndexVectorElement(int i)
 	{
 		return IndexVector[i];
 	}
-
-	const int NodesToMCGenerator::getIndexVectorSize()
+	const int NodeToMCGeneratorNaive::getIndexVectorSize()
 	{
 		return IndexVector.size();
 	}

@@ -1,42 +1,22 @@
 #pragma once
-#include "NodeChunk.h"
+#include "NodesToMCGenerator.h"
 #include "NTMCG_Base.h"
+#include <memory>
+#include <vector>
+#include <list>
 
 namespace GEM
 {
-	
-
 	/**!
-	Holds all needed data to generate one MarchingCube Nesh for one chunk.
-
-	The idea is that GeneratorController will create Generator for every chunk that should be created, provide them with all needed data
-	and then lets them generate meshes
+	Does the same thing as usual generator, but does't separate vertices
 	*/
-	class NodesToMCGenerator : public NTMCG_Base
+	class NodeToMCGeneratorNaive : public NTMCG_Base
 	{
-	private:
 		//A chunks. From them a mesh will be generated
 		std::shared_ptr<GEM::NodeChunk> ChunkCentre, ChunkRight, ChunkFront, ChunkFrontRight;
 
-
-
-		/**!
-		We actually wants to find a points on edges of cubes, that would be a part of iso-surface.
-		MidPoint is a representation of those points. It's just a float triplet of (x,y,z)
-		MidPoint counts as Unset if X or Y or Z is -1; That's their default state
-		*/
-		struct MidPoint : public NTMCG_Base::MidPointBase {
-			/**
-			Every flavor points to a position in a VertexArray where this particular midpoint were used as UpDown, LeftRight or FrontBack vertex.
-			That's why VertexList MUST have no more then 3 occurences of a single Vertex. And every accurance must be flavored uniquely so that there shouldn't
-			be two UpDown or something like that.
-			This also means that MCToMesh should be able to work differetiate flavors correctly, choosing right u,v pair for a given flavor.
-			*/
-			int FlavorUpDown = -1;
-			int FlavorLeftRight = -1;
-			int FlavorFrontBack = -1;
-		};
-
+		//structures should be public
+	public:
 		/**!
 		Nodes that comes from MapGenerator contains only things, specific to that node. But we also need some way to access mid-points, associated
 		with given node. So we just do an envelope that includes that midpoints.
@@ -44,25 +24,57 @@ namespace GEM
 		MidPoints should be set to a value, that is weighted average of nodes on their edge, assuming that node [x][y][z] have cordinates(x;y;z)
 		*/
 		struct NodeEnvelope {
-			MidPoint Right, Back, Top;
+			MidPointBase Right, Back, Top;
 			bool isChanged = false;
 		};
-
+	private:
 
 		std::vector<std::vector<std::vector<NodeEnvelope>>> NodeEnvelopeVec;
-		//This fector is flat. It must be accessed in the order values have been added in it
-		std::vector<unsigned char> m_cubeValuesCash;
 
-		//Holds pointers to used EdgePoints in order and without duplications
-		std::vector<MidPoint*> VertexVector;
+		//Holds EdgePoints in order and with duplications
+		std::vector<MidPointBase> VertexVector;
 		//Holds IDs from VertexVector, so that they could be arranged in triangles
 		std::vector<int> IndexVector;
+
+		//Linear representation. Contains chunks, that heve been changed from last Update/Generate.
+		std::vector<int> ChangedCubies;
+
+
+		struct CubeData {
+			/*
+			Contains vector of nodes, that are actually used for this cube
+			Every used Node also marked with the flavor, in which it were used
+			*/
+			std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>> VerticesInUse;
+
+			/**
+			If this cube contains any actual geometry, it will be added to a m_actuallyUsedCubes; This iterator should be used
+			in Update to erase this cube from that list in case if no geometry left in it.
+			*/
+			std::list<int>::iterator PosInActiveList;
+
+			CubeData(std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>> NIU, std::list<int>::iterator it) :
+				VerticesInUse(NIU),
+				PosInActiveList(it)
+			{}
+			CubeData() {}
+
+		};
+
+		/*Contains data about cubes, so that they can be updated. This vector is inherently sorted after Generate
+		But if something is added during update, it must be resorted
+		*/
+		std::vector<CubeData> m_cubeData;
+		/*Contains IDs of cubes, that do have nodes. The vector is sorted after Generate. It must remain sorted after any changes in Update.
+		*/
+		std::list<int> m_actuallyUsedCubes;
 
 		/**!
 		Acesses node from multiple NodeMap as they are one big NodeMap.
 		\param[in] NodeX Position of a node in a big NodeMap
 		\param[in] NodeY Position of a node in a big NodeMap
 		\param[in] NodeZ Position of a node in a big NodeMap
+
 		\note This method have really narrow contract. It assumes, that user insert correct data and does not perform any checks.
 		It also actively uses data of instance that it's called from, so...
 		NodeX MUST be between 0 and DimXZ+1;
@@ -139,7 +151,7 @@ namespace GEM
 		\param[in] CubeZ Cordinate of a cube
 		\param[in] EdgeID ID of edge, which MidPoint must be calculated
 		*/
-		MidPoint& CalcMidPoint(int CubeX, int CubeY, int CubeZ, int EdgeID);
+		MidPointBase& CalcMidPoint(int CubeX, int CubeY, int CubeZ, int EdgeID);
 
 		/**!
 		Processes once Cube. Calculates its value, sets midpoints, creates triangles
@@ -153,6 +165,11 @@ namespace GEM
 		*/
 		void UpdateCube(int CubeX, int CubeY, int CubeZ);
 
+		//Transforms x,y,z cordinates of a cube in to a linear cordinate
+		inline int XYZToLinearCube(int x, int y, int z)
+		{
+			return DimXZ*(DimY - 1)*x + DimXZ*y + z;
+		}
 		/**!
 		Creates new envelope.
 		Assuming that it's empty
@@ -170,10 +187,8 @@ namespace GEM
 			}
 		}
 
-		int m_chunkPosX, m_chunkPosZ;
-
 	public:
-		NodesToMCGenerator(std::shared_ptr<GEM::NodeChunk> _ChunkCentre, std::shared_ptr<GEM::NodeChunk> _ChunkRight, std::shared_ptr<GEM::NodeChunk> _ChunkFront, std::shared_ptr<GEM::NodeChunk> _ChunkCentreFront, int _DimXZ, int _DimY, int ChunkX, int ChunkZ)
+		NodeToMCGeneratorNaive(std::shared_ptr<GEM::NodeChunk> _ChunkCentre, std::shared_ptr<GEM::NodeChunk> _ChunkRight, std::shared_ptr<GEM::NodeChunk> _ChunkFront, std::shared_ptr<GEM::NodeChunk> _ChunkCentreFront, int _DimXZ, int _DimY, int ChunkX, int ChunkZ)
 			:
 			ChunkCentre(_ChunkCentre),
 			ChunkRight(_ChunkRight),
@@ -186,6 +201,11 @@ namespace GEM
 
 		void Generate();
 		void Update();
+
+		/**!
+		Mark node as changed so that it will be redrawn at next Update
+		*/
+		void ChangeNode(int x, int y, int z);
 
 		MidPointBase* getVertexVectorElement(int i);
 		const int getVertexVectorSize();

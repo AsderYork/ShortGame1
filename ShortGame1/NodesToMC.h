@@ -4,6 +4,7 @@
 #include <array>
 #include "Ogre_Service.h"
 #include "NodesToMCGenerator.h"
+#include "NTMCG_Naive.h"
 #include "MCToMesh.h"
 #include <memory>
 

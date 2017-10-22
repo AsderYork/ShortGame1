@@ -73,6 +73,15 @@
     <Filter Include="Tests">
       <UniqueIdentifier>{94595a60-09df-419a-bd39-7a5a2d6e7cdf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MapSystemV2\NodesToMCGenerator\Base">
+      <UniqueIdentifier>{06577ca1-1249-4dd3-8e07-431d5a7dc734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapSystemV2\NodesToMCGenerator\Naive">
+      <UniqueIdentifier>{02861b0f-c396-44e0-9f09-8bcc1b5203e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapSystemV2\NodesToMCGenerator\Default">
+      <UniqueIdentifier>{43b152e1-66c5-46c6-af8c-1939b41a8bf4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -123,9 +132,6 @@
     <ClInclude Include="MCToMesh.h">
       <Filter>MapSystemV2\MCToMesh</Filter>
     </ClInclude>
-    <ClInclude Include="NodesToMCGenerator.h">
-      <Filter>MapSystemV2\NodesToMCGenerator</Filter>
-    </ClInclude>
     <ClInclude Include="ChunkFormat.h">
       <Filter>MapSystemV2</Filter>
     </ClInclude>
@@ -140,6 +146,15 @@
     </ClInclude>
     <ClInclude Include="NodesToMCGeneratorsTests.h">
       <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="NTMCG_Base.h">
+      <Filter>MapSystemV2\NodesToMCGenerator\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="NTMCG_Naive.h">
+      <Filter>MapSystemV2\NodesToMCGenerator\Naive</Filter>
+    </ClInclude>
+    <ClInclude Include="NodesToMCGenerator.h">
+      <Filter>MapSystemV2\NodesToMCGenerator\Default</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,9 +191,6 @@
     <ClCompile Include="NodeChunk.cpp">
       <Filter>MapSystemV2\NodeChunk</Filter>
     </ClCompile>
-    <ClCompile Include="NodesToMCGenerator.cpp">
-      <Filter>MapSystemV2\NodesToMCGenerator</Filter>
-    </ClCompile>
     <ClCompile Include="MCToMesh.cpp">
       <Filter>MapSystemV2\MCToMesh</Filter>
     </ClCompile>
@@ -193,6 +205,15 @@
     </ClCompile>
     <ClCompile Include="DebugLayout.cpp">
       <Filter>CEGUI_Layout\DebugLayout</Filter>
+    </ClCompile>
+    <ClCompile Include="NTMCG_Naive.cpp">
+      <Filter>MapSystemV2\NodesToMCGenerator\Naive</Filter>
+    </ClCompile>
+    <ClCompile Include="NTMCG_Base.cpp">
+      <Filter>MapSystemV2\NodesToMCGenerator\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="NodesToMCGenerator.cpp">
+      <Filter>MapSystemV2\NodesToMCGenerator\Default</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
