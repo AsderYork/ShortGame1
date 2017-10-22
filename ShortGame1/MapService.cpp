@@ -6,6 +6,8 @@ namespace GEM
 {
 	void MapService::SetIndividualNode(int NodeX, int NodeY, int NodeZ, unsigned char value)
 	{
+		if((NodeY>CHUNK_HEIGHT) || (NodeY <0)){	return;	}
+
 		//Find a chunk cordinate, where this node should be
 		int ChunkX = (NodeX - 1) / CHUNK_SIZE;
 		if (NodeX < 0) { ChunkX--; }
@@ -22,6 +24,7 @@ namespace GEM
 		Chunk->NodeMap[XInChunk][NodeY][ZInChunk].Value = value;
 		Chunk->NodeMap[XInChunk][NodeY][ZInChunk].isChanged = true;
 
+		m_generator.ChangeNode(ChunkX, ChunkZ, XInChunk, NodeY, ZInChunk);
 
 	}
 	unsigned char MapService::getNodeVal(int NodeX, int NodeY, int NodeZ)

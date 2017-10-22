@@ -139,21 +139,21 @@ namespace GEM
 			//This one in case if NaiveGenerator
 			switch (m_generator->getVertexVectorElement(i)->flavor)
 			{
-				case NodeToMCGeneratorNaive::MidPointBase::FLAVOR_UPDOWN:
+				case NTMCG_Base::MidPointBase::FLAVOR_UPDOWN:
 				{
 					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->uvx;
 					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->uvz;
 					break;
 				}
 
-				case NodeToMCGeneratorNaive::MidPointBase::FLAVOR_FRONTBACK:
+				case NTMCG_Base::MidPointBase::FLAVOR_FRONTBACK:
 				{
 					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->uvy;
 					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->uvx;
 					break;
 				}
 
-				case NodeToMCGeneratorNaive::MidPointBase::FLAVOR_LEFTRIGHT:
+				case NTMCG_Base::MidPointBase::FLAVOR_LEFTRIGHT:
 				{
 					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->uvy;
 					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->uvz;

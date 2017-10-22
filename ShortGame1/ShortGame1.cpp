@@ -22,6 +22,9 @@ int main(int argc, char *argv[])
 	auto Res = GEM::TestSpeed<GEM::NodeToMCGeneratorNaive>(2, 5);
 	GEM::InterprateResults(Res);
 
+	//auto ResU = GEM::TestSpeedUpdate<GEM::NodeToMCGeneratorNaive>(2, 5);
+	//GEM::InterprateResults(ResU);
+
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
 	auto OgreController = Controller.AddService<GEM::Ogre_Service>(SDLController);

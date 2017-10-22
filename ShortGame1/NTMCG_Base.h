@@ -31,6 +31,11 @@ namespace GEM
 		*/
 		virtual void Update() = 0;
 
+		/**!
+		Mark node as changed, so that it's cubes can be updated in Update
+		*/
+		virtual void ChangeNode(int x, int y, int z) =0;
+
 
 
 		struct MidPointBase

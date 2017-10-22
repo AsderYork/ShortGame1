@@ -20,6 +20,9 @@ namespace GEM
 		float VisionSize=0;
 
 		void CreateShader();
+		
+		enum Action{ACTION_NONE, ACTION_FILL, ACTION_DIG};
+		Action m_action = ACTION_NONE;
 
 	public:
 		DebugMapGraphicsService(Ogre_Service* OgreService, MapService* MapService) :

@@ -34,6 +34,12 @@ namespace GEM
 		*/
 		void UpdateChunk(int x, int y, Ogre_Service* ogreService);
 
+		/**
+		Mark node as changed in corresponding generator, if there is one. Or just do nothing.
+		This method dont perform actual node alteration! It's just tells generators, that cubes around node must be updated
+		*/
+		void ChangeNode(int ChunkX, int ChunkZ, int X, int Y, int Z);
+
 	private:
 
 		ChunkLoader<NodeChunk>* m_chunkLoader;

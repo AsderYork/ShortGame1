@@ -63,10 +63,24 @@ namespace GEM
 
 	Service::ActionResult DebugMapGraphicsService::preFrame(double timeDelta)
 	{
-		m_visionNode->setPosition(m_ogreService->getCamera()->getPosition() + m_ogreService->getCamera()->getDerivedDirection()*10);
-		
-		
-		
+		auto Pos = m_ogreService->getCamera()->getPosition() + m_ogreService->getCamera()->getDerivedDirection() * 10;
+
+		switch (m_action)
+		{
+		case ACTION_FILL:
+		{
+			m_mapService->SetIndividualNode(round(Pos.x), round(Pos.y), round(Pos.z), 255);
+			break;
+		}
+		case ACTION_DIG:
+		{
+			m_mapService->SetIndividualNode(round(Pos.x), round(Pos.y), round(Pos.z), 0);
+			break;
+		}
+		default: {break;}
+		}
+
+		m_visionNode->setPosition(Pos);
 		return ActionResult();
 	}
 
@@ -88,19 +102,20 @@ namespace GEM
 
 	void DebugMapGraphicsService::mousePressed(const SDL_MouseButtonEvent & arg)
 	{
-		auto Pos = m_ogreService->getCamera()->getPosition() + m_ogreService->getCamera()->getDerivedDirection() * 10;
 		if (arg.button == SDL_BUTTON_LEFT)
 		{
-			m_mapService->SetIndividualNode(round(Pos.x), round(Pos.y), round(Pos.z), 255);
+			m_action = ACTION_FILL;
 		}
 		else if (arg.button == SDL_BUTTON_RIGHT)
 		{
-			m_mapService->SetIndividualNode(round(Pos.x), round(Pos.y), round(Pos.z), 0);
+			m_action = ACTION_DIG;
 		}
 	}
 
 	void DebugMapGraphicsService::mouseReleased(const SDL_MouseButtonEvent & arg)
 	{
+
+		m_action = ACTION_NONE;
 	}
 
 }

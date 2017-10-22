@@ -12,6 +12,9 @@ namespace GEM
 	*/
 	class NodeToMCGeneratorNaive : public NTMCG_Base
 	{
+		static const int triTable[256][16];
+
+
 		//A chunks. From them a mesh will be generated
 		std::shared_ptr<GEM::NodeChunk> ChunkCentre, ChunkRight, ChunkFront, ChunkFrontRight;
 
@@ -41,20 +44,16 @@ namespace GEM
 
 
 		struct CubeData {
-			/*
-			Contains vector of nodes, that are actually used for this cube
-			Every used Node also marked with the flavor, in which it were used
-			*/
-			std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>> VerticesInUse;
-
+			
 			/**
-			If this cube contains any actual geometry, it will be added to a m_actuallyUsedCubes; This iterator should be used
-			in Update to erase this cube from that list in case if no geometry left in it.
+			If this cube contains any additional geometry, it's vertex buffer will be allocated in a list, marked with
+			this iterator
 			*/
-			std::list<int>::iterator PosInActiveList;
+			std::list<std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>>>::iterator PosInActiveList;
+			//True if Iterator is a valid one. False otherwise
+			bool isSet = false;
 
-			CubeData(std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>> NIU, std::list<int>::iterator it) :
-				VerticesInUse(NIU),
+			CubeData(std::list<std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>>>::iterator&& it) :
 				PosInActiveList(it)
 			{}
 			CubeData() {}
@@ -62,12 +61,12 @@ namespace GEM
 		};
 
 		/*Contains data about cubes, so that they can be updated. This vector is inherently sorted after Generate
-		But if something is added during update, it must be resorted
+		It's get filled complitely after Generate. At update elements must be only altered, no eddition or removal
 		*/
 		std::vector<CubeData> m_cubeData;
 		/*Contains IDs of cubes, that do have nodes. The vector is sorted after Generate. It must remain sorted after any changes in Update.
 		*/
-		std::list<int> m_actuallyUsedCubes;
+		std::list<std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>>> m_actuallyUsedCubesVertices;
 
 		/**!
 		Acesses node from multiple NodeMap as they are one big NodeMap.
@@ -186,6 +185,7 @@ namespace GEM
 				}
 			}
 		}
+		
 
 	public:
 		NodeToMCGeneratorNaive(std::shared_ptr<GEM::NodeChunk> _ChunkCentre, std::shared_ptr<GEM::NodeChunk> _ChunkRight, std::shared_ptr<GEM::NodeChunk> _ChunkFront, std::shared_ptr<GEM::NodeChunk> _ChunkCentreFront, int _DimXZ, int _DimY, int ChunkX, int ChunkZ)

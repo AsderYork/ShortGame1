@@ -46,9 +46,23 @@ namespace GEM
 			if ((m_chunkGenerators[i]->getChunkX() == x) && (m_chunkGenerators[i]->getChunkZ() == y))
 			{
 				//Update Chunk
-				m_chunkGenerators[i]->Generate();
+				m_chunkGenerators[i]->Update();
 				m_mcToMeshes[i]->GenerateMesh();
 
+				break;
+			}
+		}
+	}
+
+	void NodesToMCGeneratorController::ChangeNode(int ChunkX, int ChunkZ, int X, int Y, int Z)
+	{
+		//Check if chunk is loaded
+		for (int i = 0; i< m_chunkGenerators.size(); i++)
+		{
+			if ((m_chunkGenerators[i]->getChunkX() == ChunkX) && (m_chunkGenerators[i]->getChunkZ() == ChunkZ))
+			{
+				//Update Chunk
+				m_chunkGenerators[i]->ChangeNode(X, Y, Z);
 				break;
 			}
 		}
