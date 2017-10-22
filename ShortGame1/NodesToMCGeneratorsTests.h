@@ -1,5 +1,9 @@
 #pragma once
 #include "NodesToMCGenerator.h"
+
+#include "Ogre_Service.h"
+#include "MCToMesh.h"
+#include "NodesToMCGenerator.h"
 #include <chrono>
 #include <vector>
 #include <memory>
@@ -180,18 +184,15 @@ namespace GEM
 
 			for (int GenNum = 0; GenNum < Generators.size(); GenNum++)
 			{
-				//Do one generate for every map;
 				Generators[GenNum]->Generate();
 				for (int Try = 0; Try < GenerationsForEveryMap; Try++)
 				{
-					//Change random node
-					Generators[GenNum]->ChangeNode(std::rand() % CHUNK_SIZE, std::rand() % CHUNK_HEIGHT, std::rand() % CHUNK_SIZE);
+					Generators[GenNum]->ChangeNode(rand() % CHUNK_SIZE, rand() % CHUNK_HEIGHT, rand() % CHUNK_SIZE);
 					auto t0 = std::chrono::high_resolution_clock::now();
 					Generators[GenNum]->Update();
 					auto t1 = std::chrono::high_resolution_clock::now();
 					Result[GenNum][NewMaps][Try] = std::chrono::duration_cast<fsec>(t1 - t0).count();
 				}
-
 			}
 
 		}

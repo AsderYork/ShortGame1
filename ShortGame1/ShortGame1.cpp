@@ -19,11 +19,12 @@ int main(int argc, char *argv[])
 
 
 
-	auto Res = GEM::TestSpeed<GEM::NodeToMCGeneratorNaive>(2, 5);
-	GEM::InterprateResults(Res);
+	//auto Res = GEM::TestSpeed<GEM::NodeToMCGeneratorNaive>(2, 5);
+	//GEM::InterprateResults(Res);
 
-	//auto ResU = GEM::TestSpeedUpdate<GEM::NodeToMCGeneratorNaive>(2, 5);
+	//auto ResU = GEM::TestSpeedUpdate<GEM::NodeToMCGeneratorNaive>(4, 10);
 	//GEM::InterprateResults(ResU);
+
 
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
@@ -35,6 +36,10 @@ int main(int argc, char *argv[])
 
 	SDLController->registerMouseListener(DebugMapController);
 	CEGUIController->AddLayout<GEM::DebugLayout>(1, OgreController);
+
+	//MapService->SetIndividualNode(31, 45, 0, 255);
+	MapService->SetIndividualNode(32, 45, 0, 255);
+	//MapService->SetIndividualNode(33, 45, 0, 255);
 
     return Controller.start();
 }

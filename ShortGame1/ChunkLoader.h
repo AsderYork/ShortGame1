@@ -94,7 +94,9 @@ namespace GEM
 	template<class ChunkType>
 	class ChunkLoader
 	{
+#ifdef _DEBUG
 		static_assert(std::is_base_of<ChunkBase, ChunkType>::value);/**ChunkLoader can use only childrens of a ChunkBase as a template Parameter! */
+#endif
 	public:
 		/**!
 		ChunkLoader Constructor.

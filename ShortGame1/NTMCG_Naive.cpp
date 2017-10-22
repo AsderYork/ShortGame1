@@ -577,7 +577,16 @@ namespace GEM
 
 	void NodeToMCGeneratorNaive::Update()
 	{
-		//return DimXZ*(DimY - 1)*x + DimXZ*y + z;
+		/**
+		Now we're trying to optimize Update.
+		Start - 0.05s
+		Removing all clears - 0.05s
+		Remove Build lists stage - 0.0002s
+		Remove only normalization - 0.047s
+		Pre-reserve for some big number - 0.049s
+		Remove vector's insertations - 0.026s
+
+		*/
 		VertexVector.clear();
 		IndexVector.clear();
 		//For every changed cube
@@ -591,6 +600,7 @@ namespace GEM
 		}
 		ChangedCubies.clear();
 
+		
 		//Building Final Vertex&Index vectors stage
 		int Index = 0;
 		for (auto UsedCube : m_actuallyUsedCubesVertices)
@@ -602,7 +612,7 @@ namespace GEM
 				Vertex.first->nx = normal.x;
 				Vertex.first->ny = normal.y;
 				Vertex.first->nz = normal.z;
-
+				
 
 				VertexVector.push_back(*(Vertex.first));
 				VertexVector[Index].flavor = Vertex.second;
@@ -610,6 +620,7 @@ namespace GEM
 				Index++;
 			}
 		}
+		
 	}
 
 	void NodeToMCGeneratorNaive::ChangeNode(int x, int y, int z)
