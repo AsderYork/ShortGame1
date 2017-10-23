@@ -14,10 +14,16 @@
 #include "MapService.h"
 #include <list>
 
+
 int main(int argc, char *argv[])
 {
-
-
+	/*{
+		GEM::ChunkLoader<GEM::NodeChunk> Loader("\test", "tst");
+		{
+			auto pt = Loader.getChunk(0, 0);
+		}
+	}
+	*/
 
 	//auto Res = GEM::TestSpeed<GEM::NodeToMCGeneratorNaive>(2, 5);
 	//GEM::InterprateResults(Res);

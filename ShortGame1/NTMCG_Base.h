@@ -57,5 +57,7 @@ namespace GEM
 
 		virtual int getIndexVectorElement(int i) = 0;
 		virtual const int getIndexVectorSize() = 0;
+
+		virtual ~NTMCG_Base() {};
 	};
 }
