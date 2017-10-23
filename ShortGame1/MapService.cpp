@@ -1,9 +1,67 @@
 #include "stdafx.h"
 #include "MapService.h"
 #include <chrono>
+#include <math.h>
+#include <OGRE\OgreCamera.h>
+#include <algorithm>
 
 namespace GEM
 {
+	void MapService::ProcessCameraMovement()
+	{
+		auto CameraPos = m_ogreService->getCamera()->getPosition();
+		auto CameraChunk = getChunk(CameraPos.x, CameraPos.y, CameraPos.z);
+		
+
+		std::list<std::pair<int, int>> SurvivedChunks;
+		for (int x = CameraChunk.first - m_drawDistance; x <= CameraChunk.first + m_drawDistance; x++)
+		{
+			for (int y = CameraChunk.second - m_drawDistance; y <= CameraChunk.second + m_drawDistance; y++)
+			{
+				auto& it = std::find(m_activeChunks.begin(), m_activeChunks.end(), std::make_pair(x, y));
+				if (it != m_activeChunks.end())
+				{
+					SurvivedChunks.push_back(*it);
+					m_activeChunks.erase(it);
+				}
+				else{//If there wasn't required chunk
+					m_generator.GenerateFromScratch(x, y, m_ogreService);
+					SurvivedChunks.push_back(std::make_pair(x, y));
+				}
+			}
+		}
+
+		for (auto& ChunkForUnload : m_activeChunks)
+		{
+			m_generator.UnloadChunk(ChunkForUnload.first, ChunkForUnload.second);
+		}
+		m_activeChunks.clear();
+		m_activeChunks.splice(m_activeChunks.begin(), SurvivedChunks);
+		auto Si = m_activeChunks.size();
+
+	}
+	std::pair<int, int> MapService::getChunk(float x, float y, float z)
+	{
+		int retX = 0;
+		if (x<0)
+		{
+			retX = ((trunc(x)) / CHUNK_SIZE) - 1;}
+		else
+		{
+			retX = trunc(x) / CHUNK_SIZE;}
+
+		int retY = 0;
+		if (z<0)
+		{
+			retY = ((trunc(z)) / CHUNK_SIZE) - 1;
+		}
+		else
+		{
+			retY = trunc(z) / CHUNK_SIZE;
+		}
+
+		return std::make_pair(retX, retY);
+	}
 	void MapService::SetIndividualNode(int NodeX, int NodeY, int NodeZ, unsigned char value)
 	{
 		if((NodeY>CHUNK_HEIGHT) || (NodeY <0)){	return;	}
@@ -60,10 +118,18 @@ namespace GEM
 	}
 	Service::ActionResult MapService::initialize()
 	{		
+		ProcessCameraMovement();		
+		//m_generator.GenerateFromScratch(-1, -1, m_ogreService);
+		//m_generator.GenerateFromScratch(0, -1, m_ogreService);
+		//m_generator.GenerateFromScratch(1, -1, m_ogreService);
 
-		auto start = std::chrono::steady_clock::now();
-		m_generator.GenerateFromScratch(0, 0, m_ogreService);
-		m_generator.GenerateFromScratch(1, 0, m_ogreService);
+		//m_generator.GenerateFromScratch(-1, 0, m_ogreService);
+		//m_generator.GenerateFromScratch(0, 0, m_ogreService);
+		//m_generator.GenerateFromScratch(1, 0, m_ogreService);
+
+		//m_generator.GenerateFromScratch(-1, 1, m_ogreService);
+		//m_generator.GenerateFromScratch(0, 1, m_ogreService);
+		//m_generator.GenerateFromScratch(1, 1, m_ogreService);
 
 
 		return ActionResult();
@@ -71,10 +137,12 @@ namespace GEM
 
 	void GEM::MapService::shutdown()
 	{
+		m_generator.UnloadAllChunks();
 	}
 
 	Service::ActionResult MapService::preFrame(double timeDelta)
 	{
+		ProcessCameraMovement();
 		//Update changed chunks. Ignore chunks, that are not actually shown
 		for (auto& ChunlPos : m_changedChunks)
 		{

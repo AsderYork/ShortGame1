@@ -30,6 +30,17 @@ namespace GEM
 		void GenerateFromScratch(int x, int y, Ogre_Service* ogreService);
 
 		/**!
+		Unloads chunk, removing generator and MCtoMesh associated with it.
+		If specified chunk wasn't loaded, nothing will happen.
+		*/
+		void UnloadChunk(int x, int z);
+
+		/**!
+		Sometimes you just need to unload everything. This method does axactly that
+		*/
+		void UnloadAllChunks();
+
+		/**!
 		Update chunk that is allready created
 		*/
 		void UpdateChunk(int x, int y, Ogre_Service* ogreService);

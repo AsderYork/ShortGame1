@@ -13,6 +13,7 @@ namespace GEM
 		Ogre_Service* m_ogreService;
 		Ogre::Item* m_MarchingCubesItem = nullptr;
 		Ogre::SceneNode* m_MarchingCubeNode = nullptr;
+		Ogre::MeshPtr m_mesh;
 
 		Ogre::IndexBufferPacked* createIndexBuffer();
 
@@ -31,6 +32,8 @@ namespace GEM
 			m_posZ(PosZ),
 			m_scale(Scale)
 			{}
+
+		~MCToMesh();
 
 		/**!
 		Creates a mesh from Vertex and Index vector calculated by specified generator.

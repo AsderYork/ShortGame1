@@ -2,7 +2,7 @@
 #include "EngineController.h"
 #include "Ogre_Service.h"
 #include "NodesToMC.h"
-#include <vector>
+#include <list>
 
 namespace GEM
 {
@@ -16,6 +16,8 @@ namespace GEM
 		GEM::ChunkLoader<GEM::NodeChunk> m_loader;
 		GEM::NodesToMCGeneratorController m_generator;
 
+		int m_drawDistance = 1;
+
 		/**!
 		Chunks can be changed. So we track down, what chunks have been changed, and update their meshes every frame
 		Every frame this list becomes clear. Even if some chunk were added in here, but wasn't redrawn that's just means that it wasn't drawn
@@ -23,7 +25,25 @@ namespace GEM
 		*/
 		std::vector<std::pair<int, int>> m_changedChunks;
 
+		/**!
+		Tracks down loaded chunks.
+		*/
+		std::list<std::pair<int, int>> m_activeChunks;
+
+
+		/**!
+		Camera can move. And chunks must be loaded around it, and unloaded if they are too far.
+		This metod does exactly that
+		*/
+		void ProcessCameraMovement();
+
 	public:
+
+		/**!
+		Takes world cordinate and return a <int,int> pair of cordinates of a chunk, that these cordinates belongs to.
+		*/
+		std::pair<int, int> getChunk(float x, float y, float z);
+
 		/**!
 		Sets value of a node
 		\param[in] NodeX X-cordinate of a node

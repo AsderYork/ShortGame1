@@ -38,6 +38,26 @@ namespace GEM
 		m_mcToMeshes[ID]->GenerateMesh();
 	}
 
+	void NodesToMCGeneratorController::UnloadChunk(int x, int z)
+	{
+		//Check if chunk is loaded
+		for (int i = 0; i < m_chunkGenerators.size(); i++)
+		{
+			if ((m_chunkGenerators[i]->getChunkX() == x) && (m_chunkGenerators[i]->getChunkZ() == z))
+			{
+				m_mcToMeshes.erase(m_mcToMeshes.begin() + i);
+				m_chunkGenerators.erase(m_chunkGenerators.begin() + i);
+				break;
+			}
+		}
+	}
+
+	void NodesToMCGeneratorController::UnloadAllChunks()
+	{		
+		m_mcToMeshes.clear();
+		m_chunkGenerators.clear();
+	}
+
 	void NodesToMCGeneratorController::UpdateChunk(int x, int y, Ogre_Service * ogreService)
 	{
 		//Check if chunk is loaded

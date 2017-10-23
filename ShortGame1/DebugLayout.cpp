@@ -5,7 +5,10 @@
 namespace GEM
 {
 
-	DebugLayout::DebugLayout(int SizeOfAvgGroup, Ogre_Service *OgreService) : m_sizeOfAvgGroup(SizeOfAvgGroup), m_ogreService(OgreService)
+	DebugLayout::DebugLayout(int SizeOfAvgGroup, Ogre_Service *OgreService, MapService* mapService) :
+		m_sizeOfAvgGroup(SizeOfAvgGroup),
+		m_ogreService(OgreService),
+		m_mapService(mapService)
 	{
 		assert(SizeOfAvgGroup > 0);
 	}
@@ -42,10 +45,21 @@ namespace GEM
 		tmpFPS += m_avgFPS;
 		m_avgFPS = tmpFPS / 2;
 
-		FPS_Window->setText("FPS" + std::to_string(m_avgFPS) +
-			"\nX:" + std::to_string((float)m_ogreService->getCamera()->getPosition().x) +
-			"\nY:" + std::to_string((float)m_ogreService->getCamera()->getPosition().y) +
-			"\nZ:" + std::to_string((float)m_ogreService->getCamera()->getPosition().z) );
+		auto CamPos = m_ogreService->getCamera()->getPosition();
+
+		std::string Text = "FPS" + std::to_string(m_avgFPS) +
+			"\nX:" + std::to_string((float)CamPos.x) +
+			"\nY:" + std::to_string((float)CamPos.y) +
+			"\nZ:" + std::to_string((float)CamPos.z) + "\n";
+
+		if (m_mapService != nullptr)
+		{
+			auto Res = m_mapService->getChunk(CamPos.x, CamPos.y, CamPos.z);
+			Text += "Chunk< " + std::to_string(Res.first) + " : " + std::to_string(Res.second) + " >\n";
+		}
+
+
+		FPS_Window->setText(Text);
 	}
 
 

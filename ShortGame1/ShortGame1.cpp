@@ -35,11 +35,8 @@ int main(int argc, char *argv[])
 	auto DebugMapController = Controller.AddService<GEM::DebugMapGraphicsService>(OgreController, MapService);
 
 	SDLController->registerMouseListener(DebugMapController);
-	CEGUIController->AddLayout<GEM::DebugLayout>(1, OgreController);
-
-	//MapService->SetIndividualNode(31, 45, 0, 255);
-	MapService->SetIndividualNode(32, 45, 0, 255);
-	//MapService->SetIndividualNode(33, 45, 0, 255);
+	CEGUIController->AddLayout<GEM::DebugLayout>(1, OgreController, MapService);
+		
 
     return Controller.start();
 }

@@ -68,6 +68,21 @@ namespace GEM
 		return indexBuffer;
 	}
 
+	MCToMesh::~MCToMesh()
+	{
+		if (m_MarchingCubesItem != nullptr)
+		{
+			auto SceneManager = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance");
+			m_MarchingCubesItem->detachFromParent();
+			SceneManager->destroyItem(m_MarchingCubesItem);
+		}
+		if (m_mesh != nullptr)
+		{
+			Ogre::MeshManager::getSingleton().remove(m_mesh);
+		}
+
+	}
+
 	void MCToMesh::GenerateMesh()
 	{
 		Ogre::RenderSystem *renderSystem = m_ogreService->getRoot()->getRenderSystem();
@@ -81,10 +96,9 @@ namespace GEM
 			m_MarchingCubesItem->detachFromParent();
 			SceneManager->destroyItem(m_MarchingCubesItem);
 		}
-		Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName(MeshName);
-		if (mesh != nullptr)
+		if (m_mesh != nullptr)
 		{
-			Ogre::MeshManager::getSingleton().remove(mesh);
+			Ogre::MeshManager::getSingleton().remove(m_mesh);
 		}
 
 		if (m_generator->getVertexVectorSize() == 0)//Then there is no vertices to draw!
@@ -94,8 +108,8 @@ namespace GEM
 
 		
 
-		mesh = Ogre::MeshManager::getSingleton().createManual(MeshName, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-		Ogre::SubMesh *subMesh = mesh->createSubMesh();
+		m_mesh = Ogre::MeshManager::getSingleton().createManual(MeshName, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		Ogre::SubMesh *subMesh = m_mesh->createSubMesh();
 
 		//Vertex declaration
 		Ogre::VertexElement2Vec vertexElements;
@@ -188,9 +202,10 @@ namespace GEM
 		//Use the same geometry for shadow casting.
 		subMesh->mVao[Ogre::VpShadow].push_back(vao);
 
-		float meshSize = pow(pow(CHUNK_SIZE,2)*2 + pow(CHUNK_HEIGHT, 2), 0.5f);
-		mesh->_setBounds(Ogre::Aabb(Ogre::Vector3::ZERO, Ogre::Vector3::UNIT_SCALE*meshSize), false);
-		mesh->_setBoundingSphereRadius(meshSize);
+		float meshSize = CHUNK_SIZE / 2;
+		float meshRadius = pow(((CHUNK_SIZE*CHUNK_SIZE)/2) + ((CHUNK_HEIGHT*CHUNK_HEIGHT)/4),0.5);
+		m_mesh->_setBounds(Ogre::Aabb(Ogre::Vector3::ZERO + Ogre::Vector3(m_posX + meshSize, CHUNK_HEIGHT/2, m_posZ + meshSize), Ogre::Vector3(CHUNK_SIZE/2, CHUNK_HEIGHT/2, CHUNK_SIZE/2)), false);
+		m_mesh->_setBoundingSphereRadius(meshRadius);
 
 		
 
@@ -201,6 +216,7 @@ namespace GEM
 
 		m_MarchingCubeNode->attachObject(m_MarchingCubesItem);
 		m_MarchingCubeNode->setPosition(0, 0, 0);
+		
 
 		m_MarchingCubesItem->setDatablock("HlmsPbs1");
 

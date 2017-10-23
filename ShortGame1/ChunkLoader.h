@@ -137,6 +137,8 @@ namespace GEM
 		*/
 		void saveMagistral();
 
+		~ChunkLoader();
+
 	private:
 
 		std::vector<std::pair<intcord2, std::weak_ptr<ChunkType>>> m_chunkPool;
@@ -280,6 +282,12 @@ namespace GEM
 		};
 
 		return chunk;
+	}
+
+	template<class ChunkType>
+	inline ChunkLoader<ChunkType>::~ChunkLoader()
+	{
+		saveMagistral();
 	}
 
 }
