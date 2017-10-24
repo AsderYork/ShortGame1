@@ -17,19 +17,14 @@
 
 int main(int argc, char *argv[])
 {
-	/*{
-		GEM::ChunkLoader<GEM::NodeChunk> Loader("\test", "tst");
-		{
-			auto pt = Loader.getChunk(0, 0);
-		}
-	}
-	*/
+	
+	printf("Generation speed\n");
+	auto Res = GEM::TestSpeed<GEM::NodeToMCGeneratorNaive>(2, 10);
+	GEM::InterprateResults(Res);
 
-	//auto Res = GEM::TestSpeed<GEM::NodeToMCGeneratorNaive>(2, 5);
-	//GEM::InterprateResults(Res);
-
-	//auto ResU = GEM::TestSpeedUpdate<GEM::NodeToMCGeneratorNaive>(4, 10);
-	//GEM::InterprateResults(ResU);
+	printf("Updating speed\n");
+	auto ResU = GEM::TestSpeedUpdate<GEM::NodeToMCGeneratorNaive>(2, 10);
+	GEM::InterprateResults(ResU);
 
 
 	GEM::EngineController Controller;

@@ -1,4 +1,6 @@
 #pragma once
+#include <OGRE\OgreVector3.h>
+
 namespace GEM
 {
 	/**!
@@ -40,11 +42,12 @@ namespace GEM
 
 		struct MidPointBase
 		{
-			float x = 0, y = 0, z = 0;
-			float nx = 0, ny = 1, nz = 0;
+			//float x = 0, y = 0, z = 0;
+			Ogre::Vector3 normal, pos, textcord1;
+			//float nx = 0, ny = 1, nz = 0;
 
 			//Texture cordinate are actually 3d. But with a help of a flavors ony 2 of cordinate will end in actual mesh
-			float uvx = 0, uvy = 0, uvz = 0;
+			//float uvx = 0, uvy = 0, uvz = 0;
 			//This also means that MCToMesh should be able to work differetiate flavors correctly, choosing right u, v pair for a given flavor.
 			enum Flavor { FLAVOR_UPDOWN, FLAVOR_LEFTRIGHT, FLAVOR_FRONTBACK } flavor;
 		};

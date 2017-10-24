@@ -281,9 +281,9 @@ namespace GEM
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 1);
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right.x = (float)CubeX + midval;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right.y = (float)CubeY;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right.z = (float)CubeZ;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right.pos.x = (float)CubeX + midval;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right.pos.y = (float)CubeY;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right.pos.z = (float)CubeZ;
 
 			return NodeEnvelopeVec[CubeX][CubeY][CubeZ].Right;
 		}
@@ -293,9 +293,9 @@ namespace GEM
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 2);
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back.x = (float)CubeX + 1;
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back.y = (float)CubeY;
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back.z = (float)CubeZ + midval;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back.pos.x = (float)CubeX + 1;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back.pos.y = (float)CubeY;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back.pos.z = (float)CubeZ + midval;
 
 			return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Back;
 		}
@@ -305,9 +305,9 @@ namespace GEM
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 2);
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right.x = (float)CubeX + midval;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right.y = (float)CubeY;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right.z = (float)CubeZ + 1;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right.pos.x = (float)CubeX + midval;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right.pos.y = (float)CubeY;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right.pos.z = (float)CubeZ + 1;
 
 			return NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Right;
 		}
@@ -317,9 +317,9 @@ namespace GEM
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 3);
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back.x = (float)CubeX;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back.y = (float)CubeY;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back.z = (float)CubeZ + midval;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back.pos.x = (float)CubeX;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back.pos.y = (float)CubeY;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back.pos.z = (float)CubeZ + midval;
 
 			return NodeEnvelopeVec[CubeX][CubeY][CubeZ].Back;
 		}
@@ -329,9 +329,9 @@ namespace GEM
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 5);
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right.x = (float)CubeX + midval;
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right.y = (float)CubeY + 1;
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right.z = (float)CubeZ;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right.pos.x = (float)CubeX + midval;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right.pos.y = (float)CubeY + 1;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right.pos.z = (float)CubeZ;
 
 			return NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Right;
 		}
@@ -341,9 +341,9 @@ namespace GEM
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 6);
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back.x = (float)CubeX + 1;
-			NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back.y = (float)CubeY + 1;
-			NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back.z = (float)CubeZ + midval;
+			NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back.pos.x = (float)CubeX + 1;
+			NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back.pos.y = (float)CubeY + 1;
+			NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back.pos.z = (float)CubeZ + midval;
 
 			return NodeEnvelopeVec[CubeX + 1][CubeY + 1][CubeZ].Back;
 		}
@@ -353,9 +353,9 @@ namespace GEM
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 6);
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right.x = (float)CubeX + midval;
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right.y = (float)CubeY + 1;
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right.z = (float)CubeZ + 1;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right.pos.x = (float)CubeX + midval;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right.pos.y = (float)CubeY + 1;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right.pos.z = (float)CubeZ + 1;
 
 			return NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ + 1].Right;
 		}
@@ -366,9 +366,9 @@ namespace GEM
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
 
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back.x = (float)CubeX;
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back.y = (float)CubeY + 1;
-			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back.z = (float)CubeZ + midval;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back.pos.x = (float)CubeX;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back.pos.y = (float)CubeY + 1;
+			NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back.pos.z = (float)CubeZ + midval;
 
 			return NodeEnvelopeVec[CubeX][CubeY + 1][CubeZ].Back;
 		}
@@ -378,9 +378,9 @@ namespace GEM
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 4);
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top.x = (float)CubeX;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top.y = (float)CubeY + midval;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top.z = (float)CubeZ;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top.pos.x = (float)CubeX;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top.pos.y = (float)CubeY + midval;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top.pos.z = (float)CubeZ;
 
 			return NodeEnvelopeVec[CubeX][CubeY][CubeZ].Top;
 		}
@@ -390,9 +390,9 @@ namespace GEM
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 5);
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top.x = (float)CubeX + 1;
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top.y = (float)CubeY + midval;
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top.z = (float)CubeZ;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top.pos.x = (float)CubeX + 1;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top.pos.y = (float)CubeY + midval;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top.pos.z = (float)CubeZ;
 
 			return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ].Top;
 		}
@@ -402,9 +402,9 @@ namespace GEM
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 6);
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top.x = (float)CubeX + 1;
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top.y = (float)CubeY + midval;
-			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top.z = (float)CubeZ + 1;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top.pos.x = (float)CubeX + 1;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top.pos.y = (float)CubeY + midval;
+			NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top.pos.z = (float)CubeZ + 1;
 
 			return NodeEnvelopeVec[CubeX + 1][CubeY][CubeZ + 1].Top;
 		}
@@ -414,9 +414,9 @@ namespace GEM
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 7);
 			float midval = ((float)N1.Value + (float)N2.Value) / 512;//512 is the double of maximum values of "Value"
 
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top.x = (float)CubeX;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top.y = (float)CubeY + midval;
-			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top.z = (float)CubeZ + 1;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top.pos.x = (float)CubeX;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top.pos.y = (float)CubeY + midval;
+			NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top.pos.z = (float)CubeZ + 1;
 
 			return NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top;
 		}
@@ -444,7 +444,6 @@ namespace GEM
 		auto cubeval = GetCubieValue(CubeX, CubeY, CubeZ);
 
 		
-		static std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>> Vertices;
 		for (int i = 0; triTable[cubeval][i] != -1;i += 3) {
 			auto& p1 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i]);
 			auto& p2 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i + 1]);
@@ -453,25 +452,16 @@ namespace GEM
 			//Used to ease access to these points
 			MidPointBase* Ps[3] = { &p1, &p2, &p3 };
 
-			//Calculate normals
-			Ogre::Vector3 P1Vec(p1.x, p1.y, p1.z);
-			Ogre::Vector3 P2Vec(p2.x, p2.y, p2.z);
-			Ogre::Vector3 P3Vec(p3.x, p3.y, p3.z);
-
-			auto& From1To2 = P1Vec - P2Vec;
-			auto& From1To3 = P1Vec - P3Vec;
+			//Calculate normals			
+			auto& From1To2 = p1.pos - p2.pos;
+			auto& From1To3 = p1.pos - p3.pos;
 
 			Ogre::Vector3 Normal = From1To2.crossProduct(From1To3);
 			Normal.normalise();
 			for (auto& p : Ps)
 			{
-				p->nx += Normal.x;
-				p->ny += Normal.y;
-				p->nz += Normal.z;
-
-				p->uvx = p->x;
-				p->uvy = p->y;
-				p->uvz = p->z;
+				p->normal += Normal;
+				p->textcord1 = p->pos;
 			}
 
 			//Check for UpDown flavor
@@ -499,20 +489,21 @@ namespace GEM
 
 			for (auto& p : Ps)
 			{
-				Vertices.push_back(std::make_pair(p, Flavor));				
+				m_vertices.push_back(std::make_pair(p, Flavor));				
 			}
 
 		}
 
 	
-		if (!Vertices.empty()) {
-			auto It = m_actuallyUsedCubesVertices.insert(m_actuallyUsedCubesVertices.end(), std::move(Vertices));
+		if (!m_vertices.empty()) {
+			auto It = m_actuallyUsedCubesVertices.insert(m_actuallyUsedCubesVertices.end(), std::move(m_vertices));
 
 			m_cubeData[XYZToLinearCube(CubeX, CubeY, CubeZ)].PosInActiveList = std::move(It);
 			m_cubeData[XYZToLinearCube(CubeX, CubeY, CubeZ)].isSet = true;
+			m_cubeData[XYZToLinearCube(CubeX, CubeY, CubeZ)].lastCubeVal = cubeval;
 		}
 
-		Vertices.clear();
+		m_vertices.clear();
 	}
 
 	void NodeToMCGeneratorNaive::UpdateCube(int CubeX, int CubeY, int CubeZ)
@@ -521,13 +512,40 @@ namespace GEM
 		//Given cube might be empty. In that case there's nothing to erase
 		if (Er.isSet)
 		{
+			RemoveNormals(CubeX, CubeY, CubeZ, Er.lastCubeVal);
 			m_actuallyUsedCubesVertices.erase(Er.PosInActiveList);
+			Er.lastCubeVal = 0;
 		}
 
 		//Mark as unset in case if CreateCube will leave this cube empty
 		Er.isSet = false;
 
 		CreateCube(CubeX, CubeY, CubeZ);
+	}
+
+
+	void NodeToMCGeneratorNaive::RemoveNormals(int CubeX, int CubeY, int CubeZ, unsigned char cubeval)
+	{
+		for (int i = 0; triTable[cubeval][i] != -1;i += 3) {
+			auto& p1 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i]);
+			auto& p2 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i + 1]);
+			auto& p3 = CalcMidPoint(CubeX, CubeY, CubeZ, triTable[cubeval][i + 2]);
+
+			//Used to ease access to these points
+			MidPointBase* Ps[3] = { &p1, &p2, &p3 };
+
+			//Calculate normals			
+			auto& From1To2 = p1.pos - p2.pos;
+			auto& From1To3 = p1.pos - p3.pos;
+
+			Ogre::Vector3 Normal = From1To2.crossProduct(From1To3);
+			Normal.normalise();
+			for (auto&p : Ps)
+			{
+				p->normal -= Normal;
+			}
+
+		}
 	}
 
 	void NodeToMCGeneratorNaive::Generate()
@@ -560,15 +578,9 @@ namespace GEM
 		{
 			for (auto Vertex : UsedCube)
 			{
-				Ogre::Vector3 normal(Vertex.first->nx, Vertex.first->ny, Vertex.first->nz);
-				normal.normalise();
-				Vertex.first->nx = normal.x;
-				Vertex.first->ny = normal.y;
-				Vertex.first->nz = normal.z;
-
-				
 				VertexVector.push_back(*(Vertex.first));
 				VertexVector[Index].flavor = Vertex.second;
+				VertexVector[Index].normal.normalise();
 				IndexVector.push_back(Index);
 				Index++;
 			}			
@@ -607,15 +619,9 @@ namespace GEM
 		{
 			for (auto Vertex : UsedCube)
 			{
-				Ogre::Vector3 normal(Vertex.first->nx, Vertex.first->ny, Vertex.first->nz);
-				normal.normalise();
-				Vertex.first->nx = normal.x;
-				Vertex.first->ny = normal.y;
-				Vertex.first->nz = normal.z;
-				
-
 				VertexVector.push_back(*(Vertex.first));
 				VertexVector[Index].flavor = Vertex.second;
+				VertexVector[Index].normal.normalise();
 				IndexVector.push_back(Index);
 				Index++;
 			}

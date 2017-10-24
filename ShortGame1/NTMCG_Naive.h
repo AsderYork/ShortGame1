@@ -32,6 +32,8 @@ namespace GEM
 		};
 	private:
 
+		//This thing is moved out of CreateCube to prevent its rebuild every time, and keep it to the instance of a class opposing to static
+		std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>> m_vertices;
 		std::vector<std::vector<std::vector<NodeEnvelope>>> NodeEnvelopeVec;
 
 		//Holds EdgePoints in order and with duplications
@@ -52,6 +54,7 @@ namespace GEM
 			std::list<std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>>>::iterator PosInActiveList;
 			//True if Iterator is a valid one. False otherwise
 			bool isSet = false;
+			unsigned char lastCubeVal = 0;
 
 			CubeData(std::list<std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>>>::iterator&& it) :
 				PosInActiveList(it)
@@ -185,6 +188,8 @@ namespace GEM
 				}
 			}
 		}
+
+		void RemoveNormals(int CubeX, int CubeY, int CubeZ, unsigned char cubeval);
 		
 
 	public:

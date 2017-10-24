@@ -122,14 +122,16 @@ namespace GEM
 		//Translate VertexList from Generator to Ogre
 		for (int i = 0; i < m_generator->getVertexVectorSize(); i++)
 		{
-			meshVertices[i].px =  m_generator->getVertexVectorElement(i)->x + m_posX;
-			meshVertices[i].py =  m_generator->getVertexVectorElement(i)->y;
-			meshVertices[i].pz = m_generator->getVertexVectorElement(i)->z + m_posZ;
+			//auto&& Vertex = m_generator->getVertexVectorElement(i);
+
+			meshVertices[i].px =  m_generator->getVertexVectorElement(i)->pos.x + m_posX;
+			meshVertices[i].py =  m_generator->getVertexVectorElement(i)->pos.y;
+			meshVertices[i].pz = m_generator->getVertexVectorElement(i)->pos.z + m_posZ;
 
 			
-			meshVertices[i].nx = m_generator->getVertexVectorElement(i)->nx;
-			meshVertices[i].ny = m_generator->getVertexVectorElement(i)->ny;
-			meshVertices[i].nz = m_generator->getVertexVectorElement(i)->nz;
+			meshVertices[i].nx = m_generator->getVertexVectorElement(i)->normal.x;
+			meshVertices[i].ny = m_generator->getVertexVectorElement(i)->normal.y;
+			meshVertices[i].nz = m_generator->getVertexVectorElement(i)->normal.z;
 
 
 			//And no Texture cordinates
@@ -155,22 +157,22 @@ namespace GEM
 			{
 				case NTMCG_Base::MidPointBase::FLAVOR_UPDOWN:
 				{
-					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->uvx;
-					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->uvz;
+					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->pos.x + m_posX;
+					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->pos.z + m_posZ;
 					break;
 				}
 
 				case NTMCG_Base::MidPointBase::FLAVOR_FRONTBACK:
 				{
-					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->uvy;
-					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->uvx;
+					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->pos.y;
+					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->pos.x + m_posX;
 					break;
 				}
 
 				case NTMCG_Base::MidPointBase::FLAVOR_LEFTRIGHT:
 				{
-					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->uvy;
-					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->uvz;
+					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->pos.y;
+					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->pos.z + m_posZ;
 					break;
 				}
 			}
