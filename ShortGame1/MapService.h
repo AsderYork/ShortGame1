@@ -17,6 +17,7 @@ namespace GEM
 		GEM::NodesToMCGeneratorController m_generator;
 
 		int m_drawDistance = 1;
+		int m_prepareDistance = 3;//Prepare distance must be bigger or equal, then draw distance
 
 		/**!
 		Chunks can be changed. So we track down, what chunks have been changed, and update their meshes every frame
@@ -25,10 +26,13 @@ namespace GEM
 		*/
 		std::vector<std::pair<int, int>> m_changedChunks;
 
-		/**!
-		Tracks down loaded chunks.
-		*/
-		std::list<std::pair<int, int>> m_activeChunks;
+		//Tracks down loaded chunks.
+		std::list<std::pair<int, int>> m_shownChunks;
+
+
+		//Tracks down preparing chunks
+		std::list<std::pair<int, int>> m_preparingChunks;
+
 
 
 		/**!
@@ -36,6 +40,8 @@ namespace GEM
 		This metod does exactly that
 		*/
 		void ProcessCameraMovement();
+
+		std::pair<int, int> m_currentChunk;
 
 	public:
 

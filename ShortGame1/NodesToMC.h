@@ -24,12 +24,9 @@ namespace GEM
 		NodesToMCGeneratorController(ChunkLoader<NodeChunk>* chunkLoader);
 
 		/**!
-		Generates chunk just from nodes
-		This method performs chunk load from Loader by itself
-		This method create actual mesh, for required chunk in a given position.
-		This method should not be called for chunks that's allready exists
+		This method is deleted!
 		*/
-		void GenerateFromScratch(int x, int y, Ogre_Service* ogreService);
+		//void GenerateFromScratch(int x, int y, Ogre_Service* ogreService);
 
 		/**!
 		Prepares the chunk, so that it could be accessed later.
@@ -50,16 +47,10 @@ namespace GEM
 		void UnloadChunk(int x, int z);
 
 		/**!
-		Sometimes you just need to unload everything. This method does axactly that
-		Method will block, untill all building chunk is built
-		*/
-		void UnloadAllChunks();
-
-		/**!
 		Update chunk that is allready created
 		If this method is called for still loading chunk, method will block untill chunk is built
 		*/
-		void UpdateChunk(int x, int y, Ogre_Service* ogreService);
+		void UpdateChunk(int x, int z, Ogre_Service* ogreService);
 
 		/**
 		Mark node as changed in corresponding generator, if there is one. Or just do nothing.
@@ -67,6 +58,12 @@ namespace GEM
 		*/
 		void ChangeNode(int ChunkX, int ChunkZ, int X, int Y, int Z);
 
+		/**!
+		Shut's down everything. This method might be called only once! It complitely shuts down NodesToMC
+		*/
+		void ShutDown();
+
+		~NodesToMCGeneratorController();
 
 	private:
 
@@ -91,12 +88,16 @@ namespace GEM
 			If that is the case, then Generator will be null, and instead of removing chunk from a list, it will be marked as inactive. Then as soon
 			as its done, ChunkLoader will fill Generator field and call UnloadChunk again.
 			*/
-			std::atomic_bool isActive = true;
-
-			/** It's hard to delete somethig, if you don't know, if it's used by someone else. So every operation, that have INTENSION TO DELETE
-			this Core, should check/set this flag before doing anything
+			std::atomic_bool markedForDeletion = false;
+			/*Only UnloadChunk can ask for delition but execute it can no only UnloadChunk, but also WorkerThread
+			So the idea is that UnloadChunk grabs this mutex Mark this chunk then check if it's still not built
+			If it's built, then it's guaranteed, that WorkerThread done all the work with this chunk so nothing will broke.
+			If it's not set, then WorkerThread will wait, untill UnloadChunk ungrabs mutex. UnloadChunk gurantees that as soon as it grabbed
+			a mutex, it can't do it again(Removal from m_listChunkUnit happens before mutex grabbing), and if it grabbed mutex and chunk were Prepared,
+			it will unload it
 			*/
-			std::atomic_bool isInUse = false;
+			std::mutex DelitionRoutineMutex;
+
 		};
 		/**
 		A list of all chunks, Shown and prepared.
@@ -117,6 +118,7 @@ namespace GEM
 		Loads in a separate thread. Checks m_ntmcg_ToDo if Generator is needed to be created, then creates it and moves it to Done
 		*/
 		void ChunkLoaderThredFunc();
+		std::thread m_workerThread;
 
 		struct ChunkUnit
 		{
@@ -139,7 +141,6 @@ namespace GEM
 		////////////////////////////////////
 		ChunkLoader<NodeChunk>* m_chunkLoader;	
 
-		std::list<ChunkCore> m_listChunkUnit;
 
 	};
 

@@ -4,40 +4,72 @@
 #include <math.h>
 #include <OGRE\OgreCamera.h>
 #include <algorithm>
+#include <chrono>
 
 namespace GEM
 {
+
+	typedef std::chrono::duration<float> fsec;
 	void MapService::ProcessCameraMovement()
 	{
+		auto t0 = std::chrono::high_resolution_clock::now();
 		auto CameraPos = m_ogreService->getCamera()->getPosition();
 		auto CameraChunk = getChunk(CameraPos.x, CameraPos.y, CameraPos.z);
 		
 
-		std::list<std::pair<int, int>> SurvivedChunks;
-		for (int x = CameraChunk.first - m_drawDistance; x <= CameraChunk.first + m_drawDistance; x++)
+		std::list<std::pair<int, int>> SurvivedShownChunks;
+		std::list<std::pair<int, int>> SurvivedPrepareChunks;
+
+		//Iterate through all chunks, that must be prepared
+		for (int x = CameraChunk.first - m_prepareDistance; x <= CameraChunk.first + m_prepareDistance; x++)
 		{
-			for (int y = CameraChunk.second - m_drawDistance; y <= CameraChunk.second + m_drawDistance; y++)
+			for (int y = CameraChunk.second - m_prepareDistance; y <= CameraChunk.second + m_prepareDistance; y++)
 			{
-				auto& it = std::find(m_activeChunks.begin(), m_activeChunks.end(), std::make_pair(x, y));
-				if (it != m_activeChunks.end())
+				//Check if it's prepared
+				auto& it = std::find(m_preparingChunks.begin(), m_preparingChunks.end(), std::make_pair(x, y));
+				//Check if it's allready preparing
+				if (it != m_preparingChunks.end())
+				{//If it is, then move it to survivers
+					SurvivedPrepareChunks.push_back(*it);//If it is, then move it to survived chunks
+					m_preparingChunks.erase(it);
+				}
+				else
+				{//If it wasn't prepared before. Start preparing and move it to survivers
+					m_generator.PrepareChunk(x, y, m_ogreService);
+					SurvivedPrepareChunks.push_back(std::make_pair(x, y));
+				}
+
+				//If it's also a chunk to be shown, then process it more
+				if ((abs(CameraChunk.first - x) < m_drawDistance) && (abs(CameraChunk.second - y) < m_drawDistance))
 				{
-					SurvivedChunks.push_back(*it);
-					m_activeChunks.erase(it);
-				}
-				else{//If there wasn't required chunk
-					m_generator.GenerateFromScratch(x, y, m_ogreService);
-					SurvivedChunks.push_back(std::make_pair(x, y));
-				}
+					auto& it = std::find(m_shownChunks.begin(), m_shownChunks.end(), std::make_pair(x, y));
+					if (it != m_shownChunks.end())//Check if it's shown
+					{
+						SurvivedShownChunks.push_back(*it);//If it is, then move it to survived chunks
+						m_shownChunks.erase(it);
+					}
+					else {//If it's not, then force it to be shown, and move it to survivers
+						m_generator.ShowChunk(x, y, m_ogreService);
+						SurvivedShownChunks.push_back(std::make_pair(x, y));
+					}
+				}				
 			}
 		}
 
-		for (auto& ChunkForUnload : m_activeChunks)
+		auto ts = std::chrono::high_resolution_clock::now();
+
+		//All the chunks that wasn't moved from Preparing CHunks must be cleared;
+		for (auto& ChunkForUnload : m_preparingChunks)
 		{
 			m_generator.UnloadChunk(ChunkForUnload.first, ChunkForUnload.second);
 		}
-		m_activeChunks.clear();
-		m_activeChunks.splice(m_activeChunks.begin(), SurvivedChunks);
-		auto Si = m_activeChunks.size();
+		m_shownChunks = std::move(SurvivedShownChunks);//Chunks from shown, that havn't been moved, might just gone to Prepared, so they should stay
+		m_preparingChunks = std::move(SurvivedPrepareChunks);
+
+
+		auto t1 = std::chrono::high_resolution_clock::now();
+		printf("Search:%f\n", std::chrono::duration_cast<fsec>(ts - t0).count());
+		printf("Overall:%f\n", std::chrono::duration_cast<fsec>(t1 - t0).count());
 
 	}
 	std::pair<int, int> MapService::getChunk(float x, float y, float z)
@@ -118,6 +150,10 @@ namespace GEM
 	}
 	Service::ActionResult MapService::initialize()
 	{		
+		auto CameraPos = m_ogreService->getCamera()->getPosition();
+		auto CameraChunk = getChunk(CameraPos.x, CameraPos.y, CameraPos.z);
+
+		m_currentChunk = CameraChunk;
 		ProcessCameraMovement();		
 		//m_generator.GenerateFromScratch(-1, -1, m_ogreService);
 		//m_generator.GenerateFromScratch(0, -1, m_ogreService);
@@ -137,12 +173,18 @@ namespace GEM
 
 	void GEM::MapService::shutdown()
 	{
-		m_generator.UnloadAllChunks();
+		m_generator.ShutDown();
 	}
 
 	Service::ActionResult MapService::preFrame(double timeDelta)
 	{
-		ProcessCameraMovement();
+		auto CameraPos = m_ogreService->getCamera()->getPosition();
+		auto CameraChunk = getChunk(CameraPos.x, CameraPos.y, CameraPos.z);
+		if ((m_currentChunk.first != CameraChunk.first) || (m_currentChunk.second != CameraChunk.second))
+		{
+			ProcessCameraMovement();
+			m_currentChunk = CameraChunk;
+		}
 		//Update changed chunks. Ignore chunks, that are not actually shown
 		for (auto& ChunlPos : m_changedChunks)
 		{

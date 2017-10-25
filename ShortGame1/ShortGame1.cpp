@@ -18,13 +18,13 @@
 int main(int argc, char *argv[])
 {
 	
-	printf("Generation speed\n");
+	/*printf("Generation speed\n");
 	auto Res = GEM::TestSpeed<GEM::NodeToMCGeneratorNaive>(2, 10);
 	GEM::InterprateResults(Res);
 
 	printf("Updating speed\n");
 	auto ResU = GEM::TestSpeedUpdate<GEM::NodeToMCGeneratorNaive>(2, 10);
-	GEM::InterprateResults(ResU);
+	GEM::InterprateResults(ResU);*/
 
 
 	GEM::EngineController Controller;
