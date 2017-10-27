@@ -61,12 +61,14 @@ namespace GEM
 	{
 	}
 
-	Service::ActionResult DebugMapGraphicsService::preFrame(double timeDelta)
+	Service::ActionResult DebugMapGraphicsService::preFrame(float timeDelta)
 	{
 		auto Pos = m_ogreService->getCamera()->getPosition() + m_ogreService->getCamera()->getDerivedDirection() * 10;
 
 		switch (m_action)
 		{
+#pragma warning( push )
+#pragma warning( disable : 4244)//Round doesn't cast float to int. But it just int
 		case ACTION_FILL:
 		{
 			m_mapService->SetIndividualNode(round(Pos.x), round(Pos.y), round(Pos.z), 255);
@@ -77,6 +79,7 @@ namespace GEM
 			m_mapService->SetIndividualNode(round(Pos.x), round(Pos.y), round(Pos.z), 0);
 			break;
 		}
+#pragma warning( pop ) 
 		default: {break;}
 		}
 
@@ -84,12 +87,12 @@ namespace GEM
 		return ActionResult();
 	}
 
-	Service::ActionResult DebugMapGraphicsService::frame(double timeDelta)
+	Service::ActionResult DebugMapGraphicsService::frame(float timeDelta)
 	{
 		return ActionResult();
 	}
 
-	Service::ActionResult DebugMapGraphicsService::postFrame(double timeDelta)
+	Service::ActionResult DebugMapGraphicsService::postFrame(float timeDelta)
 	{
 		return ActionResult();
 	}

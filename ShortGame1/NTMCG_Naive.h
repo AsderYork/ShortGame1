@@ -126,6 +126,7 @@ namespace GEM
 			case 5: return GetNode(CubeX + 1, CubeY + 1, CubeZ);
 			case 6: return GetNode(CubeX + 1, CubeY + 1, CubeZ + 1);
 			case 7: return GetNode(CubeX, CubeY + 1, CubeZ + 1);
+			default: {assert(false);/**/}
 			}
 		}
 

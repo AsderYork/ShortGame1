@@ -29,9 +29,9 @@ namespace GEM
 		*/
 		virtual void shutdown() = 0;
 
-		virtual ActionResult preFrame(double timeDelta)=0;
-		virtual ActionResult frame(double timeDelta) = 0;
-		virtual ActionResult postFrame(double timeDelta) = 0;
+		virtual ActionResult preFrame(float timeDelta)=0;
+		virtual ActionResult frame(float timeDelta) = 0;
+		virtual ActionResult postFrame(float timeDelta) = 0;
 
 
 		inline EngineController* getEngineController() const {
@@ -99,9 +99,9 @@ namespace GEM
 		Does a preFrame for all of the services. If some of them return something other then AR_OK, then everything stops, and false is returned,
 		otherwise true gets returned. The same goes for doFrame and doPostFrame 
 		*/
-		bool doPreFrame(double TimeDelta);
-		bool doFrame(double TimeDelta);
-		bool doPostFrame(double TimeDelta);
+		bool doPreFrame(float TimeDelta);
+		bool doFrame(float TimeDelta);
+		bool doPostFrame(float TimeDelta);
 		
 
 	};

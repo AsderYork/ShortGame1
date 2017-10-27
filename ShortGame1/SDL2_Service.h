@@ -45,11 +45,11 @@ namespace GEM
 
 		virtual void shutdown() override;
 
-		virtual ActionResult preFrame(double timeDelta) override;
+		virtual ActionResult preFrame(float timeDelta) override;
 
-		virtual ActionResult frame(double timeDelta) override;
+		virtual ActionResult frame(float timeDelta) override;
 
-		virtual ActionResult postFrame(double timeDelta) override;
+		virtual ActionResult postFrame(float timeDelta) override;
 
 		/**!
 		Intializes SDL. For now it's the only thing, that happens in constructor.

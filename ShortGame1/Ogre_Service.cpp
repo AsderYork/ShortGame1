@@ -83,7 +83,7 @@ namespace GEM
 		chooseSceneManager();
 		createCamera();
 		m_workspace = createWorkspace();
-		CreateCube();
+		//CreateCube();
 
 		Ogre::Light *light = m_sceneManager->createLight();
 		Ogre::SceneNode *lightNode = m_sceneManager->getRootSceneNode()->createChildSceneNode();
@@ -100,19 +100,19 @@ namespace GEM
 		m_root.release();
 	}
 
-	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::preFrame(double timeDelta)
+	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::preFrame(float timeDelta)
 	{
 		tmpCamera.AjustPosition(timeDelta);
 		return ActionResult();
 	}
 
-	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::frame(double timeDelta)
+	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::frame(float timeDelta)
 	{
 		m_root->renderOneFrame(timeDelta);
 		return ActionResult();
 	}
 
-	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::postFrame(double timeDelta)
+	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::postFrame(float timeDelta)
 	{
 		return ActionResult();
 	}
@@ -195,6 +195,7 @@ namespace GEM
 
 		return compositorManager->addWorkspace(m_sceneManager, m_renderWindow, tmpCamera.getCamera(), workspaceName, true);
 	}
+	/*
 	void Ogre_Service::CreateCube()
 	{
 		Ogre::RenderSystem *renderSystem = m_root->getRenderSystem();
@@ -214,7 +215,7 @@ namespace GEM
 
 		const CubeVertices originalVertices[8] =
 		{
-			CubeVertices(-1, -1,  1, -0.57737, -0.57737,  0.57737),
+			CubeVertices(-1.0f, -1,  1, -0.57737, -0.57737,  0.57737),
 			CubeVertices(1, -1,  1,  0.57737, -0.57737,  0.57737),
 			CubeVertices(1,  1,  1,  0.57737,  0.57737,  0.57737),
 			CubeVertices(-1,  1,  1, -0.57737,  0.57737,  0.57737),
@@ -267,6 +268,7 @@ namespace GEM
 
 		m_node->attachObject(item);
 	}
+	*/
 	Ogre::IndexBufferPacked * Ogre_Service::createIndexBuffer()
 	{
 		Ogre::IndexBufferPacked *indexBuffer = 0;
@@ -415,8 +417,8 @@ namespace GEM
 	void MovableCamera::AjustPosition(float timeDelta)
 	{
 		if (!m_reciveInput) { m_positionChange = Ogre::Vector3::ZERO; m_yaw = 0; m_pitch = 0;return; }
-		float MoveSpeed = 7;
-		float TurnSpeed = 0.1;
+		float MoveSpeed = 7.0f;
+		float TurnSpeed = 0.1f;
 		m_camera->moveRelative(m_positionChange * timeDelta * MoveSpeed);
 		m_camera->yaw(Ogre::Radian(1)*m_yaw*timeDelta*TurnSpeed);
 		m_camera->pitch(Ogre::Radian(1)*m_pitch*timeDelta*TurnSpeed);

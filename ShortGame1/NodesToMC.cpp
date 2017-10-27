@@ -6,6 +6,7 @@
 
 namespace GEM
 {
+	typedef std::chrono::duration<float> fsec;
 	NodesToMCGeneratorController::NodesToMCGeneratorController(ChunkLoader<NodeChunk>* chunkLoader) :
 		m_chunkLoader(chunkLoader)
 	{
@@ -15,6 +16,7 @@ namespace GEM
 
 	void NodesToMCGeneratorController::PrepareChunk(int x, int z, Ogre_Service * ogreService)
 	{
+		auto t0 = std::chrono::high_resolution_clock::now();
 		//Check that asked chunk is not allready loaded somehow(PREPRARING, PREPARED, SHOWN)
 		for (auto& Unit : m_ChunkUnits)
 		{
@@ -39,11 +41,12 @@ namespace GEM
 
 		//Show that it's now not unloaded
 		m_ChunkUnits.emplace_back(x, z, it);
+		auto t1 = std::chrono::high_resolution_clock::now();
+		printf("Prepared:%f\n", std::chrono::duration_cast<fsec>(t1 - t0).count());
 	}
 
 	void NodesToMCGeneratorController::ShowChunk(int x, int z, Ogre_Service * ogreService)
 	{
-		typedef std::chrono::duration<float> fsec;
 		auto t0 = std::chrono::high_resolution_clock::now();
 
 		//Check if it's not unloaded.

@@ -128,7 +128,7 @@ namespace GEM
 		}
 		SDL_Quit();
 	}
-	GEM::Service::ActionResult SDL_Controller::preFrame(double timeDelta)
+	GEM::Service::ActionResult SDL_Controller::preFrame(float timeDelta)
 	{
 		if (!processEvents())
 		{
@@ -136,11 +136,11 @@ namespace GEM
 		}
 		return ActionResult::AR_OK;
 	}
-	GEM::Service::ActionResult SDL_Controller::frame(double timeDelta)
+	GEM::Service::ActionResult SDL_Controller::frame(float timeDelta)
 	{
 		return ActionResult();
 	}
-	GEM::Service::ActionResult SDL_Controller::postFrame(double timeDelta)
+	GEM::Service::ActionResult SDL_Controller::postFrame(float timeDelta)
 	{
 		return ActionResult();
 	}

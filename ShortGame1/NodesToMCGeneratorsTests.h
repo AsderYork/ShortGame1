@@ -277,7 +277,7 @@ namespace GEM
 		printf("_________|");
 		for (int i = 0; i < Results.size(); i++)
 		{
-			printf("Avg:      |Dev:        |", i);
+			printf("Avg:      |Dev:        |");
 		}
 		printf("\n");
 		for (int Map = 0; Map < Results[0].size(); Map++)

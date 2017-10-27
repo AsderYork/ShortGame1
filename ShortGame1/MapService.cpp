@@ -49,7 +49,7 @@ namespace GEM
 						m_shownChunks.erase(it);
 					}
 					else {//If it's not, then force it to be shown, and move it to survivers
-						m_generator.ShowChunk(x, y, m_ogreService);
+						//m_generator.ShowChunk(x, y, m_ogreService);
 						SurvivedShownChunks.push_back(std::make_pair(x, y));
 					}
 				}				
@@ -72,6 +72,8 @@ namespace GEM
 		printf("Overall:%f\n", std::chrono::duration_cast<fsec>(t1 - t0).count());
 
 	}
+#pragma warning( push )
+#pragma warning( disable : 4244)//Call to trunc() for some reason doesn't change type to int. So these 'floats' are actually ints
 	std::pair<int, int> MapService::getChunk(float x, float y, float z)
 	{
 		int retX = 0;
@@ -94,6 +96,7 @@ namespace GEM
 
 		return std::make_pair(retX, retY);
 	}
+#pragma warning( pop ) 
 	void MapService::SetIndividualNode(int NodeX, int NodeY, int NodeZ, unsigned char value)
 	{
 		if((NodeY>CHUNK_HEIGHT) || (NodeY <0)){	return;	}
@@ -149,24 +152,13 @@ namespace GEM
 		return Chunk->NodeMap[XInChunk][NodeY][ZInChunk].Value;
 	}
 	Service::ActionResult MapService::initialize()
-	{		
+	{
+		m_generator.ShowChunk(0, 0, m_ogreService);
 		auto CameraPos = m_ogreService->getCamera()->getPosition();
 		auto CameraChunk = getChunk(CameraPos.x, CameraPos.y, CameraPos.z);
 
 		m_currentChunk = CameraChunk;
 		ProcessCameraMovement();		
-		//m_generator.GenerateFromScratch(-1, -1, m_ogreService);
-		//m_generator.GenerateFromScratch(0, -1, m_ogreService);
-		//m_generator.GenerateFromScratch(1, -1, m_ogreService);
-
-		//m_generator.GenerateFromScratch(-1, 0, m_ogreService);
-		//m_generator.GenerateFromScratch(0, 0, m_ogreService);
-		//m_generator.GenerateFromScratch(1, 0, m_ogreService);
-
-		//m_generator.GenerateFromScratch(-1, 1, m_ogreService);
-		//m_generator.GenerateFromScratch(0, 1, m_ogreService);
-		//m_generator.GenerateFromScratch(1, 1, m_ogreService);
-
 
 		return ActionResult();
 	}
@@ -176,7 +168,7 @@ namespace GEM
 		m_generator.ShutDown();
 	}
 
-	Service::ActionResult MapService::preFrame(double timeDelta)
+	Service::ActionResult MapService::preFrame(float timeDelta)
 	{
 		auto CameraPos = m_ogreService->getCamera()->getPosition();
 		auto CameraChunk = getChunk(CameraPos.x, CameraPos.y, CameraPos.z);
@@ -197,12 +189,12 @@ namespace GEM
 		return ActionResult();
 	}
 
-	Service::ActionResult MapService::frame(double timeDelta)
+	Service::ActionResult MapService::frame(float timeDelta)
 	{
 		return ActionResult();
 	}
 
-	Service::ActionResult MapService::postFrame(double timeDelta)
+	Service::ActionResult MapService::postFrame(float timeDelta)
 	{
 		return ActionResult();
 	}

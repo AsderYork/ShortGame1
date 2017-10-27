@@ -97,7 +97,7 @@ namespace GEM
 	{
 	}
 
-	Service::ActionResult CEGUI_Service::preFrame(double timeDelta)
+	Service::ActionResult CEGUI_Service::preFrame(float timeDelta)
 	{
 		if (!InitializeLayouts())
 			return ActionResult::AR_ERROR;
@@ -110,12 +110,12 @@ namespace GEM
 		return ActionResult();
 	}
 
-	Service::ActionResult CEGUI_Service::frame(double timeDelta)
+	Service::ActionResult CEGUI_Service::frame(float timeDelta)
 	{
 		return ActionResult();
 	}
 
-	Service::ActionResult CEGUI_Service::postFrame(double timeDelta)
+	Service::ActionResult CEGUI_Service::postFrame(float timeDelta)
 	{
 		return ActionResult();
 	}
@@ -138,12 +138,12 @@ namespace GEM
 		switch (arg.type)
 		{
 		case SDL_MOUSEWHEEL: {
-			m_inputAgregator->injectMouseWheelChange(arg.wheel.y);
+			m_inputAgregator->injectMouseWheelChange((float)arg.wheel.y);
 			break;
 		}
 
 		case SDL_MOUSEMOTION: {
-			m_inputAgregator->injectMousePosition(arg.motion.x, arg.motion.y);
+			m_inputAgregator->injectMousePosition((float)arg.motion.x, (float)arg.motion.y);
 			break;
 		}
 		}

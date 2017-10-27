@@ -68,9 +68,9 @@ namespace GEM
 		// Унаследовано через Service
 		virtual ActionResult initialize() override;
 		virtual void shutdown() override;
-		virtual ActionResult preFrame(double timeDelta) override;
-		virtual ActionResult frame(double timeDelta) override;
-		virtual ActionResult postFrame(double timeDelta) override;
+		virtual ActionResult preFrame(float timeDelta) override;
+		virtual ActionResult frame(float timeDelta) override;
+		virtual ActionResult postFrame(float timeDelta) override;
 
 	
 	};

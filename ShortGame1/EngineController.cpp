@@ -21,10 +21,7 @@ int GEM::EngineController::start()
 
 	LOGCATEGORY("EngineController/start").info("Everything is ready for a main loop!");
 	//Main loop!
-	double timeDelta = 1;
-
-	double DebugTime = 0;//Amount of time it takes to do 10000 frames
-	int DebugFrames = 0;//Counter of frames;
+	float timeDelta = 1;
 
 	std::chrono::time_point<std::chrono::system_clock> start, end;
 
@@ -39,19 +36,8 @@ int GEM::EngineController::start()
 
 		end = std::chrono::system_clock::now();
 
-		timeDelta = std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count();
-
-		DebugTime += timeDelta;
-		DebugFrames++;
-
-		if (DebugFrames >= DEBUG_FRAME_AMOUNT)
-		{
-			LOGCATEGORY("EngineController/start").info("%i frames were done in %f avg.", DEBUG_FRAME_AMOUNT, DebugTime/ DEBUG_FRAME_AMOUNT);
-			DebugTime = 0;
-			DebugFrames = 0;
-		}
-
-		if (timeDelta > 1) { timeDelta = 1; }//So that nothing would brake on debug stoppages
+		timeDelta = std::chrono::duration_cast<std::chrono::duration<float>>(end - start).count();
+		
 	}
 
 	if(TerminateUnexpected)
@@ -93,7 +79,7 @@ void GEM::EngineController::shutdownServices()
 	}
 }
 
-bool GEM::EngineController::doPreFrame(double TimeDelta)
+bool GEM::EngineController::doPreFrame(float TimeDelta)
 {
 	for (auto& service : m_servicesVector)
 	{
@@ -105,7 +91,7 @@ bool GEM::EngineController::doPreFrame(double TimeDelta)
 	return true;
 }
 
-bool GEM::EngineController::doFrame(double TimeDelta)
+bool GEM::EngineController::doFrame(float TimeDelta)
 {
 	for (auto& service : m_servicesVector)
 	{
@@ -117,7 +103,7 @@ bool GEM::EngineController::doFrame(double TimeDelta)
 	return true;
 }
 
-bool GEM::EngineController::doPostFrame(double TimeDelta)
+bool GEM::EngineController::doPostFrame(float TimeDelta)
 {
 	for (auto& service : m_servicesVector)
 	{

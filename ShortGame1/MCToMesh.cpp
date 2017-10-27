@@ -188,7 +188,7 @@ namespace GEM
 		catch (Ogre::Exception &e)
 		{
 			OGRE_FREE_SIMD(vertexBuffer, Ogre::MEMCATEGORY_GEOMETRY);
-			LOGCATEGORY("MCToMesh\GenerateMesh").error("Failed to create VertexBuffer for chunk, in position %i, %i", m_posX, m_posZ);
+			LOGCATEGORY("MCToMesh/GenerateMesh").error("Failed to create VertexBuffer for chunk, in position %i, %i", m_posX, m_posZ);
 			vertexBuffer = 0;
 			throw e;
 		}
@@ -205,7 +205,7 @@ namespace GEM
 		subMesh->mVao[Ogre::VpShadow].push_back(vao);
 
 		float meshSize = CHUNK_SIZE / 2;
-		float meshRadius = pow(((CHUNK_SIZE*CHUNK_SIZE)/2) + ((CHUNK_HEIGHT*CHUNK_HEIGHT)/4),0.5);
+		float meshRadius = (float)pow(((CHUNK_SIZE*CHUNK_SIZE)/2) + ((CHUNK_HEIGHT*CHUNK_HEIGHT)/4),0.5f);
 		m_mesh->_setBounds(Ogre::Aabb(Ogre::Vector3::ZERO + Ogre::Vector3(m_posX + meshSize, CHUNK_HEIGHT/2, m_posZ + meshSize), Ogre::Vector3(CHUNK_SIZE/2, CHUNK_HEIGHT/2, CHUNK_SIZE/2)), false);
 		m_mesh->_setBoundingSphereRadius(meshRadius);
 

@@ -275,7 +275,6 @@ namespace GEM
 		*/
 		switch (EdgeID)
 		{
-
 		case 0: {
 			auto N1 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 0);
 			auto N2 = GetNodeAsCubie(CubeX, CubeY, CubeZ, 1);
@@ -420,6 +419,8 @@ namespace GEM
 
 			return NodeEnvelopeVec[CubeX][CubeY][CubeZ + 1].Top;
 		}
+
+		default: {assert(false);/*There is only 12 edges!*/}
 		}
 	}
 	void NodeToMCGeneratorNaive::CreateCube(int CubeX, int CubeY, int CubeZ)
@@ -728,17 +729,22 @@ namespace GEM
 	{
 		return &(VertexVector[i]);
 	}
+
+#pragma warning( push )
+#pragma warning( disable : 4267)//There can't be more, then a couple of hundred thousands values in bouth of this vertexes. So everything is guaranteeed to fit it unsigned int
 	const int NodeToMCGeneratorNaive::getVertexVectorSize()
 	{
 		return VertexVector.size();
-	}
-	int NodeToMCGeneratorNaive::getIndexVectorElement(int i)
-	{
-		return IndexVector[i];
-	}
+	}	
 	const int NodeToMCGeneratorNaive::getIndexVectorSize()
 	{
 		return IndexVector.size();
 	}
+#pragma warning( pop ) 
+	int NodeToMCGeneratorNaive::getIndexVectorElement(int i)
+	{
+		return IndexVector[i];
+	}
+
 
 }
