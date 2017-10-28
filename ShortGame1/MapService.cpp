@@ -12,6 +12,14 @@ namespace GEM
 	typedef std::chrono::duration<float> fsec;
 	void MapService::ProcessCameraMovement()
 	{
+		/**
+		Now we're trying to make this method faster
+		baseline - 0.027s
+		Nothing is prepared and shown - 0.000043
+		Do only prepares - 0.013s
+		NodesToMC.UnloadChunk now just create remove task for it's internal WorkerThread - 0.00006s
+		Shows now do works - 
+		*/
 		auto t0 = std::chrono::high_resolution_clock::now();
 		auto CameraPos = m_ogreService->getCamera()->getPosition();
 		auto CameraChunk = getChunk(CameraPos.x, CameraPos.y, CameraPos.z);
@@ -35,7 +43,7 @@ namespace GEM
 				}
 				else
 				{//If it wasn't prepared before. Start preparing and move it to survivers
-					m_generator.PrepareChunk(x, y, m_ogreService);
+					m_generator.PrepareChunk(x, y);
 					SurvivedPrepareChunks.push_back(std::make_pair(x, y));
 				}
 
@@ -49,7 +57,7 @@ namespace GEM
 						m_shownChunks.erase(it);
 					}
 					else {//If it's not, then force it to be shown, and move it to survivers
-						//m_generator.ShowChunk(x, y, m_ogreService);
+						m_generator.ShowChunk(x, y);
 						SurvivedShownChunks.push_back(std::make_pair(x, y));
 					}
 				}				
@@ -72,31 +80,28 @@ namespace GEM
 		printf("Overall:%f\n", std::chrono::duration_cast<fsec>(t1 - t0).count());
 
 	}
-#pragma warning( push )
-#pragma warning( disable : 4244)//Call to trunc() for some reason doesn't change type to int. So these 'floats' are actually ints
 	std::pair<int, int> MapService::getChunk(float x, float y, float z)
 	{
 		int retX = 0;
 		if (x<0)
 		{
-			retX = ((trunc(x)) / CHUNK_SIZE) - 1;}
+			retX = (((int)trunc(x)) / CHUNK_SIZE) - 1;}
 		else
 		{
-			retX = trunc(x) / CHUNK_SIZE;}
+			retX = (int)trunc(x) / CHUNK_SIZE;}
 
 		int retY = 0;
 		if (z<0)
 		{
-			retY = ((trunc(z)) / CHUNK_SIZE) - 1;
+			retY = (((int)trunc(z)) / CHUNK_SIZE) - 1;
 		}
 		else
 		{
-			retY = trunc(z) / CHUNK_SIZE;
+			retY = (int)trunc(z) / CHUNK_SIZE;
 		}
 
 		return std::make_pair(retX, retY);
 	}
-#pragma warning( pop ) 
 	void MapService::SetIndividualNode(int NodeX, int NodeY, int NodeZ, unsigned char value)
 	{
 		if((NodeY>CHUNK_HEIGHT) || (NodeY <0)){	return;	}
@@ -153,7 +158,6 @@ namespace GEM
 	}
 	Service::ActionResult MapService::initialize()
 	{
-		m_generator.ShowChunk(0, 0, m_ogreService);
 		auto CameraPos = m_ogreService->getCamera()->getPosition();
 		auto CameraChunk = getChunk(CameraPos.x, CameraPos.y, CameraPos.z);
 
@@ -180,7 +184,7 @@ namespace GEM
 		//Update changed chunks. Ignore chunks, that are not actually shown
 		for (auto& ChunlPos : m_changedChunks)
 		{
-			m_generator.UpdateChunk(ChunlPos.first, ChunlPos.second, m_ogreService);
+			m_generator.UpdateChunk(ChunlPos.first, ChunlPos.second);
 
 		}
 

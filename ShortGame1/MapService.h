@@ -16,8 +16,8 @@ namespace GEM
 		GEM::ChunkLoader<GEM::NodeChunk> m_loader;
 		GEM::NodesToMCGeneratorController m_generator;
 
-		int m_drawDistance = 1;
-		int m_prepareDistance = 3;//Prepare distance must be bigger or equal, then draw distance
+		int m_drawDistance = 2;
+		int m_prepareDistance = 6;//Prepare distance must be bigger or equal, then draw distance
 
 		/**!
 		Chunks can be changed. So we track down, what chunks have been changed, and update their meshes every frame
@@ -63,7 +63,7 @@ namespace GEM
 		MapService(Ogre_Service* OgreService) :
 			m_ogreService(OgreService),
 			m_loader("../Map/", ".map"),
-			m_generator(&m_loader)
+			m_generator(&m_loader, OgreService)
 		{};
 		// Унаследовано через Service
 		virtual ActionResult initialize() override;
