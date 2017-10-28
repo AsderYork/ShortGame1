@@ -55,25 +55,7 @@ namespace GEM
 			}
 		}//If we still here then this chunk wasnt loaded! Load it from this thread
 
-		/*
-		auto t1 = std::chrono::high_resolution_clock::now();
-		printf("NotFound:%f\n", std::chrono::duration_cast<fsec>(t1 - t0).count());
-
-		auto chunkCentre = m_chunkLoader->getChunk(x, z);
-		auto chunkFront = m_chunkLoader->getChunk(x, z + 1);
-		auto chunkRight = m_chunkLoader->getChunk(x + 1, z);
-		auto chunkFrontRight = m_chunkLoader->getChunk(x + 1, z + 1);
-
-		auto it = m_chunks.emplace(m_chunks.end() , x, z);
-		it->Generator = std::make_unique<NodeToMCGeneratorNaive>(chunkCentre, chunkRight, chunkFront, chunkFrontRight, CHUNK_SIZE, CHUNK_HEIGHT, x, z);
-		it->Mesher = std::make_unique<MCToMesh>(m_ogreService, it->Generator.get(), x*CHUNK_SIZE, z*CHUNK_SIZE, 1);
-
-		m_ChunkUnits.emplace_back(x, z, it);
-		//Add work
-		it->Generator->Generate();
-		it->Mesher->GenerateMesh();
-		it->isBuilt.store(true);
-		*/
+		
 	}
 
 	void NodesToMCGeneratorController::UnloadChunk(int x, int z)
@@ -86,6 +68,7 @@ namespace GEM
 				//Remove it from the sercher's list
 				m_ChunkUnits.erase(it);
 
+				ChunkIt->Mesher.reset();//Ogre doesn't like, when object dessapear in the middle of a frame. So remove it before all parallel things
 				m_workQueueMutex.lock();
 				m_workQueue.push_back(ChunkIt);
 				m_workQueueMutex.unlock();
@@ -162,7 +145,6 @@ namespace GEM
 				WorkIter = m_workQueue.front();
 				m_workQueue.pop_front();
 				WorkFound = true;
-				printf("WorkFound:<%i,%i>\n", WorkIter->x, WorkIter->z);
 			}
 			m_workQueueMutex.unlock();
 
@@ -170,7 +152,6 @@ namespace GEM
 			{
 				if (!WorkIter->isBuilt.load())
 				{
-					printf("WorkFound/Create:<%i,%i>\n", WorkIter->x, WorkIter->z);
 					//Get chunk nodes
 					auto chunkCentre = m_chunkLoader->getChunk(WorkIter->x, WorkIter->z);
 					auto chunkFront = m_chunkLoader->getChunk(WorkIter->x, WorkIter->z + 1);
@@ -188,7 +169,6 @@ namespace GEM
 				}
 				else 
 				{//Then it's here to be deleatad
-					printf("WorkFound/Erase:<%i,%i>\n", WorkIter->x, WorkIter->z);
 					m_chunks.erase(WorkIter);
 				}
 				

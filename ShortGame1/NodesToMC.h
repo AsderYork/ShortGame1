@@ -30,8 +30,8 @@ namespace GEM
 		void PrepareChunk(int x, int z);
 
 		/**!
-		Shows a chunk. If this chunk wasn't prepared before, this method will block untill it's done. If it was prepared, method will block
-		untill chunk became shown. In other words, this method guarantees, that chunk will be shown.
+		Shows a chunk. Only chunks, that where Prepared, can be shown. If chunks is allready prepared, it will be shown.
+		If it's only Preparing, method will block, untill it's done and then show it. In other words, this method guarantees, that chunk will be shown.
 		*/
 		void ShowChunk(int x, int z);
 
