@@ -209,18 +209,17 @@ namespace GEM
 		m_mesh->_setBounds(Ogre::Aabb(Ogre::Vector3::ZERO + Ogre::Vector3(m_posX + meshSize, CHUNK_HEIGHT/2, m_posZ + meshSize), Ogre::Vector3(CHUNK_SIZE/2, CHUNK_HEIGHT/2, CHUNK_SIZE/2)), false);
 		m_mesh->_setBoundingSphereRadius(meshRadius);
 
+		subMesh->setMaterialName("HlmsPbs1");
 		
 
 		
 
-		m_MarchingCubesItem = SceneManager->createItem("MarchingCubies" + std::to_string(m_posX) + "X" + std::to_string(m_posZ));
+		m_MarchingCubesItem = SceneManager->createItem(MeshName);
 		m_MarchingCubeNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);
 
 		m_MarchingCubeNode->attachObject(m_MarchingCubesItem);
 		m_MarchingCubeNode->setPosition(0, 0, 0);
 		
-
-		m_MarchingCubesItem->setDatablock("HlmsPbs1");
 
 	}
 
