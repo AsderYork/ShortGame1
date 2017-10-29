@@ -46,7 +46,7 @@ namespace GEM
 			if ((Unit.x == x) && (Unit.z == z))
 			{
 				//Wait while chunk is built if its still isn't
-				while (!Unit.ChunkListIter->isBuilt.load()) {};
+				while (!Unit.ChunkListIter->isBuilt.load(std::memory_order_acquire)) {};
 				Unit.ChunkListIter->Mesher->GenerateMesh();
 				auto t1 = std::chrono::high_resolution_clock::now();
 				printf("Found:%f\n",std::chrono::duration_cast<fsec>(t1 - t0).count());
@@ -135,7 +135,7 @@ namespace GEM
 		std::list<ChunkCore>::iterator WorkIter;
 		volatile bool WorkFound = false;
 
-		while (m_ContinueThread.load())
+		while (m_ContinueThread.load(std::memory_order_acquire))
 		{
 			WorkFound = false;
 			//If WorkQueue is not empty, grab one task and RUN!
@@ -150,7 +150,7 @@ namespace GEM
 
 			if (WorkFound)
 			{
-				if (!WorkIter->isBuilt.load())
+				if (!WorkIter->isBuilt.load(std::memory_order_acquire))
 				{
 					//Get chunk nodes
 					auto chunkCentre = m_chunkLoader->getChunk(WorkIter->x, WorkIter->z);
@@ -165,7 +165,7 @@ namespace GEM
 					WorkIter->Generator->Generate();
 					//If it's allready useles
 					bool Ex = false;
-					WorkIter->isBuilt.store(true);
+					WorkIter->isBuilt.store(true, std::memory_order_release);
 				}
 				else 
 				{//Then it's here to be deleatad
