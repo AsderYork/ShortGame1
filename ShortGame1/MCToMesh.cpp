@@ -122,16 +122,18 @@ namespace GEM
 		//Translate VertexList from Generator to Ogre
 		for (int i = 0; i < m_generator->getVertexVectorSize(); i++)
 		{
-			//auto&& Vertex = m_generator->getVertexVectorElement(i);
+			auto& Vertex = m_generator->getVertexVectorElement(i);
+			Vertex.first->normal.normalise();
+			
 
-			meshVertices[i].px =  m_generator->getVertexVectorElement(i)->pos.x + m_posX;
-			meshVertices[i].py =  m_generator->getVertexVectorElement(i)->pos.y;
-			meshVertices[i].pz = m_generator->getVertexVectorElement(i)->pos.z + m_posZ;
+			meshVertices[i].px = Vertex.first->pos.x + m_posX;
+			meshVertices[i].py = Vertex.first->pos.y;
+			meshVertices[i].pz = Vertex.first->pos.z + m_posZ;
 
 			
-			meshVertices[i].nx = m_generator->getVertexVectorElement(i)->normal.x;
-			meshVertices[i].ny = m_generator->getVertexVectorElement(i)->normal.y;
-			meshVertices[i].nz = m_generator->getVertexVectorElement(i)->normal.z;
+			meshVertices[i].nx = Vertex.first->normal.x;
+			meshVertices[i].ny = Vertex.first->normal.y;
+			meshVertices[i].nz = Vertex.first->normal.z;
 
 
 			//And no Texture cordinates
@@ -153,26 +155,26 @@ namespace GEM
 			}*/
 
 			//This one in case if NaiveGenerator
-			switch (m_generator->getVertexVectorElement(i)->flavor)
+			switch (Vertex.second)
 			{
-				case NTMCG_Base::MidPointBase::FLAVOR_UPDOWN:
+				case NodeToMCGeneratorNaive::Flavor::FLAVOR_UPDOWN:
 				{
-					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->pos.x + m_posX;
-					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->pos.z + m_posZ;
+					meshVertices[i].nu = Vertex.first->pos.x + m_posX;
+					meshVertices[i].nv = Vertex.first->pos.z + m_posZ;
 					break;
 				}
 
-				case NTMCG_Base::MidPointBase::FLAVOR_FRONTBACK:
+				case NodeToMCGeneratorNaive::Flavor::FLAVOR_FRONTBACK:
 				{
-					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->pos.y;
-					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->pos.x + m_posX;
+					meshVertices[i].nu = Vertex.first->pos.y;
+					meshVertices[i].nv = Vertex.first->pos.x + m_posX;
 					break;
 				}
 
-				case NTMCG_Base::MidPointBase::FLAVOR_LEFTRIGHT:
+				case NodeToMCGeneratorNaive::Flavor::FLAVOR_LEFTRIGHT:
 				{
-					meshVertices[i].nu = m_generator->getVertexVectorElement(i)->pos.y;
-					meshVertices[i].nv = m_generator->getVertexVectorElement(i)->pos.z + m_posZ;
+					meshVertices[i].nu = Vertex.first->pos.y;
+					meshVertices[i].nv = Vertex.first->pos.z + m_posZ;
 					break;
 				}
 			}

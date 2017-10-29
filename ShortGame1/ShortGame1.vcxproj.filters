@@ -37,9 +37,6 @@
     <Filter Include="CEGUI_Layout\MarchingCubesNodeController">
       <UniqueIdentifier>{ff61bcaa-6410-447f-aa9b-2b834e02accf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MapSystem">
-      <UniqueIdentifier>{6448af9f-7965-41f6-9b57-b067640d489d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MapSystemV2">
       <UniqueIdentifier>{388b16f3-a950-41d1-b0e3-ec5bd63f5627}</UniqueIdentifier>
     </Filter>
@@ -58,9 +55,6 @@
     <Filter Include="MapSystemV2\MCToMesh">
       <UniqueIdentifier>{27afc7d9-1529-4c2a-875c-411cdd371113}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MapSystem\MapSystem">
-      <UniqueIdentifier>{bf5df743-78d9-4dfc-8bd2-c1e35a069a86}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MapSystemV2\MapService">
       <UniqueIdentifier>{88c391dc-f3ad-43d0-be40-7aaa97676a34}</UniqueIdentifier>
     </Filter>
@@ -73,14 +67,8 @@
     <Filter Include="Tests">
       <UniqueIdentifier>{94595a60-09df-419a-bd39-7a5a2d6e7cdf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MapSystemV2\NodesToMCGenerator\Base">
-      <UniqueIdentifier>{06577ca1-1249-4dd3-8e07-431d5a7dc734}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MapSystemV2\NodesToMCGenerator\Naive">
       <UniqueIdentifier>{02861b0f-c396-44e0-9f09-8bcc1b5203e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MapSystemV2\NodesToMCGenerator\Default">
-      <UniqueIdentifier>{43b152e1-66c5-46c6-af8c-1939b41a8bf4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -117,9 +105,6 @@
     <ClInclude Include="FPS_Layout.h">
       <Filter>CEGUI_Layout\FPS</Filter>
     </ClInclude>
-    <ClInclude Include="MapSystem.h">
-      <Filter>MapSystem\MapSystem</Filter>
-    </ClInclude>
     <ClInclude Include="ChunkLoader.h">
       <Filter>MapSystemV2\ChunkLoader</Filter>
     </ClInclude>
@@ -144,17 +129,8 @@
     <ClInclude Include="DebugMapGraphicsService.h">
       <Filter>MapSystemV2\DebugMapGraphicsService</Filter>
     </ClInclude>
-    <ClInclude Include="NodesToMCGeneratorsTests.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="NTMCG_Base.h">
-      <Filter>MapSystemV2\NodesToMCGenerator\Base</Filter>
-    </ClInclude>
     <ClInclude Include="NTMCG_Naive.h">
       <Filter>MapSystemV2\NodesToMCGenerator\Naive</Filter>
-    </ClInclude>
-    <ClInclude Include="NodesToMCGenerator.h">
-      <Filter>MapSystemV2\NodesToMCGenerator\Default</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,9 +161,6 @@
     <ClCompile Include="FPS_Layout.cpp">
       <Filter>CEGUI_Layout\FPS</Filter>
     </ClCompile>
-    <ClCompile Include="MapSystem.cpp">
-      <Filter>MapSystem\MapSystem</Filter>
-    </ClCompile>
     <ClCompile Include="NodeChunk.cpp">
       <Filter>MapSystemV2\NodeChunk</Filter>
     </ClCompile>
@@ -208,12 +181,6 @@
     </ClCompile>
     <ClCompile Include="NTMCG_Naive.cpp">
       <Filter>MapSystemV2\NodesToMCGenerator\Naive</Filter>
-    </ClCompile>
-    <ClCompile Include="NTMCG_Base.cpp">
-      <Filter>MapSystemV2\NodesToMCGenerator\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="NodesToMCGenerator.cpp">
-      <Filter>MapSystemV2\NodesToMCGenerator\Default</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

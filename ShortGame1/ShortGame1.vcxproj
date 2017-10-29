@@ -162,13 +162,9 @@
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="LogHelper.h" />
     <ClInclude Include="MapService.h" />
-    <ClInclude Include="MapSystem.h" />
     <ClInclude Include="MCToMesh.h" />
     <ClInclude Include="NodeChunk.h" />
     <ClInclude Include="NodesToMC.h" />
-    <ClInclude Include="NodesToMCGenerator.h" />
-    <ClInclude Include="NodesToMCGeneratorsTests.h" />
-    <ClInclude Include="NTMCG_Base.h" />
     <ClInclude Include="NTMCG_Naive.h" />
     <ClInclude Include="OgreLogRedirection.h" />
     <ClInclude Include="Ogre_Service.h" />
@@ -184,12 +180,9 @@
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="LogHelper.cpp" />
     <ClCompile Include="MapService.cpp" />
-    <ClCompile Include="MapSystem.cpp" />
     <ClCompile Include="MCToMesh.cpp" />
     <ClCompile Include="NodeChunk.cpp" />
     <ClCompile Include="NodesToMC.cpp" />
-    <ClCompile Include="NodesToMCGenerator.cpp" />
-    <ClCompile Include="NTMCG_Base.cpp" />
     <ClCompile Include="NTMCG_Naive.cpp" />
     <ClCompile Include="OgreLogRedirection.cpp" />
     <ClCompile Include="Ogre_Service.cpp" />

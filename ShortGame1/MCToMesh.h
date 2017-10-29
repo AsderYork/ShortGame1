@@ -1,6 +1,6 @@
 #pragma once
 #include "Ogre_Service.h"
-#include "NodesToMCGenerator.h"
+#include "NTMCG_Naive.h"
 
 namespace GEM
 {
@@ -21,11 +21,11 @@ namespace GEM
 		int m_posZ;
 		int m_scale;
 
-		NTMCG_Base* m_generator = nullptr;
+		NodeToMCGeneratorNaive* m_generator = nullptr;
 
 
 	public:
-		MCToMesh(Ogre_Service* ogreService, NTMCG_Base* Generator, int PosX, int PosZ, int Scale) :
+		MCToMesh(Ogre_Service* ogreService, NodeToMCGeneratorNaive* Generator, int PosX, int PosZ, int Scale) :
 			m_ogreService(ogreService),
 			m_generator(Generator),
 			m_posX(PosX),

@@ -1,18 +1,19 @@
 #pragma once
-#include "NodesToMCGenerator.h"
-#include "NTMCG_Base.h"
+#include "NodeChunk.h"
 #include <memory>
 #include <vector>
 #include <list>
+#include <OGRE\OgreVector3.h>
 
 namespace GEM
 {
 	/**!
 	Does the same thing as usual generator, but does't separate vertices
 	*/
-	class NodeToMCGeneratorNaive : public NTMCG_Base
+	class NodeToMCGeneratorNaive
 	{
 		static const int triTable[256][16];
+		int DimXZ, DimY;
 
 
 		//A chunks. From them a mesh will be generated
@@ -26,20 +27,34 @@ namespace GEM
 		According to a paper about MarchingCubes, Midpoints that are represented here lays on a 0,3,8
 		MidPoints should be set to a value, that is weighted average of nodes on their edge, assuming that node [x][y][z] have cordinates(x;y;z)
 		*/
+
+		struct MidPointBase
+		{
+			//float x = 0, y = 0, z = 0;
+			Ogre::Vector3 normal, pos, textcord1;
+			//float nx = 0, ny = 1, nz = 0;
+
+			//Texture cordinate are actually 3d. But with a help of a flavors ony 2 of cordinate will end in actual mesh
+			//float uvx = 0, uvy = 0, uvz = 0;
+			//This also means that MCToMesh should be able to work differetiate flavors correctly, choosing right u, v pair for a given flavor.
+		};
+
 		struct NodeEnvelope {
 			MidPointBase Right, Back, Top;
 			bool isChanged = false;
 		};
+
+		enum class Flavor { FLAVOR_UPDOWN, FLAVOR_LEFTRIGHT, FLAVOR_FRONTBACK };
 	private:
 
 		//This thing is moved out of CreateCube to prevent its rebuild every time, and keep it to the instance of a class opposing to static
-		std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>> m_vertices;
+		std::vector<std::pair<MidPointBase*, Flavor>> m_vertices;
 		std::vector<std::vector<std::vector<NodeEnvelope>>> NodeEnvelopeVec;
 
 		//Holds EdgePoints in order and with duplications
-		std::vector<MidPointBase> VertexVector;
-		//Holds IDs from VertexVector, so that they could be arranged in triangles
-		std::vector<int> IndexVector;
+		std::vector<std::pair<MidPointBase*,Flavor>> VertexVector;
+		//IndexVector is no longer used, becouse they all just sequential
+		//std::vector<int> IndexVector;
 
 		//Linear representation. Contains chunks, that heve been changed from last Update/Generate.
 		std::vector<int> ChangedCubies;
@@ -51,12 +66,12 @@ namespace GEM
 			If this cube contains any additional geometry, it's vertex buffer will be allocated in a list, marked with
 			this iterator
 			*/
-			std::list<std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>>>::iterator PosInActiveList;
+			std::list<std::vector<std::pair<MidPointBase*, Flavor>>>::iterator PosInActiveList;
 			//True if Iterator is a valid one. False otherwise
 			bool isSet = false;
 			unsigned char lastCubeVal = 0;
 
-			CubeData(std::list<std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>>>::iterator&& it) :
+			CubeData(std::list<std::vector<std::pair<MidPointBase*, Flavor>>>::iterator&& it) :
 				PosInActiveList(it)
 			{}
 			CubeData() {}
@@ -69,7 +84,7 @@ namespace GEM
 		std::vector<CubeData> m_cubeData;
 		/*Contains IDs of cubes, that do have nodes. The vector is sorted after Generate. It must remain sorted after any changes in Update.
 		*/
-		std::list<std::vector<std::pair<MidPointBase*, MidPointBase::Flavor>>> m_actuallyUsedCubesVertices;
+		std::list<std::vector<std::pair<MidPointBase*, Flavor>>> m_actuallyUsedCubesVertices;
 
 		/**!
 		Acesses node from multiple NodeMap as they are one big NodeMap.
@@ -200,7 +215,8 @@ namespace GEM
 			ChunkRight(_ChunkRight),
 			ChunkFront(_ChunkFront),
 			ChunkFrontRight(_ChunkCentreFront),
-			NTMCG_Base(_DimXZ, _DimY, ChunkX, ChunkZ)
+			DimXZ(_DimXZ),
+			DimY(_DimY)
 		{
 			regenerateEnvelope();
 		}
@@ -213,10 +229,14 @@ namespace GEM
 		*/
 		void ChangeNode(int x, int y, int z);
 
-		MidPointBase* getVertexVectorElement(int i);
-		const int getVertexVectorSize();
+		/**
+		Returns a pair of MidPointBase pointer and a flavor, in which this point is used in that place.
+		A Normals is not normalized in this 
+		*/
+		std::pair<MidPointBase*, Flavor> getVertexVectorElement(int i);
+		const int getVertexVectorSize() const;
 
-		int getIndexVectorElement(int i);
-		const int getIndexVectorSize();
+		int getIndexVectorElement(int i) const;
+		const int getIndexVectorSize() const;
 	};
 }

@@ -3,7 +3,6 @@
 #include <cassert>
 #include <array>
 #include "Ogre_Service.h"
-#include "NodesToMCGenerator.h"
 #include "NTMCG_Naive.h"
 #include "MCToMesh.h"
 #include <memory>
@@ -73,7 +72,7 @@ namespace GEM
 		*/
 		struct ChunkCore
 		{
-			std::unique_ptr<NTMCG_Base> Generator;
+			std::unique_ptr<NodeToMCGeneratorNaive> Generator;
 			std::unique_ptr<MCToMesh> Mesher;
 			/**
 			Before that the plan was to complitely move all generator creation to a worker threads. But the problem is that ChunkLoader is not

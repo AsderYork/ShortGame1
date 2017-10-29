@@ -472,20 +472,20 @@ namespace GEM
 			float VorValResY = abs(90 - Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees());
 			float ValResY = Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees();
 
-			MidPointBase::Flavor Flavor;
+			Flavor Flavor;
 			if (abs(90 - Normal.angleBetween(Ogre::Vector3(0, 1, 0)).valueDegrees()) >= 30)
 			{
-				Flavor = MidPointBase::FLAVOR_UPDOWN;
+				Flavor = Flavor::FLAVOR_UPDOWN;
 			}
 			//if flavor is LeftRight
 			else if (abs(90 - Normal.angleBetween(Ogre::Vector3(1, 0, 0)).valueDegrees()) > 45)
 			{
-				Flavor = MidPointBase::FLAVOR_LEFTRIGHT;
+				Flavor = Flavor::FLAVOR_LEFTRIGHT;
 			}
 			//Then it's FrontBack
 			else
 			{
-				Flavor = MidPointBase::FLAVOR_FRONTBACK;
+				Flavor = Flavor::FLAVOR_FRONTBACK;
 			}
 
 			for (auto& p : Ps)
@@ -553,7 +553,6 @@ namespace GEM
 	{
 		//Clear for regeneration
 		VertexVector.clear();
-		IndexVector.clear();
 		m_cubeData.clear();
 
 		m_cubeData.resize(DimXZ*DimXZ*(DimY - 1));
@@ -574,16 +573,11 @@ namespace GEM
 		}
 
 		//Building Final Vertex&Index vectors stage
-		int Index = 0;
 		for (auto UsedCube : m_actuallyUsedCubesVertices)
 		{
 			for (auto Vertex : UsedCube)
 			{
-				VertexVector.push_back(*(Vertex.first));
-				VertexVector[Index].flavor = Vertex.second;
-				VertexVector[Index].normal.normalise();
-				IndexVector.push_back(Index);
-				Index++;
+				VertexVector.push_back(Vertex);
 			}			
 		}
 	}
@@ -601,7 +595,6 @@ namespace GEM
 
 		*/
 		VertexVector.clear();
-		IndexVector.clear();
 		//For every changed cube
 		for (auto& cubePos : ChangedCubies)
 		{
@@ -615,16 +608,11 @@ namespace GEM
 
 		
 		//Building Final Vertex&Index vectors stage
-		int Index = 0;
 		for (auto UsedCube : m_actuallyUsedCubesVertices)
 		{
 			for (auto Vertex : UsedCube)
 			{
-				VertexVector.push_back(*(Vertex.first));
-				VertexVector[Index].flavor = Vertex.second;
-				VertexVector[Index].normal.normalise();
-				IndexVector.push_back(Index);
-				Index++;
+				VertexVector.push_back(Vertex);				
 			}
 		}
 		
@@ -725,25 +713,22 @@ namespace GEM
 
 	}
 
-	NodeToMCGeneratorNaive::MidPointBase* NodeToMCGeneratorNaive::getVertexVectorElement(int i)
+	std::pair<NodeToMCGeneratorNaive::MidPointBase*, NodeToMCGeneratorNaive::Flavor> NodeToMCGeneratorNaive::getVertexVectorElement(int i)
 	{
-		return &(VertexVector[i]);
+		return VertexVector[i];
 	}
 
-#pragma warning( push )
-#pragma warning( disable : 4267)//There can't be more, then a couple of hundred thousands values in bouth of this vertexes. So everything is guaranteeed to fit it unsigned int
-	const int NodeToMCGeneratorNaive::getVertexVectorSize()
+	const int NodeToMCGeneratorNaive::getVertexVectorSize() const
 	{
-		return VertexVector.size();
+		return (int)VertexVector.size();
 	}	
-	const int NodeToMCGeneratorNaive::getIndexVectorSize()
+	const int NodeToMCGeneratorNaive::getIndexVectorSize() const
 	{
-		return IndexVector.size();
+		return getVertexVectorSize();
 	}
-#pragma warning( pop ) 
-	int NodeToMCGeneratorNaive::getIndexVectorElement(int i)
+	int NodeToMCGeneratorNaive::getIndexVectorElement(int i) const
 	{
-		return IndexVector[i];
+		return i;
 	}
 
 
