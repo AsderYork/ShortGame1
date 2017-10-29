@@ -123,7 +123,7 @@ namespace GEM
 		for (int i = 0; i < m_generator->getVertexVectorSize(); i++)
 		{
 			auto& Vertex = m_generator->getVertexVectorElement(i);
-			Vertex.first->normal.normalise();
+			auto NormalNormal = Vertex.first->normal.normalisedCopy();//We are no allowed to change this value. so create a copy instead
 			
 
 			meshVertices[i].px = Vertex.first->pos.x + m_posX;
@@ -131,9 +131,9 @@ namespace GEM
 			meshVertices[i].pz = Vertex.first->pos.z + m_posZ;
 
 			
-			meshVertices[i].nx = Vertex.first->normal.x;
-			meshVertices[i].ny = Vertex.first->normal.y;
-			meshVertices[i].nz = Vertex.first->normal.z;
+			meshVertices[i].nx = NormalNormal.x;
+			meshVertices[i].ny = NormalNormal.y;
+			meshVertices[i].nz = NormalNormal.z;
 
 
 			//And no Texture cordinates

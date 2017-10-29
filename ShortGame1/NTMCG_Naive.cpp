@@ -713,7 +713,7 @@ namespace GEM
 
 	}
 
-	std::pair<NodeToMCGeneratorNaive::MidPointBase*, NodeToMCGeneratorNaive::Flavor> NodeToMCGeneratorNaive::getVertexVectorElement(int i)
+	const std::pair<NodeToMCGeneratorNaive::MidPointBase*, NodeToMCGeneratorNaive::Flavor> NodeToMCGeneratorNaive::getVertexVectorElement(int i) const
 	{
 		return VertexVector[i];
 	}

@@ -107,10 +107,24 @@ namespace GEM
 		if((NodeY>CHUNK_HEIGHT) || (NodeY <0)){	return;	}
 
 		//Find a chunk cordinate, where this node should be
-		int ChunkX = (NodeX) / CHUNK_SIZE;
-		if (NodeX < 0) { ChunkX--; }
-		int ChunkZ = (NodeZ) / CHUNK_SIZE;
-		if (ChunkZ < 0) { ChunkZ--; }
+		int ChunkX;
+		if (NodeX < 0) {
+			ChunkX = ((NodeX + 1) / CHUNK_SIZE) - 1;
+		}
+		else
+		{
+			ChunkX = NodeX / CHUNK_SIZE;
+		}
+
+		int ChunkZ;
+		if (NodeZ < 0) {
+			ChunkZ = ((NodeZ + 1) / CHUNK_SIZE) - 1;
+		}
+		else
+		{
+			ChunkZ = NodeZ / CHUNK_SIZE;
+		}
+		
 
 		int XInChunk = NodeX - ChunkX*(CHUNK_SIZE);
 		int ZInChunk = NodeZ - ChunkZ*(CHUNK_SIZE);

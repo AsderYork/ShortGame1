@@ -233,7 +233,7 @@ namespace GEM
 		Returns a pair of MidPointBase pointer and a flavor, in which this point is used in that place.
 		A Normals is not normalized in this 
 		*/
-		std::pair<MidPointBase*, Flavor> getVertexVectorElement(int i);
+		const std::pair<MidPointBase*, Flavor> getVertexVectorElement(int i) const;
 		const int getVertexVectorSize() const;
 
 		int getIndexVectorElement(int i) const;
