@@ -26,8 +26,9 @@ namespace GEM
 		MapService* m_mapService;
 		Ogre_Service *m_ogreService;
 		CEGUI::Window* FPS_Window;
-		int m_sizeOfAvgGroup;
-		int m_avgFPS = 0;
+		float m_fps_ForThisSecond = 0.0f;
+		float m_fps_lastSecond = 60.0f;
+		int m_frames = 0;
 
 	};
 }

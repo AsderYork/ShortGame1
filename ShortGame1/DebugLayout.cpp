@@ -6,7 +6,6 @@ namespace GEM
 {
 
 	DebugLayout::DebugLayout(int SizeOfAvgGroup, Ogre_Service *OgreService, MapService* mapService) :
-		m_sizeOfAvgGroup(SizeOfAvgGroup),
 		m_ogreService(OgreService),
 		m_mapService(mapService)
 	{
@@ -39,15 +38,21 @@ namespace GEM
 	}
 
 	void DebugLayout::PreFrame(float delta)
-	{
-		int tmpFPS = (int)(1 / delta);
-		if (m_avgFPS == 0) { m_avgFPS = tmpFPS; }
-		tmpFPS += m_avgFPS;
-		m_avgFPS = tmpFPS / 2;
+	{		
+
+		m_fps_ForThisSecond += delta;
+		m_frames++;
+
+		if (m_fps_ForThisSecond > 1.0f)
+		{
+			m_fps_lastSecond = m_frames / m_fps_ForThisSecond;
+			m_fps_ForThisSecond = 0.0f;
+			m_frames = 0;
+		}
 
 		auto CamPos = m_ogreService->getCamera()->getPosition();
 
-		std::string Text = "FPS" + std::to_string(m_avgFPS) +
+		std::string Text = "FPS" + std::to_string(m_fps_lastSecond) +
 			"\nX:" + std::to_string((float)CamPos.x) +
 			"\nY:" + std::to_string((float)CamPos.y) +
 			"\nZ:" + std::to_string((float)CamPos.z) + "\n";

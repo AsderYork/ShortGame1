@@ -72,16 +72,22 @@ namespace GEM
 		template<class ServiceClass, typename ...Args>
 		ServiceClass* AddService(Args ...args);
 
-		/**
+		/**!
 		If we need to start shuting down after this frame, this method should be called.
 		But remember, only after this frame. So don't call shutdown and then destroy all resources, that might be used someone later in the pipeline of this
 		frame!
 		*/
 		void shutdown();
 
+		/**!
+		Sets the limit on maximum number of frames per second
+		*/
+		void setMaximumFPS(float fps);
+
 	private:
 		std::vector<std::unique_ptr<Service>> m_servicesVector;
 		bool m_shouldTerminate = false;//Set to true, if it's time to shut down
+		float m_frameSpeedLinit = 0.01f;//Limits the minimum time a full frame(pre-, -, post-) can be completed
 
 		/**!
 		Initializes all the services and return true. Services gets initialized in order they were regestered(FIFO).

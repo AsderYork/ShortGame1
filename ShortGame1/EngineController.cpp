@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "EngineController.h"
 #include <chrono>
-
-#define DEBUG_FRAME_AMOUNT 5000 //Amount of frames, that is counts
+#include <thread>
 
 
 int GEM::EngineController::start()
@@ -23,19 +22,20 @@ int GEM::EngineController::start()
 	//Main loop!
 	float timeDelta = 1;
 
-	std::chrono::time_point<std::chrono::system_clock> start, end;
+	std::chrono::time_point<std::chrono::steady_clock> start, end;
 
 	bool TerminateUnexpected = false;//Set to true if termination was not becouse of terminate() call;
 	while(!m_shouldTerminate)
 	{
-		start = std::chrono::system_clock::now();
+		start = std::chrono::steady_clock::now();
 
 		if (!doPreFrame(timeDelta)) { TerminateUnexpected = true; break; }
 		if (!doFrame(timeDelta)) { TerminateUnexpected = true; break; }
 		if (!doPostFrame(timeDelta)) { TerminateUnexpected = true; break; }
 
-		end = std::chrono::system_clock::now();
 
+		std::this_thread::sleep_until(start + std::chrono::duration<float>(m_frameSpeedLinit));
+		end = std::chrono::steady_clock::now();
 		timeDelta = std::chrono::duration_cast<std::chrono::duration<float>>(end - start).count();
 		
 	}
@@ -55,6 +55,12 @@ void GEM::EngineController::shutdown()
 {
 	LOGCATEGORY("EngineController/shutdown").info("Shutdown gets called");
 	m_shouldTerminate = true;
+}
+
+void GEM::EngineController::setMaximumFPS(float fps)
+{
+	if (fps == 0) { m_frameSpeedLinit = 0; return; }
+	m_frameSpeedLinit = 1.0f / fps;
 }
 
 bool GEM::EngineController::initializeServices()
