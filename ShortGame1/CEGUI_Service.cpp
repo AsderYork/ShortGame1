@@ -64,6 +64,25 @@ namespace GEM
 	{
 
 	}
+	void CEGUI_Service::VoteForVisibleCursor()
+	{
+		if (m_CursorVisibilityVotes == 0){
+			CEGUI::System::getSingleton().getDefaultGUIContext().getCursor().setVisible(true);
+		}
+		m_CursorVisibilityVotes++;
+	}
+	void CEGUI_Service::VoteAgainstVisibleCursor()
+	{
+		if (m_CursorVisibilityVotes == 1) {
+			CEGUI::System::getSingleton().getDefaultGUIContext().getCursor().setVisible(false);
+		}
+		m_CursorVisibilityVotes--;
+		if (m_CursorVisibilityVotes < 0) { m_CursorVisibilityVotes = 0; }
+	}
+	int CEGUI_Service::gettmpCursorVotes() const
+	{
+		return m_CursorVisibilityVotes;
+	}
 	Service::ActionResult CEGUI_Service::initialize()
 	{
 		try
@@ -158,11 +177,11 @@ namespace GEM
 	}
 	void CEGUI_Service::textInput(const SDL_TextInputEvent & arg)
 	{
+			m_inputAgregator->injectChar(arg.text[0]);
 	}
 	void CEGUI_Service::keyPressed(const SDL_KeyboardEvent & arg)
 	{
 		m_inputAgregator->injectKeyDown(toCEGUIKey(arg.keysym.scancode));
-		m_inputAgregator->injectChar(arg.keysym.sym);
 	}
 	void CEGUI_Service::keyReleased(const SDL_KeyboardEvent & arg)
 	{

@@ -70,6 +70,15 @@
     <Filter Include="MapSystemV2\NodesToMCGenerator\Naive">
       <UniqueIdentifier>{02861b0f-c396-44e0-9f09-8bcc1b5203e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Console">
+      <UniqueIdentifier>{4476af0f-2652-4739-81a7-b34a7e35f7e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Console\ConsoleParser">
+      <UniqueIdentifier>{521171e8-87b6-4375-84ac-170ea0368ed2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CEGUI_Layout\ConsoleLayout">
+      <UniqueIdentifier>{1470bc72-2984-421e-8abe-238d8d9acaf2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -132,6 +141,15 @@
     <ClInclude Include="NTMCG_Naive.h">
       <Filter>MapSystemV2\NodesToMCGenerator\Naive</Filter>
     </ClInclude>
+    <ClInclude Include="ConsoleParser.h">
+      <Filter>Console\ConsoleParser</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleLayout.h">
+      <Filter>CEGUI_Layout\ConsoleLayout</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleParserHelper.h">
+      <Filter>Console\ConsoleParser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogHelper.cpp">
@@ -181,6 +199,12 @@
     </ClCompile>
     <ClCompile Include="NTMCG_Naive.cpp">
       <Filter>MapSystemV2\NodesToMCGenerator\Naive</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleParser.cpp">
+      <Filter>Console\ConsoleParser</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleLayout.cpp">
+      <Filter>CEGUI_Layout\ConsoleLayout</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

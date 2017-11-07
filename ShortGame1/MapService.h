@@ -60,6 +60,12 @@ namespace GEM
 		void SetIndividualNode(int NodeX, int NodeY, int NodeZ, unsigned char value);
 		unsigned char getNodeVal(int NodeX, int NodeY, int NodeZ);
 
+		inline int getDrawDistance() { return m_drawDistance; }
+		inline void setDrawDistance(int v) {m_drawDistance = v; }
+
+		inline int getPrepareDistance() { return m_prepareDistance; }
+		inline void setPrepareDistance(int v) { m_prepareDistance = v; }
+
 		MapService(Ogre_Service* OgreService) :
 			m_ogreService(OgreService),
 			m_loader("../Map/", ".map"),
