@@ -6,12 +6,13 @@
 #include "DebugLayout.h"
 #include "DebugMapGraphicsService.h"
 #include "ConsoleLayout.h"
-
 #include "MapService.h"
+#include "NTMCG_TestSpeed.h"
 
 
 int main(int argc, char *argv[])
 {
+	PerformNTMCG_TestSpeed_Results(PerformNTMCG_TestSpeed(3, 5, 100, 1));
 	
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();

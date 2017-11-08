@@ -150,6 +150,9 @@
     <ClInclude Include="ConsoleParserHelper.h">
       <Filter>Console\ConsoleParser</Filter>
     </ClInclude>
+    <ClInclude Include="NTMCG_TestSpeed.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogHelper.cpp">

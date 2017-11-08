@@ -83,7 +83,7 @@ namespace GEM
 		Get's called in the destructor and removes object from ChunkLoader's pool
 		This callback contains reference to a ChunkLoader that created this chunk
 		*/
-		std::function<void()> m_deleteCallback;
+		std::function<void()> m_deleteCallback = []()->void{};
 	};
 
 	/**
@@ -95,7 +95,7 @@ namespace GEM
 	class ChunkLoader
 	{
 #ifdef _DEBUG
-		static_assert(std::is_base_of<ChunkBase, ChunkType>::value);/**ChunkLoader can use only childrens of a ChunkBase as a template Parameter! */
+		static_assert(std::is_base_of<ChunkBase, ChunkType>::value);/**ChunkLoader can use only use childrens of a ChunkBase as a template Parameter! */
 #endif
 	public:
 		/**!
@@ -255,7 +255,7 @@ namespace GEM
 	{
 		std::ifstream inputChunk(m_prefix + "chunk"+ std::to_string(pos.x)+"a"+ std::to_string(pos.y) + m_postfix, std::ios::binary);
 		if (!inputChunk.is_open()) {
-			LOGCATEGORY("ChunkLoader/loadChunk").warn("Chunk is atemted to be loaded, but not exist! %s, %s, Chunk(%i, %i)", m_prefix.c_str(), m_postfix.c_str(), pos.x, pos.y);
+			LOGCATEGORY("ChunkLoader/loadChunk").error("Chunk is atemted to be loaded from magistral, but it's actually do not exist! %s, %s, Chunk(%i, %i)", m_prefix.c_str(), m_postfix.c_str(), pos.x, pos.y);
 			return std::shared_ptr<ChunkType>();
 		}
 
@@ -278,7 +278,7 @@ namespace GEM
 					return;
 				}
 			}
-			LOGCATEGORY("LAMBDA").error("Cant find deletee in a pool!");
+			LOGCATEGORY("LAMBDA").error("Cant find deletie in a pool!");
 		};
 
 		return chunk;
