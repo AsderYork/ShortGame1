@@ -128,6 +128,8 @@ namespace GEM
 		\param[in] CubeZ Z-cordinate of a cubie
 		\param[in] NodeID Id of a node in a cubie, according to a MarchingCubes paper
 		*/
+#pragma warning( push )
+#pragma warning( disable : 4715)//No-return case is actually an assert
 		inline Node& GetNodeAsCubie(int CubeX, int CubeY, int CubeZ, int NodeID)
 		{
 			switch (NodeID)
@@ -144,6 +146,7 @@ namespace GEM
 			default: {assert(false);/*Cuibie have only 8 nodes!*/}
 			}
 		}
+#pragma warning( pop )
 
 		/**!
 		Finds a value of a cube, according to a paper

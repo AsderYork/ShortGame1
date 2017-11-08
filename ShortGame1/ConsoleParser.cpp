@@ -462,7 +462,7 @@ namespace GEM {
 				if ((*Result)->second.isType<Function>()) { throw std::exception("Function cannot be used as a variable!"); }
 				return (*Result)->second;
 			}
-			std::exception("Object is used as a variable, but it's not a variable!");
+			throw std::exception("Object is used as a variable, but it's not a variable!");
 		};
 
 		auto FindFunc = [&](LogicalParser::Function& Func) -> Holder& {
@@ -552,6 +552,8 @@ namespace GEM {
 					return Found.get<Variable>().get();
 				}
 			}
+
+			throw std::exception("Object cannot be 'Get' in any way! How did you couse this exception?");
 		};
 
 		auto ProcessOperator = [&](std::string& op) {

@@ -263,7 +263,8 @@ namespace GEM
 	{ 0, 3, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
 	{ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 } };
 
-	
+#pragma warning( push )
+#pragma warning( disable : 4715)//No-return case is actually an assert
 	NodeToMCGeneratorNaive::MidPointBase & NodeToMCGeneratorNaive::CalcMidPoint(int CubeX, int CubeY, int CubeZ, int EdgeID)
 	{
 		/*
@@ -422,7 +423,9 @@ namespace GEM
 
 		default: {assert(false);/*There is only 12 edges!*/}
 		}
+		assert(false);
 	}
+#pragma warning( pop ) 
 	void NodeToMCGeneratorNaive::CreateCube(int CubeX, int CubeY, int CubeZ)
 	{
 		/**!

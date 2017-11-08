@@ -251,7 +251,7 @@ namespace GEM
 
 		/**!
 		Registers a function.
-		\param[in] Funcname Name ofa func, as it can be accessed.
+		\param[in] Funcname Name of a func, as it can be accessed.
 		\param[in] ReturnType A type of result of this function call. UNDECLARED if function returns nothing. VAR cannot be returned.
 		If it's a object function, then next parameter is a pointer to that object. Otherwise it's just omitted
 		And finally, the function itself. Can be function of an object, free function, or std::function. Can't be std::bound result.
@@ -266,7 +266,7 @@ namespace GEM
 
 			auto& Fnc = FomralizeFunction(Functhigns...);
 
-			return 	CreateFunction((*Hierarchy), ReturnType, Fnc.first, Fnc.second);
+			return 	CreateFunction((*Hierarchy), ReturnType, Fnc.first, static_cast<int>(Fnc.second));
 
 		}
 
