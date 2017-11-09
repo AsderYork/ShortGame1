@@ -12,7 +12,7 @@
 
 int main(int argc, char *argv[])
 {
-	PerformNTMCG_TestSpeed_Results(PerformNTMCG_TestSpeed(10, 10, 100, 1));
+	//PerformNTMCG_TestSpeed_Results(PerformNTMCG_TestSpeed(10, 10, 100, 1));
 	
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();

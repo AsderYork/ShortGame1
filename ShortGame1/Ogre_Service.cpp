@@ -317,7 +317,7 @@ namespace GEM
 	void Ogre_Service::RegisterHLMS()
 	{
 		Ogre::ConfigFile cf;
-		cf.load("resources2.cfg");
+		cf.load("../Resources/resources.cfg");
 
 
 		Ogre::String dataFolder = cf.getSetting("DoNotUseAsResource", "Hlms", "");
@@ -375,7 +375,7 @@ namespace GEM
 	void Ogre_Service::setupResources()
 	{ // Load resource paths from config file
 		Ogre::ConfigFile cf;
-		cf.load("resources2.cfg");
+		cf.load("../Resources/resources.cfg");
 
 		// Go through all sections & settings in the file
 		Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
