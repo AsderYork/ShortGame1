@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
 	auto MapService = Controller.AddService<GEM::MapService>(OgreController);
 	auto DebugMapController = Controller.AddService<GEM::DebugMapGraphicsService>(OgreController, MapService);
 
-	MapService->setDrawDistance(0);
-	MapService->setPrepareDistance(0);
+	MapService->setDrawDistance(4);
+	MapService->setPrepareDistance(6);
 
 
 

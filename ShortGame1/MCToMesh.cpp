@@ -136,24 +136,6 @@ namespace GEM
 			meshVertices[i].nz = NormalNormal.z;
 
 
-			//And no Texture cordinates
-			//Check for flavors
-			/*if((m_generator->getVertexVector())[i]->FlavorUpDown == i)
-			{
-				meshVertices[i].nu = (m_generator->getVertexVector())[i]->uvx;
-				meshVertices[i].nv = (m_generator->getVertexVector())[i]->uvz;
-			}
-			else if ((m_generator->getVertexVector())[i]->FlavorFrontBack == i)
-			{
-				meshVertices[i].nu = (m_generator->getVertexVector())[i]->uvy;
-				meshVertices[i].nv = (m_generator->getVertexVector())[i]->uvx;
-			}
-			else
-			{
-				meshVertices[i].nu = (m_generator->getVertexVector())[i]->uvy;
-				meshVertices[i].nv = (m_generator->getVertexVector())[i]->uvz;
-			}*/
-
 			//This one in case if NaiveGenerator
 			switch (Vertex.second)
 			{
