@@ -6,18 +6,7 @@
 
 inline std::vector<std::pair<std::vector<float>,float>> PerformNTMCG_TestSpeed(unsigned int Maps, unsigned int IteratiosOnMap, int MaxChanges=100, int MinChanges=0)
 {
-	auto chunkCentre = std::make_shared<GEM::NodeChunk>();
-	chunkCentre->generateNewChunk();
-
-	auto chunkFront = std::make_shared<GEM::NodeChunk>();
-	chunkFront->generateNewChunk();
-
-	auto chunkRight = std::make_shared<GEM::NodeChunk>();
-	chunkRight->generateNewChunk();
-
-	auto chunkFrontRight = std::make_shared<GEM::NodeChunk>();
-	chunkFrontRight->generateNewChunk();
-
+	
 	typedef std::chrono::duration<float> fsec;
 
 	auto MapStart = std::chrono::system_clock::now();
@@ -29,6 +18,18 @@ inline std::vector<std::pair<std::vector<float>,float>> PerformNTMCG_TestSpeed(u
 
 	for (unsigned int mapIt = 0; mapIt < Maps; mapIt++)
 	{
+		auto chunkCentre = std::make_shared<GEM::NodeChunk>();
+		chunkCentre->generateNewChunk();
+
+		auto chunkFront = std::make_shared<GEM::NodeChunk>();
+		chunkFront->generateNewChunk();
+
+		auto chunkRight = std::make_shared<GEM::NodeChunk>();
+		chunkRight->generateNewChunk();
+
+		auto chunkFrontRight = std::make_shared<GEM::NodeChunk>();
+		chunkFrontRight->generateNewChunk();
+
 		std::pair<std::vector<float>, float> TmpPair;
 		MapStart = std::chrono::system_clock::now();
 		GEM::NodeToMCGeneratorNaive Generator(chunkCentre, chunkRight, chunkFront, chunkFrontRight, CHUNK_SIZE, CHUNK_HEIGHT, 0, 0);
@@ -38,7 +39,13 @@ inline std::vector<std::pair<std::vector<float>,float>> PerformNTMCG_TestSpeed(u
 
 		for (unsigned int updateIt = 0; updateIt < Maps; updateIt++)
 		{
-			int ChangesNum = MinChanges + rand() % (MaxChanges-MinChanges);
+			int ChangesNum = MinChanges;
+			if (MaxChanges != MinChanges)
+			{
+				ChangesNum += rand() % (MaxChanges - MinChanges);
+			}
+
+
 			for (int i = 0; i < ChangesNum; i++)
 			{
 				int x = rand() % CHUNK_SIZE;
