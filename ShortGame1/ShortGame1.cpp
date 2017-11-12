@@ -12,7 +12,7 @@
 
 int main(int argc, char *argv[])
 {
-	PerformNTMCG_TestSpeed_Results(PerformNTMCG_TestSpeed(10, 10, 10, 1));
+	//PerformNTMCG_TestSpeed_Results(PerformNTMCG_TestSpeed(10, 10, 10, 1));
 	
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
 	auto MapService = Controller.AddService<GEM::MapService>(OgreController);
 	auto DebugMapController = Controller.AddService<GEM::DebugMapGraphicsService>(OgreController, MapService);
 
-	MapService->setDrawDistance(4);
-	MapService->setPrepareDistance(6);
+	MapService->setDrawDistance(1);
+	MapService->setPrepareDistance(2);
 
 
 

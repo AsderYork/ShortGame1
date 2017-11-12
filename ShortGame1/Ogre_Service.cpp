@@ -335,7 +335,6 @@ namespace GEM
 			shaderSyntax = "HLSL";
 		else if (renderSystem->getName() == "Metal Rendering Subsystem")
 			shaderSyntax = "Metal";
-
 		Ogre::Archive *archiveLibrary = Ogre::ArchiveManager::getSingletonPtr()->load(
 			dataFolder + "Hlms/Common/" + shaderSyntax,
 			"FileSystem", true);

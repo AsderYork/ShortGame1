@@ -18,19 +18,12 @@ namespace GEM
 {
 	struct MeshVertices
 	{
-		float px, py, pz;   //Position
+		float px=0, py=0, pz=0;   //Position
 		float nx = 0, ny = 1, nz = 0;   //Normals
 		float nu = 0, nv = 0; //Texture Coordinates 1
+		float TBR = 1.0f, TBG = 0.5f, TBB = 0.5f, TBA =1.0f;
 
 		MeshVertices() {}
-		MeshVertices(float _px, float _py, float _pz,
-			float _nx, float _ny, float _nz) :
-			px(_px), py(_py), pz(_pz),
-			nx(_nx), ny(_ny), nz(_nz) {}
-
-		MeshVertices(float _px, float _py, float _pz) :
-			px(_px), py(_py), pz(_pz),
-			nx(0), ny(1), nz(0) {}
 	};
 
 	Ogre::IndexBufferPacked * MCToMesh::createIndexBuffer()
@@ -116,9 +109,11 @@ namespace GEM
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_POSITION));
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_NORMAL));
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES));
+		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT4, Ogre::VES_SPECULAR));
 
 		MeshVertices *meshVertices = reinterpret_cast<MeshVertices*>(OGRE_MALLOC_SIMD(sizeof(MeshVertices) * m_generator->getVertexVectorSize(), Ogre::MEMCATEGORY_GEOMETRY));
 
+		int TextureControll1 = 0;
 		//Translate VertexList from Generator to Ogre
 		for (int i = 0; i < m_generator->getVertexVectorSize(); i++)
 		{
@@ -135,6 +130,24 @@ namespace GEM
 			meshVertices[i].ny = NormalNormal.y;
 			meshVertices[i].nz = NormalNormal.z;
 
+			if (((int)(floor(meshVertices[i].px)) / 4) % 3 == 0)
+			{
+				meshVertices[i].TBR = 1.0;
+				meshVertices[i].TBG = 0.0;
+				meshVertices[i].TBB = 0.0;
+			}
+			else if (((int)(floor(meshVertices[i].px)) / 4) % 3 == 1)
+			{
+				meshVertices[i].TBR = 0.0;
+				meshVertices[i].TBG = 1.0;
+				meshVertices[i].TBB = 0.0;
+			}
+			else
+			{
+				meshVertices[i].TBR = 0.0;
+				meshVertices[i].TBG = 0.0;
+				meshVertices[i].TBB = 1.0;
+			}
 
 			//This one in case if NaiveGenerator
 			switch (Vertex.second)
@@ -194,13 +207,12 @@ namespace GEM
 		m_mesh->_setBoundingSphereRadius(meshRadius);
 
 		subMesh->setMaterialName("HlmsPbs1");
-		
 
 		
 
 		m_MarchingCubesItem = SceneManager->createItem(MeshName);
 		m_MarchingCubeNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);
-
+		
 		m_MarchingCubeNode->attachObject(m_MarchingCubesItem);
 		m_MarchingCubeNode->setPosition(0, 0, 0);
 		
