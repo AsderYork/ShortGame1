@@ -100,25 +100,19 @@ namespace GEM
 		*/
 		inline Node& GetNode(int NodeX, int NodeY, int NodeZ)
 		{
-			if ((NodeX >= DimXZ))
+			short Case = NodeX / DimXZ + 2 * (NodeZ / DimXZ);
+			NodeChunk* Chunk = nullptr;
+
+			switch (Case)
 			{
-				if ((NodeZ >= DimXZ))
-				{
-					return ChunkFrontRight->NodeMap[NodeX - DimXZ][NodeY][NodeZ - DimXZ];
-				}
-				else
-				{
-					return ChunkRight->NodeMap[NodeX - DimXZ][NodeY][NodeZ];
-				}
+			case 0: { Chunk = ChunkCentre.get();break;	}
+			case 1: { Chunk = ChunkRight.get(); break;	}
+			case 2: { Chunk = ChunkFront.get(); break;	}
+			case 3: { Chunk = ChunkFrontRight.get(); break;	}
 			}
-			else if (NodeZ >= DimXZ)
-			{
-				return ChunkFront->NodeMap[NodeX][NodeY][NodeZ - DimXZ];
-			}
-			else
-			{
-				return ChunkCentre->NodeMap[NodeX][NodeY][NodeZ];
-			}
+
+			return Chunk->NodeMap[NodeX % DimXZ][NodeY][NodeZ % DimXZ];
+
 		}
 
 		/**!
