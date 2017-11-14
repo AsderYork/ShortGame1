@@ -1,7 +1,5 @@
 #pragma once
 #include "stdafx.h"
-
-
 #include <type_traits>
 
 #include <memory>
@@ -16,6 +14,8 @@
 #include <cereal\archives\binary.hpp>
 #include <cereal\types\vector.hpp>
 #include <cereal\types\utility.hpp>
+
+#include <zstr\zstr.hpp>
 
 namespace GEM
 {
@@ -94,9 +94,7 @@ namespace GEM
 	template<class ChunkType>
 	class ChunkLoader
 	{
-#ifdef _DEBUG
 		static_assert(std::is_base_of<ChunkBase, ChunkType>::value);/**ChunkLoader can use only use childrens of a ChunkBase as a template Parameter! */
-#endif
 	public:
 		/**!
 		ChunkLoader Constructor.
@@ -191,7 +189,7 @@ namespace GEM
 	inline void ChunkLoader<ChunkType>::saveChunk(ChunkType* Chunk)
 	{
 		auto pos = Chunk->cords;
-		std::ofstream inputChunk(m_prefix + "chunk" + std::to_string(pos.x) + "a" + std::to_string(pos.y) + m_postfix, std::ios::binary);
+		zstr::ofstream inputChunk(m_prefix + "chunk" + std::to_string(pos.x) + "a" + std::to_string(pos.y) + m_postfix, std::ios::binary);
 		cereal::BinaryOutputArchive ChunkArchive(inputChunk);
 
 		if (std::find(m_magistral.begin(), m_magistral.end(), Chunk->cords) == m_magistral.end())
@@ -253,8 +251,9 @@ namespace GEM
 	template<class ChunkType>
 	inline std::shared_ptr<ChunkType> ChunkLoader<ChunkType>::loadChunk(intcord2 pos)
 	{
-		std::ifstream inputChunk(m_prefix + "chunk"+ std::to_string(pos.x)+"a"+ std::to_string(pos.y) + m_postfix, std::ios::binary);
-		if (!inputChunk.is_open()) {
+		zstr::ifstream inputChunk(m_prefix + "chunk"+ std::to_string(pos.x)+"a"+ std::to_string(pos.y) + m_postfix, std::ios::binary);
+		
+		if (inputChunk.bad()) {
 			LOGCATEGORY("ChunkLoader/loadChunk").error("Chunk is atemted to be loaded from magistral, but it's actually do not exist! %s, %s, Chunk(%i, %i)", m_prefix.c_str(), m_postfix.c_str(), pos.x, pos.y);
 			return std::shared_ptr<ChunkType>();
 		}
