@@ -160,12 +160,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="MapSystemV2Excuse.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEGUI_Service.h" />
-    <ClInclude Include="ChunkFormat.h" />
     <ClInclude Include="ChunkLoader.h" />
     <ClInclude Include="ConsoleLayout.h" />
     <ClInclude Include="ConsoleParser.h" />

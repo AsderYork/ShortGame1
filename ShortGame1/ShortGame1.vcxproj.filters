@@ -82,9 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
-    <Text Include="MapSystemV2Excuse.txt">
-      <Filter>MapSystemV2</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogHelper.h">
@@ -125,9 +122,6 @@
     </ClInclude>
     <ClInclude Include="MCToMesh.h">
       <Filter>MapSystemV2\MCToMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="ChunkFormat.h">
-      <Filter>MapSystemV2</Filter>
     </ClInclude>
     <ClInclude Include="MapService.h">
       <Filter>MapSystemV2\MapService</Filter>
