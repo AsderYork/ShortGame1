@@ -132,7 +132,6 @@ namespace GEM
 		auto Chunk = m_loader.getChunk(ChunkX, ChunkZ);		
 
 		Chunk->NodeMap[XInChunk][NodeY][ZInChunk].Value = value;
-		Chunk->NodeMap[XInChunk][NodeY][ZInChunk].isChanged = true;
 
 		//Check for edge cases
 		if (XInChunk == 0)

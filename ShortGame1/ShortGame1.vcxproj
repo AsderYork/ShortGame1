@@ -177,6 +177,7 @@
     <ClInclude Include="MCToMesh.h" />
     <ClInclude Include="NodeChunk.h" />
     <ClInclude Include="NodesToMC.h" />
+    <ClInclude Include="NTMCG_MultiLOD.h" />
     <ClInclude Include="NTMCG_Naive.h" />
     <ClInclude Include="NTMCG_TestSpeed.h" />
     <ClInclude Include="OgreLogRedirection.h" />

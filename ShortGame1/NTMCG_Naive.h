@@ -14,6 +14,8 @@ namespace GEM
 	{
 		static const int triTable[256][16];
 		int DimXZ, DimY;
+		//If nodes = 1 then evry node will be representation. The bigger is m_lod, the more aprroximate will be MarchingCubes
+		int m_lod = 1;
 
 
 		//A chunks. From them a mesh will be generated

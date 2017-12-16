@@ -79,6 +79,9 @@
     <Filter Include="CEGUI_Layout\ConsoleLayout">
       <UniqueIdentifier>{1470bc72-2984-421e-8abe-238d8d9acaf2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MapSystemV2\NodesToMCGenerator\MultiLod">
+      <UniqueIdentifier>{c800d5e8-64e9-4ecb-a217-b41f5f7cfea4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -146,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="NTMCG_TestSpeed.h">
       <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="NTMCG_MultiLOD.h">
+      <Filter>MapSystemV2\NodesToMCGenerator\MultiLod</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

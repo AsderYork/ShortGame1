@@ -8,10 +8,6 @@ namespace GEM
 {
 	struct Node {
 		unsigned char Value=0;
-		/*Nodes can be altered; We track their alteration while they are in memory to ease mesh updates
-		But we don't need this info to be stored on a disk, becouse it is useless to track down changes if no mesh exists
-		*/
-		bool isChanged = false;
 
 		template <class Archive>
 		void serialize(Archive & ar)
@@ -39,13 +35,19 @@ namespace GEM
 	*/
 	struct NodeChunk : public ChunkBase
 	{
+		Node NodeMap[CHUNK_SIZE][CHUNK_HEIGHT][CHUNK_SIZE];
+		/**
+		Chunks might be changed. So every time a change occurs,
+		*/
+		uint_least64_t HashVal = 0;
+
+
 		template <class Archive>
 		void serialize(Archive & ar)
 		{
+			ar(HashVal);
 			ar(NodeMap);
 		};
-
-		Node NodeMap[CHUNK_SIZE][CHUNK_HEIGHT][CHUNK_SIZE];
 
 		virtual void generateNewChunk() override;
 	};
