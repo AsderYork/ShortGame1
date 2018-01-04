@@ -10,6 +10,9 @@
     <Filter Include="Player">
       <UniqueIdentifier>{0dad55ec-0ee6-4790-ac7b-7d311d875f45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{5bfefb48-9b5d-4cde-9502-20fedf5d0154}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -17,6 +20,10 @@
     </ClInclude>
     <ClInclude Include="GS_Player.h">
       <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities.h" />
+    <ClInclude Include="Test_GameSimulation.h">
+      <Filter>Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

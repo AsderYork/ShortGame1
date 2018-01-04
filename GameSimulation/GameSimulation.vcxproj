@@ -138,8 +138,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Entities.h" />
     <ClInclude Include="GameSimulation.h" />
     <ClInclude Include="GS_Player.h" />
+    <ClInclude Include="Test_GameSimulation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameSimulation.cpp" />

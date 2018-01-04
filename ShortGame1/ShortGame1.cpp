@@ -14,15 +14,11 @@
 
 int main(int argc, char *argv[])
 {
-	GEM::GameSimulation GS(10);
-
-	GEM::GS_Player Pl1(10, "Jhon");
-	bool Succ1 = GS.AddPlayer(std::move(Pl1));
-
-	GEM::GS_Player Pl2(11, "Jesus");
-	bool Succ2 = GS.AddPlayer(std::move(Pl2));
-
-	GS.getPlayer(10)->m_playerName = "Moses";
+	GEM::GameSim::GameSimulation GS(2);
+	bool Succ1 = GS.AddPlayer(10, "Jesus");
+	bool Succ4 = GS.AddPlayer(10, "Christ");
+	bool Succ2 = GS.AddPlayer(12, "Rex");
+	bool Succ3 = GS.AddPlayer(14, "Moses");
 	
 	/*GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
