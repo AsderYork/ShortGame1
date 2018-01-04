@@ -9,12 +9,22 @@
 #include "MapService.h"
 #include "NTMCG_TestSpeed.h"
 
+#include <GameSimulation.h>
+
 
 int main(int argc, char *argv[])
 {
-	//PerformNTMCG_TestSpeed_Results(PerformNTMCG_TestSpeed(10, 10, 10, 1));
+	GEM::GameSimulation GS(10);
+
+	GEM::GS_Player Pl1(10, "Jhon");
+	bool Succ1 = GS.AddPlayer(std::move(Pl1));
+
+	GEM::GS_Player Pl2(11, "Jesus");
+	bool Succ2 = GS.AddPlayer(std::move(Pl2));
+
+	GS.getPlayer(10)->m_playerName = "Moses";
 	
-	GEM::EngineController Controller;
+	/*GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
 	auto OgreController = Controller.AddService<GEM::Ogre_Service>(SDLController);
 	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
@@ -39,6 +49,7 @@ int main(int argc, char *argv[])
 
 	Console->getEvaluator().RegisterFunction("Eng.SetMaxFPS", GEM::Evaluator::OBJTYPE::UNDECLARED, &Controller, &GEM::EngineController::setMaximumFPS);
 
-    return Controller.start();
+    return Controller.start();*/
+	return 0;
 }
 
