@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <string>
-#include "Entities.h"
+#include "EntitiesBase.h"
 
 namespace GEM::GameSim
 {

@@ -16,6 +16,9 @@
     <Filter Include="GameSimulation">
       <UniqueIdentifier>{a705d57f-bc7c-4ecb-b9c0-eb3cfc627372}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{19d969cc-b5dd-4d5d-8339-10eaaa76275e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -29,11 +32,14 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Tests.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Test_Simulation.cpp">
       <Filter>GameSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="Test_Helpers_SingeInstance.cpp">
+      <Filter>GameSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

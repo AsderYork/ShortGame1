@@ -138,11 +138,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entities.h" />
+    <ClInclude Include="EntitiesBase.h" />
     <ClInclude Include="GameSimulation.h" />
     <ClInclude Include="GS_Player.h" />
+    <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EntitiesBase.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

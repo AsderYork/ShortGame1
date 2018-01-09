@@ -73,7 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(BOOST_HOME);$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(BOOST_HOME)\libs;$(BOOST_HOME)\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -84,7 +84,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(BOOST_HOME);$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(BOOST_HOME)\libs;$(BOOST_HOME)\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -166,6 +166,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Tests.cpp" />
+    <ClCompile Include="Test_Helpers_SingeInstance.cpp" />
     <ClCompile Include="Test_Simulation.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -10,6 +10,15 @@
     <Filter Include="Player">
       <UniqueIdentifier>{0dad55ec-0ee6-4790-ac7b-7d311d875f45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{56a67337-293f-462f-95cb-bf94c42184ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Base">
+      <UniqueIdentifier>{4a83cd48-530b-4f98-9d7d-38f821a72fb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{3970f975-14eb-4c10-b253-099aaabb304b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -18,9 +27,17 @@
     <ClInclude Include="GS_Player.h">
       <Filter>Player</Filter>
     </ClInclude>
-    <ClInclude Include="Entities.h" />
+    <ClInclude Include="EntitiesBase.h">
+      <Filter>Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper_UniqueInstanceGuarantee.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameSimulation.cpp" />
+    <ClCompile Include="EntitiesBase.cpp">
+      <Filter>Entities\Base</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
