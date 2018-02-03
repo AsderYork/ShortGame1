@@ -19,13 +19,22 @@
     <Filter Include="Helpers">
       <UniqueIdentifier>{3970f975-14eb-4c10-b253-099aaabb304b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameSimulation\PlayerController">
+      <UniqueIdentifier>{6a7fdf4b-6eef-44db-8b22-18212cfd1d14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSimulation\EntityController">
+      <UniqueIdentifier>{61d985bc-bf1d-43ab-8496-604f550d6b3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSimulation\Entities">
+      <UniqueIdentifier>{710903ff-53ed-4176-9b85-91364745ed9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSimulation\Entities\EntityBase">
+      <UniqueIdentifier>{43a18ef5-2059-41ea-bd05-d35fd53c6d7a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
       <Filter>GameSimulation</Filter>
-    </ClInclude>
-    <ClInclude Include="GS_Player.h">
-      <Filter>Player</Filter>
     </ClInclude>
     <ClInclude Include="EntitiesBase.h">
       <Filter>Entities\Base</Filter>
@@ -33,11 +42,24 @@
     <ClInclude Include="Helper_UniqueInstanceGuarantee.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="Words.txt" />
+    <ClInclude Include="GS_PlayerController.h">
+      <Filter>GameSimulation\PlayerController</Filter>
+    </ClInclude>
+    <ClInclude Include="GS_EntityController.h">
+      <Filter>GameSimulation\EntityController</Filter>
+    </ClInclude>
+    <ClInclude Include="GS_Entity_Base.h">
+      <Filter>GameSimulation\Entities\EntityBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameSimulation.cpp" />
     <ClCompile Include="EntitiesBase.cpp">
       <Filter>Entities\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="GS_PlayerController.cpp">
+      <Filter>GameSimulation\PlayerController</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -140,12 +140,16 @@
   <ItemGroup>
     <ClInclude Include="EntitiesBase.h" />
     <ClInclude Include="GameSimulation.h" />
-    <ClInclude Include="GS_Player.h" />
+    <ClInclude Include="GS_EntityController.h" />
+    <ClInclude Include="GS_Entity_Base.h" />
+    <ClInclude Include="GS_PlayerController.h" />
+    <ClInclude Include="Words.txt" />
     <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntitiesBase.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
+    <ClCompile Include="GS_PlayerController.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

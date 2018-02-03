@@ -1,0 +1,61 @@
+#pragma once
+#include <limits>
+/**!
+So. Players. Player are uniquely identified by ID. Every player have unique name.
+Every player also have a list of entities, that belongs to him. Player can send commands to entities in
+it's list.
+
+Tasks:
+bool AddNewPlayer(PlayerID, Username, listOfEntities); ћожно ли добавл€ть список энтити сразу же?. —корее всего нет
+потому как игрок сначала подключаетс€, потм дл€ него создаетс€ персонаж и только потом персонаж переходит
+под его контроль.
+—ледовательно правельный вариант:
+bool AddNewPlayer(PlayerID, Username); ¬озвращает true, если игрок добавлен. ≈сли описанный выше контракт нарушен - false
+
+bool RemovePlayer(PlayerID); Returns true if player removed successfully, false otherwise
+
+bool RemovePlayer(Username); Same is before
+
+optional(PlayerID) FindPlayerID(Username);
+
+optional((Username, ListOfEntities)) FindPlayer(PlayerID); Caller
+will recive actual ListOfEntities, that can be changed.
+
+
+Ok. So now we can work with players. Yay!
+What's next? Entitites.
+
+Entity - is a thing.
+Every entity have a unique ID.
+There are inheritance tree of entities.
+Every class in three have unique ID.
+
+Or no? Maybe it's better to use mix-ins?
+So that's how it goes. There is one single class called entity. It's a virtual class.
+Then there are mix-in classes. Every unique mix produce new class and that class whil recive unique ID
+
+Ok. So what do entities have? Apart from Entity ID and Class ID?
+They can be created and destroyed. They interact with each other, they interact with landscape
+and they can recive commands from the player.
+
+It's also a simulation. So there is a notion of time. All that commands, that happens to an entity is
+actually happens during ticks. So, basically, mostimportant method of every entity is tick.
+
+void tick(float delta);
+
+But interactions. If it's entity interacting on other entity, or even landscape collision, it's ok and
+and it's all initiated withn tick(). What to do with commands from out of simulation?
+
+That's what we will do with them. Every command get's during untill the tick for an entire simulation
+is started. When it's started, queue closes and new starts, so that no action, that didn't make it to the
+start of tick, could participate in qurrent one. It will have to wait for the next instead.
+
+Right after that goes tick. We process every entity, applying every command along the way.
+Then it's time for conflicts. First we need to understend, what exactly have lead to a conflict.
+Then we ither rollback a random competitive change, or unroll the older one, if we can trace the time.
+
+
+
+
+
+*/

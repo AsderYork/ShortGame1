@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SDL2_HOME)\x64\include;$(OGRE_HOME)\include;$(CEGUI_DEPS)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SDL2_HOME)\x64\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
+    <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -90,8 +90,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SDL2_HOME)\x64\include;$(OGRE_HOME)\include;$(CEGUI_DEPS)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SDL2_HOME)\x64\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
+    <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

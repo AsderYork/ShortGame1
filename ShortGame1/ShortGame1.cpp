@@ -10,10 +10,13 @@
 #include "NTMCG_TestSpeed.h"
 
 #include <GameSimulation.h>
+#include <GameSim_EventReciver.h>
 
 
 int main(int argc, char *argv[])
 {
+	GEM::GameSim::GameSimulation();
+
 	GEM::GameSim::GameSimulation GS(2);
 	bool Succ1 = GS.AddPlayer(10, "Jesus");
 	bool Succ4 = GS.AddPlayer(10, "Christ");

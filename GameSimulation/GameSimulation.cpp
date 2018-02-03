@@ -3,7 +3,7 @@
 
 namespace GEM::GameSim
 {
-	bool GameSimulation::AddPlayer(GS_PlayerID_Type ID, const std::string name, GS_Enitity_ID_Type entID)
+	/*bool GameSimulation::AddPlayer(GS_PlayerID_Type ID, const std::string name)
 	{//Assumes single-thread
 		assert(name.size() != 0);//Name should not be empty!
 
@@ -12,7 +12,7 @@ namespace GEM::GameSim
 			return false;//Container is full!
 		}
 
-		auto retval = m_players.emplace(ID, PlayerData(name, entID));
+		auto retval = m_players.emplace(ID, PlayerIdentityData(name, ID));
 		
 		return retval.second;
 	}
@@ -25,5 +25,5 @@ namespace GEM::GameSim
 		{ return std::string(); }
 
 		//return Retval->second.m_userName;
-	}
+	}*/
 }
