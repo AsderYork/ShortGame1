@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "EngineController.h"
+/*#include "EngineController.h"
 #include "SDL2_Service.h"
 #include "Ogre_Service.h"
 #include "CEGUI_Service.h"
@@ -11,17 +11,30 @@
 
 #include <GameSimulation.h>
 #include <GameSim_EventReciver.h>
+*/
 
+#include <TestPlace.h>
+
+#define MIXIN_REG_ROUTINE(T, C) std::function<void(Mixin_base*, cereal::BinaryInputArchive&)>([](Mixin_base* b, cereal::BinaryInputArchive& c) \
+{ dynamic_cast<T*>(b)->C(c); })
 
 int main(int argc, char *argv[])
 {
-	GEM::GameSim::GameSimulation();
+	using namespace GEM::GameSim;
 
-	GEM::GameSim::GameSimulation GS(2);
-	bool Succ1 = GS.AddPlayer(10, "Jesus");
-	bool Succ4 = GS.AddPlayer(10, "Christ");
-	bool Succ2 = GS.AddPlayer(12, "Rex");
-	bool Succ3 = GS.AddPlayer(14, "Moses");
+	MixedEntity<Mixin_Movable> Ent1{ Mixin_Movable()};
+
+	auto& S = Ent1;
+	S.tick(0.1f);
+
+	S.get<Mixin_Movable>().y = -43;
+
+
+	Mixin_Controller::Instance().RegisterMixinClass(14, "Movable");
+	Mixin_Controller::Instance().RegisterMethod(14, 1, MIXIN_REG_ROUTINE(Mixin_Movable, Move), "Move");
+
+	printf("Uas!\n");
+
 	
 	/*GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
