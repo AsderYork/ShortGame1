@@ -14,6 +14,7 @@
 */
 
 #include <TestPlace.h>
+#include <sstream>
 
 #define MIXIN_REG_ROUTINE(T, C) std::function<void(Mixin_base*, cereal::BinaryInputArchive&)>([](Mixin_base* b, cereal::BinaryInputArchive& c) \
 { dynamic_cast<T*>(b)->C(c); })
@@ -29,9 +30,25 @@ int main(int argc, char *argv[])
 
 	S.get<Mixin_Movable>().y = -43;
 
+	auto GrabRes = Grab(&Mixin_Movable::Shift);
 
-	Mixin_Controller::Instance().RegisterMixinClass(14, "Movable");
-	Mixin_Controller::Instance().RegisterMethod(14, 1, MIXIN_REG_ROUTINE(Mixin_Movable, Move), "Move");
+	std::stringstream ss;
+
+	{
+		cereal::BinaryOutputArchive oarchive(ss); // Create an output archive
+
+		int m1=12, m2=65, m3=4;
+		oarchive(m1, m2, m3); 
+	}
+	{
+		cereal::BinaryInputArchive  oarchive(ss);
+
+		GrabRes(&Ent1, oarchive);
+	}
+	
+
+	//Mixin_Controller::Instance().RegisterMixinClass(14, "Movable");
+	//Mixin_Controller::Instance().RegisterMethod(14, 1, MIXIN_REG_ROUTINE(Mixin_Movable, Move), "Move");
 
 	printf("Uas!\n");
 
