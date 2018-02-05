@@ -72,9 +72,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -143,12 +145,14 @@
     <ClInclude Include="GS_EntityController.h" />
     <ClInclude Include="GS_Entity_Base.h" />
     <ClInclude Include="GS_PlayerController.h" />
+    <ClInclude Include="TestPlace.h" />
     <ClInclude Include="Words.txt" />
     <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntitiesBase.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
+    <ClCompile Include="GS_EntityController.cpp" />
     <ClCompile Include="GS_PlayerController.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

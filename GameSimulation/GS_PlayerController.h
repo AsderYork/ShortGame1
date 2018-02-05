@@ -4,13 +4,11 @@
 #include <map>
 #include <string>
 #include <optional>
+#include "GS_EntityController.h"
 
 namespace GEM::GameSim
 {
 	using PLAYER_ID_TYPE = uint32_t;
-
-	//Temporary
-	using ENTITY_ID_TYPE = uint32_t;
 
 	/**!
 	Controlls players.

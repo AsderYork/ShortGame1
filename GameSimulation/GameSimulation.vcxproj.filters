@@ -52,6 +52,7 @@
     <ClInclude Include="GS_Entity_Base.h">
       <Filter>GameSimulation\Entities\EntityBase</Filter>
     </ClInclude>
+    <ClInclude Include="TestPlace.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameSimulation.cpp" />
@@ -60,6 +61,9 @@
     </ClCompile>
     <ClCompile Include="GS_PlayerController.cpp">
       <Filter>GameSimulation\PlayerController</Filter>
+    </ClCompile>
+    <ClCompile Include="GS_EntityController.cpp">
+      <Filter>GameSimulation\EntityController</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

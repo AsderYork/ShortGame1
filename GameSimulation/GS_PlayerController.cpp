@@ -52,8 +52,11 @@ namespace GEM::GameSim
 	std::set<ENTITY_ID_TYPE>* GameSim_PlayerController::GetEntityListByID(PLAYER_ID_TYPE id)
 	{
 		auto& retfind = m_playerMap.find(id);
-		if (retfind != m_playerMap.end());
-		return &(retfind->second.EntityList);
+		if (retfind != m_playerMap.end())
+		{
+			return &(retfind->second.EntityList);
+		}
+		return nullptr;
 	}
 
 }
