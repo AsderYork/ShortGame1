@@ -13,39 +13,72 @@
 #include <GameSim_EventReciver.h>
 */
 
+#include <Mixin_Health.h>
+
 #include <TestPlace.h>
 #include <sstream>
 
-#define MIXIN_REG_ROUTINE(T, C) std::function<void(Mixin_base*, cereal::BinaryInputArchive&)>([](Mixin_base* b, cereal::BinaryInputArchive& c) \
-{ dynamic_cast<T*>(b)->C(c); })
+#define REGISTER_MIXIN_CLASS(classname) Mixin_Controller::Instance().RegisterMixinClass(classname::MixinID, #classname);
 
 int main(int argc, char *argv[])
 {
 	using namespace GEM::GameSim;
 
-	MixedEntity<Mixin_Movable> Ent1{ Mixin_Movable()};
+	REGISTER_MIXIN_CLASS(Mixin_Movable);
+	REGISTER_MIXIN_CLASS(Mixin_Health);
+	Mixin_Controller::Instance().RegisterMethod(14, 1, Grab(&Mixin_Movable::Shift), "Shift");
+
+
+	MixedEntity<Mixin_Movable, Mixin_Health> Ent1{ Mixin_Movable(), Mixin_Health(25) };
+
+
+	MixedEntity<Mixin_Movable> Ent2{ Mixin_Movable()};
+
+	//MixedEntity<Mixin_Health> Ent2{  };
+
+	//std::tuple<Mixin_Health> Tup{ Mixin_Health(25,10) };
 
 	auto& S = Ent1;
 	S.tick(0.1f);
 
-	S.get<Mixin_Movable>().y = -43;
-
 	auto GrabRes = Grab(&Mixin_Movable::Shift);
-
-	std::stringstream ss;
+	auto GrabResHelth = Grab(&Mixin_Health::SetHealth);
 
 	{
-		cereal::BinaryOutputArchive oarchive(ss); // Create an output archive
+		std::stringstream ss;
 
-		int m1=12, m2=65, m3=4;
-		oarchive(m1, m2, m3); 
+		{
+			cereal::BinaryOutputArchive oarchive(ss); // Create an output archive
+
+			int m1 = 12, m2 = 65, m3 = 4;
+			oarchive(m1, m2, m3);
+		}
+		{
+			cereal::BinaryInputArchive  oarchive(ss);
+
+			GrabRes(&Ent1, oarchive);
+		}
+
 	}
+
+
 	{
-		cereal::BinaryInputArchive  oarchive(ss);
+		std::stringstream ss;
 
-		GrabRes(&Ent1, oarchive);
+		{
+			cereal::BinaryOutputArchive oarchive(ss); // Create an output archive
+
+			float m1 = 13;
+			oarchive(m1);
+		}
+		{
+			cereal::BinaryInputArchive  oarchive(ss);
+
+			GrabResHelth(&Ent1, oarchive);
+		}
+
 	}
-	
+
 
 	//Mixin_Controller::Instance().RegisterMixinClass(14, "Movable");
 	//Mixin_Controller::Instance().RegisterMethod(14, 1, MIXIN_REG_ROUTINE(Mixin_Movable, Move), "Move");

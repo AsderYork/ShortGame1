@@ -1,50 +1,70 @@
 #pragma once
-#include <cstdint>
-#include "Helper_UniqueInstanceGuarantee.h"
-#define ENTITY_BASE_ID_UNQIUE_PROOF
+#include "Mixin_Base.h"
+
+#include "Helper_TupleForeach.h"
+
 namespace GEM::GameSim
 {
-	//4 billions of entities!
-	using GS_Enitity_ID_Type = uint32_t;
-	/**
-	Everything have a starting point. The entities is not en exclusion!
-	This ID is reserved for errors. If an entity gets this ID' it's an error.
+	/**!
+	Base class for all entities in simulation.
+	It's purpose is to provide shared base for all instancess of MixedEntity metaclass
+	and to allow access to a Mixins in an entity
 	*/
-	const GS_Enitity_ID_Type ENTITY_ID_NONE = 0;
+	class EntityBase
+	{
+	public:		
+		virtual Mixin_base* GetMixinByID(int i) = 0;
 
+
+		virtual bool tick(float delta) = 0;
+		virtual ~EntityBase() {};
+	};
 
 	/**!
-	A base class for all entities.
-	There is a lot of different things in a game, some big and some small,
-	but you need to keep track of all of them.
-	This class holds the most basic properties, shared among all of the entities, like ID's names e.t.c.
-	But it's not resposible for providing uique ID's or enything like that
+	This meta-class should be used to represent all entities in the game!
+	To add properties use various mixins.
 	*/
-#ifdef ENTITY_BASE_ID_UNQIUE_PROOF
-	class EntityBase : public GEM::Helper::UniqueInstanceHelper<EntityBase, GS_Enitity_ID_Type>
-#else
-	class EntityBase
-#endif
+	template<typename...Mixins>
+	class MixedEntity : public EntityBase
 	{
-	protected:
-		//Uniquely identifies an entity.
-		const GS_Enitity_ID_Type m_id;
-		
+	private:
+
 	public:
+
+		std::tuple<Mixins...> m_mixins;
 		/**!
-		\param[in] id Unqiue identifier of an entitiy. Owner must guarante,
-		that every existing instances of this class and it's derivatives have unique ID.
+		Initialize all mixins in an entity
 		*/
-		EntityBase(const GS_Enitity_ID_Type id);
+		MixedEntity(Mixins&&... mixins) : m_mixins(std::move(mixins)...)
+		{}
 
 		/**!
-		Entities need names. It is useful for debugging and even for in-game usage as in-game internal name;
-		The resultig names follows the same rules as variable names in C++.
-		Name must be unique for every derived class.
+		Return mixin of certain type
 		*/
-		virtual std::string getEntityClassName() const =0;
+		template<class T>
+		T& get()
+		{
+			return std::get<T>(m_mixins);
+		}
 
-		virtual ~EntityBase() {}
+		bool tick(float delta)
+		{
+			return (... && std::get<Mixins>(m_mixins).tick(delta));
+			return true;
+		}
+
+		/**!
+		Returns a pointer to a mixin with given ID. If there is no such mixin, nullptr will be returned
+		*/
+		Mixin_base* GetMixinByID(int id)
+		{
+			Mixin_base* retptr;
+			GEM::Helper::for_each(m_mixins, [&](int index, auto&& T) {
+				if (T.MixinID == id) { retptr = &T; }
+			});
+			return retptr;
+		}
 	};
+
 
 }

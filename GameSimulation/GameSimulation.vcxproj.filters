@@ -31,6 +31,18 @@
     <Filter Include="GameSimulation\Entities\EntityBase">
       <UniqueIdentifier>{43a18ef5-2059-41ea-bd05-d35fd53c6d7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\Mixins">
+      <UniqueIdentifier>{c95241a2-c2b3-4e70-ae45-b0c00edc0b9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Mixins\Mixin_base">
+      <UniqueIdentifier>{1274b481-94bf-4ae9-8b08-c8f546238c05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Mixins\Mixin_Movable">
+      <UniqueIdentifier>{e8fd1f94-c81c-4db7-a6ee-7a89fea043ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Mixins\Mixin_Health">
+      <UniqueIdentifier>{9c97503f-dc33-40e9-8234-6f34337a0882}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -53,12 +65,21 @@
       <Filter>GameSimulation\Entities\EntityBase</Filter>
     </ClInclude>
     <ClInclude Include="TestPlace.h" />
+    <ClInclude Include="Mixin_Base.h">
+      <Filter>Entities\Mixins\Mixin_base</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper_TupleForeach.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Mixin_Movable.h">
+      <Filter>Entities\Mixins\Mixin_Movable</Filter>
+    </ClInclude>
+    <ClInclude Include="Mixin_Health.h">
+      <Filter>Entities\Mixins\Mixin_Health</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameSimulation.cpp" />
-    <ClCompile Include="EntitiesBase.cpp">
-      <Filter>Entities\Base</Filter>
-    </ClCompile>
     <ClCompile Include="GS_PlayerController.cpp">
       <Filter>GameSimulation\PlayerController</Filter>
     </ClCompile>

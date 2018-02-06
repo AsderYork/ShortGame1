@@ -7,26 +7,15 @@
 #include <iostream>
 #include <tuple>
 
+#include "EntitiesBase.h"
+#include "Mixin_Movable.h"
+
 namespace GEM::GameSim
 {
 
-	class NewEntityBase
-	{
-	public:
-		virtual bool tick(float delta) = 0;
-		virtual ~NewEntityBase() {};
-	};
 	
 	
-	class Mixin_base
-	{
-	public:
-		/**!
-		Called every simulation tick. Must return true, if everything is ok, false will terminate simulation, probably
-		*/
-		virtual bool tick(float delta) = 0;
-		virtual ~Mixin_base() {};
-	};
+	
 
 	class Mixin_Controller
 	{
@@ -41,9 +30,9 @@ namespace GEM::GameSim
 			struct MethodData
 			{
 				std::string name;
-				std::function<void(Mixin_base*, cereal::BinaryInputArchive  &)> method;
+				std::function<void(EntityBase*, cereal::BinaryInputArchive  &)> method;
 
-				MethodData(std::string n, std::function<void(Mixin_base*, cereal::BinaryInputArchive  &)> m) : name(n), method(m) {}
+				MethodData(std::string n, std::function<void(EntityBase*, cereal::BinaryInputArchive  &)> m) : name(n), method(m) {}
 			};
 			std::map<int, MethodData> methods;
 
@@ -71,7 +60,7 @@ namespace GEM::GameSim
 		/**!
 		Registeres new method of a mixin class. Return true if registered successfully.
 		*/
-		bool RegisterMethod(int classID, int MethodID, std::function<void(Mixin_base*, cereal::BinaryInputArchive  &)> func, std::string name)
+		bool RegisterMethod(int classID, int MethodID, std::function<void(EntityBase*, cereal::BinaryInputArchive  &)> func, std::string name)
 		{
 			auto& Class = m_methods.find(classID);
 			if (Class == m_methods.end()) { return false; }
@@ -88,127 +77,7 @@ namespace GEM::GameSim
 		Mixin_Controller(Mixin_Controller const&) = delete;
 		Mixin_Controller& operator= (Mixin_Controller const&) = delete;
 	};
-
-
-	class Mixin_Movable : public Mixin_base
-	{
-	private:
 		
-	public:
-		float x = 0, y = 0, z = 0;
-		void Move(cereal::BinaryInputArchive  & Arc)
-		{
-			Arc(x, y, z);
-		}
-
-		void Shift(int X, int Y, int Z)
-		{
-			x += X;
-			y += Y;
-			z += Z;
-		}
-
-		bool tick(float delta) { return true; }
-
-	};
-
-	
-	/**!
-	This meta-class should be used to represent all antities in the game!
-	To add properties use various mixins.
-	*/
-	template<typename...Mixins>
-	class MixedEntity : public NewEntityBase
-	{
-	private:
-	public:
-
-		std::tuple<Mixins...> m_mixins;
-		/**!
-		Initialize all mixins in an entity
-		*/
-		MixedEntity(Mixins&&...mixins)
-		{			
-			m_mixins = std::forward_as_tuple(mixins...);
-		}
-
-		template<class T>
-		T& get()
-		{
-			return std::get<T>(m_mixins);
-		}
-
-		bool tick(float delta)
-		{
-			return (... && std::get<Mixins>(m_mixins).tick(delta));
-		}
-	};
-
-
-	namespace _detail_
-	{
-		// Главная роль здесь у шаблона класса iterate_tuple.
-
-		// Первый параметр шаблона класса iterate_tuple имеет тип int (index).
-		// Значение этого параметра используется функцией get, 
-		// которая "достает" из кортежа элемент по указанной позиции.
-
-		// Мы рекурсивно сдвигаем позицию (уменьшаем index на 1) и таким образом
-		// перемещаемся по кортежу.
-
-		// Когда значение индекса становится равно 0, рекурсия завершается,
-		// благодаря частичной специализации для индекса равного 0.
-
-		// При этом есть особый случай, когда индекс равен -1. Он соответствует 
-		// ситуации, когда кортеж не содержит ни одного элемента.
-
-		template<int index, typename Callback, typename... Args>
-		struct iterate_tuple
-		{
-			static void next(std::tuple<Args...>& t, Callback callback)
-			{
-				// Уменьшаем позицию и рекурсивно вызываем этот же метод 
-				iterate_tuple<index - 1, Callback, Args...>::next(t, callback);
-
-				// Вызываем обработчик и передаем ему позицию и значение элемента
-				callback(index, std::get<index>(t));
-			}
-		};
-
-		// Частичная специализация для индекса 0 (завершает рекурсию)
-		template<typename Callback, typename... Args>
-		struct iterate_tuple<0, Callback, Args...>
-		{
-			static void next(std::tuple<Args...>& t, Callback callback)
-			{
-				callback(0, std::get<0>(t));
-			}
-		};
-
-		// Частичная специализация для индекса -1 (пустой кортеж)
-		template<typename Callback, typename... Args>
-		struct iterate_tuple<-1, Callback, Args...>
-		{
-			static void next(std::tuple<Args...>& t, Callback callback)
-			{
-				// ничего не делаем
-			}
-		};
-	}
-
-	//
-	// "Волшебный" for_each для обхода элементов кортежа (compile time!):
-	//
-	template<typename Callback, typename... Args>
-	void for_each(std::tuple<Args...>& t, Callback callback)
-	{
-		// Размер кортежа
-		int const t_size = std::tuple_size<std::tuple<Args...>>::value;
-
-		// Запускаем рекурсивный обход элементов кортежа во время компиляции
-		_detail_::iterate_tuple<t_size - 1, Callback, Args...>::next(t, callback);
-	}
-
 
 	template<typename TFunc, typename TObj,typename Tpl, std::size_t... I>
 	void BetterInvoke(TFunc func, TObj obj, Tpl& Tuple, std::index_sequence<I...>)
@@ -216,19 +85,25 @@ namespace GEM::GameSim
 		std::invoke(func, obj, std::get<I>(Tuple)...);
 	}
 
+	
 	template < typename classname, typename ... funcargs, typename Indices = std::make_index_sequence<sizeof...(funcargs)>>
-	std::function<void(NewEntityBase*, cereal::BinaryInputArchive &)> Grab(void (classname::*func)(funcargs...))
+	std::function<void(EntityBase*, cereal::BinaryInputArchive &)> Grab(void (classname::*func)(funcargs...))
 	{
-		return std::function<void(NewEntityBase*, cereal::BinaryInputArchive &)>(
-			[=](NewEntityBase* base, cereal::BinaryInputArchive & ar) {
+		return std::function<void(EntityBase*, cereal::BinaryInputArchive &)>(
+			[=](EntityBase* base, cereal::BinaryInputArchive & ar) {
 			std::tuple<funcargs...> args;
-			for_each(args, [&](int index, auto&& T) {ar(T); });
+			GEM::Helper::for_each(args, [&](int index, auto&& T) {ar(T); });
 
-			//std::invoke(func, dynamic_cast<classname*>(base), std::get<Indices>(args)...);
-			BetterInvoke(func, &(dynamic_cast<MixedEntity<classname>*>(base)->get<classname>()), args, Indices{});
+
+			auto Ptr = dynamic_cast<classname*>(base->GetMixinByID(classname::MixinID));
+			BetterInvoke(func, Ptr, args, Indices{});
 		}
 		);
 	}
+
+	
+
+	
 
 	class CommandRetranslator
 	{
