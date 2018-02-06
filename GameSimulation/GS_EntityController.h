@@ -1,8 +1,9 @@
 #pragma once
 #include <unordered_map>
 #include <memory>
-#include "GS_Entity_Base.h"
+#include "EntitiesBase.h"
 #include <vector>
+#include <optional>
 
 namespace GEM::GameSim
 {
@@ -11,7 +12,7 @@ namespace GEM::GameSim
 	class EntityController
 	{
 	private:
-		std::unordered_map<ENTITY_ID_TYPE, std::unique_ptr<Entity_Base>> m_entityMap;
+		std::unordered_map<ENTITY_ID_TYPE, std::unique_ptr<EntityBase>> m_entityMap;
 	public:
 
 		/**!
@@ -31,6 +32,16 @@ namespace GEM::GameSim
 			return EmplaceResult.second ? Ptr : nullptr;
 		}
 
+		template<class...TMixins>
+		MixedEntity<TMixins...>* MixNewEntity(ENTITY_ID_TYPE id, TMixins&&... constructors)
+		{
+			auto UniPtr = std::make_unique<MixedEntity<TMixins...>>(std::forward<TMixins>(constructors)...);
+			auto Ptr = UniPtr.get();
+			auto EmplaceResult = m_entityMap.emplace(id, std::move(UniPtr));
+			return EmplaceResult.second ? Ptr : nullptr;
+		}
+
+
 		/**!
 		Remove entity with given id if there is one. Return true if entity is removed, false otherwise
 		*/
@@ -39,15 +50,49 @@ namespace GEM::GameSim
 		/**!
 		Returns a pointer to an entity with given id, if there is one. Otherwise nullptr will be returned.
 		*/
-		Entity_Base* GetEntity(ENTITY_ID_TYPE id);
+		EntityBase* GetEntity(ENTITY_ID_TYPE id);
 
 		/**!
 		Returns overall number of entities
 		*/
 		ENTITY_ID_TYPE GetEntitiesCount() const;
 
-		
+		/**!
+		This structure is used to hide the iterator of actual hash map
+		*/
+		class EntityListIterator
+		{
+			friend class EntityController;
+			std::unordered_map<ENTITY_ID_TYPE, std::unique_ptr<EntityBase>>::iterator m_iter;
+		public:
+			EntityListIterator(EntityController* Controller) : m_iter(Controller->m_entityMap.begin()) {}
 
+		};
+		friend class EntityListIterator;
+
+		/**!
+		Allows iteration over entities.
+		When this method is called with default parameter, it will return first entity, if there is one and produce a valid interator
+		on the next entity. This iterator can be used in next call of this function, to retrieve another entity.
+
+		When last entity is retrieved, all calls after it will not produce values. Iterator will not be destroyed.
+		It is recomended to just let it fall off the stack when all iteration buisness is done.
+		*/
+		std::optional<std::pair<ENTITY_ID_TYPE, EntityBase*>> IterateOverEntities(std::unique_ptr<EntityListIterator> &&Iterator = std::unique_ptr<EntityListIterator>(nullptr))
+		{
+			if (Iterator == nullptr)
+			{
+				Iterator = std::make_unique<EntityListIterator>(this);
+			}
+
+			if (Iterator->m_iter != m_entityMap.end())
+			{
+				auto RetVal = std::make_pair(Iterator->m_iter->first, Iterator->m_iter->second.get());
+				Iterator->m_iter++;
+				return std::optional<std::pair<ENTITY_ID_TYPE, EntityBase*>>(RetVal);
+			}
+			return std::nullopt;
+		}
 	};
 
 }

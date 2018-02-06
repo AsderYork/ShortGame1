@@ -143,10 +143,10 @@
     <ClInclude Include="EntitiesBase.h" />
     <ClInclude Include="GameSimulation.h" />
     <ClInclude Include="GS_EntityController.h" />
-    <ClInclude Include="GS_Entity_Base.h" />
     <ClInclude Include="GS_PlayerController.h" />
     <ClInclude Include="Helper_TupleForeach.h" />
     <ClInclude Include="Mixin_Base.h" />
+    <ClInclude Include="Mixin_Controller.h" />
     <ClInclude Include="Mixin_Health.h" />
     <ClInclude Include="Mixin_Movable.h" />
     <ClInclude Include="TestPlace.h" />

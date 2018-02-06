@@ -8,80 +8,40 @@
 #include "ConsoleLayout.h"
 #include "MapService.h"
 #include "NTMCG_TestSpeed.h"
-
-#include <GameSimulation.h>
-#include <GameSim_EventReciver.h>
 */
+#include <GameSimulation.h>
+
 
 #include <Mixin_Health.h>
+#include <Mixin_Movable.h>
+#include <Mixin_Controller.h>
 
-#include <TestPlace.h>
+//#include <TestPlace.h>
 #include <sstream>
-
-#define REGISTER_MIXIN_CLASS(classname) Mixin_Controller::Instance().RegisterMixinClass(classname::MixinID, #classname);
 
 int main(int argc, char *argv[])
 {
 	using namespace GEM::GameSim;
 
-	REGISTER_MIXIN_CLASS(Mixin_Movable);
-	REGISTER_MIXIN_CLASS(Mixin_Health);
-	Mixin_Controller::Instance().RegisterMethod(14, 1, Grab(&Mixin_Movable::Shift), "Shift");
+	GameSimulation GSS;
 
+	auto EntPtr = GSS.m_entities.AddNewEntity<MixedEntity<>>(1);
+	auto MixEnt = GSS.m_entities.MixNewEntity<Mixin_Movable, Mixin_Health>(2, Mixin_Movable(), Mixin_Health(25));
+	
+	GSS.Tick(12);
 
 	MixedEntity<Mixin_Movable, Mixin_Health> Ent1{ Mixin_Movable(), Mixin_Health(25) };
 
 
 	MixedEntity<Mixin_Movable> Ent2{ Mixin_Movable()};
 
-	//MixedEntity<Mixin_Health> Ent2{  };
+	Mixin_Controller::Instance().ApplyCommand(&Ent1, MixinCommandRetranslator(Mixin_Movable::MixinID, 1, -5, 3 ,6));
 
-	//std::tuple<Mixin_Health> Tup{ Mixin_Health(25,10) };
+	Mixin_Controller::Instance().ApplyCommand(&Ent1, MixinCommandRetranslator(Mixin_Health::MixinID, 1, 18.0f));
+
 
 	auto& S = Ent1;
 	S.tick(0.1f);
-
-	auto GrabRes = Grab(&Mixin_Movable::Shift);
-	auto GrabResHelth = Grab(&Mixin_Health::SetHealth);
-
-	{
-		std::stringstream ss;
-
-		{
-			cereal::BinaryOutputArchive oarchive(ss); // Create an output archive
-
-			int m1 = 12, m2 = 65, m3 = 4;
-			oarchive(m1, m2, m3);
-		}
-		{
-			cereal::BinaryInputArchive  oarchive(ss);
-
-			GrabRes(&Ent1, oarchive);
-		}
-
-	}
-
-
-	{
-		std::stringstream ss;
-
-		{
-			cereal::BinaryOutputArchive oarchive(ss); // Create an output archive
-
-			float m1 = 13;
-			oarchive(m1);
-		}
-		{
-			cereal::BinaryInputArchive  oarchive(ss);
-
-			GrabResHelth(&Ent1, oarchive);
-		}
-
-	}
-
-
-	//Mixin_Controller::Instance().RegisterMixinClass(14, "Movable");
-	//Mixin_Controller::Instance().RegisterMethod(14, 1, MIXIN_REG_ROUTINE(Mixin_Movable, Move), "Move");
 
 	printf("Uas!\n");
 

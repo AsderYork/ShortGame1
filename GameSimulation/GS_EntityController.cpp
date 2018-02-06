@@ -12,7 +12,7 @@ namespace GEM::GameSim
 		}
 		return false;
 	}
-	Entity_Base* EntityController::GetEntity(ENTITY_ID_TYPE id)
+	EntityBase* EntityController::GetEntity(ENTITY_ID_TYPE id)
 	{
 		auto& it = m_entityMap.find(id);
 		if (it != m_entityMap.end())
