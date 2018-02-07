@@ -82,6 +82,12 @@
     <Filter Include="MapSystemV2\NodesToMCGenerator\MultiLod">
       <UniqueIdentifier>{c800d5e8-64e9-4ecb-a217-b41f5f7cfea4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayerInputController">
+      <UniqueIdentifier>{de2add77-852d-42fb-aeca-c7e9e8312eb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking">
+      <UniqueIdentifier>{f5b81a9f-3816-4101-a564-df7c28e65217}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -152,6 +158,12 @@
     </ClInclude>
     <ClInclude Include="NTMCG_MultiLOD.h">
       <Filter>MapSystemV2\NodesToMCGenerator\MultiLod</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInputController.h">
+      <Filter>PlayerInputController</Filter>
+    </ClInclude>
+    <ClInclude Include="Networking.h">
+      <Filter>Networking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

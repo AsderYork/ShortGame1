@@ -26,9 +26,11 @@
 			std::stringstream m_paramStream;
 
 			friend class Mixin_Controller;
+			MixinCommandRetranslator(const MixinCommandRetranslator&) = delete;
 
 		public:
 
+			MixinCommandRetranslator(MixinCommandRetranslator&&) = default;
 			/**!
 			/param[in] classID ID of a mixin, that should recive this call
 			/param[in] MethodID ID of a method in a class, that should be called

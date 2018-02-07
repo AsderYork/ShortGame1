@@ -1,5 +1,6 @@
 #include "stdafx.h"
-/*#include "EngineController.h"
+/*
+#include "EngineController.h"
 #include "SDL2_Service.h"
 #include "Ogre_Service.h"
 #include "CEGUI_Service.h"
@@ -9,19 +10,25 @@
 #include "MapService.h"
 #include "NTMCG_TestSpeed.h"
 */
+
+/*
 #include <GameSimulation.h>
-
-
 #include <Mixin_Health.h>
 #include <Mixin_Movable.h>
 #include <Mixin_Controller.h>
+*/
 
-//#include <TestPlace.h>
-#include <sstream>
+#include "Networking.h"
 
 int main(int argc, char *argv[])
 {
-	using namespace GEM::GameSim;
+	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
+
+	printf("sYay!\n");
+	GEM::TCP_Connection Asq;
+	printf("Yay!\n");
+
+	/*using namespace GEM::GameSim;
 
 	GameSimulation GSS;
 
@@ -41,9 +48,8 @@ int main(int argc, char *argv[])
 
 
 	auto& S = Ent1;
-	S.tick(0.1f);
+	S.tick(0.1f);*/
 
-	printf("Uas!\n");
 
 	
 	/*GEM::EngineController Controller;
