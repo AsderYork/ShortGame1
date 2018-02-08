@@ -19,13 +19,39 @@
 */
 
 #include "Networking.h"
+#include <conio.h>
 
 int main(int argc, char *argv[])
 {
 	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
 
+
+
 	printf("sYay!\n");
-	GEM::TCP_Connection Asq;
+	GEM::TCP_Connection Asq(5543);
+	printf("Connected!\n");
+
+	std::stringstream DataToSend;
+	DataToSend << "This shit is sended!";
+	Asq.Send(DataToSend);
+	Asq.ProcessConnection();
+
+	std::string Answer;
+	std::cin >> Answer;
+
+	while (Answer != "X")
+	{
+		Asq.ProcessConnection();
+		DataToSend.str(Answer);
+		Asq.Send(DataToSend);
+
+		auto RecStr = Asq.Recive().str();
+		if (RecStr.size() != 0) { printf("Recived:%s\n", RecStr.c_str()); }
+		Asq.Recive().str(std::string());
+
+		std::cin >> Answer;
+	}
+
 	printf("Yay!\n");
 
 	/*using namespace GEM::GameSim;

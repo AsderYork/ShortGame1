@@ -2,21 +2,13 @@
 #include "Connection.h"
 #include <list>
 #include <memory>
+#include <queue>
 
 
-#include <boost\asio.hpp>
 
 namespace GEM
 {
-	class Connection
-	{
-	private:
-		boost::asio::ip::tcp::socket m_socket;
-
-	public:
-		Connection(boost::asio::ip::tcp::socket&& socket) : m_socket(std::move(socket))
-		{}
-	};
+	
 
 
 	class ConnectionController
@@ -24,6 +16,7 @@ namespace GEM
 	private:
 		std::list<std::unique_ptr<Connection>> m_connections;
 		boost::asio::io_context m_io_context;
+		std::queue<Connection*> m_newConnections;
 
 		boost::asio::ip::tcp::acceptor m_acceptor;
 
@@ -34,7 +27,7 @@ namespace GEM
 				printf("Yelp!\n");
 				if (!ec)
 				{
-					m_connections.emplace_back(std::make_unique<Connection>(std::move(socket)));
+					m_newConnections.emplace(m_connections.emplace_back(std::make_unique<Connection>(std::move(socket))).get());
 				}
 
 				Do_accept();
@@ -43,6 +36,22 @@ namespace GEM
 
 
 	public:
+		
+		const std::list<std::unique_ptr<Connection>>& ConnectionList()
+		{
+			return m_connections;
+		}
+
+		/**!
+		Returns last new recived connection, if there is any, otherwise nullptr
+		*/
+		Connection* GetNewConnectionIfAny()
+		{
+			if (m_newConnections.empty()) { return nullptr; }
+			auto Ptr= m_newConnections.front();
+			m_newConnections.pop();
+			return Ptr;
+		}
 
 
 		ConnectionController(unsigned int Port) : m_acceptor(m_io_context, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), Port))
@@ -52,8 +61,11 @@ namespace GEM
 
 		void RunALittle()
 		{
-			m_io_context.run();
-			m_io_context.restart();
+			m_io_context.run_for(std::chrono::milliseconds(1));
+			for (auto& con : m_connections)
+			{
+				con->ProcessConnection();
+			}
 		}
 	};
 }

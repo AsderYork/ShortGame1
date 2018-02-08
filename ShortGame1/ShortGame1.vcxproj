@@ -199,6 +199,7 @@
     <ClCompile Include="LogHelper.cpp" />
     <ClCompile Include="MapService.cpp" />
     <ClCompile Include="MCToMesh.cpp" />
+    <ClCompile Include="Networking.cpp" />
     <ClCompile Include="NodeChunk.cpp" />
     <ClCompile Include="NodesToMC.cpp" />
     <ClCompile Include="NTMCG_Naive.cpp" />

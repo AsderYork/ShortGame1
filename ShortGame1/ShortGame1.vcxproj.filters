@@ -221,5 +221,8 @@
     <ClCompile Include="ConsoleLayout.cpp">
       <Filter>CEGUI_Layout\ConsoleLayout</Filter>
     </ClCompile>
+    <ClCompile Include="Networking.cpp">
+      <Filter>Networking</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

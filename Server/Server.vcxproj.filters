@@ -44,5 +44,8 @@
     <ClCompile Include="Server.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Connection.cpp">
+      <Filter>ASIO_Server\Connection</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
