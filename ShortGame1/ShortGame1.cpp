@@ -11,23 +11,20 @@
 #include "NTMCG_TestSpeed.h"
 */
 
-/*
-#include <GameSimulation.h>
-#include <Mixin_Health.h>
-#include <Mixin_Movable.h>
-#include <Mixin_Controller.h>
-*/
 
-#include "NetworkClient.h"
-#include <conio.h>
+#include <GameSimulation.h>
+#include <Mixin_Controller.h>
+
+
+//#include "NetworkClient.h"
 
 int main(int argc, char *argv[])
 {
-	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
+	//SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
 
 	
 
-	printf("sYay!\n");
+	/*printf("sYay!\n");
 	auto Asq = GEM::NetworkClient::ProduceConnection("127.0.0.1", 5421);
 	printf("Connected!\n");
 
@@ -52,9 +49,9 @@ int main(int argc, char *argv[])
 		std::cin >> Answer;
 	}
 
-	printf("Yay!\n");
-
-	/*using namespace GEM::GameSim;
+	printf("Yay!\n");*/
+/*
+	using namespace GEM::GameSim;
 
 	GameSimulation GSS;
 
@@ -74,9 +71,9 @@ int main(int argc, char *argv[])
 
 
 	auto& S = Ent1;
-	S.tick(0.1f);*/
+	S.tick(0.1f);
 
-
+	*/
 	
 	/*GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();

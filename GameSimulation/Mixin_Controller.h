@@ -94,9 +94,7 @@
 			Registeres new mixin class. Return true, if registeres successfully.
 			ID and name must be unique.
 			*/
-			bool RegisterMixinClass(int classID, std::string className) {
-				return m_methods.emplace(classID, className).second;
-			}
+			bool RegisterMixinClass(int classID, std::string className);
 
 			/**!
 			Registeres new method of a mixin class. Return true if registered successfully.
@@ -109,13 +107,7 @@
 			/note All parameters of a method registered MUST be default-constructable!
 			And return value MUST be void.
 			*/
-			bool RegisterMethod(int classID, int MethodID, std::function<void(EntityBase*, cereal::BinaryInputArchive  &)> func, std::string name)
-			{
-				auto& Class = m_methods.find(classID);
-				if (Class == m_methods.end()) { return false; }
-
-				return Class->second.methods.emplace(MethodID, ClassData::MethodData(name, func)).second;
-			}
+			bool RegisterMethod(int classID, int MethodID, std::function<void(EntityBase*, cereal::BinaryInputArchive  &)> func, std::string name);
 
 			/**!
 			Transforms a mixin method to a functional object, that can be registered
@@ -141,25 +133,7 @@
 			Applies a command to an entity
 			\returns Return true, if command was applied successfully, false otherwise
 			*/
-			bool ApplyCommand(EntityBase* Entity, MixinCommandRetranslator& Command)
-			{
-				auto CalledMixin = m_methods.find(Command.m_classID);
-				if (CalledMixin == m_methods.end()) { return false; }
-
-				auto CalledMethod = CalledMixin->second.methods.find(Command.m_methodID);
-				if (CalledMethod == CalledMixin->second.methods.end()) { return false; }
-
-				try
-				{
-					cereal::BinaryInputArchive  oarchive(Command.m_paramStream);
-					CalledMethod->second.method(Entity, oarchive);
-				}
-				catch (const std::exception&)
-				{
-					return false;
-				}
-				return true;
-			}
+			bool ApplyCommand(EntityBase* Entity, MixinCommandRetranslator& Command);
 
 
 		private:

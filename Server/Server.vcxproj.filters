@@ -19,6 +19,9 @@
     <Filter Include="ASIO_Server\ConnectionController">
       <UniqueIdentifier>{84a64dbf-2723-441b-a240-45da2e4c4710}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Server">
+      <UniqueIdentifier>{ebc43343-877f-451e-9c5f-68309c3ccc9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -36,7 +39,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Server.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Server</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

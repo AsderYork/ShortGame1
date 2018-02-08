@@ -16,6 +16,9 @@
     <Filter Include="NetworkConnection">
       <UniqueIdentifier>{dfda96a7-7a4d-4884-bc10-b9fdf3c86f43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="InformationalStructers">
+      <UniqueIdentifier>{3da7aa28-2cf3-4ff8-b2c0-c8323c656750}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -26,6 +29,9 @@
     </ClInclude>
     <ClInclude Include="NetworkConnection.h">
       <Filter>NetworkConnection</Filter>
+    </ClInclude>
+    <ClInclude Include="InformationalStructers.h">
+      <Filter>InformationalStructers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

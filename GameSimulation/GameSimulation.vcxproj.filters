@@ -83,5 +83,6 @@
     <ClCompile Include="GS_EntityController.cpp">
       <Filter>GameSimulation\EntityController</Filter>
     </ClCompile>
+    <ClCompile Include="Mixin_Controller.cpp" />
   </ItemGroup>
 </Project>
