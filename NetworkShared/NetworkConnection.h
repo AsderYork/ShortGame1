@@ -1,31 +1,23 @@
 #pragma once
+#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 #include <boost\asio.hpp>
 #include <sstream>
 
 namespace GEM
 {
-	class TCP_Connection
+	class NetworkConnection
 	{
 	private:
-		boost::asio::io_context m_io_context;
-
 		boost::asio::ip::tcp::socket m_socket;
-
 
 		std::stringstream m_StreamToSend;
 		std::stringstream m_StreamToRecive;
-
-
 	public:
-		TCP_Connection(int Port) : m_socket(m_io_context)
-		{
-			m_io_context.run();
-			boost::system::error_code ec;
-			m_socket.connect(boost::asio::ip::tcp::endpoint(boost::asio::ip::address::from_string("127.0.0.1"), Port), ec);
+		NetworkConnection(boost::asio::ip::tcp::socket&& socket) : m_socket(std::move(socket))
+		{}
 
-			printf("%s", ec.message().c_str());
-		}
-
+		NetworkConnection(const NetworkConnection&) = delete;
+		NetworkConnection(NetworkConnection&&) = default;
 
 		/**!
 		Add the contents of a stream to the output of the socket.
@@ -46,10 +38,6 @@ namespace GEM
 		*/
 		void ClearReciveBuffer();
 
-		/**!
-		Recives everything, that should be recived, sends everything, that should be send
-		*/
 		void ProcessConnection();
 	};
-		
 }

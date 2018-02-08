@@ -13,11 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ASIO_Server">
-      <UniqueIdentifier>{14d6389a-8ce1-4a94-8765-47736c17275d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ASIO_Server\ConnectionController">
-      <UniqueIdentifier>{84a64dbf-2723-441b-a240-45da2e4c4710}</UniqueIdentifier>
+    <Filter Include="NetworkConnection">
+      <UniqueIdentifier>{dfda96a7-7a4d-4884-bc10-b9fdf3c86f43}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -27,16 +24,16 @@
     <ClInclude Include="targetver.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="ConnectionController.h">
-      <Filter>ASIO_Server\ConnectionController</Filter>
+    <ClInclude Include="NetworkConnection.h">
+      <Filter>NetworkConnection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Server.cpp">
-      <Filter>Исходные файлы</Filter>
+    <ClCompile Include="NetworkConnection.cpp">
+      <Filter>NetworkConnection</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

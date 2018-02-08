@@ -1,5 +1,5 @@
 #pragma once
-#include "Connection.h"
+#include <NetworkConnection.h>
 #include <list>
 #include <memory>
 #include <queue>
@@ -14,9 +14,9 @@ namespace GEM
 	class ConnectionController
 	{
 	private:
-		std::list<std::unique_ptr<Connection>> m_connections;
+		std::list<std::unique_ptr<NetworkConnection>> m_connections;
 		boost::asio::io_context m_io_context;
-		std::queue<Connection*> m_newConnections;
+		std::queue<NetworkConnection*> m_newConnections;
 
 		boost::asio::ip::tcp::acceptor m_acceptor;
 
@@ -27,7 +27,7 @@ namespace GEM
 				printf("Yelp!\n");
 				if (!ec)
 				{
-					m_newConnections.emplace(m_connections.emplace_back(std::make_unique<Connection>(std::move(socket))).get());
+					m_newConnections.emplace(m_connections.emplace_back(std::make_unique<NetworkConnection>(std::move(socket))).get());
 				}
 
 				Do_accept();
@@ -37,7 +37,7 @@ namespace GEM
 
 	public:
 		
-		const std::list<std::unique_ptr<Connection>>& ConnectionList()
+		const std::list<std::unique_ptr<NetworkConnection>>& ConnectionList()
 		{
 			return m_connections;
 		}
@@ -45,7 +45,7 @@ namespace GEM
 		/**!
 		Returns last new recived connection, if there is any, otherwise nullptr
 		*/
-		Connection* GetNewConnectionIfAny()
+		NetworkConnection* GetNewConnectionIfAny()
 		{
 			if (m_newConnections.empty()) { return nullptr; }
 			auto Ptr= m_newConnections.front();

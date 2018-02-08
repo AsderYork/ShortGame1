@@ -18,17 +18,17 @@
 #include <Mixin_Controller.h>
 */
 
-#include "Networking.h"
+#include "NetworkClient.h"
 #include <conio.h>
 
 int main(int argc, char *argv[])
 {
 	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
 
-
+	
 
 	printf("sYay!\n");
-	GEM::TCP_Connection Asq(5543);
+	auto Asq = GEM::NetworkClient::ProduceConnection("127.0.0.1", 5421);
 	printf("Connected!\n");
 
 	std::stringstream DataToSend;

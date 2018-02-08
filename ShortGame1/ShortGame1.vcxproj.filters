@@ -88,6 +88,9 @@
     <Filter Include="Networking">
       <UniqueIdentifier>{f5b81a9f-3816-4101-a564-df7c28e65217}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Networking\NetworkClient">
+      <UniqueIdentifier>{6fbd979f-8ec1-49ce-9cd8-3ba688e138c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -162,8 +165,8 @@
     <ClInclude Include="PlayerInputController.h">
       <Filter>PlayerInputController</Filter>
     </ClInclude>
-    <ClInclude Include="Networking.h">
-      <Filter>Networking</Filter>
+    <ClInclude Include="NetworkClient.h">
+      <Filter>Networking\NetworkClient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -221,8 +224,8 @@
     <ClCompile Include="ConsoleLayout.cpp">
       <Filter>CEGUI_Layout\ConsoleLayout</Filter>
     </ClCompile>
-    <ClCompile Include="Networking.cpp">
-      <Filter>Networking</Filter>
+    <ClCompile Include="NetworkClient.cpp">
+      <Filter>Networking\NetworkClient</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

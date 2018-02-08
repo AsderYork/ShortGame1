@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "Connection.h"
+#include "NetworkConnection.h"
 
 namespace GEM
 {
-	void Connection::Send(std::stringstream & instream)
+	void NetworkConnection::Send(std::stringstream & instream)
 	{
 		m_StreamToSend << instream.str();
 	}
-	std::stringstream & Connection::Recive()
+	std::stringstream & NetworkConnection::Recive()
 	{
 		return m_StreamToRecive;
 	}
-	void Connection::ClearReciveBuffer()
+	void NetworkConnection::ClearReciveBuffer()
 	{
 		m_StreamToRecive.str(std::string());
 	}
-	void Connection::ProcessConnection()
+	void NetworkConnection::ProcessConnection()
 	{
 		auto Sended = m_socket.send(boost::asio::buffer(m_StreamToSend.str()));
 		m_StreamToSend.str(m_StreamToSend.str().substr(Sended, std::string::npos));
