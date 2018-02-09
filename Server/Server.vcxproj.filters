@@ -19,8 +19,11 @@
     <Filter Include="ASIO_Server\ConnectionController">
       <UniqueIdentifier>{84a64dbf-2723-441b-a240-45da2e4c4710}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server">
+    <Filter Include="Main">
       <UniqueIdentifier>{ebc43343-877f-451e-9c5f-68309c3ccc9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server">
+      <UniqueIdentifier>{4ce75aa3-ad2b-4199-929e-9bd663ee4c8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,10 +36,16 @@
     <ClInclude Include="ConnectionController.h">
       <Filter>ASIO_Server\ConnectionController</Filter>
     </ClInclude>
+    <ClInclude Include="Server.h">
+      <Filter>Server</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="Server.cpp">
       <Filter>Server</Filter>
