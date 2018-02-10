@@ -2,6 +2,8 @@
 #define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 #include <boost\asio.hpp>
 #include <sstream>
+#include <cereal\cereal.hpp>
+#include <cereal\archives\binary.hpp>
 
 namespace GEM
 {
@@ -25,6 +27,15 @@ namespace GEM
 		*/
 		void Send(std::stringstream& instream);
 
+		template<typename...T>
+		void SendAsArchive(T&&...args)
+		{
+			std::stringstream OutStre;
+			cereal::BinaryOutputArchive ar(OutStre);
+			ar(std::forward<T>(args)...);
+			Send(OutStre);
+		}
+
 		/**!
 		Provides access to a recive buffer.
 		There is no guarantee, that caller wouldn't alterate the state of the buffer
@@ -32,6 +43,14 @@ namespace GEM
 
 		*/
 		std::stringstream& Recive();
+
+		template<typename...T>
+		void ReciveAsArchive(T&&...args)
+		{
+			std::stringstream OutStre;
+			cereal::BinaryInputArchive ar(Recive());
+			ar(std::forward<T>(args)...);
+		}
 
 		/**!
 		Clears recive buffer.

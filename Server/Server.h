@@ -10,9 +10,7 @@
 #include "ConnectionController.h"
 #include <list>
 
-#include <cereal\cereal.hpp>
-#include <cereal\types\string.hpp>
-#include <cereal\archives\binary.hpp>
+
 
 namespace GEM
 {

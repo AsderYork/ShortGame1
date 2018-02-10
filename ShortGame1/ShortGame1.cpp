@@ -12,17 +12,26 @@
 */
 
 
-#include <GameSimulation.h>
-#include <Mixin_Controller.h>
+//#include <GameSimulation.h>
+//#include <Mixin_Controller.h>
 
-
-//#include "NetworkClient.h"
+#include "GameClient.h"
 
 int main(int argc, char *argv[])
 {
-	//SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
+	GEM::logHelper::setLog("laststart.log");
+	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
 
+	GEM::GameClient GC(GEM::ClientData("Jasoz"));
+
+	GC.Connect("127.0.0.1", 4483);
+
+	while (true)
+	{
+		if (!GC.process()) { break; }
+	}
 	
+	printf("So this is the end!\n");
 
 	/*printf("sYay!\n");
 	auto Asq = GEM::NetworkClient::ProduceConnection("127.0.0.1", 5421);

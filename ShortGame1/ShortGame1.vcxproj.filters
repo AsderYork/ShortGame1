@@ -91,6 +91,9 @@
     <Filter Include="Networking\NetworkClient">
       <UniqueIdentifier>{6fbd979f-8ec1-49ce-9cd8-3ba688e138c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Networking\GameClinet">
+      <UniqueIdentifier>{04d9870f-2b39-444a-815f-388986cfdd7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -168,6 +171,9 @@
     <ClInclude Include="NetworkClient.h">
       <Filter>Networking\NetworkClient</Filter>
     </ClInclude>
+    <ClInclude Include="GameClient.h">
+      <Filter>Networking\GameClinet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogHelper.cpp">
@@ -226,6 +232,9 @@
     </ClCompile>
     <ClCompile Include="NetworkClient.cpp">
       <Filter>Networking\NetworkClient</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClient.cpp">
+      <Filter>Networking\GameClinet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

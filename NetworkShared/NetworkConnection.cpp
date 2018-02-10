@@ -21,9 +21,11 @@ namespace GEM
 		m_StreamToSend.str(m_StreamToSend.str().substr(Sended, std::string::npos));
 		auto Avaliable = m_socket.available();
 		std::string Recive;
-		Recive.reserve(Avaliable);
-		auto BytesRead = boost::asio::read(m_socket, boost::asio::buffer(Recive.data(), Avaliable), boost::asio::transfer_exactly(64));
-		Recive = Recive.data();
+		std::vector<char> VecChar;
+		VecChar.resize(Avaliable);
+		auto BytesRead = boost::asio::read(m_socket, boost::asio::buffer(VecChar.data(), Avaliable), boost::asio::transfer_exactly(Avaliable));
+
+		Recive = std::string(VecChar.begin(), VecChar.end());
 		m_StreamToRecive.str(m_StreamToRecive.str() + Recive.substr(0, BytesRead));
 	}
 }

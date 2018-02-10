@@ -24,7 +24,6 @@ namespace GEM
 		{
 			m_acceptor.async_accept([this](boost::system::error_code ec, boost::asio::ip::tcp::socket socket)
 			{
-				printf("Yelp!\n");
 				if (!ec)
 				{
 					m_newConnections.emplace(m_connections.emplace_back(std::make_unique<NetworkConnection>(std::move(socket))).get());

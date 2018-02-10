@@ -5,6 +5,7 @@ int main(int argc, char *argv[])
 {
 	GEM::Server server(4483, GEM::ServerData("First one!"));
 
+	printf("Server is going to start right now!\n");
 	server.Run();
 
 
