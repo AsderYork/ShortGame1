@@ -94,6 +94,12 @@
     <Filter Include="Networking\GameClinet">
       <UniqueIdentifier>{04d9870f-2b39-444a-815f-388986cfdd7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Screens">
+      <UniqueIdentifier>{b68c90b8-cea7-4d1e-82f2-70afe2323f19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Screens\ScreenController">
+      <UniqueIdentifier>{ee8a5d27-68fb-4484-a7e6-79c82f352ded}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -173,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="GameClient.h">
       <Filter>Networking\GameClinet</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenController.h">
+      <Filter>Screens\ScreenController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -28,7 +28,7 @@ namespace GEM
 		virtual void turnOff() = 0;
 		/**!
 		\brief If layout want's to do some changes, it should do them in this method.
-		This method get's called in PreFrame if CEGUI_Service;
+		This method get's called in PreFrame of CEGUI_Service;
 		*/
 		virtual void PreFrame(float delta) = 0;
 

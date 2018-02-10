@@ -12,6 +12,10 @@ namespace GEM
 	/**!
 	Yup. The GEM::Service
 	It get's initialized, destructed, pre/.../post-framed.
+
+	One more thing. Service is something, that work for entire game. They can be addressed,
+	for example you can ask them to render something for you, or to send something over a network.
+	They are not something, that is actual game. For that purpose, use screens.
 	*/
 	class Service
 	{
@@ -51,6 +55,35 @@ namespace GEM
 		inline virtual ~Service() {}
 	};
 
+	/**!
+	Screens are things, that do stuff.
+	Want some GUI, make a screen for it and make it so that some other screen would push it onto the stack.
+	Want the game graphics to appear, like models, terrain and stuff? Make a screen for it! But don't forget to cleanup in destructor.
+	So basically use it as, well, state. Yup. Stack-based state machine. But with a twist!
+	All screens are transparent. It means that every screen on the stack is active. And will remain active, untill it leaves.
+	And yeah, even though it's a stack, screen can leave any time from any place. Just a convenience mesure.	
+	*/
+	class Screen
+	{
+	private:
+		bool m_ShouldLeave=false;
+
+	protected:
+
+		
+		/**!
+		After this function call, a screen will be deleated on the next game loop run.
+		It is recomended, treat screen, that called this method, as allready dead.
+		*/
+		void LeaveStack()
+		{
+			m_ShouldLeave = true;
+		}
+		
+	public:
+		virtual ~Screen() {};
+	};
+
 
 	class EngineController
 	{
@@ -71,6 +104,35 @@ namespace GEM
 		*/
 		template<class ServiceClass, typename ...Args>
 		ServiceClass* AddService(Args ...args);
+
+		/**!
+		Adds new screen to the top of the stack.
+
+		Wait a minute. How the hell is this a stack? I mean there is literally nothing stack-like happens!
+		You just add a screen, it plays it's constructor and that's it! All the interesting stuff happens, probably, from
+		SDL2 events or something like that. And they process controlls in ordered, indeferent to this one! It's still a natural
+		stack by design, becouse who first register itself to a SDL2 service, will be serviced first. But right now SDL2 service provide
+		no means for stopping other screens from reciving messages. So there must be a way! Well, there is none. It just holds pointers
+		 to everything, that registered. It can't even unregister you! Actually, if you really think about it. Screens have nothing to do
+		 with EngineController. I mean yes, EngincController is a core of a game client, but it delegates all the work to the services.
+		 All it does, is just manages services and provides them with a controll flow from time to time.
+		Screens, probably, just want SDL2, CEGUI, and SOUND and occasionally other services. So yeah, screens want access to different services
+		But right now Engine controller doesn't provide any means to acces it's services!
+		Ok, so I can make it so that services would be accessable. Somehow. Now what? Were do Screens really belong?
+		Maybe controlling screens is a service itself? I mean it looks like one. It starts ASAP and holds for the entire game.
+		And that way it can access all the services easyly through allready used trick with EngineController.
+		Ok. So let it be a service. With empty Pre/-/Postframes. Yeah, probably not the best idea.
+		How about just standalone structure? Since when everything should be tied to EngineController? It's just controlls engines!
+		Ok, Let it be a standalone structure.
+
+		Now the stack question. Actually, i kust come up with some ideas on why it should be a stack. Oh wait, lost it again.
+
+		
+
+
+		*/
+		template<class ScreenClass, typename... Args>
+		Screen* AddScreen(Args&&...args);
 
 		/**!
 		If we need to start shuting down after this frame, this method should be called.
