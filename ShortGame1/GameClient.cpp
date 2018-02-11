@@ -73,4 +73,12 @@ namespace GEM
 		m_state = state::JUST_CONNECTED;
 		return true;
 	}
+	void GameClient::SetClientData(ClientData cd)
+	{
+		m_clientData = cd;
+	}
+	ServerData GameClient::getServerData()
+	{
+		return m_serverData;
+	}
 }

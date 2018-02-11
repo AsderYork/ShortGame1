@@ -100,6 +100,9 @@
     <Filter Include="Screens\ScreenController">
       <UniqueIdentifier>{ee8a5d27-68fb-4484-a7e6-79c82f352ded}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Screens\LoginScreen">
+      <UniqueIdentifier>{f13f6c79-d2dc-4581-9d8e-307d595d3dd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -183,6 +186,9 @@
     <ClInclude Include="ScreenController.h">
       <Filter>Screens\ScreenController</Filter>
     </ClInclude>
+    <ClInclude Include="LoginScreen.h">
+      <Filter>Screens\LoginScreen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogHelper.cpp">
@@ -245,5 +251,9 @@
     <ClCompile Include="GameClient.cpp">
       <Filter>Networking\GameClinet</Filter>
     </ClCompile>
+    <ClCompile Include="ScreenController.cpp">
+      <Filter>Screens\ScreenController</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginScreen.cpp" />
   </ItemGroup>
 </Project>

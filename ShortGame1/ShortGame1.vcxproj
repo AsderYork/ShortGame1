@@ -173,6 +173,7 @@
     <ClInclude Include="EngineController.h" />
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="GameClient.h" />
+    <ClInclude Include="LoginScreen.h" />
     <ClInclude Include="NetworkClient.h" />
     <ClInclude Include="LogHelper.h" />
     <ClInclude Include="MapService.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="GameClient.cpp" />
     <ClCompile Include="LogHelper.cpp" />
+    <ClCompile Include="LoginScreen.cpp" />
     <ClCompile Include="MapService.cpp" />
     <ClCompile Include="MCToMesh.cpp" />
     <ClCompile Include="NetworkClient.cpp" />
@@ -208,6 +210,7 @@
     <ClCompile Include="NTMCG_Naive.cpp" />
     <ClCompile Include="OgreLogRedirection.cpp" />
     <ClCompile Include="Ogre_Service.cpp" />
+    <ClCompile Include="ScreenController.cpp" />
     <ClCompile Include="SDL2_Service.cpp" />
     <ClCompile Include="ShortGame1.cpp" />
     <ClCompile Include="stdafx.cpp" />

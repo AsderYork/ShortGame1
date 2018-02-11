@@ -36,9 +36,11 @@ namespace GEM
 
 
 	public:
-		GameClient(ClientData& clientData) : m_clientData(clientData){}
 
 		bool Connect(std::string address, int port);
+
+		void SetClientData(ClientData cd);
+		ServerData getServerData();
 
 
 		/**!
