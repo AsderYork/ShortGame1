@@ -254,6 +254,8 @@
     <ClCompile Include="ScreenController.cpp">
       <Filter>Screens\ScreenController</Filter>
     </ClCompile>
-    <ClCompile Include="LoginScreen.cpp" />
+    <ClCompile Include="LoginScreen.cpp">
+      <Filter>Screens\LoginScreen</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 #include "GS_PlayerController.h"
 #include "GS_EntityController.h"
 #include "Mixin_Controller.h"
+#include "EntityGenerator.h"
 
 //Mixins
 #include "Mixin_Movable.h"
@@ -31,6 +32,8 @@ namespace GEM::GameSim
 	public:
 		GameSim_PlayerController m_players;
 		EntityController m_entities;
+		EntityGenerator<Mixin_Health, Mixin_Movable> m_generator;
+		
 
 		GameSimulation() {
 			RegisterMixins();

@@ -40,6 +40,9 @@
     <Filter Include="Entities\Mixins\Controller">
       <UniqueIdentifier>{15df439c-ae60-49ec-9e4b-70d0db02c373}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\EntityGenerator">
+      <UniqueIdentifier>{73091bba-e85a-4b25-88d1-06cd2d74cb8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -74,15 +77,25 @@
     <ClInclude Include="Mixin_Controller.h">
       <Filter>Entities\Mixins\Controller</Filter>
     </ClInclude>
+    <ClInclude Include="EntityGenerator.h">
+      <Filter>Entities\EntityGenerator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameSimulation.cpp" />
     <ClCompile Include="GS_PlayerController.cpp">
       <Filter>GameSimulation\PlayerController</Filter>
     </ClCompile>
     <ClCompile Include="GS_EntityController.cpp">
       <Filter>GameSimulation\EntityController</Filter>
     </ClCompile>
-    <ClCompile Include="Mixin_Controller.cpp" />
+    <ClCompile Include="Mixin_Controller.cpp">
+      <Filter>Entities\Mixins\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSimulation.cpp">
+      <Filter>GameSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityGenerator.cpp">
+      <Filter>Entities\EntityGenerator</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

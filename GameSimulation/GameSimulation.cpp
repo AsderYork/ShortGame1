@@ -19,6 +19,7 @@ namespace GEM::GameSim
 			auto Entity = m_entities.GetEntity(BufferInUse.front().second);
 			if (Entity == nullptr) { continue; }
 			Mixin_Controller::Instance().ApplyCommand(Entity, std::move(BufferInUse.front().first));
+			BufferInUse.pop();
 		}
 		
 		std::unique_ptr<EntityController::EntityListIterator> iter = nullptr;

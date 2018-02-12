@@ -13,6 +13,8 @@ namespace GEM::GameSim
 	Mixin may provide some methods to alter the entity from outside of the simulation,
 	in that case it must use Mixin_Controller singleton
 	*/
+	using MIXIN_ID_TYPE = int;
+
 	class Mixin_base
 	{
 	public:

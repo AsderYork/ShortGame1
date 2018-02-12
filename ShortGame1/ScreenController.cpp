@@ -72,11 +72,11 @@ namespace GEM
 
 	Service::ActionResult ScreenController::initialize()
 	{
+		m_initialized = true;
 		for (auto& screen : m_screens)
 		{
 			screen->Init();
 		}
-		m_initialized = true;
 		return ActionResult::AR_OK;
 	}
 	void ScreenController::shutdown()

@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EntitiesBase.h" />
+    <ClInclude Include="EntityGenerator.h" />
     <ClInclude Include="GameSimulation.h" />
     <ClInclude Include="GS_EntityController.h" />
     <ClInclude Include="GS_PlayerController.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EntityGenerator.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
     <ClCompile Include="GS_EntityController.cpp" />
     <ClCompile Include="GS_PlayerController.cpp" />

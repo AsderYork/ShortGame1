@@ -41,6 +41,12 @@ namespace GEM::GameSim
 			return EmplaceResult.second ? Ptr : nullptr;
 		}
 
+		inline EntityBase* AddFreeEntity(ENTITY_ID_TYPE id, std::unique_ptr<EntityBase>&& ptr) {
+			auto iter = m_entityMap.emplace(id, std::move(ptr));
+			if (!iter.second) { return nullptr; }
+			else {return iter.first->second.get();}
+		}
+
 
 		/**!
 		Remove entity with given id if there is one. Return true if entity is removed, false otherwise

@@ -21,13 +21,16 @@ namespace GEM::GameSim
 		/**!
 		If MaxHealth is set to 0, health will not have an upper limit
 		*/
-		Mixin_Health(float MaxHealth, float tmpHealth) : m_maxHealth(MaxHealth), m_health(tmpHealth)//, Mixin_base(12)
+		Mixin_Health(float MaxHealth, float tmpHealth) : m_maxHealth(MaxHealth), m_health(tmpHealth)
 		{}
 		/**!
 		TmpHealth will be set equal to MaxHealth
 		If MaxHealth is set to 0, health will not have an upper limit.
 		*/
-		Mixin_Health(float MaxHealth) : m_maxHealth(MaxHealth), m_health(MaxHealth)//, Mixin_base(12)
+		Mixin_Health(float MaxHealth) : m_maxHealth(MaxHealth), m_health(MaxHealth)
+		{}
+
+		Mixin_Health() : m_maxHealth(100), m_health(100)
 		{}
 
 		Mixin_Health(Mixin_Health &&) = default;

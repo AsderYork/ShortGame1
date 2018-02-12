@@ -17,7 +17,7 @@ namespace GEM::GameSim
 		/**!
 		Shifts position of an entity
 		*/
-		void Shift(int X, int Y, int Z)
+		void Shift(float X, float Y, float Z)
 		{
 			x += X;
 			y += Y;
