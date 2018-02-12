@@ -72,11 +72,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -160,6 +160,8 @@
     <ClCompile Include="GS_EntityController.cpp" />
     <ClCompile Include="GS_PlayerController.cpp" />
     <ClCompile Include="Mixin_Controller.cpp" />
+    <ClCompile Include="Mixin_Health.cpp" />
+    <ClCompile Include="Mixin_Movable.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,6 +15,18 @@
 
 namespace GEM::GameSim
 {	
+	/**!
+	This stuff should probably be server-side only.
+	*/
+	struct Player
+	{
+		//!ID of a player character entity
+		ENTITY_ID_TYPE m_characterEntity;
+		//!Set of all entities, that should be updated for this client.
+		std::set<ENTITY_ID_TYPE> m_trackedEntities;
+
+	};
+
 	class GameSimulation {
 	private:
 		void RegisterMixins()
@@ -26,8 +38,7 @@ namespace GEM::GameSim
 			REGISTER_MIXIN_METHOD(Mixin_Health, SetHealth, 1);
 		}
 
-		std::queue<std::pair<MixinCommandRetranslator, ENTITY_ID_TYPE>> m_commandBuffers[2];
-		bool m_TickParity = false;
+		std::queue<std::pair<MixinCommandRetranslator, ENTITY_ID_TYPE>> m_commandBuffer;
 
 	public:
 		GameSim_PlayerController m_players;
@@ -38,6 +49,8 @@ namespace GEM::GameSim
 		GameSimulation() {
 			RegisterMixins();
 		}
+
+
 
 		/**!
 		Insert a command in a simulation, to be applied on the upcoming tick;

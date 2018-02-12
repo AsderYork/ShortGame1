@@ -5,21 +5,18 @@ namespace GEM::GameSim
 {
 	void GameSimulation::InsertCommand(ENTITY_ID_TYPE Entity, MixinCommandRetranslator && Command)
 	{
-		m_commandBuffers[m_TickParity ? 0 : 1].push(std::make_pair(std::move(Command), Entity));
+		m_commandBuffer.push(std::make_pair(std::move(Command), Entity));
 	}
 	bool GameSimulation::Tick(float delta)
 	{
-		//Invert parity, to expose different buffer
-		m_TickParity = !m_TickParity;
-		auto& BufferInUse = m_commandBuffers[m_TickParity ? 1 : 0];
 
 		//Apply all commands
-		while (!BufferInUse.empty())
+		while (!m_commandBuffer.empty())
 		{
-			auto Entity = m_entities.GetEntity(BufferInUse.front().second);
+			auto Entity = m_entities.GetEntity(m_commandBuffer.front().second);
 			if (Entity == nullptr) { continue; }
-			Mixin_Controller::Instance().ApplyCommand(Entity, std::move(BufferInUse.front().first));
-			BufferInUse.pop();
+			Mixin_Controller::Instance().ApplyCommand(Entity, std::move(m_commandBuffer.front().first));
+			m_commandBuffer.pop();
 		}
 		
 		std::unique_ptr<EntityController::EntityListIterator> iter = nullptr;

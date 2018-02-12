@@ -97,5 +97,7 @@
     <ClCompile Include="EntityGenerator.cpp">
       <Filter>Entities\EntityGenerator</Filter>
     </ClCompile>
+    <ClCompile Include="Mixin_Movable.cpp" />
+    <ClCompile Include="Mixin_Health.cpp" />
   </ItemGroup>
 </Project>

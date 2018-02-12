@@ -57,5 +57,10 @@ namespace GEM::GameSim
 
 		bool tick(float delta) { return true; }
 
+
+		virtual void SendUpdate(cereal::BinaryOutputArchive & archive, const UpdateReason reason) override;
+
+		virtual void ReciveUpdate(cereal::BinaryOutputArchive & archive) override;
+
 	};
 }

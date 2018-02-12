@@ -1,5 +1,8 @@
 #pragma once
 #include "Mixin_Base.h"
+#include <vmmlib\vector.hpp>
+#include <vmmlib/math.hpp>
+
 namespace GEM::GameSim
 {
 	/**!
@@ -8,7 +11,14 @@ namespace GEM::GameSim
 	class Mixin_Movable : public Mixin_base
 	{
 	private:
-		float x = 0, y = 0, z = 0;
+
+	protected:
+		vmml::vec3f m_pos = vmml::vec3f(0, 0, 0);
+		vmml::vec3f m_velocity = vmml::vec3f(0, 0, 0);
+
+
+		bool m_keepUpdating = true;
+
 	public:
 
 		static const int MixinID = 43;
@@ -19,12 +29,17 @@ namespace GEM::GameSim
 		*/
 		void Shift(float X, float Y, float Z)
 		{
-			x += X;
-			y += Y;
-			z += Z;
+			m_pos += vmml::vec3f(X, Y, Z);
 		}
 
-		bool tick(float delta) { return true; }
+		bool tick(float delta);
+
+
+		virtual bool NeedsUpdate() override;
+
+		virtual void SendUpdate(cereal::BinaryOutputArchive & archive, const UpdateReason reason) override;
+
+		virtual void ReciveUpdate(cereal::BinaryOutputArchive & archive) override;
 
 	};
 }
