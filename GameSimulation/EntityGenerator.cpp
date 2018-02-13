@@ -20,4 +20,14 @@ namespace GEM::GameSim
 		return true;
 	}
 
+	std::vector<Mixin_base*> StaticlyMixedEntity::getAllMixins()
+	{
+		std::vector<Mixin_base*> ret;
+		for (auto& m : m_mixins)
+		{
+			ret.emplace_back(m.second.get());
+		}
+		return ret;
+	}
+
 }

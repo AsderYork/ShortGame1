@@ -14,6 +14,7 @@ namespace GEM::GameSim
 	{
 	public:		
 		virtual Mixin_base* GetMixinByID(int i) = 0;
+		virtual std::vector<Mixin_base*> getAllMixins() = 0;
 
 
 		virtual bool tick(float delta) = 0;
@@ -63,6 +64,11 @@ namespace GEM::GameSim
 				if (T.MixinID == id) { retptr = &T; }
 			});
 			return retptr;
+		}
+
+		virtual std::vector<Mixin_base*> getAllMixins() override
+		{
+			return std::vector<Mixin_base*>{&(std::get<Mixins>(m_mixins))...};
 		}
 	};
 

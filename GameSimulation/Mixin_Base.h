@@ -20,6 +20,8 @@ namespace GEM::GameSim
 	{
 	public:
 
+		
+
 		/**!
 		Every tick simulation asks every mixin of every entity, if it feels like it needs to send some data
 		to clients. Actually, map is big, and some updates should be sent only to clients, that, really needs them

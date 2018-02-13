@@ -143,8 +143,10 @@
     <ClInclude Include="EntitiesBase.h" />
     <ClInclude Include="EntityGenerator.h" />
     <ClInclude Include="GameSimulation.h" />
+    <ClInclude Include="GS_Client.h" />
     <ClInclude Include="GS_EntityController.h" />
     <ClInclude Include="GS_PlayerController.h" />
+    <ClInclude Include="GS_Server.h" />
     <ClInclude Include="Helper_TupleForeach.h" />
     <ClInclude Include="Mixin_Base.h" />
     <ClInclude Include="Mixin_Controller.h" />
@@ -157,8 +159,10 @@
   <ItemGroup>
     <ClCompile Include="EntityGenerator.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
+    <ClCompile Include="GS_Client.cpp" />
     <ClCompile Include="GS_EntityController.cpp" />
     <ClCompile Include="GS_PlayerController.cpp" />
+    <ClCompile Include="GS_Server.cpp" />
     <ClCompile Include="Mixin_Controller.cpp" />
     <ClCompile Include="Mixin_Health.cpp" />
     <ClCompile Include="Mixin_Movable.cpp" />

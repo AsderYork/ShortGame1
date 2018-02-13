@@ -18,6 +18,9 @@ namespace GEM::GameSim
 
 		virtual Mixin_base * GetMixinByID(int i) override;
 		virtual bool tick(float delta) override;
+
+
+		virtual std::vector<Mixin_base*> getAllMixins() override;
 	};
 
 	template<typename...TMixins>
