@@ -21,7 +21,7 @@ namespace GEM::GameSim
 
 	public:
 
-		static const int MixinID = 43;
+	 MIXIN_ID(43)
 
 
 		/**!

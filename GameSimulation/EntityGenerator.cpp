@@ -6,7 +6,7 @@ namespace GEM::GameSim
 	{
 		for (auto& m : m_mixins)
 		{
-			if (m.first == i) { return m.second.get(); }
+			if (m->getMixinID() == i) { return m.get(); }
 		}
 		return nullptr;
 	}
@@ -15,7 +15,7 @@ namespace GEM::GameSim
 	{
 		for (auto& m : m_mixins)
 		{
-			if (!m.second->tick(delta)) { return false; }
+			if (!m->tick(delta)) { return false; }
 		}
 		return true;
 	}
@@ -25,7 +25,7 @@ namespace GEM::GameSim
 		std::vector<Mixin_base*> ret;
 		for (auto& m : m_mixins)
 		{
-			ret.emplace_back(m.second.get());
+			ret.emplace_back(m.get());
 		}
 		return ret;
 	}

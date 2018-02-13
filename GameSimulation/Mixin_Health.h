@@ -12,7 +12,8 @@ namespace GEM::GameSim
 	private:
 
 	public:
-		static const int MixinID = 12;
+
+		MIXIN_ID(12)
 
 		
 		float m_health;

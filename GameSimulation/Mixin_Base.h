@@ -1,6 +1,8 @@
 #pragma once
 #include <cereal\cereal.hpp>
 
+#define MIXIN_ID(id) static const MIXIN_ID_TYPE MixinID = id; inline virtual const MIXIN_ID_TYPE getMixinID() const override{return MixinID;}
+
 namespace GEM::GameSim
 {
 	/**!
@@ -10,6 +12,9 @@ namespace GEM::GameSim
 	Every mixin must be derived from this class
 	Every mixin also must declare
 	"static const int MixinID" variable with same unique ID
+	This one is for class recognision during entity building. But then we need to address this mixin in an entity
+	for that there is virtual method that also should be overloaded and must return same ID
+	It's adviced to use special macro to handle all that stuff
 	
 	Mixin may provide some methods to alter the entity from outside of the simulation,
 	in that case it must use Mixin_Controller singleton
@@ -20,7 +25,7 @@ namespace GEM::GameSim
 	{
 	public:
 
-		
+		virtual const MIXIN_ID_TYPE getMixinID() const = 0;
 
 		/**!
 		Every tick simulation asks every mixin of every entity, if it feels like it needs to send some data

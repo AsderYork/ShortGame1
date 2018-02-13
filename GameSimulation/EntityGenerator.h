@@ -12,9 +12,9 @@ namespace GEM::GameSim
 	class StaticlyMixedEntity : public EntityBase
 	{
 	private:
-		const std::vector<std::pair<MIXIN_ID_TYPE, std::unique_ptr<Mixin_base>>> m_mixins;
+		const std::vector<std::unique_ptr<Mixin_base>> m_mixins;
 	public:
-		StaticlyMixedEntity(std::vector<std::pair<MIXIN_ID_TYPE, std::unique_ptr<Mixin_base>>>&& vec) : m_mixins(std::move(vec)) {}
+		StaticlyMixedEntity(std::vector<std::unique_ptr<Mixin_base>>&& vec) : m_mixins(std::move(vec)) {}
 
 		virtual Mixin_base * GetMixinByID(int i) override;
 		virtual bool tick(float delta) override;
@@ -59,13 +59,13 @@ namespace GEM::GameSim
 
 		std::unique_ptr<EntityBase> GenerateEntity(const std::vector<MIXIN_ID_TYPE> Mixins)
 		{
-			std::vector<std::pair<MIXIN_ID_TYPE, std::unique_ptr<Mixin_base>>> vec;
+			std::vector<std::unique_ptr<Mixin_base>> vec;
 
 			for(auto& id : Mixins)
 			{
 				auto Ptr = Impl<TMixins...>::GenerateMixinIfIDIsCorrenct(id);
 				if (Ptr == nullptr) { throw std::exception("Can't build an entity. Requested Mixin is unknown!"); }
-				vec.emplace_back(std::make_pair(id, std::move(Ptr)));
+				vec.emplace_back(std::move(Ptr));
 			}
 
 			return std::make_unique<StaticlyMixedEntity>(std::move(vec));
