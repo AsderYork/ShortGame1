@@ -1,69 +1,103 @@
 #pragma once
-#include <unordered_map>
-#include <set>
-#include <map>
+#include "GS_EntityController.h"
 #include <string>
 #include <optional>
-#include "GS_EntityController.h"
+#include <set>
+#include <memory>
 
 namespace GEM::GameSim
 {
 	using PLAYER_ID_TYPE = uint32_t;
+	class PlayerController;
+
+	struct Player
+	{
+		std::string playerName;
+
+		//!ID of a player character entity
+		EntityBase* characterPtr;
+		ENTITY_ID_TYPE characterID;
+
+		//!Set of all entities, that should be updated for this client.
+		std::set<ENTITY_ID_TYPE> trackedEntities;
+
+		
+		PLAYER_ID_TYPE id;	
+
+		Player(std::string name) : playerName(name) {};
+		Player() {}
+
+	};
+
+	/**!
+	Outer interface for players
+	Used to hide the optional part of a player, to ease player removal but
+	not expose it to a user
+
+	Player tickets livetime MUST NOT exceed a lifetime of PlayerController!
+	*/
+	class PlayerTicket
+	{
+	private:
+
+		struct StaticMemoryPack
+		{
+			std::size_t m_playerIndex;
+			PlayerController* m_contr = nullptr;
+			StaticMemoryPack* m_next = nullptr;//Tickets secretly forms a linked list inside a vector!
+			StaticMemoryPack* m_prev = nullptr;
+
+			StaticMemoryPack(std::size_t p, PlayerController* controller, StaticMemoryPack* prev);
+			~StaticMemoryPack();
+
+		};
+
+		std::unique_ptr<StaticMemoryPack> m_internal;
+		
+
+		friend class PlayerController;
+		PlayerTicket(std::size_t p, PlayerController* controller, StaticMemoryPack* prev);
+	public:
+		/**!
+		Returns a reference to a player.
+		This values should NOT be stored becouse it might become invalidated after every player removal
+		*/
+		Player & get();
+
+		PlayerTicket(const PlayerTicket&) = delete;
+		PlayerTicket(PlayerTicket&&) = default;
+		
+	};
 
 	/**!
 	Controlls players.
-	Various info about them, like their username, and entities they are allowed to conmmand
+	Various info about them, like their username
 	*/
-	class GameSim_PlayerController
+	class PlayerController
 	{
 	private:
-		using UsernameMapIter = std::map<std::string, PLAYER_ID_TYPE>::iterator;
-		struct PlayerData {
-			std::set<ENTITY_ID_TYPE> EntityList;
-			UsernameMapIter UsernameIDMapIter;
-			PlayerData(std::set<ENTITY_ID_TYPE> list, UsernameMapIter iter) :
-				EntityList(list), UsernameIDMapIter(iter) {}
-		};
+		friend class PlayerTicket;
+		std::vector<Player> m_players;
+		std::size_t m_maxPlayers;
 
-		std::unordered_map<PLAYER_ID_TYPE, PlayerData> m_playerMap;
-		std::map<std::string, PLAYER_ID_TYPE> m_idUsernameMap;
+		PLAYER_ID_TYPE m_lastGivenID = 0;
 
+		PlayerTicket::StaticMemoryPack* m_listHead = nullptr;//Tickets forms a linked list, which allow them to perform shifts, when one of them gets removed
+		PlayerTicket::StaticMemoryPack* m_listEnd = nullptr;
 	public:
+		PlayerController(std::size_t MaxPlayers = 100) : m_maxPlayers(MaxPlayers)
+		{
+			m_players.reserve(MaxPlayers);
+		}
 
 		/**!
-		Adds a player.
-		\param[in] id id of a player, to be added. Must be unique for every player
-		\param[in] Username Username of the player. Must be unique for every player
-		\returns Returns true if player is added successfully, false otherwise
+		Adds new player.
+		\returns returns a ticket to a newly created player. If there is no place for a new player, nullopt is returned
 		*/
-		bool AddPlayer(PLAYER_ID_TYPE id, std::string Username);
-		
-		/**!
-		Removes a Player
-		\param[in] id ID of the player, that should be removed
-		*/
-		bool RemovePlayer(PLAYER_ID_TYPE id);
-		
-		/**!
-		Get the number of players currently in
-		*/
-		int GetPlayerCount() const;
+		std::optional<PlayerTicket> addPlayer(Player Player);
 
-		/**!
-		Returns playerID for a given name, if there is one
-		*/
-		std::optional<PLAYER_ID_TYPE> GetIDbyName(const std::string& name) const;
+		void RemovePlayer(PlayerTicket&& ticket);
 
-		/**!
-		Returns player name by it's ID, if there is one
-		*/
-		std::optional<std::string> GetNameByID(PLAYER_ID_TYPE id) const;
-
-		/**!
-		Returns a pointer to a list of entities, owned by this player
-		if this player exists. Otherwise null pointer will be returned.
-		*/
-		std::set<ENTITY_ID_TYPE>* GetEntityListByID(PLAYER_ID_TYPE id);
-
+		inline const decltype(m_players)& getPlayersVector() { return m_players; }
 	};
 }

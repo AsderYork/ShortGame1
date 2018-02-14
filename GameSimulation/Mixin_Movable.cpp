@@ -3,6 +3,10 @@
 
 namespace GEM::GameSim
 {
+	void Mixin_Movable::SetVelocity(float X, float Y, float Z)
+	{
+		m_velocity = vmml::vec3f(X, Y, Z);
+	}
 	bool Mixin_Movable::tick(float delta)
 	{
 		m_pos += m_velocity;
@@ -27,8 +31,10 @@ namespace GEM::GameSim
 		archive(m_velocity.x(), m_velocity.y(), m_velocity.z());
 	}
 
-	void Mixin_Movable::ReciveUpdate(cereal::BinaryOutputArchive & archive)
+	void Mixin_Movable::ReciveUpdate(cereal::BinaryInputArchive & archive)
 	{
+
+
 		archive(m_pos.x(), m_pos.y(), m_pos.z());
 		archive(m_velocity.x(), m_velocity.y(), m_velocity.z());
 	}

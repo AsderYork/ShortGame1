@@ -32,16 +32,13 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Test_Simulation.cpp">
-      <Filter>GameSimulation</Filter>
-    </ClCompile>
     <ClCompile Include="Test_Helpers_SingeInstance.cpp">
       <Filter>GameSimulation</Filter>
     </ClCompile>
     <ClCompile Include="Tests.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="Test_EntityController.cpp">
+    <ClCompile Include="Test_PlayerController.cpp">
       <Filter>GameSimulation</Filter>
     </ClCompile>
   </ItemGroup>

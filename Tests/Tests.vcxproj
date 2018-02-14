@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(BOOST_HOME);$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
+    <IncludePath>$(BOOST_HOME);$(SolutionDir)GameSimulation;$(SolutionDir)\ExternalDeps\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(BOOST_HOME)\libs;$(BOOST_HOME)\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -166,9 +166,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Tests.cpp" />
-    <ClCompile Include="Test_EntityController.cpp" />
     <ClCompile Include="Test_Helpers_SingeInstance.cpp" />
-    <ClCompile Include="Test_Simulation.cpp" />
+    <ClCompile Include="Test_PlayerController.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

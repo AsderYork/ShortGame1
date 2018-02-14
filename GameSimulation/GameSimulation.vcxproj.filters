@@ -49,6 +49,9 @@
     <Filter Include="GameSimulation\GS_Server">
       <UniqueIdentifier>{e922a798-589d-4b44-86d7-78fc429719c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameSimulation\UpdateStructures">
+      <UniqueIdentifier>{55c3d5d2-510d-4990-bdc3-165ef9221908}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -92,6 +95,9 @@
     <ClInclude Include="GS_Server.h">
       <Filter>GameSimulation\GS_Server</Filter>
     </ClInclude>
+    <ClInclude Include="UpdateStructures.h">
+      <Filter>GameSimulation\UpdateStructures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -109,9 +115,17 @@
     <ClCompile Include="EntityGenerator.cpp">
       <Filter>Entities\EntityGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="Mixin_Movable.cpp" />
-    <ClCompile Include="Mixin_Health.cpp" />
-    <ClCompile Include="GS_Client.cpp" />
-    <ClCompile Include="GS_Server.cpp" />
+    <ClCompile Include="GS_Client.cpp">
+      <Filter>GameSimulation\GS_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="GS_Server.cpp">
+      <Filter>GameSimulation\GS_Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Mixin_Health.cpp">
+      <Filter>Entities\Mixins\Mixin_Health</Filter>
+    </ClCompile>
+    <ClCompile Include="Mixin_Movable.cpp">
+      <Filter>Entities\Mixins\Mixin_Movable</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

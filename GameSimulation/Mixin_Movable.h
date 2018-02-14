@@ -32,14 +32,17 @@ namespace GEM::GameSim
 			m_pos += vmml::vec3f(X, Y, Z);
 		}
 
+		void SetVelocity(float X, float Y, float Z);
+
 		bool tick(float delta);
 
+		inline vmml::vec3f getPos() {	return m_pos;	}
 
 		virtual bool NeedsUpdate() override;
 
 		virtual void SendUpdate(cereal::BinaryOutputArchive & archive, const UpdateReason reason) override;
 
-		virtual void ReciveUpdate(cereal::BinaryOutputArchive & archive) override;
+		virtual void ReciveUpdate(cereal::BinaryInputArchive & archive) override;
 
 	};
 }

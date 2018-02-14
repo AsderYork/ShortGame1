@@ -15,24 +15,14 @@
 
 namespace GEM::GameSim
 {	
-	/**!
-	This stuff should probably be server-side only.
-	*/
-	struct Player
-	{
-		//!ID of a player character entity
-		ENTITY_ID_TYPE m_characterEntity;
-		//!Set of all entities, that should be updated for this client.
-		std::set<ENTITY_ID_TYPE> m_trackedEntities;
-
-	};
 
 	class GameSimulation {
 	private:
 		void RegisterMixins()
 		{
 			REGISTER_MIXIN_CLASS(Mixin_Movable);
-			REGISTER_MIXIN_METHOD(Mixin_Movable, Shift, 1);
+				REGISTER_MIXIN_METHOD(Mixin_Movable, Shift, 1);
+				REGISTER_MIXIN_METHOD(Mixin_Movable, SetVelocity, 2);
 
 			REGISTER_MIXIN_CLASS(Mixin_Health);
 			REGISTER_MIXIN_METHOD(Mixin_Health, SetHealth, 1);
@@ -40,10 +30,17 @@ namespace GEM::GameSim
 
 		std::queue<std::pair<MixinCommandRetranslator, ENTITY_ID_TYPE>> m_commandBuffer;
 
+
+		/**!
+		Used to generate entity ID when needed.
+		*/
+		ENTITY_ID_TYPE m_lastAddedEntity = 0;
+
 	public:
-		GameSim_PlayerController m_players;
+		//GameSim_PlayerController m_players;
 		EntityController m_entities;
 		EntityGenerator<Mixin_Health, Mixin_Movable> m_generator;
+		PlayerController m_players;
 		
 
 		GameSimulation() {
@@ -66,6 +63,18 @@ namespace GEM::GameSim
 		\returns true if everything is ok. If false is returned, simulation is broken and should be terminated
 		*/
 		bool Tick(float delta);
+
+		/**!
+		Adds entity with some valid id.
+		\returns a pair with first value - pointer to newly created entity and second - ID of that entity
+		*/
+		std::pair<EntityBase*, ENTITY_ID_TYPE> AddEntity(std::vector<MIXIN_ID_TYPE> mixins);
+
+		/**!
+		Adds entity with a given ID.
+		Returns a pointer to the entity, if it was created or nullptr, if entity wasn't created
+		*/
+		EntityBase* AddEntity(ENTITY_ID_TYPE ID, std::vector<MIXIN_ID_TYPE> mixins);
 
 
 

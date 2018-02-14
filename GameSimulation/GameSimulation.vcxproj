@@ -153,6 +153,7 @@
     <ClInclude Include="Mixin_Health.h" />
     <ClInclude Include="Mixin_Movable.h" />
     <ClInclude Include="TestPlace.h" />
+    <ClInclude Include="UpdateStructures.h" />
     <ClInclude Include="Words.txt" />
     <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
   </ItemGroup>

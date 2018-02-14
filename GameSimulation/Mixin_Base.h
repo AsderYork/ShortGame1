@@ -66,7 +66,7 @@ namespace GEM::GameSim
 		This one for clients. Entity on a server can alter it state, so client's entity should be altered in a same way.
 		Beware of various update scheems!
 		*/
-		virtual void ReciveUpdate(cereal::BinaryOutputArchive& archive) = 0;
+		virtual void ReciveUpdate(cereal::BinaryInputArchive& archive) = 0;
 
 		/**!
 		Called every simulation tick. Must return true, if everything is ok, false will terminate simulation, probably

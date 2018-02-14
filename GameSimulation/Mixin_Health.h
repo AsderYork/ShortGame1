@@ -61,7 +61,7 @@ namespace GEM::GameSim
 
 		virtual void SendUpdate(cereal::BinaryOutputArchive & archive, const UpdateReason reason) override;
 
-		virtual void ReciveUpdate(cereal::BinaryOutputArchive & archive) override;
+		virtual void ReciveUpdate(cereal::BinaryInputArchive & archive) override;
 
 	};
 }

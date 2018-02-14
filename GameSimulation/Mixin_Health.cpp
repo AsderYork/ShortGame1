@@ -4,6 +4,6 @@ void GEM::GameSim::Mixin_Health::SendUpdate(cereal::BinaryOutputArchive & archiv
 {
 }
 
-void GEM::GameSim::Mixin_Health::ReciveUpdate(cereal::BinaryOutputArchive & archive)
+void GEM::GameSim::Mixin_Health::ReciveUpdate(cereal::BinaryInputArchive & archive)
 {
 }
