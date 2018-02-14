@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <GameSimulation.h>
+#include <GS_Server.h>
 #include <Mixin_Controller.h>
 
 #include <InformationalStructers.h>
@@ -20,7 +20,7 @@ namespace GEM
 		class ClientConnectionRep;
 	private:
 		GEM::ConnectionController m_controller;
-		GEM::GameSim::GameSimulation m_gameSim;
+		GameSim::GS_Server m_gameSimServer;
 
 		GEM::ServerData m_serverInfo;
 
@@ -31,26 +31,27 @@ namespace GEM
 		class ClientConnectionRep
 		{
 		public:
-			enum class state { NO_INIT, WAIT_FOR_INIT_DATA, INITED, ERR, END };
+			enum class state { NO_INIT, WAIT_FOR_INIT_DATA, INITED, WORKING, ERR, END };
 		private:
 			GEM::NetworkConnection* m_connectionPointer;
 			state m_state;
 			Server* m_server;
 
 			ClientData m_clientData;
+			std::optional<GameSim::PlayerTicket> m_playerTicket;
 
 		public:
 
 			ClientConnectionRep(GEM::NetworkConnection* ptr, Server* server) : m_connectionPointer(ptr),
 				m_state(state::NO_INIT), m_server(server) {}
+			~ClientConnectionRep();
 
 			state State_NO_INIT();
-
 			state State_WAIT_FOR_INIT_DATA();
-
 			state State_ERR();
-
 			state State_INITED();
+			state State_WORKING();
+
 
 			/**!
 			Return false, if all work is done and connection should be deleated. true if there is still a work to do.

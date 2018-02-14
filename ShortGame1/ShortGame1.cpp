@@ -22,20 +22,7 @@
 int main(int argc, char *argv[])
 {
 	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
-	/*
-	GEM::logHelper::setLog("laststart.log");
-
-	GEM::GameClient GC(GEM::ClientData("Jasoz"));
-
-	if (GC.Connect("127.0.0.1", 4483))
-	{
-		while (true)
-		{
-			if (!GC.process()) { break; }
-		}
-	}
-	printf("So this is the end!\n");
-	*/
+	
 	
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
