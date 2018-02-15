@@ -172,7 +172,9 @@
     <ClInclude Include="DebugLayout.h" />
     <ClInclude Include="EngineController.h" />
     <ClInclude Include="FPS_Layout.h" />
-    <ClInclude Include="GameClient.h" />
+    <ClInclude Include="GameSimService.h" />
+    <ClInclude Include="MainGameScreen.h" />
+    <ClInclude Include="NetworkController.h" />
     <ClInclude Include="LoginScreen.h" />
     <ClInclude Include="NetworkClient.h" />
     <ClInclude Include="LogHelper.h" />
@@ -199,7 +201,9 @@
     <ClCompile Include="DebugMapGraphicsService.cpp" />
     <ClCompile Include="EngineController.cpp" />
     <ClCompile Include="FPS_Layout.cpp" />
-    <ClCompile Include="GameClient.cpp" />
+    <ClCompile Include="GameSimService.cpp" />
+    <ClCompile Include="MainGameScreen.cpp" />
+    <ClCompile Include="NetworkController.cpp" />
     <ClCompile Include="LogHelper.cpp" />
     <ClCompile Include="LoginScreen.cpp" />
     <ClCompile Include="MapService.cpp" />

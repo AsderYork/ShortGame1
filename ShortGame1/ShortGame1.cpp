@@ -9,6 +9,8 @@
 #include "ConsoleLayout.h"
 #include "MapService.h"
 #include "ScreenController.h"
+#include "NetworkController.h"
+#include "GameSimService.h"
 
 #include "LoginScreen.h"
 
@@ -17,7 +19,6 @@
 //#include <GameSimulation.h>
 //#include <Mixin_Controller.h>
 
-#include "GameClient.h"
 
 int main(int argc, char *argv[])
 {
@@ -28,6 +29,9 @@ int main(int argc, char *argv[])
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
 	auto OgreController = Controller.AddService<GEM::Ogre_Service>(SDLController);
 	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
+	auto NetworkController = Controller.AddService<GEM::NetworkController>();
+	auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
+	auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
 
 	//auto MapService = Controller.AddService<GEM::MapService>(OgreController);
 	//auto DebugMapController = Controller.AddService<GEM::DebugMapGraphicsService>(OgreController, MapService);
@@ -50,10 +54,8 @@ int main(int argc, char *argv[])
 	Console->getEvaluator().RegisterFunction("Eng.SetMaxFPS", GEM::Evaluator::OBJTYPE::UNDECLARED, &Controller, &GEM::EngineController::setMaximumFPS);
 	*/
 
-	auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
 
-	GEM::GameClient GC;
-	ScreenController->AddScreen<GEM::LoginScreen>(&GC);
+	ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
 
     return Controller.start();
 	return 0;

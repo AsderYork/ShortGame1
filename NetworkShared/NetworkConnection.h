@@ -58,5 +58,10 @@ namespace GEM
 		void ClearReciveBuffer();
 
 		void ProcessConnection();
+
+		/**!
+		Check weather this connection is still open or not
+		*/
+		bool isOpen();
 	};
 }

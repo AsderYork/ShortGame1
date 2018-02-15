@@ -9,7 +9,7 @@
 
 #include "ConnectionController.h"
 #include <list>
-
+#include <memory>
 
 
 namespace GEM
@@ -33,7 +33,7 @@ namespace GEM
 		public:
 			enum class state { NO_INIT, WAIT_FOR_INIT_DATA, INITED, WORKING, ERR, END };
 		private:
-			GEM::NetworkConnection* m_connectionPointer;
+			std::unique_ptr<NetworkConnection> m_connectionPointer;
 			state m_state;
 			Server* m_server;
 
@@ -42,7 +42,7 @@ namespace GEM
 
 		public:
 
-			ClientConnectionRep(GEM::NetworkConnection* ptr, Server* server) : m_connectionPointer(ptr),
+			ClientConnectionRep(std::unique_ptr<GEM::NetworkConnection> ptr, Server* server) : m_connectionPointer(std::move(ptr)),
 				m_state(state::NO_INIT), m_server(server) {}
 			~ClientConnectionRep();
 

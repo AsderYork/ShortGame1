@@ -91,9 +91,6 @@
     <Filter Include="Networking\NetworkClient">
       <UniqueIdentifier>{6fbd979f-8ec1-49ce-9cd8-3ba688e138c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Networking\GameClinet">
-      <UniqueIdentifier>{04d9870f-2b39-444a-815f-388986cfdd7c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Screens">
       <UniqueIdentifier>{b68c90b8-cea7-4d1e-82f2-70afe2323f19}</UniqueIdentifier>
     </Filter>
@@ -102,6 +99,15 @@
     </Filter>
     <Filter Include="Screens\LoginScreen">
       <UniqueIdentifier>{f13f6c79-d2dc-4581-9d8e-307d595d3dd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking\NetworkController">
+      <UniqueIdentifier>{04d9870f-2b39-444a-815f-388986cfdd7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSimService">
+      <UniqueIdentifier>{8b459b16-a119-4ad6-bac1-516676ea6e93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Screens\MainGameScreen">
+      <UniqueIdentifier>{873156d4-0310-4edc-b537-a0854bfadd68}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -180,14 +186,20 @@
     <ClInclude Include="NetworkClient.h">
       <Filter>Networking\NetworkClient</Filter>
     </ClInclude>
-    <ClInclude Include="GameClient.h">
-      <Filter>Networking\GameClinet</Filter>
-    </ClInclude>
     <ClInclude Include="ScreenController.h">
       <Filter>Screens\ScreenController</Filter>
     </ClInclude>
     <ClInclude Include="LoginScreen.h">
       <Filter>Screens\LoginScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkController.h">
+      <Filter>Networking\NetworkController</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSimService.h">
+      <Filter>GameSimService</Filter>
+    </ClInclude>
+    <ClInclude Include="MainGameScreen.h">
+      <Filter>Screens\MainGameScreen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,14 +260,20 @@
     <ClCompile Include="NetworkClient.cpp">
       <Filter>Networking\NetworkClient</Filter>
     </ClCompile>
-    <ClCompile Include="GameClient.cpp">
-      <Filter>Networking\GameClinet</Filter>
-    </ClCompile>
     <ClCompile Include="ScreenController.cpp">
       <Filter>Screens\ScreenController</Filter>
     </ClCompile>
     <ClCompile Include="LoginScreen.cpp">
       <Filter>Screens\LoginScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkController.cpp">
+      <Filter>Networking\NetworkController</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSimService.cpp">
+      <Filter>GameSimService</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGameScreen.cpp">
+      <Filter>Screens\MainGameScreen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

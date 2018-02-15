@@ -1,8 +1,10 @@
 #pragma once
 #include "ScreenController.h"
 #include "CEGUI_Service.h"
-#include "GameClient.h"
+#include "NetworkController.h"
+#include "GameSimService.h"
 #include <future>
+#include <string>
 
 namespace GEM
 {
@@ -17,15 +19,20 @@ namespace GEM
 
 		bool ButtonPressed(const CEGUI::EventArgs & e);
 
-		GameClient* m_gameClient;
+		NetworkController* m_gameClient;
+		GameSimController* m_gameSim;
+
 
 		std::future<bool> m_connectionFuture;
+		std::string m_stateLineBeginningMessage;
 
 	public:
 
 		~LoginScreen();
 
-		LoginScreen(GameClient* GameClient) : m_gameClient(GameClient) {}
+		LoginScreen(NetworkController* NetworkController, GameSimController* gs, std::string StateLine = "" ) : m_gameClient(NetworkController),
+			m_gameSim(gs),
+			m_stateLineBeginningMessage(StateLine){}
 
 
 		void Init() override;

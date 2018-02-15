@@ -1,10 +1,14 @@
 #include "stdafx.h"
 #include "LoginScreen.h"
+
+#include "MainGameScreen.h"
+
 #include <string>         // std::string, std::u32string
 #include <locale>         // std::wstring_convert
 #include <codecvt>        // std::codecvt_utf8
 #include <cstdint> 
 #include <chrono>
+
 
 
 namespace GEM
@@ -24,6 +28,11 @@ namespace GEM
 
 		LogWindow->getChild("Button")->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&LoginScreen::ButtonPressed, this));
 
+		if (m_stateLineBeginningMessage.size() != 0)
+		{
+			m_lableStatus->setText(m_stateLineBeginningMessage);
+		}
+
 	}
 
 	void LoginScreen::PostFrame(float timeDelta)
@@ -40,6 +49,7 @@ namespace GEM
 					std::string Str = "Connected to a server '";
 					Str += m_gameClient->getServerData().ServerName + "'.";
 					m_lableStatus->setText(Str);
+
 				}
 				else
 				{
@@ -49,6 +59,20 @@ namespace GEM
 					Button->setActive(true);
 					m_lableStatus->setText("Failed to connect. Try other data");
 				}
+			}
+		}
+		else
+		{
+			switch (m_gameClient->getState())
+			{
+			default:
+			case NetworkController::state::NOT_CONNECTED:{ break; }
+			case NetworkController::state::READY: {
+				m_gameSim->ActivateSimulation();
+				getController()->AddScreen<MainGameScreen>(m_gameClient, m_gameSim);
+				Finish();
+				break; }
+			
 			}
 		}
 	}

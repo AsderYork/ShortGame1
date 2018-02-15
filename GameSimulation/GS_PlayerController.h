@@ -19,7 +19,7 @@ namespace GEM::GameSim
 		ENTITY_ID_TYPE characterID;
 
 		//!Set of all entities, that should be updated for this client.
-		std::set<ENTITY_ID_TYPE> trackedEntities;
+		mutable std::set<ENTITY_ID_TYPE> trackedEntities;
 
 		
 		PLAYER_ID_TYPE id;	

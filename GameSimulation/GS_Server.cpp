@@ -68,6 +68,7 @@ namespace GEM::GameSim
 	void GS_Server::RemovePlayer(PlayerTicket && player)
 	{
 		m_UpdateMessages.erase(player.get().id);
+		m_gs.m_entities.RemoveEntity(player.get().characterID);
 		m_gs.m_players.RemovePlayer(std::move(player));
 	}
 
@@ -89,12 +90,24 @@ namespace GEM::GameSim
 
 		*/
 
+		bool IsThereGeneralUpdate;
+
 		while (Entity)
 		{
 			auto[RegUpdate, AppearUpdate] = GetEntityUpdate(Entity.value());
 
 			UpdateData RegEntry(std::move(RegUpdate), Entity->first);
 			UpdateData AppearingEntry(std::move(AppearUpdate), Entity->first);
+			
+			
+			if (RegUpdate.PerMixinUpdates.size() == 0)
+			{//This entity doesn't have a regular update for this tick.
+				IsThereGeneralUpdate = false;
+			}
+			else
+			{
+				IsThereGeneralUpdate = true;
+			}
 
 			auto EntityMovability = static_cast<Mixin_Movable*>(Entity->second->GetMixinByID(Mixin_Movable::MixinID));
 
@@ -111,7 +124,14 @@ namespace GEM::GameSim
 						//Check if it's in a radius for update
 						if (PlayerPos.distance(EntityMovability->getPos()) < m_playerUpldateRadius)
 						{//It is in radius of update. Send regular
-							m_UpdateMessages.find(pl.id)->second.emplace_back(RegEntry);
+							if (IsThereGeneralUpdate)
+							{
+								m_UpdateMessages.find(pl.id)->second.emplace_back(RegEntry);
+							}
+						}
+						else
+						{//It's out of radius. Player looses this entity.
+							pl.trackedEntities.erase(Entity->first);
 						}
 					}
 					else
@@ -119,6 +139,7 @@ namespace GEM::GameSim
 						//Check if it's in radius for update
 						if (PlayerPos.distance(EntityMovability->getPos()) < m_playerUpldateRadius)
 						{//It is in radius of update. Send Appearing
+							pl.trackedEntities.insert(Entity->first);
 							m_UpdateMessages.find(pl.id)->second.emplace_back(AppearingEntry);
 						}
 					}
@@ -130,9 +151,13 @@ namespace GEM::GameSim
 				{//Check if player have this entity
 					if (pl.trackedEntities.find(Entity->first) != pl.trackedEntities.end())
 					{//Player have this entity. Send regular
-						m_UpdateMessages.find(pl.id)->second.emplace_back(RegEntry);
+						if (IsThereGeneralUpdate)
+						{
+							m_UpdateMessages.find(pl.id)->second.emplace_back(RegEntry);
+						}
 					}
 					else {//Player doesn't have this entity. Send Appearing
+						pl.trackedEntities.insert(Entity->first);
 						m_UpdateMessages.find(pl.id)->second.emplace_back(AppearingEntry);
 					}
 				}

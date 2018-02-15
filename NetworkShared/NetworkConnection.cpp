@@ -17,7 +17,10 @@ namespace GEM
 	}
 	void NetworkConnection::ProcessConnection()
 	{
-		auto Sended = m_socket.send(boost::asio::buffer(m_StreamToSend.str()));
+		boost::system::error_code ec;
+		auto Sended = m_socket.send(boost::asio::buffer(m_StreamToSend.str()), 0, ec);
+		if (ec) { m_socket.close();  return; }
+
 		m_StreamToSend.str(m_StreamToSend.str().substr(Sended, std::string::npos));
 		auto Avaliable = m_socket.available();
 		std::string Recive;
@@ -27,5 +30,9 @@ namespace GEM
 
 		Recive = std::string(VecChar.begin(), VecChar.end());
 		m_StreamToRecive.str(m_StreamToRecive.str() + Recive.substr(0, BytesRead));
+	}
+	bool NetworkConnection::isOpen()
+	{
+		return m_socket.is_open();
 	}
 }
