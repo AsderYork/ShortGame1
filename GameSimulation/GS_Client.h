@@ -13,9 +13,16 @@ namespace GEM::GameSim
 	{
 	private:
 		bool m_timeIsSet = false;
+
+	protected:
+		ENTITY_ID_TYPE m_playerCharacterID;
 	public:
 		GameSimulation m_gs;
 		std::chrono::system_clock::time_point m_lastUpdateTime;
+
+		inline void InsertPlayerEvent(std::unique_ptr<EventBase>&& Event) {
+			m_gs.InsertEvent(std::move(Event), m_playerCharacterID);
+		}
 
 		inline void Reset() { m_timeIsSet = false; }
 

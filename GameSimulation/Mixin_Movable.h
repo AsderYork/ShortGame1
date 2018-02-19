@@ -44,5 +44,7 @@ namespace GEM::GameSim
 
 		virtual void ReciveUpdate(cereal::BinaryInputArchive & archive) override;
 
+		virtual void ReciveEvent(const EventBase * const Event) override;
+
 	};
 }

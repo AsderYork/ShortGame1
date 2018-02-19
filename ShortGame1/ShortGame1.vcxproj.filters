@@ -287,7 +287,11 @@
     <ClCompile Include="MainGameScreen.cpp">
       <Filter>Screens\MainGameScreen</Filter>
     </ClCompile>
-    <ClCompile Include="GameVisualization.cpp" />
-    <ClCompile Include="PlayerInputEventGenerator.cpp" />
+    <ClCompile Include="GameVisualization.cpp">
+      <Filter>GameVisualization</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInputEventGenerator.cpp">
+      <Filter>PlayerInputEventGenerator</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

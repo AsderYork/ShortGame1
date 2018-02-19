@@ -7,7 +7,6 @@
 #include <string>
 
 
-#include "PlayerInputEventGenerator.h"
 
 namespace GEM
 {
@@ -29,7 +28,6 @@ namespace GEM
 		std::future<bool> m_connectionFuture;
 		std::string m_stateLineBeginningMessage;
 
-		PlayerInputEventGenerator m_PIEG;
 
 	public:
 

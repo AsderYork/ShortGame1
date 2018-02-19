@@ -13,6 +13,16 @@ namespace GEM
 			getController()->AddScreen<LoginScreen>(m_network, m_gsController, "Simulation were terminated. Try to reconnect");
 			Finish();
 		}
+		else
+		{
+			m_PIEG.CheckForEvents();
+			auto NewEvent = m_PIEG.getEvent();
+			while (NewEvent != nullptr)
+			{						
+				m_gsController->InsertPlayerEvent(std::move(NewEvent));
+				NewEvent = m_PIEG.getEvent();
+			}
+		}
 		
 	}
 }

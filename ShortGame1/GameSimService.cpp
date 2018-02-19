@@ -8,6 +8,17 @@ namespace GEM
 	void GameSimController::ActivateSimulation()
 	{
 		m_simmulationActive = true;
+		auto maybePlayerID = m_network->getPlayerCharID();
+		if (!maybePlayerID)
+		{
+			LOGCATEGORY("GameSimController/ActivateSimulation").error("Can't activate simulation! PlayerID is undefined. Network is probaly broken");
+			DeactivateSimmulation();
+		}
+		else
+		{
+			m_playerCharacterID = maybePlayerID.value();
+		}
+
 	}
 	void GameSimController::DeactivateSimmulation()
 	{

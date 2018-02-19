@@ -50,7 +50,6 @@ namespace GEM
 		template<typename...T>
 		void ReciveAsArchive(T&&...args)
 		{
-			std::stringstream OutStre;
 			cereal::BinaryInputArchive ar(Recive());
 			ar(std::forward<T>(args)...);
 		}

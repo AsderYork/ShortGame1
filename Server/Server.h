@@ -31,7 +31,12 @@ namespace GEM
 		class ClientConnectionRep
 		{
 		public:
-			enum class state { NO_INIT, WAIT_FOR_INIT_DATA, INITED, WORKING, ERR, END };
+			enum class state { NO_INIT,//Connection is not inited
+				WAIT_FOR_INIT_DATA,//ServerData is sent, wait for PlayerData
+				CREATE_PLAYER_AND_WAIT,//PlayerData recived. Create new player and wait till the player is ready to start.
+				WORKING,//Main game loop. At this point, GameSim controlls send and recive.
+				ERR,//Something got wrong
+				END };//Connection is terminated and should be removed.
 		private:
 			std::unique_ptr<NetworkConnection> m_connectionPointer;
 			state m_state;
@@ -48,8 +53,8 @@ namespace GEM
 
 			state State_NO_INIT();
 			state State_WAIT_FOR_INIT_DATA();
+			state State_CREATE_PLAYER_AND_WAIT();
 			state State_ERR();
-			state State_INITED();
 			state State_WORKING();
 
 

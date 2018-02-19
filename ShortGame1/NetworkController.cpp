@@ -14,6 +14,7 @@ namespace GEM
 		case state::NOT_CONNECTED: { return false; }
 		case state::JUST_CONNECTED: {m_state = s_JUST_CONNECTED(); break; }
 		case state::WAIT_FOR_INITIAL_EXCHANGE: {m_state = s_WAIT_FOR_INITIAL_EXCHANGE(); break; }
+		case state::WAIT_FOR_PLAYER_CHAR_ID: {m_state = s_WAIT_FOR_PLAYER_CHAR_ID(); break; }
 		case state::READY: {m_state = s_READY(); break; }
 		case state::ERROR: {m_state = s_ERROR(); break; }
 
@@ -59,19 +60,40 @@ namespace GEM
 		m_connection->ProcessConnection();
 		if (m_connection->Recive().str().size() != 0)
 		{
-			try {
+			try {				
 				m_connection->ReciveAsArchive(m_serverData);
 			}
 			catch (...)
 			{
 				return state::ERROR;
 			}
-
+			m_connection->ClearReciveBuffer();
 			LOGCATEGORY("NetworkController/s_WAIT_FOR_INITIAL_EXCHANGE").info("So connection is established! Servername:'%s';",
 				m_serverData.ServerName.c_str());
-			return state::READY;
+			return state::WAIT_FOR_PLAYER_CHAR_ID;
 		}
 		return state::WAIT_FOR_INITIAL_EXCHANGE;
+	}
+
+	NetworkController::state NetworkController::s_WAIT_FOR_PLAYER_CHAR_ID()
+	{
+		m_connection->ProcessConnection();
+		if (m_connection->Recive().str().size() != 0)
+		{
+			try {
+				GameSim::ENTITY_ID_TYPE id;
+				m_connection->ReciveAsArchive(id);
+				m_playerCharacterID = id;
+			}
+			catch (...)
+			{
+				return state::ERROR;
+			}
+			m_connection->ClearReciveBuffer();
+			m_connection->SendAsArchive(true);//Send true to continue connection
+			return state::READY;
+		}
+		return state::WAIT_FOR_PLAYER_CHAR_ID;
 	}
 
 	NetworkController::state NetworkController::s_READY()
