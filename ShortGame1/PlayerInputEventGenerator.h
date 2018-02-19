@@ -12,9 +12,6 @@
 
 namespace GEM
 {
-
-
-
 	class PlayerInputEventGenerator
 	{
 	private:

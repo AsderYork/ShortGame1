@@ -13,8 +13,8 @@ namespace GEM::GameSim
 	class EntityBase
 	{
 	public:		
-		virtual Mixin_base* GetMixinByID(int i) = 0;
-		virtual std::vector<Mixin_base*> getAllMixins() = 0;
+		virtual Mixin_base* GetMixinByID(int i) const = 0;
+		virtual std::vector<Mixin_base*> const getAllMixins() const = 0;
 
 
 		virtual bool tick(float delta) = 0;
@@ -57,7 +57,7 @@ namespace GEM::GameSim
 		/**!
 		Returns a pointer to a mixin with given ID. If there is no such mixin, nullptr will be returned
 		*/
-		Mixin_base* GetMixinByID(int id)
+		Mixin_base* GetMixinByID(int id) const
 		{
 			Mixin_base* retptr;
 			GEM::Helper::for_each(m_mixins, [&](int index, auto&& T) {
@@ -66,7 +66,7 @@ namespace GEM::GameSim
 			return retptr;
 		}
 
-		virtual std::vector<Mixin_base*> getAllMixins() override
+		virtual std::vector<Mixin_base*> const getAllMixins() const override
 		{
 			return std::vector<Mixin_base*>{&(std::get<Mixins>(m_mixins))...};
 		}

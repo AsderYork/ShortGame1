@@ -1,5 +1,6 @@
 #pragma once
 #include <cereal\cereal.hpp>
+#include "EventBase.h"
 
 #define MIXIN_ID(id) static const MIXIN_ID_TYPE MixinID = id; inline virtual const MIXIN_ID_TYPE getMixinID() const override{return MixinID;}
 
@@ -72,6 +73,15 @@ namespace GEM::GameSim
 		Called every simulation tick. Must return true, if everything is ok, false will terminate simulation, probably
 		*/
 		virtual bool tick(float delta) = 0;
+
+		/**!
+		Recives an event, that were sent to the entity, that this mixin is part of. It's up to mixin to check the
+		id of that event and then decide whether it will react on that event in some way, or just ignore it.
+
+		\note Technicaly mixins may want to send an event as a reaction to some other event. This event will be placed
+		in the queue and processed on the same frame, so beware of infinite loops, were two or more mixins exchange events indefinitely.
+		*/
+		virtual void ReciveEvent(const EventBase * const event) {};
 		virtual ~Mixin_base() {};
 	};
 }

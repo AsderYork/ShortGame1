@@ -3,6 +3,10 @@
 
 namespace GEM::GameSim
 {
+	void GameSimulation::InsertEvent(std::unique_ptr<EventBase>&& Event, const ENTITY_ID_TYPE id)
+	{
+		m_eventsBuffer.emplace(std::move(Event), id);
+	}
 	void GameSimulation::InsertCommand(ENTITY_ID_TYPE Entity, MixinCommandRetranslator && Command)
 	{
 		m_commandBuffer.push(std::make_pair(std::move(Command), Entity));
@@ -17,6 +21,16 @@ namespace GEM::GameSim
 			if (Entity == nullptr) { continue; }
 			Mixin_Controller::Instance().ApplyCommand(Entity, std::move(m_commandBuffer.front().first));
 			m_commandBuffer.pop();
+		}
+
+		//Apply all events. Commands is deprecated now, don't they?
+		while (!m_eventsBuffer.empty())
+		{
+			for (auto& mixin : m_entities.GetEntity(m_eventsBuffer.front().second)->getAllMixins())
+			{
+				mixin->ReciveEvent(m_eventsBuffer.front().first.get());
+			}
+			m_eventsBuffer.pop();
 		}
 		
 		std::unique_ptr<EntityController::EntityListIterator> iter = nullptr;

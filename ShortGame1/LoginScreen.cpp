@@ -63,6 +63,7 @@ namespace GEM
 				LOGCATEGORY("LoginScreen/PostFrame").info("NewEvent %s", NewEvent->getEventTypeName().c_str());
 				break; }
 			}
+			m_gameSim->m_gs.InsertEvent(std::move(NewEvent), 0);
 			NewEvent = m_PIEG.getEvent();
 		}
 

@@ -5,6 +5,7 @@
 #include "GS_EntityController.h"
 #include "Mixin_Controller.h"
 #include "EntityGenerator.h"
+#include "EventBase.h"
 
 //Mixins
 #include "Mixin_Movable.h"
@@ -29,6 +30,7 @@ namespace GEM::GameSim
 		}
 
 		std::queue<std::pair<MixinCommandRetranslator, ENTITY_ID_TYPE>> m_commandBuffer;
+		std::queue<std::pair<std::unique_ptr<EventBase>, ENTITY_ID_TYPE>> m_eventsBuffer;
 
 
 		/**!
@@ -46,6 +48,12 @@ namespace GEM::GameSim
 		GameSimulation() {
 			RegisterMixins();
 		}
+
+		/**!
+		Inserts an event into simulation. Event will be applied to a all mixin of
+		specified entity with the next call of \c Tick.
+		*/
+		void InsertEvent(std::unique_ptr<EventBase>&& Event, const ENTITY_ID_TYPE  id);
 
 
 
