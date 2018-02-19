@@ -10,7 +10,6 @@
 #include <chrono>
 
 
-
 namespace GEM
 {
 	
@@ -37,6 +36,36 @@ namespace GEM
 
 	void LoginScreen::PostFrame(float timeDelta)
 	{
+		m_PIEG.CheckForEvents();
+		auto NewEvent = m_PIEG.getEvent();
+		while (NewEvent != nullptr)
+		{
+			
+			switch (NewEvent->getEventID())
+			{
+			case GameSim::KeyboardEvent_PlayerAttack::id:
+			case GameSim::KeyboardEvent_PlayerJump::id:
+			case GameSim::KeyboardEvent_PlayerMoveBackward::id:
+			case GameSim::KeyboardEvent_PlayerMoveForward::id:
+			case GameSim::KeyboardEvent_PlayerMoveLeft::id:
+			case GameSim::KeyboardEvent_PlayerMoveRight::id: {
+				if (static_cast<GameSim::KeyboardEventBase*>(NewEvent.get())->m_isPressed)
+				{
+					LOGCATEGORY("LoginScreen/PostFrame").info("NewEvent KeyPressed! %s", NewEvent->getEventTypeName().c_str());
+				}
+				else
+				{
+					LOGCATEGORY("LoginScreen/PostFrame").info("NewEvent KeyReleased! %s", NewEvent->getEventTypeName().c_str());
+				}
+				break;
+			}
+			default: {
+				LOGCATEGORY("LoginScreen/PostFrame").info("NewEvent %s", NewEvent->getEventTypeName().c_str());
+				break; }
+			}
+			NewEvent = m_PIEG.getEvent();
+		}
+
 		if (m_connectionFuture.valid())
 		{
 			if (m_connectionFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready)

@@ -13,6 +13,7 @@
 #include "GameSimService.h"
 
 #include "LoginScreen.h"
+#include "GameVisualization.h"
 
 
 
@@ -32,6 +33,7 @@ int main(int argc, char *argv[])
 	auto NetworkController = Controller.AddService<GEM::NetworkController>();
 	auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
 	auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
+	auto GameVisualization = Controller.AddService<GEM::GameVisualization>(GameSimService, OgreController);
 
 	//auto MapService = Controller.AddService<GEM::MapService>(OgreController);
 	//auto DebugMapController = Controller.AddService<GEM::DebugMapGraphicsService>(OgreController, MapService);

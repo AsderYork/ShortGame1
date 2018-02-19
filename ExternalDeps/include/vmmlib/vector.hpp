@@ -1528,7 +1528,7 @@ vector< M, T >::scale_to( vector< M, TT >& result_,
 {
     T range       = max_value-min_value;
     T half_range  = range * 0.5;
-    T scale       = ( 1.0 / range ) * static_cast< T >( std::numeric_limits< TT >::max() );
+    T scale       = ( 1.0 / range ) * static_cast< T >( (std::numeric_limits< TT >::max)() );
 
     for( size_t index = 0; index < M; ++index )
     {
@@ -1755,7 +1755,7 @@ vector< M, T >::reciprocal_safe()
         T& v = *it;
 
         if ( v == static_cast< T >( 0 ) )
-            v = std::numeric_limits< T >::max();
+            v = (std::numeric_limits< T >::max)();
         else
             v = static_cast< T >( 1.0 ) / v;
     }

@@ -52,6 +52,15 @@
     <Filter Include="GameSimulation\UpdateStructures">
       <UniqueIdentifier>{55c3d5d2-510d-4990-bdc3-165ef9221908}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Events">
+      <UniqueIdentifier>{f0debbd5-f40e-4f68-8307-d9efc3f5ef68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events\EventBase">
+      <UniqueIdentifier>{7c050646-be78-4017-b058-8930a336a90f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events\KeyboardEvents">
+      <UniqueIdentifier>{0f1dc085-7670-4a0d-9337-3640cc3606da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -97,6 +106,12 @@
     </ClInclude>
     <ClInclude Include="UpdateStructures.h">
       <Filter>GameSimulation\UpdateStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="EventBase.h">
+      <Filter>Events\EventBase</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardEvents.h">
+      <Filter>Events\KeyboardEvents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

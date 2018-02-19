@@ -46,7 +46,7 @@ namespace GEM
 		EngineController* m_owner;
 		inline void setEngineController(EngineController* ptr) {
 			assert(m_owner == nullptr);/*setEngineController, apperantly, get's called more then once. That means, that multiple EngineControllers are trying
-			to get one Service. Why is there even more then one EngineControllers?*/
+			to get one Service. Why is there ever more then one EngineController?*/
 		m_owner = ptr; }
 		friend EngineController;
 

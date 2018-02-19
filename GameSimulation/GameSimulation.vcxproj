@@ -142,12 +142,14 @@
   <ItemGroup>
     <ClInclude Include="EntitiesBase.h" />
     <ClInclude Include="EntityGenerator.h" />
+    <ClInclude Include="EventBase.h" />
     <ClInclude Include="GameSimulation.h" />
     <ClInclude Include="GS_Client.h" />
     <ClInclude Include="GS_EntityController.h" />
     <ClInclude Include="GS_PlayerController.h" />
     <ClInclude Include="GS_Server.h" />
     <ClInclude Include="Helper_TupleForeach.h" />
+    <ClInclude Include="KeyboardEvents.h" />
     <ClInclude Include="Mixin_Base.h" />
     <ClInclude Include="Mixin_Controller.h" />
     <ClInclude Include="Mixin_Health.h" />

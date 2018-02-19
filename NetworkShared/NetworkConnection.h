@@ -1,5 +1,8 @@
 #pragma once
+#ifndef _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 #define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
+#endif // !_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
+
 #include <boost\asio.hpp>
 #include <sstream>
 #include <cereal\cereal.hpp>

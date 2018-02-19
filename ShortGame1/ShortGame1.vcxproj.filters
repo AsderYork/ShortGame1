@@ -109,6 +109,12 @@
     <Filter Include="Screens\MainGameScreen">
       <UniqueIdentifier>{873156d4-0310-4edc-b537-a0854bfadd68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameVisualization">
+      <UniqueIdentifier>{6737b1ab-9774-4eca-9b2f-5903e11464de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayerInputEventGenerator">
+      <UniqueIdentifier>{ffda274c-e8b0-4bcc-be53-63c1aef7a59a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -201,6 +207,12 @@
     <ClInclude Include="MainGameScreen.h">
       <Filter>Screens\MainGameScreen</Filter>
     </ClInclude>
+    <ClInclude Include="GameVisualization.h">
+      <Filter>GameVisualization</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInputEventGenerator.h">
+      <Filter>PlayerInputEventGenerator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogHelper.cpp">
@@ -275,5 +287,7 @@
     <ClCompile Include="MainGameScreen.cpp">
       <Filter>Screens\MainGameScreen</Filter>
     </ClCompile>
+    <ClCompile Include="GameVisualization.cpp" />
+    <ClCompile Include="PlayerInputEventGenerator.cpp" />
   </ItemGroup>
 </Project>
