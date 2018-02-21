@@ -1,0 +1,18 @@
+/**!
+This is a dangerous zone!
+
+So we want to generate an entire event and even register it afterwards with as less code
+duplication, as possible.
+
+For that, we use 3 files.
+This is a first one. It contains only definitions of class that will be created.
+
+Then KeyboardEvents.h will create actual class definitions and, probably, some special way to deserialize this events
+from EventBase.
+*/
+NEW_EVENT(KeyboardEvent_PlayerMoveForward)
+NEW_EVENT(KeyboardEvent_PlayerMoveBackward)
+NEW_EVENT(KeyboardEvent_PlayerMoveLeft)
+NEW_EVENT(KeyboardEvent_PlayerMoveRight)
+NEW_EVENT(KeyboardEvent_PlayerJump)
+NEW_EVENT(KeyboardEvent_PlayerAttack)

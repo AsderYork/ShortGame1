@@ -1,6 +1,9 @@
 #pragma once
 #include <cstdint>
 #include <string>
+#include <tuple>
+#include <cereal\cereal.hpp>
+#include <cereal\archives\binary.hpp>
 
 /**!
 Defines id field and virtual functions of class EventBase
@@ -43,8 +46,8 @@ namespace GEM::GameSim
 	using EVENT_ID_TYPE = uint16_t;
 
 	/**!
-	Events. So we have a GameSim. It's simulaties the game, but we don't want to just watch it progresses!
-	It not a movie or a Game of Life we're doing here, we want to interact with the world! Affect it in some way or another.
+	Events. So we have a GameSim. It's simulaties the game, but we don't want to just watch it progress!
+	Its not a movie or a Game of Life we're doing here, we want to interact with the world! Affect it in one way or another.
 	This affects are represented by events.
 	Events are passed down to specific entities and to it's mixins. If mixin wants it can react to that event in some
 	way, altering the state of the entity.<br>
@@ -54,6 +57,12 @@ namespace GEM::GameSim
 	constexpr static EVENT_ID_TYPE id<br>
 	field with value, unique for every declared class. It is recomended to use
 	GAMESIM_EVENT(<classname>) macro to define this field and base virtual methods.
+
+	\note Creating an event is a bizzare task, so before you make one, make shure that you read all of the info
+	about how to make one. You can also use KeyboardEvents as a template(literaly, not a c++ template) for your oun templates.
+	If this is the first thing you read about events, you probably thinking that it is not that bad. Well, you're wrong. Go to
+	EventSerializator.h and find out, how it is possible, to create a bunch of events and serialize them correctly, if you only have
+	a unique_ptr with the type of base class, wihout using RTTI.
 	*/
 	class EventBase
 	{
@@ -73,5 +82,13 @@ namespace GEM::GameSim
 		Just use GAMESIM_EVENT(<classname>) of beginning of a class definition.
 		*/
 		virtual std::string getEventTypeName() const = 0;
+
+		/**!
+		Performs a specific for a given event type specialization.
+		That means that id should not be serialized here, there are internal mechanisms
+		that take care of that.
+		*/
+		virtual void serialize(cereal::BinaryOutputArchive& ar) const = 0;
 	};
+
 }

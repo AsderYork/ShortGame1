@@ -143,6 +143,7 @@
     <ClInclude Include="EntitiesBase.h" />
     <ClInclude Include="EntityGenerator.h" />
     <ClInclude Include="EventBase.h" />
+    <ClInclude Include="EventSerializator.h" />
     <ClInclude Include="GameSimulation.h" />
     <ClInclude Include="GS_Client.h" />
     <ClInclude Include="GS_EntityController.h" />
@@ -169,6 +170,9 @@
     <ClCompile Include="Mixin_Controller.cpp" />
     <ClCompile Include="Mixin_Health.cpp" />
     <ClCompile Include="Mixin_Movable.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="KeyboardEvents.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

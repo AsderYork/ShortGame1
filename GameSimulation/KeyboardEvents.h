@@ -1,17 +1,10 @@
 #pragma once
 #include "EventBase.h"
+#include <memory>
 
-/**!
-Creates new KeyboardEvent class named KeyboardEvent_<x>.
-This macro can only be used in this header! And, well while we're on it
-all KeyboardEvents must be declared only in this header!
-*/
-#define NEW_KEYBOARD_EVENT(x) class KeyboardEvent_##x : public GEM::GameSim::KeyboardEventBase \
-{\
-	GAMESIM_EVENT(KeyboardEvent_##x) \
-	public:\
-	KeyboardEvent_##x(bool isPressed) : KeyboardEventBase(isPressed) {}\
-}
+#include <cereal\cereal.hpp>
+#include <cereal\archives\binary.hpp>
+
 
 namespace GEM::GameSim
 {
@@ -76,12 +69,25 @@ namespace GEM::GameSim
 		KeyboardEventBase(bool isPressed) : m_isPressed(isPressed) {}
 	};
 
-	NEW_KEYBOARD_EVENT(PlayerMoveForward);
-	NEW_KEYBOARD_EVENT(PlayerMoveBackward);
-	NEW_KEYBOARD_EVENT(PlayerMoveLeft);
-	NEW_KEYBOARD_EVENT(PlayerMoveRight);
-	NEW_KEYBOARD_EVENT(PlayerJump);
-	NEW_KEYBOARD_EVENT(PlayerAttack);
+	/**!
+	Creates new KeyboardEvent class named KeyboardEvent_<x>.
+	This macro can only be used in this header! And, well while we're on it
+	all KeyboardEvents must be declared only in this header!
+	*/
+#define NEW_EVENT(x) class x : public GEM::GameSim::KeyboardEventBase \
+	{\
+		GAMESIM_EVENT(x) \
+		public:\
+		x(bool isPressed) : KeyboardEventBase(isPressed) {}\
+		inline static std::unique_ptr<EventBase> deserialize(cereal::BinaryInputArchive& ar)\
+		{ bool state = false;\
+		ar(state);\
+		return std::make_unique<x>(state);\
+		}\
+		virtual void serialize(cereal::BinaryOutputArchive& ar) const override {ar(m_isPressed);}\
+	};
+
+#include "KeyboardEvents.def"
+#undef NEW_EVENT
 
 }
-#undef NEW_KEYBOARD_EVENT

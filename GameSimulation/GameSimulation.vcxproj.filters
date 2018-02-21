@@ -113,6 +113,9 @@
     <ClInclude Include="KeyboardEvents.h">
       <Filter>Events\KeyboardEvents</Filter>
     </ClInclude>
+    <ClInclude Include="EventSerializator.h">
+      <Filter>Events\EventBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -142,5 +145,10 @@
     <ClCompile Include="Mixin_Movable.cpp">
       <Filter>Entities\Mixins\Mixin_Movable</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="KeyboardEvents.def">
+      <Filter>Events\KeyboardEvents</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -30,7 +30,6 @@ namespace GEM::GameSim
 		}
 
 		std::queue<std::pair<MixinCommandRetranslator, ENTITY_ID_TYPE>> m_commandBuffer;
-		std::queue<std::pair<std::unique_ptr<EventBase>, ENTITY_ID_TYPE>> m_eventsBuffer;
 
 
 		/**!
@@ -43,6 +42,9 @@ namespace GEM::GameSim
 		EntityController m_entities;
 		EntityGenerator<Mixin_Health, Mixin_Movable> m_generator;
 		PlayerController m_players;
+
+
+		std::queue<std::pair<std::unique_ptr<EventBase>, ENTITY_ID_TYPE>> m_eventsBuffer;
 		
 
 		GameSimulation() {
