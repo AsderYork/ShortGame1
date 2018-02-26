@@ -5,6 +5,7 @@
 
 //Events headeres
 #include "KeyboardEvents.h"
+#include "NumerableEvents.h"
 
 namespace GEM::GameSim
 {
@@ -54,6 +55,7 @@ namespace GEM::GameSim
 		switch (id)
 		{
 #include "KeyboardEvents.def"
+#include "NumerableEvents.def"
 		default: {m = nullptr; break; }
 		}
 #undef NEW_EVENT

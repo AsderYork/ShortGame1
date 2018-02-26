@@ -1,13 +1,13 @@
 #pragma once
+#include "EntitiesBase.h"
+#include "EntityIDType.h"
 #include <unordered_map>
 #include <memory>
-#include "EntitiesBase.h"
 #include <vector>
 #include <optional>
 
 namespace GEM::GameSim
 {
-	using ENTITY_ID_TYPE = uint32_t;
 
 	class EntityController
 	{

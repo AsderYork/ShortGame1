@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[])
 {
-	std::stringstream s;
+	/*std::stringstream s;
 
 	{
 		std::vector<std::unique_ptr<GEM::GameSim::EventBase>> vec;
@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
 
 		printf("no error!\n");
 	}
+	*/
 	
 	GEM::Server server(4483, GEM::ServerData("First one!"));
 

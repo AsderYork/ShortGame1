@@ -57,7 +57,7 @@ namespace GEM::GameSim
 		
 	public:
 
-		std::unique_ptr<EntityBase> GenerateEntity(const std::vector<MIXIN_ID_TYPE> Mixins)
+		std::unique_ptr<EntityBase> GenerateEntity(const std::vector<MIXIN_ID_TYPE> Mixins, GameSimulation* GameSimPtr, ENTITY_ID_TYPE EntID)
 		{
 			std::vector<std::unique_ptr<Mixin_base>> vec;
 
@@ -65,6 +65,8 @@ namespace GEM::GameSim
 			{
 				auto Ptr = Impl<TMixins...>::GenerateMixinIfIDIsCorrenct(id);
 				if (Ptr == nullptr) { throw std::exception("Can't build an entity. Requested Mixin is unknown!"); }
+				Ptr->m_GameSim = GameSimPtr;
+				Ptr->m_EntityID = EntID;
 				vec.emplace_back(std::move(Ptr));
 			}
 

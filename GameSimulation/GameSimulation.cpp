@@ -50,7 +50,8 @@ namespace GEM::GameSim
 
 	EntityBase* GameSimulation::AddEntity(ENTITY_ID_TYPE ID, std::vector<MIXIN_ID_TYPE> mixins)
 	{
-		return m_entities.AddFreeEntity(ID, m_generator.GenerateEntity(std::move(mixins)));
+		auto ent = m_entities.AddFreeEntity(ID, m_generator.GenerateEntity(std::move(mixins), this, ID));
+		return ent;
 	}
 	std::pair<EntityBase*, ENTITY_ID_TYPE> GameSimulation::AddEntity(std::vector<MIXIN_ID_TYPE> mixins)
 	{
@@ -66,9 +67,7 @@ namespace GEM::GameSim
 				m_lastAddedEntity++;
 			}
 		}
-
-
-		return std::make_pair(m_entities.AddFreeEntity(m_lastAddedEntity, m_generator.GenerateEntity(std::move(mixins))), m_lastAddedEntity);
+		return std::make_pair(AddEntity(m_lastAddedEntity, std::move(mixins)), m_lastAddedEntity);
 	}
 
 }

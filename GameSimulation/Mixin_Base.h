@@ -1,6 +1,7 @@
 #pragma once
 #include <cereal\cereal.hpp>
 #include "EventBase.h"
+#include "EntityIDType.h"
 
 #define MIXIN_ID(id) static const MIXIN_ID_TYPE MixinID = id; inline virtual const MIXIN_ID_TYPE getMixinID() const override{return MixinID;}
 
@@ -22,9 +23,23 @@ namespace GEM::GameSim
 	*/
 	using MIXIN_ID_TYPE = int;
 
+	//Forward declarations
+	class GameSimulation;
+	template<typename...T>
+	class EntityGenerator;
+
 	class Mixin_base
 	{
+		template<typename... T>
+		friend class EntityGenerator;
+	private:
+		ENTITY_ID_TYPE m_EntityID;
+		GameSimulation * m_GameSim;
+	protected:
+		inline const GameSimulation* getGameSim() { return m_GameSim; }
+		inline const ENTITY_ID_TYPE getEntityID() { return m_EntityID; }
 	public:
+		
 
 		virtual const MIXIN_ID_TYPE getMixinID() const = 0;
 
