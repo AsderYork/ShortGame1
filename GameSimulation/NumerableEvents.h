@@ -38,7 +38,7 @@ In time of writing 2 ideas emerged.
 Let's apply that and see if option 1 as actually needed.
 
 Player1 tries to move forward, but Player2 builds a wall right on it's path. Server recives BuildWall event, PlayerMoveForward and a bunch
-of NumerableEvents about Player1 movements. Server rejects some of this event at the end, shifting the player along the wall instead.
+of NumerableEvents about Player1 movements. Server rejects some of this events at the end, shifting the player along the wall instead.
 During that time Player1 continues to move forward, oblivious about the wall, that just appeared on it's path. Then Server packets are recived.
 Client marks declined events, forgets about them, applying a state from Update to it's position, tries to re-apply it's remaining NumerableEvents
 that it allready sent to a Server. Determines that they can't be applied(Becouse they where moving forward, and now player can only move along the wall).
@@ -76,6 +76,23 @@ could try to tame the wave and stay right on the edge, but one sudden downspike 
 known to a server. If player would prefer to stay a little farther from the edge it still can gain advantage though. Or can it?
 Well yes, it seems like it can. About 0.05s of advantage. And to do that, Player must monitor it's connection latency constantly.
 So the decision is that it doesn't worth it.
+
+And ine more time, an example! But now server dosn't try to fix recived events.
+Player1 starts to move forawrad. Player2 builds a wall right in front of Player1. Server recives a wallBuild first, and then a dozen of
+MoveForwards from Player1. Server rejects some of the Events from Player1 (For example the events where from 0 to 15). And sends
+OOS(12,13,14,15):LastRecived(15), Player1 continues to move through the wall when it recives this package. It removes events 12,13,14,15
+then it also removes all the remaning event between 0-15 and then it tries to re-apply events, that it were generating all the time. Let's say
+these are events from 16 to 50. We're trying to re-apply them(becouse we allready sent them. If there are events, that server would confirm,
+then if we do not apply it, we would lost synchronization!). Let's say that player have moved through the wall completely according to this events.
+But funny fact, player stores it's entire position in this event. We easily mark events from 16 through 40 as Potentially OOS becouse they are right
+in the wall. And then there are events 40-50, that are on the other side of the wall. But when we're tryng to apply them, we're applying them to
+a gamestate, where Player1 is on the other side of the wall, so we just check if it's possible to move through the wall.
+
+Do we really need to send Something with OOS? We ither InSync or NotInSync. If we're InSync we just ignoring Server's Update for a particular
+Entity, if we OutOfSync, then we just accept correct state from The Update and trying to re-apply all the events that came after it.
+But wait, what about moments, when we can predict, that some packets will be OOS? If we're were able to predict correctly, that we have no need
+to re-apply! So yeah, we actually need that info, but in the other place.
+
 */
 
 namespace GEM::GameSim
