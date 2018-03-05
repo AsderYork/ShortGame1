@@ -64,6 +64,9 @@
     <Filter Include="Events\NumerableEvents">
       <UniqueIdentifier>{0e49bca4-0f07-44c7-bc3b-67a474b3d1d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameSimulation\GameHistory">
+      <UniqueIdentifier>{5d5838f2-372f-48a4-b22e-f44017421265}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -128,6 +131,9 @@
     <ClInclude Include="EntityIDType.h">
       <Filter>Entities\Base</Filter>
     </ClInclude>
+    <ClInclude Include="GameHistory.h">
+      <Filter>GameSimulation\GameHistory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -156,6 +162,9 @@
     </ClCompile>
     <ClCompile Include="Mixin_Movable.cpp">
       <Filter>Entities\Mixins\Mixin_Movable</Filter>
+    </ClCompile>
+    <ClCompile Include="GameHistory.cpp">
+      <Filter>GameSimulation\GameHistory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

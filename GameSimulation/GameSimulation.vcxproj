@@ -145,6 +145,7 @@
     <ClInclude Include="EntityIDType.h" />
     <ClInclude Include="EventBase.h" />
     <ClInclude Include="EventSerializator.h" />
+    <ClInclude Include="GameHistory.h" />
     <ClInclude Include="GameSimulation.h" />
     <ClInclude Include="GS_Client.h" />
     <ClInclude Include="GS_EntityController.h" />
@@ -165,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntityGenerator.cpp" />
+    <ClCompile Include="GameHistory.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
     <ClCompile Include="GS_Client.cpp" />
     <ClCompile Include="GS_EntityController.cpp" />

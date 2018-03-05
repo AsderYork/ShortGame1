@@ -403,9 +403,9 @@ namespace GEM
 	{
 		m_camera = sceneManager->createCamera("Main Camera");
 
-		m_camera->setPosition(Ogre::Vector3(20, 45, 15));
+		m_camera->setPosition(Ogre::Vector3(0, 0, 15));
 		// Look back along -Z
-		m_camera->lookAt(Ogre::Vector3(20, 40, 20));
+		m_camera->lookAt(Ogre::Vector3(0, 0, 0));
 		m_camera->setNearClipDistance(0.2f);
 		m_camera->setFarClipDistance(1000.0f);
 		m_camera->setAutoAspectRatio(true);

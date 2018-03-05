@@ -45,11 +45,13 @@ namespace GEM
 				return ActionResult::AR_OK;
 			}
 			cereal::BinaryInputArchive ar(conn->Recive());
-			if (!Tick(timeDelta, ar, conn->Recive().str().size() == 0))
+			std::stringstream OutStream;
+			if (!Tick(timeDelta, ar, OutStream, conn->Recive().str().size() == 0))
 			{
 				DeactivateSimmulation();
 				return ActionResult::AR_OK;
 			}
+			conn->Send(OutStream);
 		}
 		return ActionResult::AR_OK;
 	}

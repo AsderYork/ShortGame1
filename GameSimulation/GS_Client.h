@@ -1,5 +1,6 @@
 #pragma once
 #include "GameSimulation.h"
+#include "GameHistory.h"
 #include <cereal\cereal.hpp>
 #include <cereal\archives\binary.hpp>
 #include <cereal\types\string.hpp>
@@ -16,6 +17,9 @@ namespace GEM::GameSim
 
 	protected:
 		ENTITY_ID_TYPE m_playerCharacterID;
+		GameHistoryController m_gameHistory;
+
+
 	public:
 		GameSimulation m_gs;
 		std::chrono::system_clock::time_point m_lastUpdateTime;
@@ -33,6 +37,6 @@ namespace GEM::GameSim
 		Performs one tick of a simulation
 		\returns returns true if simmulation should continue ticking, false if something gone worng and simulation should be stopped.
 		*/
-		bool Tick(float Delta, cereal::BinaryInputArchive& archive, bool ArchiveIsEmpty=false);
+		bool Tick(float Delta, cereal::BinaryInputArchive& archive, std::stringstream& OutputStream, bool ArchiveIsEmpty=false);
 	};
 }

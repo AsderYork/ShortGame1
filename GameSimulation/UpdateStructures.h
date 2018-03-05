@@ -83,7 +83,7 @@ namespace GEM::GameSim
 	};
 
 	/**!
-	So, updates. Imagine 100 player playing. Some of them will recive nearly identical updatesm
+	So, updates. Imagine 100 player playing. Some of them will recive nearly identical updates
 	some will not.
 	So there was 3 ideas.
 	1) Make a separate storage for updates on a per player basis. This means that there is as much duplicates as possible!

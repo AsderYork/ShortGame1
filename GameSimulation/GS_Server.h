@@ -1,6 +1,7 @@
 #pragma once
 #include "GameSimulation.h"
 #include "UpdateStructures.h"
+#include "GameHistory.h"
 #include <string>
 #include <map>
 
@@ -15,10 +16,35 @@ namespace GEM::GameSim
 	
 	class GS_Server
 	{
+	public:
+
+		/**!
+		Holds everything, that should be sended to a player
+		*/
+		struct PlayerUpdatePack
+		{
+			std::vector<UpdateData> updates;
+			OutOfSync_Packet OOS;
+			InSync_Packet InSync;
+
+			template<class Archive>
+			void serialize(Archive & archive)
+			{
+				archive(OOS, InSync, updates);
+			}
+		};
 	private:
 	
 
-		std::map<PLAYER_ID_TYPE, std::vector<UpdateData>> m_UpdateMessages;
+		struct PerPlayerInfo
+		{
+			std::vector<UpdateData> UpdateVector;
+			std::vector<SyncingUpdate_Packet> SynchroUpdates;
+			InSync_Packet currentInSync;
+			OutOfSync_Packet currentOOS;
+
+		};
+		std::map<PLAYER_ID_TYPE, PerPlayerInfo> m_perPlayerInfo;
 
 		GameSimulation m_gs;
 
@@ -34,6 +60,8 @@ namespace GEM::GameSim
 		*/
 		std::pair<EntityRegularUpdate, EntityAppearingUpdate>  GetEntityUpdate(std::pair<ENTITY_ID_TYPE, EntityBase*>& Entity);
 
+		void ProcessPlayerSyncingUpdates();
+
 	public:
 
 		std::optional<PlayerTicket> NewPlayerRoutine(Player&& player);
@@ -46,9 +74,13 @@ namespace GEM::GameSim
 		*/
 		void Tick(float Delta);
 
+		void ReciveSynchroUpdatesFromClient(PLAYER_ID_TYPE id, cereal::BinaryInputArchive ar);
 
-
-		std::vector<UpdateData>& GetUpdatesForPlayer(PLAYER_ID_TYPE id);
+		/**!
+		Returns a block of data, that should be sended to a given player.
+		This method should be called only once for every player per tick.
+		*/
+		PlayerUpdatePack GatherDataForPlayer(PLAYER_ID_TYPE id);
 		
 	};
 }

@@ -9,11 +9,38 @@ namespace GEM::GameSim
 	
 	
 
-	std::vector<UpdateData>& GS_Server::GetUpdatesForPlayer(PLAYER_ID_TYPE id)
+	GS_Server::PlayerUpdatePack GS_Server::GatherDataForPlayer(PLAYER_ID_TYPE id)
 	{
-		return m_UpdateMessages.find(id)->second;
-	}
+		PlayerUpdatePack PPI;
 
+		auto PlayerInfo = m_perPlayerInfo.find(id);
+
+		PPI.updates.swap(PlayerInfo->second.UpdateVector);
+		PPI.OOS.DesyncronizedEvents.swap(PlayerInfo->second.currentOOS.DesyncronizedEvents);
+		PPI.InSync.LastSynced = PlayerInfo->second.currentInSync.LastSynced;
+
+		return PPI;
+	}
+	void GS_Server::ReciveSynchroUpdatesFromClient(PLAYER_ID_TYPE id, cereal::BinaryInputArchive ar)
+	{
+		auto& TmpPlayerInfo = m_perPlayerInfo.find(id)->second;
+
+		/*There is no obvious way to check, how many packets server have sent us
+		So we have to realy on on exception for a main flow controll.
+		*/
+		try
+		{
+			while (true)
+			{
+				SyncingUpdate_Packet tmpStateHolder;
+				ar(tmpStateHolder);
+				TmpPlayerInfo.SynchroUpdates.push_back(tmpStateHolder);
+			}
+
+
+		}
+		catch (cereal::Exception&) {}
+	}
 	
 
 	
@@ -50,6 +77,30 @@ namespace GEM::GameSim
 		return std::make_pair(Regular, Appearing);
 	}
 
+	void GS_Server::ProcessPlayerSyncingUpdates()
+	{
+		for (auto& player : m_gs.m_players.getPlayersVector())
+		{
+			auto& playerIt = m_perPlayerInfo.find(player.id);
+			if (playerIt->second.SynchroUpdates.size() == 0) {continue; }
+
+			for (auto& update : playerIt->second.SynchroUpdates)
+			{
+				//Check the update.
+					//if update doesn't fit the rules of the simulation, add ID to OOS and skip
+
+				//If update fits, apply it
+				cereal::BinaryInputArchive ar(update.UpdateData.data);
+				player.characterPtr->GetMixinByID(Mixin_Movable::MixinID)->ReciveUpdate(ar);
+			}
+			playerIt->second.currentInSync.LastSynced = playerIt->second.SynchroUpdates.back().UniuqeEventID;
+			playerIt->second.SynchroUpdates.clear();
+			
+		}
+
+		
+	}
+
 	std::optional<PlayerTicket> GS_Server::NewPlayerRoutine(Player && player)
 	{
 		auto newPlayer = m_gs.m_players.addPlayer(player);
@@ -59,7 +110,7 @@ namespace GEM::GameSim
 		newPlayer->get().characterPtr = CharPtr;
 		newPlayer->get().characterID = CharId;
 
-		m_UpdateMessages.emplace(newPlayer->get().id, std::vector<UpdateData>());
+		m_perPlayerInfo.emplace(newPlayer->get().id, PerPlayerInfo());
 
 
 		return newPlayer;
@@ -67,13 +118,14 @@ namespace GEM::GameSim
 
 	void GS_Server::RemovePlayer(PlayerTicket && player)
 	{
-		m_UpdateMessages.erase(player.get().id);
+		m_perPlayerInfo.erase(player.get().id);
 		m_gs.m_entities.RemoveEntity(player.get().characterID);
 		m_gs.m_players.RemovePlayer(std::move(player));
 	}
 
 	void  GS_Server::Tick(float Delta)
 	{
+		ProcessPlayerSyncingUpdates();
 		//Perform basic tick
 		auto Reval = m_gs.Tick(Delta);
 
@@ -126,7 +178,7 @@ namespace GEM::GameSim
 						{//It is in radius of update. Send regular
 							if (IsThereGeneralUpdate)
 							{
-								m_UpdateMessages.find(pl.id)->second.emplace_back(RegEntry);
+								m_perPlayerInfo.find(pl.id)->second.UpdateVector.emplace_back(RegEntry);
 							}
 						}
 						else
@@ -140,7 +192,7 @@ namespace GEM::GameSim
 						if (PlayerPos.distance(EntityMovability->getPos()) < m_playerUpldateRadius)
 						{//It is in radius of update. Send Appearing
 							pl.trackedEntities.insert(Entity->first);
-							m_UpdateMessages.find(pl.id)->second.emplace_back(AppearingEntry);
+							m_perPlayerInfo.find(pl.id)->second.UpdateVector.emplace_back(AppearingEntry);
 						}
 					}
 				}
@@ -153,12 +205,12 @@ namespace GEM::GameSim
 					{//Player have this entity. Send regular
 						if (IsThereGeneralUpdate)
 						{
-							m_UpdateMessages.find(pl.id)->second.emplace_back(RegEntry);
+							m_perPlayerInfo.find(pl.id)->second.UpdateVector.emplace_back(RegEntry);
 						}
 					}
 					else {//Player doesn't have this entity. Send Appearing
 						pl.trackedEntities.insert(Entity->first);
-						m_UpdateMessages.find(pl.id)->second.emplace_back(AppearingEntry);
+						m_perPlayerInfo.find(pl.id)->second.UpdateVector.emplace_back(AppearingEntry);
 					}
 				}
 			}
@@ -166,4 +218,5 @@ namespace GEM::GameSim
 			Entity = m_gs.m_entities.IterateOverEntities(std::move(iter));
 		}
 	}
+
 }
