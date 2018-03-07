@@ -2,6 +2,7 @@
 #include "Mixin_Base.h"
 #include <vmmlib\vector.hpp>
 #include <vmmlib/math.hpp>
+#include <chrono>
 
 namespace GEM::GameSim
 {
@@ -15,7 +16,8 @@ namespace GEM::GameSim
 	protected:
 		vmml::vec3f m_pos = vmml::vec3f(0, 0, 0);
 		vmml::vec3f m_velocity = vmml::vec3f(0, 0, 0);
-
+		//Remembers when was the last time of gathering update from this mixin. If it was too long, it will start asking for an update
+		std::chrono::system_clock::time_point m_lastUpdate;
 
 		bool m_keepUpdating = true;
 
@@ -23,6 +25,7 @@ namespace GEM::GameSim
 
 	 MIXIN_ID(43)
 
+		 Mixin_Movable() : m_lastUpdate(std::chrono::system_clock::now()) {}
 
 		/**!
 		Shifts position of an entity

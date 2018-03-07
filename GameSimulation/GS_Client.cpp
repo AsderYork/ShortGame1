@@ -34,7 +34,8 @@ namespace GEM::GameSim
 				}
 			}
 			catch (...)
-			{}
+			{
+			}
 
 			if (!m_timeIsSet)//Check if it's the first update of session
 			{//It is				
@@ -54,7 +55,7 @@ namespace GEM::GameSim
 
 			for (auto& update : Updates)
 			{
-				static bool skipPlayerMovement = false;
+				bool skipPlayerMovement = false;
 				/*Player character is controlled by a clinet and it prediction mechanisms is used
 				to eliminate latency. So if an update is addressed to a player entity, we may prefer to
 				not apply the update in expectation that we allready have a newer version of gamestate.
@@ -69,7 +70,7 @@ namespace GEM::GameSim
 					m_gs.AddEntity(update.EntityID, std::get<EntityAppearingUpdate>(update.Data).EntityMixins);
 					auto& MixinUpdate = std::get<EntityAppearingUpdate>(update.Data).PerMixinUpdates;
 
-					
+
 
 					auto ent = m_gs.m_entities.GetEntity(update.EntityID);
 					for (auto& mixin : MixinUpdate)
@@ -124,16 +125,18 @@ namespace GEM::GameSim
 		//Perform basic simulation tick
 		auto Retval = m_gs.Tick(Delta);
 
-		//Gather new PlayerUpdate for history.
-		GameHistoryController::StateChange newUpdate;
-		cereal::BinaryOutputArchive UpdateAr(newUpdate.data);
-		ent->GetMixinByID(Mixin_Movable::MixinID)->SendUpdate(UpdateAr, Mixin_base::UpdateReason::REGULAR);
-		auto UpdateForSending = m_gameHistory.AddNewUpdate(newUpdate);
+		//Gather new PlayerUpdate for history if needed, and send it to a server
+		if (ent->GetMixinByID(Mixin_Movable::MixinID)->NeedsUpdate())
+		{
+			GameHistoryController::StateChange newUpdate;
+			cereal::BinaryOutputArchive UpdateAr(newUpdate.data);
+			ent->GetMixinByID(Mixin_Movable::MixinID)->SendUpdate(UpdateAr, Mixin_base::UpdateReason::REGULAR);
+			auto UpdateForSending = m_gameHistory.AddNewUpdate(newUpdate);
 
-		//Send new events to a server
-		cereal::BinaryOutputArchive OutputAr(OutputStream);
-		OutputAr(UpdateForSending);
-
+			//Send new events to a server
+			cereal::BinaryOutputArchive OutputAr(OutputStream);
+			OutputAr(UpdateForSending);
+		}
 		return Retval;
 	}
 

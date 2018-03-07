@@ -17,6 +17,10 @@ namespace GEM::GameSim
 	}
 	bool Mixin_Movable::NeedsUpdate()
 	{
+		if((std::chrono::system_clock::now() - m_lastUpdate) > std::chrono::milliseconds(500))
+		{
+			return true;
+		}
 		if (m_velocity.squared_length() != 0)
 		{
 			m_keepUpdating = true;
@@ -30,6 +34,10 @@ namespace GEM::GameSim
 	}
 	void Mixin_Movable::SendUpdate(cereal::BinaryOutputArchive & archive, const UpdateReason reason)
 	{
+		if(reason == UpdateReason::REGULAR){
+			m_lastUpdate = std::chrono::system_clock::now();
+		}
+
 		archive(m_pos.x(), m_pos.y(), m_pos.z());
 		archive(m_velocity.x(), m_velocity.y(), m_velocity.z());
 	}

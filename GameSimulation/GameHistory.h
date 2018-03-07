@@ -118,9 +118,6 @@ namespace GEM::GameSim
 
 		std::size_t getShiftedPos(std::size_t curr, int shift) const
 		{
-			auto subval1 = curr + m_updates.size();
-			auto subval2 = shift % (int)m_updates.size();
-			auto subval3 = (subval1 + subval2) % m_updates.size();
 			return ((curr + m_updates.size()) + (shift % (int)m_updates.size())) % m_updates.size();
 		}
 
@@ -193,18 +190,23 @@ namespace GEM::GameSim
 			if(m_lastSyncedID == LastSynced.LastSynced) { return; }
 
 			bool StartRemovingEvents = false;
-			for (int i = 1; i < m_updates.size(); i++)
+
+			int i = 1;
+			std::size_t NewHistoryEnd;
+
+			for (auto shift = getShiftedPos(m_nextPos, -i); shift != m_historyEnd; shift = getShiftedPos(m_nextPos, -(++i)))
 			{
 				if (StartRemovingEvents)
 				{
-					m_updates[getShiftedPos(m_nextPos, -i)].Event.reset();
+					m_updates[shift].Event.reset();
 				}
 				else
 				{
-					if (m_updates[getShiftedPos(m_nextPos, -i)].UniuqeEventID == LastSynced.LastSynced)
+					if (m_updates[shift].UniuqeEventID == LastSynced.LastSynced)
 					{
-						m_updates[getShiftedPos(m_nextPos, -i)].Event.reset();
-						m_historyEnd = getShiftedPos(m_nextPos, -i);//This is gonna be new end of the history!
+						m_updates[shift].Event.reset();
+						m_updates[shift].UniuqeEventID = 0;
+						NewHistoryEnd = shift;//This is gonna be new end of the history!
 						StartRemovingEvents = true;
 					}
 				}
@@ -215,6 +217,11 @@ namespace GEM::GameSim
 				throw std::exception("InSync event, provided to history is not present!");
 			}
 			m_lastSyncedID = LastSynced.LastSynced;
+			m_historyEnd = NewHistoryEnd;
+
+
+			int OccupiedSpace = (int)(m_updates.size() + m_historyEnd - m_nextPos) % m_updates.size();
+			printf("After reading an OOS, there are %i free slots\n", OccupiedSpace);
 		}
 
 		/**!
