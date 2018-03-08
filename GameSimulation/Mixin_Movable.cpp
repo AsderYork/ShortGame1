@@ -10,7 +10,7 @@ namespace GEM::GameSim
 	{
 		m_velocity = vmml::vec3f(X, Y, Z);
 	}
-	bool Mixin_Movable::tick(float delta)
+	bool Mixin_Movable::tick(const GameTime delta)
 	{
 		m_pos += m_velocity;
 		return true;
@@ -42,10 +42,20 @@ namespace GEM::GameSim
 		archive(m_velocity.x(), m_velocity.y(), m_velocity.z());
 	}
 
-	void Mixin_Movable::ReciveUpdate(cereal::BinaryInputArchive & archive)
+	void Mixin_Movable::ReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime updateTime)
 	{
-		archive(m_pos.x(), m_pos.y(), m_pos.z());
-		archive(m_velocity.x(), m_velocity.y(), m_velocity.z());
+		vmml::vec3f NewPos, NewVel;
+		archive(NewPos.x(), NewPos.y(), NewPos.z());
+		archive(NewVel.x(), NewVel.y(), NewVel.z());
+
+		if (NewVel == m_velocity)
+		{
+			if (m_pos.equals(NewPos + (NewVel * GameTimeToSeconds(updateTime)))) { return; }
+		}
+
+		m_pos = NewPos;
+		m_velocity = NewVel;
+
 	}
 
 	void Mixin_Movable::ReciveEvent(const EventBase * const Event)
@@ -100,6 +110,12 @@ namespace GEM::GameSim
 
 		default: {break; }
 		}
+	}
+
+	void Mixin_Movable::ApplyEvent(cereal::BinaryInputArchive& archive)
+	{
+		archive(m_pos.x(), m_pos.y(), m_pos.z());
+		archive(m_velocity.x(), m_velocity.y(), m_velocity.z());
 	}
 
 }

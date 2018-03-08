@@ -6,6 +6,7 @@
 #include "Mixin_Controller.h"
 #include "EntityGenerator.h"
 #include "EventBase.h"
+#include "GameTime.h"
 
 //Mixins
 #include "Mixin_Movable.h"
@@ -36,6 +37,9 @@ namespace GEM::GameSim
 		Used to generate entity ID when needed.
 		*/
 		ENTITY_ID_TYPE m_lastAddedEntity = 0;
+	protected:
+		GameTime m_simulationTime = 0;
+
 
 	public:
 		//GameSim_PlayerController m_players;
@@ -46,6 +50,7 @@ namespace GEM::GameSim
 
 		std::queue<std::pair<std::unique_ptr<EventBase>, ENTITY_ID_TYPE>> m_eventsBuffer;
 		
+		inline const GameTime& getGameTime() { return m_simulationTime; }
 
 		GameSimulation() {
 			RegisterMixins();

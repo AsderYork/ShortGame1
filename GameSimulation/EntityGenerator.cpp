@@ -11,7 +11,7 @@ namespace GEM::GameSim
 		return nullptr;
 	}
 
-	bool GEM::GameSim::StaticlyMixedEntity::tick(float delta)
+	bool GEM::GameSim::StaticlyMixedEntity::tick(const GameTime delta)
 	{
 		for (auto& m : m_mixins)
 		{

@@ -10,7 +10,7 @@
 
 namespace GEM::GameSim
 {
-	class GS_Client
+	class GS_Client : public GameSimulation
 	{
 	private:
 		bool m_timeIsSet = false;
@@ -21,14 +21,16 @@ namespace GEM::GameSim
 
 
 	public:
-		GameSimulation m_gs;
+		//GameSimulation m_gs;
 		std::chrono::system_clock::time_point m_lastUpdateTime;
 
 		inline void InsertPlayerEvent(std::unique_ptr<EventBase>&& Event) {
-			m_gs.InsertEvent(std::move(Event), m_playerCharacterID);
+			InsertEvent(std::move(Event), m_playerCharacterID);
 		}
 
 		inline void Reset() { m_timeIsSet = false; }
+
+		GS_Client() : m_timeIsSet(false) {}
 
 
 

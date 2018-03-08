@@ -22,7 +22,7 @@ namespace GEM
 
 		//Gather all the changes.
 		std::unique_ptr<GameSim::EntityController::EntityListIterator> iter = nullptr;
-		auto MaybeEnityIter = m_gsController->m_gs.m_entities.IterateOverEntities(std::move(iter));
+		auto MaybeEnityIter = m_gsController->m_entities.IterateOverEntities(std::move(iter));
 
 		while (MaybeEnityIter)
 		{
@@ -40,7 +40,7 @@ namespace GEM
 
 			}
 
-			MaybeEnityIter = m_gsController->m_gs.m_entities.IterateOverEntities(std::move(iter));
+			MaybeEnityIter = m_gsController->m_entities.IterateOverEntities(std::move(iter));
 		}
 		
 		m_visibleEntities = std::move(newMap);

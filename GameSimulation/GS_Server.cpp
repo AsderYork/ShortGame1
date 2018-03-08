@@ -15,6 +15,7 @@ namespace GEM::GameSim
 
 		auto PlayerInfo = m_perPlayerInfo.find(id);
 
+		PPI.UpdateTime = m_gs.getGameTime();
 		PPI.updates.swap(PlayerInfo->second.UpdateVector);
 		PPI.OOS.DesyncronizedEvents.swap(PlayerInfo->second.currentOOS.DesyncronizedEvents);
 		PPI.InSync.LastSynced = PlayerInfo->second.currentInSync.LastSynced;
@@ -33,7 +34,7 @@ namespace GEM::GameSim
 			while (true)
 			{
 				SyncingUpdate_Packet tmpStateHolder;
-				ar(tmpStateHolder);
+				ar(TmpPlayerInfo.PlayerGameTime, tmpStateHolder);
 				TmpPlayerInfo.SynchroUpdates.push_back(tmpStateHolder);
 			}
 
@@ -91,7 +92,7 @@ namespace GEM::GameSim
 
 				//If update fits, apply it
 				cereal::BinaryInputArchive ar(update.UpdateData.data);
-				player.characterPtr->GetMixinByID(Mixin_Movable::MixinID)->ReciveUpdate(ar);
+				player.characterPtr->GetMixinByID(Mixin_Movable::MixinID)->ApplyEvent(ar);
 			}
 			playerIt->second.currentInSync.LastSynced = playerIt->second.SynchroUpdates.back().UniuqeEventID;
 			playerIt->second.SynchroUpdates.clear();

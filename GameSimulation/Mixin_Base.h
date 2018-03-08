@@ -2,6 +2,32 @@
 #include <cereal\cereal.hpp>
 #include "EventBase.h"
 #include "EntityIDType.h"
+#include "GameTime.h"
+
+/**!
+Now we have history on client, but it works only for a client's character and only for it's movement.
+Tests showed, that the way other characters moves looks really jagged becouse of this constant updates
+and the time difference. The idea is to store every event that is happening in history, make methods
+isStateChanged(), getStateChange(), applyStateChange() for every mixin. And so every time when
+state of a mixin in an entity is changed on the server, it will send Update for this entity(btw, Update system
+will be removed and complitely replaced with that one). Wait a minute, we allready have NeedsUpdate(), SendUpdate() and ReciveUpdate()!
+It all the methods we need! The only thing missing is that notion of a state in mixin.
+But how can this help our problem? First of all, why do we have this problem? Well, the hypothesis is that player when object
+starts moving, it gain velocity, then for the next couple of frames it is moved by the GameSim.Tick() on the player, and then it recives
+new Update from the server, and this update teleports the object back. Let's check it first, shall we?
+So tests did cofirm the expectation. Server sends updates with the velocity pointing forward but the actual position
+is behind the one, that the object allready had.
+Ok, let's assume the model, where we're holding previous state and can compare it with the one we had allready.
+We recive new update and we see, that it's behind us. Actually, if we're also knew, the time lag of this update, it could have halped us.
+For example if we know, that update is lagging a little and we see the velocity, that is written in it, then we could just take check
+if the velocity is the same, and if it, then we could just check, if veloctiy*lag=curr_pos. If it is, then this update is truly outdated and we
+can safely ignore it. But we still have two bad cases: teleport and stopping.
+When player stops, it still will be moved by a server update, becouse server desides, where you actually stop.
+Teleport also would work ok, even if velocity is the same, we can clearly see, that position is not.
+
+So ok, let the be a shared time, a 64-bit usigned integer value, so that 100000 uints of this time is in one seconds.
+Quick calculation showed, that to avoid overflow problems, server must be restarted every 5.4 million years.
+*/
 
 #define MIXIN_ID(id) static const MIXIN_ID_TYPE MixinID = id; inline virtual const MIXIN_ID_TYPE getMixinID() const override{return MixinID;}
 
@@ -36,10 +62,12 @@ namespace GEM::GameSim
 		ENTITY_ID_TYPE m_EntityID;
 		GameSimulation * m_GameSim;
 	protected:
+		//Shows current time of the simulation
 		inline const GameSimulation* getGameSim() { return m_GameSim; }
 		inline const ENTITY_ID_TYPE getEntityID() { return m_EntityID; }
 	public:
 		
+		const GameTime& getGameTime();
 
 		virtual const MIXIN_ID_TYPE getMixinID() const = 0;
 
@@ -81,13 +109,29 @@ namespace GEM::GameSim
 		/**!
 		This one for clients. Entity on a server can alter it state, so client's entity should be altered in a same way.
 		Beware of various update scheems!
+
+		Applies event only if this event is clearly deviates from expected state with respect to time difference.
+		Updates comes with a certain lag due to a transfering channel. And sometimes it could be that update contain a state
+		that this mixin allready passed. For example if it's a Movable, Server sends an Update that it's 1 unit left and 
+		continue moving that way, but when it reached client, it's allready on 2 units both on client and server, but client
+		just recived a "1 unit" update. To negate this effect, implementation MUST perform any avaliable checks to determine
+		if new update is just an older version of a current state.
+
+		\note Currently when client recives Updates, it applies them all from oldest one to a newest. But is it good?
+		Oldest events are more likely to contain updates, that would be just a previous state, so they are, actually,
+		pretty good, and only new ones really by applied, if entity's state-changing pattern wasn't expected.
 		*/
-		virtual void ReciveUpdate(cereal::BinaryInputArchive& archive) = 0;
+		virtual void ReciveUpdate(cereal::BinaryInputArchive& archive, const GameTime UpdateLag) = 0;
+
+		/**!
+		Applies event to a mixin. Unlike \c ReciveUpdate this method MUST apply the update as-is, without any tests.
+		*/
+		virtual void ApplyEvent(cereal::BinaryInputArchive& archive) = 0;
 
 		/**!
 		Called every simulation tick. Must return true, if everything is ok, false will terminate simulation, probably
 		*/
-		virtual bool tick(float delta) = 0;
+		virtual bool tick(const GameTime delta) = 0;
 
 		/**!
 		Recives an event, that were sent to the entity, that this mixin is part of. It's up to mixin to check the

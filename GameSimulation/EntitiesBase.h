@@ -1,5 +1,6 @@
 #pragma once
 #include "Mixin_Base.h"
+#include "GameTime.h"
 
 #include "Helper_TupleForeach.h"
 
@@ -17,7 +18,7 @@ namespace GEM::GameSim
 		virtual std::vector<Mixin_base*> const getAllMixins() const = 0;
 
 
-		virtual bool tick(float delta) = 0;
+		virtual bool tick(const GameTime delta) = 0;
 		virtual ~EntityBase() {};
 	};
 
@@ -48,7 +49,7 @@ namespace GEM::GameSim
 			return std::get<T>(m_mixins);
 		}
 
-		bool tick(float delta)
+		bool tick(GameTime delta)
 		{
 			return (... && std::get<Mixins>(m_mixins).tick(delta));
 			return true;

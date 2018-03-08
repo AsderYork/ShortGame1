@@ -35,12 +35,6 @@ namespace GEM
 		*/
 		inline bool getSimulationState() { return m_simmulationActive; }
 
-		void SendQurrentEvents()
-		{
-			m_gs;
-		}
-
-
 		virtual ActionResult initialize() override;
 		virtual void shutdown() override;
 		virtual ActionResult preFrame(float timeDelta) override;

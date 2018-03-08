@@ -13,7 +13,7 @@ namespace GEM::GameSim
 	}
 	bool GameSimulation::Tick(float delta)
 	{
-
+		auto GameTimeDelta = SecondsToGameTimeInterval(delta);
 		//Apply all commands
 		while (!m_commandBuffer.empty())
 		{
@@ -38,12 +38,14 @@ namespace GEM::GameSim
 		auto Entity = m_entities.IterateOverEntities(std::move(iter));
 		while (Entity)
 		{
-			if (!Entity->second->tick(delta))
+			if (!Entity->second->tick(GameTimeDelta))
 			{
 				return false;
 			}
 			Entity = m_entities.IterateOverEntities(std::move(iter));
 		}
+
+		m_simulationTime += GameTimeDelta;
 		return true;
 	}
 

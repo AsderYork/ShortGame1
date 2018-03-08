@@ -67,6 +67,9 @@
     <Filter Include="GameSimulation\GameHistory">
       <UniqueIdentifier>{5d5838f2-372f-48a4-b22e-f44017421265}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameSimulation\GameTime">
+      <UniqueIdentifier>{612e9852-2cca-4181-a411-f0550470f79f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -134,6 +137,9 @@
     <ClInclude Include="GameHistory.h">
       <Filter>GameSimulation\GameHistory</Filter>
     </ClInclude>
+    <ClInclude Include="GameTime.h">
+      <Filter>GameSimulation\GameTime</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -165,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="GameHistory.cpp">
       <Filter>GameSimulation\GameHistory</Filter>
+    </ClCompile>
+    <ClCompile Include="Mixin_Base.cpp">
+      <Filter>Entities\Mixins\Mixin_base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

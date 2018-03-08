@@ -17,7 +17,7 @@ namespace GEM::GameSim
 		StaticlyMixedEntity(std::vector<std::unique_ptr<Mixin_base>>&& vec) : m_mixins(std::move(vec)) {}
 
 		virtual Mixin_base * GetMixinByID(int i) const override;
-		virtual bool tick(float delta) override;
+		virtual bool tick(const GameTime delta) override;
 
 
 		virtual std::vector<Mixin_base*> const getAllMixins() const override;

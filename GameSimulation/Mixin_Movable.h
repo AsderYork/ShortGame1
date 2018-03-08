@@ -37,7 +37,7 @@ namespace GEM::GameSim
 
 		void SetVelocity(float X, float Y, float Z);
 
-		bool tick(float delta);
+		bool tick(const GameTime delta);
 
 		inline vmml::vec3f getPos() {	return m_pos;	}
 
@@ -45,7 +45,9 @@ namespace GEM::GameSim
 
 		virtual void SendUpdate(cereal::BinaryOutputArchive & archive, const UpdateReason reason) override;
 
-		virtual void ReciveUpdate(cereal::BinaryInputArchive & archive) override;
+		virtual void ReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime updateTime) override;
+
+		virtual void ApplyEvent(cereal::BinaryInputArchive& archive) override;
 
 		virtual void ReciveEvent(const EventBase * const Event) override;
 

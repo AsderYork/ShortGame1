@@ -147,6 +147,7 @@
     <ClInclude Include="EventSerializator.h" />
     <ClInclude Include="GameHistory.h" />
     <ClInclude Include="GameSimulation.h" />
+    <ClInclude Include="GameTime.h" />
     <ClInclude Include="GS_Client.h" />
     <ClInclude Include="GS_EntityController.h" />
     <ClInclude Include="GS_PlayerController.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="GS_EntityController.cpp" />
     <ClCompile Include="GS_PlayerController.cpp" />
     <ClCompile Include="GS_Server.cpp" />
+    <ClCompile Include="Mixin_Base.cpp" />
     <ClCompile Include="Mixin_Controller.cpp" />
     <ClCompile Include="Mixin_Health.cpp" />
     <ClCompile Include="Mixin_Movable.cpp" />
