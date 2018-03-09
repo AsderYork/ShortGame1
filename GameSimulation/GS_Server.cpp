@@ -130,7 +130,6 @@ namespace GEM::GameSim
 		//Perform basic tick
 		auto Reval = m_gs.Tick(Delta);
 
-
 		auto& Players = m_gs.m_players.getPlayersVector();
 		//Gather all the changes.
 		std::unique_ptr<EntityController::EntityListIterator> iter = nullptr;

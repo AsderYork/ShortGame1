@@ -48,8 +48,12 @@ namespace GEM::GameSim
 		archive(NewPos.x(), NewPos.y(), NewPos.z());
 		archive(NewVel.x(), NewVel.y(), NewVel.z());
 
+
+
 		if (NewVel == m_velocity)
 		{
+			auto ExpectedPos = NewPos + (NewVel * GameTimeToSeconds(updateTime));
+			auto ErrorDistance = (m_pos - ExpectedPos).length();
 			if (m_pos.equals(NewPos + (NewVel * GameTimeToSeconds(updateTime)))) { return; }
 		}
 

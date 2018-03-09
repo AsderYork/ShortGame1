@@ -219,9 +219,6 @@ namespace GEM::GameSim
 			m_lastSyncedID = LastSynced.LastSynced;
 			m_historyEnd = NewHistoryEnd;
 
-
-			int OccupiedSpace = (int)(m_updates.size() + m_historyEnd - m_nextPos) % m_updates.size();
-			printf("After reading an OOS, there are %i free slots\n", OccupiedSpace);
 		}
 
 		/**!

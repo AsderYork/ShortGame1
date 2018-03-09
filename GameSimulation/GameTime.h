@@ -3,8 +3,9 @@
 
 namespace GEM::GameSim
 {
-	using GameTime = uint64_t;
+	using GameTime = int64_t;
+
 
 	inline GameTime SecondsToGameTimeInterval(float t) { return static_cast<GameTime>(t * 100000); }
-	inline float GameTimeToSeconds(GameTime t) { return static_cast<float>(t) / 100000.0f; }
+	inline float GameTimeToSeconds(GameTime t) { return t / 100000.0f; }
 }

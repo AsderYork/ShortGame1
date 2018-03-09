@@ -31,7 +31,7 @@ namespace GEM::GameSim
 			template<class Archive>
 			void serialize(Archive & archive)
 			{
-				archive(OOS, InSync, updates);
+				archive(UpdateTime, OOS, InSync, updates);
 			}
 		};
 	private:

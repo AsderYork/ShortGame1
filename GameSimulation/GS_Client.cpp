@@ -37,9 +37,10 @@ namespace GEM::GameSim
 			{
 			}
 
+
 			if (!m_timeIsSet)//Check if it's the first update of session
 			{//It is
-				//m_simulationTime = Updates.back().second;
+				m_simulationTime = Updates.back().second;
 				m_timeIsSet = true;
 			}
 			else
