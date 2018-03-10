@@ -20,12 +20,13 @@ namespace GEM::GameSim
 		std::chrono::system_clock::time_point m_lastUpdate;
 
 		bool m_keepUpdating = true;
+		float m_speed;
 
 	public:
 
 	 MIXIN_ID(43)
 
-		 Mixin_Movable() : m_lastUpdate(std::chrono::system_clock::now()) {}
+		 Mixin_Movable() : m_lastUpdate(std::chrono::system_clock::now()), m_speed(1.0f) {}
 
 		/**!
 		Shifts position of an entity
@@ -45,7 +46,7 @@ namespace GEM::GameSim
 
 		virtual void SendUpdate(cereal::BinaryOutputArchive & archive, const UpdateReason reason) override;
 
-		virtual void ReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime updateTime) override;
+		virtual void ReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime UpdateLag) override;
 
 		virtual void ApplyEvent(cereal::BinaryInputArchive& archive) override;
 

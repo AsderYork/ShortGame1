@@ -40,10 +40,9 @@ namespace GEM::GameSim
 		struct PerPlayerInfo
 		{
 			std::vector<UpdateData> UpdateVector;
-			std::vector<SyncingUpdate_Packet> SynchroUpdates;
+			std::vector<std::pair<SyncingUpdate_Packet, GameTime>> SynchroUpdates;
 			InSync_Packet currentInSync;
 			OutOfSync_Packet currentOOS;
-			GameTime PlayerGameTime;
 
 		};
 		std::map<PLAYER_ID_TYPE, PerPlayerInfo> m_perPlayerInfo;

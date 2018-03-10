@@ -34,8 +34,9 @@ namespace GEM::GameSim
 			while (true)
 			{
 				SyncingUpdate_Packet tmpStateHolder;
-				ar(TmpPlayerInfo.PlayerGameTime, tmpStateHolder);
-				TmpPlayerInfo.SynchroUpdates.push_back(tmpStateHolder);
+				GameTime tmpTime;
+				ar(tmpTime, tmpStateHolder);
+				TmpPlayerInfo.SynchroUpdates.emplace_back(tmpStateHolder, tmpTime);
 			}
 
 
@@ -91,10 +92,12 @@ namespace GEM::GameSim
 					//if update doesn't fit the rules of the simulation, add ID to OOS and skip
 
 				//If update fits, apply it
-				cereal::BinaryInputArchive ar(update.UpdateData.data);
-				player.characterPtr->GetMixinByID(Mixin_Movable::MixinID)->ApplyEvent(ar);
+				cereal::BinaryInputArchive ar(update.first.UpdateData.data);
+				//Lag get's devided by 2 in assumption, that it takes the same amount of time for a packet to go from server to client
+				//And from clinet to server
+				player.characterPtr->GetMixinByID(Mixin_Movable::MixinID)->ReciveUpdate(ar, (m_gs.getGameTime()-update.second)/2);
 			}
-			playerIt->second.currentInSync.LastSynced = playerIt->second.SynchroUpdates.back().UniuqeEventID;
+			playerIt->second.currentInSync.LastSynced = playerIt->second.SynchroUpdates.back().first.UniuqeEventID;
 			playerIt->second.SynchroUpdates.clear();
 			
 		}
@@ -126,6 +129,7 @@ namespace GEM::GameSim
 
 	void  GS_Server::Tick(float Delta)
 	{
+
 		ProcessPlayerSyncingUpdates();
 		//Perform basic tick
 		auto Reval = m_gs.Tick(Delta);
