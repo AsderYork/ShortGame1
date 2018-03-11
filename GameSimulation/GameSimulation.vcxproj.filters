@@ -70,6 +70,12 @@
     <Filter Include="GameSimulation\GameTime">
       <UniqueIdentifier>{612e9852-2cca-4181-a411-f0550470f79f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Landscape">
+      <UniqueIdentifier>{1390c0f1-f722-4ca9-a84b-17331a2ec2cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\Chunk">
+      <UniqueIdentifier>{261702eb-0bf9-406d-8ffc-402ce0a4adec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -140,6 +146,12 @@
     <ClInclude Include="GameTime.h">
       <Filter>GameSimulation\GameTime</Filter>
     </ClInclude>
+    <ClInclude Include="LandscapeChunk.h">
+      <Filter>Landscape\Chunk</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeChunkPack.h">
+      <Filter>Landscape\Chunk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -174,6 +186,9 @@
     </ClCompile>
     <ClCompile Include="Mixin_Base.cpp">
       <Filter>Entities\Mixins\Mixin_base</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeChunkPack.cpp">
+      <Filter>Landscape\Chunk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

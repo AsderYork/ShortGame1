@@ -10,12 +10,27 @@
 
 #include <TestPlace.h>
 
+#include <LandscapeChunkPack.h>
+
 int main(int argc, char *argv[])
 {
-	//GEM::GameSim::GameHistoryController SCS;
 
 	
+	GEM::GameSim::LandscapeChunk LCH11;
+	LCH11.Version = 112;
+	LCH11.PosX = 1;
+	LCH11.PosY = 2;
+	LCH11.Nodes[12][12][12] = 15;
 
+	GEM::GameSim::LandscapeChunk LCH12;
+	LCH12.Version = 76;
+	LCH12.PosX = 3;
+	LCH12.PosY = 4;
+	LCH12.Nodes[2][3][4] = 11;
+
+	GEM::GameSim::LandscapeChunkPack LPack({ &LCH11 , &LCH12 });
+
+	auto RetVec = LPack.UnpackLandscapeChunks();
 
 	
 	GEM::Server server(4483, GEM::ServerData("First one!"));
@@ -24,37 +39,5 @@ int main(int argc, char *argv[])
 	server.Run();
 
 
-	/*
-	std::string Answer;
-	std::cin >> Answer;
-
-	while (Answer != "X")
-	{
-	Controller.RunALittle();
-
-	auto ptr = Controller.GetNewConnectionIfAny();
-	while (ptr != nullptr)
-	{
-	printf("New connection!\n");
-
-	std::stringstream OutStre("Wellcome, newcomer!");
-	ptr->Send(OutStre);
-	ptr = Controller.GetNewConnectionIfAny();
-
-	}
-
-
-	std::stringstream OutStre(Answer);
-	for (auto& Connection : Controller.ConnectionList())
-	{
-	Connection->Send(OutStre);
-
-	auto RecStr = Connection->Recive().str();
-	if (RecStr.size() != 0) { printf("Recived:%s\n", RecStr.c_str()); }
-	Connection->Recive().str(std::string());
-	}
-	std::cin >> Answer;
-	}
-	*/
 	return 0;
 }
