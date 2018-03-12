@@ -76,6 +76,9 @@
     <Filter Include="Landscape\Chunk">
       <UniqueIdentifier>{261702eb-0bf9-406d-8ffc-402ce0a4adec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{f649fcf7-ef1b-4fd0-9db4-bf0d6103f487}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -152,6 +155,9 @@
     <ClInclude Include="LandscapeChunkPack.h">
       <Filter>Landscape\Chunk</Filter>
     </ClInclude>
+    <ClInclude Include="GamePhysics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -189,6 +195,9 @@
     </ClCompile>
     <ClCompile Include="LandscapeChunkPack.cpp">
       <Filter>Landscape\Chunk</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePhysics.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

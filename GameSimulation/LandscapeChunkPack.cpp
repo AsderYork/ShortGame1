@@ -19,11 +19,11 @@ namespace GEM::GameSim
 			}
 		}
 		m_data = PackedStream.str();
-		uLongf InitBufferSize = m_data.size();
+		auto InitBufferSize = static_cast<uLongf>(m_data.size());
 		std::string ResultBuff;
 		//Reserve ammount is recomended in ZLib specs
 		ResultBuff.resize(static_cast<std::size_t>(m_data.size()*1.1f + 12));
-		uLongf OutroBuf = m_data.size();
+		auto OutroBuf = static_cast<uLongf>(m_data.size());
 		auto result = compress(reinterpret_cast<Bytef*>(ResultBuff.data()), &OutroBuf, reinterpret_cast<Bytef*>(m_data.data()), InitBufferSize);
 		
 		m_data = ResultBuff.substr(0, OutroBuf);
@@ -36,8 +36,8 @@ namespace GEM::GameSim
 	{
 		std::string OutBuffer;
 		OutBuffer.resize(m_initialSize);
-		uLongf InitBufferSize = m_initialSize;
-		uncompress(reinterpret_cast<Bytef*>(OutBuffer.data()), &InitBufferSize, reinterpret_cast<Bytef*>(m_data.data()), m_data.size());
+		auto InitBufferSize = static_cast<uLongf>(m_initialSize);
+		uncompress(reinterpret_cast<Bytef*>(OutBuffer.data()), &InitBufferSize, reinterpret_cast<Bytef*>(m_data.data()), static_cast<uLongf>(m_data.size()));
 		m_data.swap(OutBuffer);
 
 		std::stringstream Strbuf(m_data);

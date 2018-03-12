@@ -72,13 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(BOOST_HOME);$(ZLIB_HOME)\x64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ZLIB_HOME)\x64\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(BOOST_HOME);$(ZLIB_HOME)\x64\include;$(BULLETPHYSICS_HOME)\Repo\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ZLIB_HOME)\x64\lib;$(BULLETPHYSICS_HOME)\$(Platform)\Build\Lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(BOOST_HOME);$(ZLIB_HOME)\x64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ZLIB_HOME)\x64\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(BOOST_HOME);$(ZLIB_HOME)\x64\include;$(BULLETPHYSICS_HOME)\Repo\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ZLIB_HOME)\x64\lib;$(BULLETPHYSICS_HOME)\$(Platform)\Build\Lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -97,7 +97,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlibstatic.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -120,12 +120,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalDependencies>zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlibstatic.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -154,6 +155,7 @@
     <ClInclude Include="EventBase.h" />
     <ClInclude Include="EventSerializator.h" />
     <ClInclude Include="GameHistory.h" />
+    <ClInclude Include="GamePhysics.h" />
     <ClInclude Include="GameSimulation.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="GS_Client.h" />
@@ -178,6 +180,7 @@
   <ItemGroup>
     <ClCompile Include="EntityGenerator.cpp" />
     <ClCompile Include="GameHistory.cpp" />
+    <ClCompile Include="GamePhysics.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
     <ClCompile Include="GS_Client.cpp" />
     <ClCompile Include="GS_EntityController.cpp" />
