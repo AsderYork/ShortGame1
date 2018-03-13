@@ -9,12 +9,17 @@
 #include <cereal\types\vector.hpp>
 
 #include <GamePhysics.h>
+#include <LandscapeMeshGenerator.h>
 
 
 int main(int argc, char *argv[])
 {
-	GEM::GameSim::DoPhysics();
+	//GEM::GameSim::DoPhysics();
 	
+	GEM::GameSim::LandscapeChunk LC1, LC2, LC3, LC4;
+	LC1.getNode(4, 4, 4).Value = 100;
+
+	GEM::GameSim::LandscapeMeshGenerator LNDSCPM(&LC1, &LC2, &LC3, &LC4);
 	
 	GEM::Server server(4483, GEM::ServerData("First one!"));
 

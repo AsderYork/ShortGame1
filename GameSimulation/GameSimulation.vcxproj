@@ -164,6 +164,7 @@
     <ClInclude Include="GS_Server.h" />
     <ClInclude Include="LandscapeChunk.h" />
     <ClInclude Include="LandscapeChunkPack.h" />
+    <ClInclude Include="LandscapeMeshGenerator.h" />
     <ClInclude Include="NumerableEvents.def" />
     <ClInclude Include="Helper_TupleForeach.h" />
     <ClInclude Include="KeyboardEvents.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="GS_PlayerController.cpp" />
     <ClCompile Include="GS_Server.cpp" />
     <ClCompile Include="LandscapeChunkPack.cpp" />
+    <ClCompile Include="LandscapeMeshGenerator.cpp" />
     <ClCompile Include="Mixin_Base.cpp" />
     <ClCompile Include="Mixin_Controller.cpp" />
     <ClCompile Include="Mixin_Health.cpp" />

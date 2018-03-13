@@ -79,6 +79,9 @@
     <Filter Include="Physics">
       <UniqueIdentifier>{f649fcf7-ef1b-4fd0-9db4-bf0d6103f487}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Landscape\MeshGenerator">
+      <UniqueIdentifier>{5a949bac-fad1-4c94-b686-e550bd7e99a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -158,6 +161,9 @@
     <ClInclude Include="GamePhysics.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="LandscapeMeshGenerator.h">
+      <Filter>Landscape\MeshGenerator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -199,6 +205,7 @@
     <ClCompile Include="GamePhysics.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="LandscapeMeshGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyboardEvents.def">

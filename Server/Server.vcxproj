@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(BOOST_HOME);$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(ProjectDir)\..\ExternalDeps\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(BOOST_HOME);$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(ProjectDir)\..\ExternalDeps\include;$(BULLETPHYSICS_HOME)\Repo\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
