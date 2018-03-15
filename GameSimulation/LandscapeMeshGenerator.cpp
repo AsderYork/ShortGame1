@@ -319,7 +319,7 @@ namespace GEM::GameSim
 	{}
 	};
 
-void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z)
+void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNewVertices)
 {
 	uint8_t corner[8];
 	corner[0] = getNodeValue(x - 1	, y	-1	, z	- 1	);
@@ -348,12 +348,16 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z)
 	//Otherwise cell has a non-trivial triangulation
 
 	char ValidityMask = 0;
-	ValidityMask += x > 0 ? 0x10 : 0;
-	ValidityMask += z > 0 ? 0x20 : 0;
+	ValidityMask += x > 1 ? 0x10 : 0;
+	ValidityMask += z > 1 ? 0x20 : 0;
 	ValidityMask += y > 0 ? 0x40 : 0;
 		
 	//Stores 12 indexes of a vertices, that where used for this cube
 	uint32_t IndexHolder[12];
+	memset(IndexHolder, 0xff, sizeof(uint32_t) * 12);
+
+	//Holds ptrs for 12 last used vertices in cells.
+	CellRepresentation::PerVertex* NormalsPtrHolder[12];
 	for (int Vertex = 0; Vertex < regularCellData[regularCellClass[caseCode]].GetVertexCount(); Vertex++)
 	{
 		auto edgeCode = regularVertexData[caseCode][Vertex];
@@ -364,11 +368,6 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z)
 
 		if (((edgeCode >> 8) & ValidityMask) == 0)
 		{//If vertex needs to be added
-			
-
-
-			auto vrtx = NodeDecks[posy][posx][posz];
-
 			auto& CurrVertex = NodeDecks[posy][posx][posz].Vertex[Edgecc];
 
 			if (CurrVertex == std::numeric_limits<uint32_t>::max())
@@ -393,32 +392,83 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z)
 				}
 				NewVertex -= btVector3((btScalar)(shiftx), (btScalar)(shifty), (btScalar)(shiftz));
 
-				m_vertices.push_back(NewVertex);
-				CurrVertex = static_cast<uint32_t>(m_vertices.size() - 1);
-				IndexHolder[Vertex] = CurrVertex;
+				/**!
+				Create new vertices only if flag is set, otherwise just remember positions for later normals calculations
+				*/
+				if (RegisterNewVertices)
+				{
+					m_vertices.push_back(NewVertex);
+					CurrVertex = static_cast<uint32_t>(m_vertices.size() - 1);
+					IndexHolder[Vertex] = CurrVertex;
+				}
+
+
+				NodeDecks[posy][posx][posz].data[Edgecc].pos = NewVertex;
+				/**!
+				When we work with deck it's important to remember, that it gets reset from time to time. and
+				it resets with 0xff so right after reset, values of normal would not be zeroes, they would be garbage
+				To avoid that, whenever we create a new vertex, we also check corresponding normal in a deck and if last value
+				(which allways should be zero) contains garbage, then all the normal is garbage and needs to be reset
+				*/
+				if (NodeDecks[posy][posx][posz].data[Edgecc].normal.w() != 0)
+				{
+					NodeDecks[posy][posx][posz].data[Edgecc].normal.setZero();
+				}
+
+				NormalsPtrHolder[Vertex] = &NodeDecks[posy][posx][posz].data[Edgecc];
 			}
 			else
 			{
 				//We allready created this vertex during this pass, so just find it again!
+				//Notice that we're adding to IndexHolder even if we're just calculating normals
+				//This is done to allow new normal values to be applied to a vertex if it's allready exist
 				IndexHolder[Vertex] = NodeDecks[posy][posx][posz].Vertex[Edgecc];
+				NormalsPtrHolder[Vertex] = &NodeDecks[posy][posx][posz].data[Edgecc];
 			}
 
 		}
 		else
 		{
-
 			auto vrtx = NodeDecks[posy][posx][posz];
 			//Add index of a requested vertex in Indices;
 			IndexHolder[Vertex] = NodeDecks[posy][posx][posz].Vertex[Edgecc];
+			NormalsPtrHolder[Vertex] = &NodeDecks[posy][posx][posz].data[Edgecc];
 		}
 	}
 
 	for (int traingle = 0; traingle < regularCellData[regularCellClass[caseCode]].GetTriangleCount(); traingle++)
 	{
 		//triangles are twisted, becouse culling mode in tables is not the same as in a game
-		m_indices.push_back(IndexHolder[regularCellData[regularCellClass[caseCode]].vertexIndex[traingle * 3 + 0]]);
-		m_indices.push_back(IndexHolder[regularCellData[regularCellClass[caseCode]].vertexIndex[traingle * 3 + 2]]);
-		m_indices.push_back(IndexHolder[regularCellData[regularCellClass[caseCode]].vertexIndex[traingle * 3 + 1]]);
+		auto Ind1 = regularCellData[regularCellClass[caseCode]].vertexIndex[traingle * 3 + 0];
+		auto Ind2 = regularCellData[regularCellClass[caseCode]].vertexIndex[traingle * 3 + 2];
+		auto Ind3 = regularCellData[regularCellClass[caseCode]].vertexIndex[traingle * 3 + 1];
+
+		if (RegisterNewVertices)
+		{
+			m_indices.push_back(IndexHolder[Ind1]);
+			m_indices.push_back(IndexHolder[Ind2]);
+			m_indices.push_back(IndexHolder[Ind3]);
+		}
+
+		auto norm = (NormalsPtrHolder[Ind1]->pos - NormalsPtrHolder[Ind2]->pos).cross(NormalsPtrHolder[Ind1]->pos - NormalsPtrHolder[Ind3]->pos);
+
+
+		NormalsPtrHolder[Ind1]->normal += norm;
+		NormalsPtrHolder[Ind2]->normal += norm;
+		NormalsPtrHolder[Ind3]->normal += norm;
+
+		if (RegisterNewVertices)
+		{
+			m_vertices[IndexHolder[Ind1]].normal = NormalsPtrHolder[Ind1]->normal;
+			m_vertices[IndexHolder[Ind2]].normal = NormalsPtrHolder[Ind2]->normal;
+			m_vertices[IndexHolder[Ind3]].normal = NormalsPtrHolder[Ind3]->normal;
+		}
+		else
+		{
+			if (IndexHolder[Ind1] != std::numeric_limits<uint32_t>::max()) { m_vertices[IndexHolder[Ind1]].normal = NormalsPtrHolder[Ind1]->normal; }
+			if (IndexHolder[Ind2] != std::numeric_limits<uint32_t>::max()) { m_vertices[IndexHolder[Ind2]].normal = NormalsPtrHolder[Ind2]->normal; }
+			if (IndexHolder[Ind3] != std::numeric_limits<uint32_t>::max()) { m_vertices[IndexHolder[Ind3]].normal = NormalsPtrHolder[Ind3]->normal; }
+		}
 
 	}
 
@@ -435,18 +485,22 @@ m_chunkForwardRight(ChunkForwardRight),
 m_chunkPosX(ChunkCenter->getPosition().first),
 m_chunkPosZ(ChunkCenter->getPosition().second)
 {
+
 	for (int y = 0; y < LandscapeChunk_Height; y++)
 	{
-		for (int z = 0; z < LandscapeChunk_Size; z++)
+		ProcessOneCube(0, y, 0, false);
+		for (int z = 1; z < LandscapeChunk_Size + 1; z++)
 		{
-			for (int x = 0; x < LandscapeChunk_Size; x++)
+			ProcessOneCube(0, y, z, false);
+			for (int x = 1; x < LandscapeChunk_Size + 1; x++)
 			{
-
-				ProcessOneCube(x, y, z);
+				ProcessOneCube(x, y, z, true);
 			}
+			ProcessOneCube(LandscapeChunk_Size + 1, y, z, false);
 		}
+		ProcessOneCube(0, y, LandscapeChunk_Size + 1, false);
 		//Clear last layer;
-		memset(NodeDecks + ((y + 1)% 2), 0xff, sizeof(CellRepresentation)*(LandscapeChunk_Size + 1)*(LandscapeChunk_Size + 1));
+		memset(NodeDecks + ((y + 1)% 2), 0xff, sizeof(CellRepresentation)*(LandscapeChunk_Size + 3)*(LandscapeChunk_Size + 3));
 
 	}
 }

@@ -16,16 +16,14 @@
 
 namespace GEM
 {
-	Ogre::Item* item=nullptr;
-	Ogre::SceneNode* node = nullptr;
+	
 
 	struct MeshVertices
 	{
 		float px = 0, py = 0, pz = 0;   //Position
-		float cr = 0, cg = 0, cb = 0, ca = 0; //colour
-		//float nx = 0, ny = 1, nz = 0;   //Normals
-		//float nu = 0, nv = 0; //Texture Coordinates 1
-		//float TBR = 1.0f, TBG = 0.5f, TBB = 0.5f, TBA = 1.0f;
+		float nx = 0, ny = 1, nz = 0;   //Normals
+		float nu = 0, nv = 0; //Texture Coordinates 1
+		float TBR = 1.0f, TBG = 0.0f, TBB = 0.0f, TBA = 0.0f;
 
 		MeshVertices() {}
 	};
@@ -37,9 +35,7 @@ namespace GEM
 		auto SceneManager = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance");
 
 		auto [ChunkPosX, ChunkPosZ] = m_generator->getPos();
-		//std::string MeshName = "MarchingCubies" + std::to_string(ChunkPosX) + "X" + std::to_string(ChunkPosZ);
-
-		std::string MeshName = "Makky";
+		std::string MeshName = "MarchingCubies" + std::to_string(ChunkPosX) + "X" + std::to_string(ChunkPosZ);
 
 		//Remove previously created mesh if it's exist
 		if (m_marchingCubesItem != nullptr)
@@ -61,11 +57,9 @@ namespace GEM
 
 		Ogre::VertexElement2Vec vertexElements;
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_POSITION));
-		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT4, Ogre::VES_DIFFUSE));
-		//vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT4, Ogre::VES_DIFFUSE));
-		//vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_NORMAL)); For now it is only position and colour
-		//vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES));
-		//vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT4, Ogre::VES_SPECULAR));
+		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_NORMAL));
+		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES));
+		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT4, Ogre::VES_SPECULAR));
 		
 		MeshVertices *meshVertices = reinterpret_cast<MeshVertices*>(OGRE_MALLOC_SIMD(sizeof(MeshVertices) * m_generator->getVertices().size(), Ogre::MEMCATEGORY_GEOMETRY));
 
@@ -75,14 +69,19 @@ namespace GEM
 		{
 			auto& Vertex = m_generator->getVertices()[i];
 
-			meshVertices[i].px = static_cast<float>(Vertex.x()) + ChunkPosX;
-			meshVertices[i].py = static_cast<float>(Vertex.y());
-			meshVertices[i].pz = static_cast<float>(Vertex.z()) + ChunkPosZ;	
+			meshVertices[i].px = static_cast<float>(Vertex.pos.x()) + ChunkPosX* GameSim::LandscapeChunk_Size;
+			meshVertices[i].py = static_cast<float>(Vertex.pos.y());
+			meshVertices[i].pz = static_cast<float>(Vertex.pos.z()) + ChunkPosZ* GameSim::LandscapeChunk_Size;
 
-			meshVertices[i].ca = 1.0f;
-			meshVertices[i].cr = 0.6f;
-			meshVertices[i].cg = 0.6f;
-			meshVertices[i].cb = 0.6f;
+
+			Vertex.normal.normalize();
+			meshVertices[i].nx = static_cast<float>(Vertex.normal.x());
+			meshVertices[i].ny = static_cast<float>(Vertex.normal.y());
+			meshVertices[i].nz = static_cast<float>(Vertex.normal.z());
+
+			meshVertices[i].nu = static_cast<float>(Vertex.pos.x());
+			meshVertices[i].nv = static_cast<float>(Vertex.pos.z());
+
 		}
 
 

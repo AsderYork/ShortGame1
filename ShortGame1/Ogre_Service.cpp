@@ -457,7 +457,7 @@ namespace GEM
 			m_positionChange.x = 1;
 			break;
 		case SDLK_q: {
-			m_camera->setPosition(Ogre::Vector3(1, 0, 15));
+			m_camera->setPosition(Ogre::Vector3(1, 4, 15));
 			m_camera->lookAt(Ogre::Vector3(0, 0, 0));
 			break;
 		}

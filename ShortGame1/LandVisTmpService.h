@@ -16,7 +16,7 @@ namespace GEM
 		virtual ActionResult frame(float timeDelta) override;
 		virtual ActionResult postFrame(float timeDelta) override;
 
-		LandVisTmpService(Ogre_Service* OgreService, const GameSim::LandscapeMeshGenerator* Chunk) :
+		LandVisTmpService(Ogre_Service* OgreService, GameSim::LandscapeMeshGenerator* Chunk) :
 			m_landVis(OgreService, Chunk) {}
 	};
 }

@@ -27,16 +27,38 @@ int main(int argc, char *argv[])
 {
 	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
 
-	GEM::GameSim::LandscapeChunk LC1, LC2, LC3, LC4;
+	GEM::GameSim::LandscapeChunk LC01(0, 1), LC11(1, 1), LC21(2, 1);
+	GEM::GameSim::LandscapeChunk LC00(0, 0), LC10(1, 0), LC20(2, 0);
+
 	for (int x = 0; x < 16; x++)
 	{
 		for (int z = 0; z < 16; z++)
 		{
-			LC1.getNode(x, 0, z).Value = 255;
+			LC00.getNode(x, 0, z).Value = 255;
 		}
 	}
 
-	GEM::GameSim::LandscapeMeshGenerator LNDSCPM(&LC1, &LC2, &LC3, &LC4);
+	for (int x = 0; x < 16; x++)
+	{
+		for (int z = 0; z < 16; z++)
+		{
+			LC10.getNode(x, 2, z).Value = 255;
+		}
+	}
+
+	for (int x = 0; x < 16; x++)
+	{
+		LC10.getNode(x, 6, 8).Value = 255;
+		LC00.getNode(x, 6, 8).Value = 255;
+	}
+
+	LC00.getNode(8, 6, 8).Value = 255;
+	
+	auto start = std::chrono::steady_clock::now();
+	GEM::GameSim::LandscapeMeshGenerator LNDSCPM1(&LC00, &LC01, &LC10, &LC11);
+	auto finish = std::chrono::steady_clock::now();
+	printf("BuildTime:%14.8f\n", std::chrono::duration<float>(finish - start).count());
+	GEM::GameSim::LandscapeMeshGenerator LNDSCPM2(&LC10, &LC11, &LC20, &LC21);
 	
 	
 	GEM::EngineController Controller;
@@ -45,7 +67,8 @@ int main(int argc, char *argv[])
 	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
 	auto NetworkController = Controller.AddService<GEM::NetworkController>();
 
-	auto LVTSController = Controller.AddService<GEM::LandVisTmpService>(OgreController, &LNDSCPM);
+	auto LVTSController1 = Controller.AddService<GEM::LandVisTmpService>(OgreController, &LNDSCPM1);
+	auto LVTSController2 = Controller.AddService<GEM::LandVisTmpService>(OgreController, &LNDSCPM2);
 
 	//auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
 	//auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);

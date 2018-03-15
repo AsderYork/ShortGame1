@@ -33,32 +33,38 @@ namespace GEM::GameSim
 
 	class LandscapeChunk
 	{
-		LandscapeChunk_NodeData Nodes[LandscapeChunk_Size][LandscapeChunk_Size][LandscapeChunk_Height];
+		LandscapeChunk_NodeData m_nodes[LandscapeChunk_Size][LandscapeChunk_Size][LandscapeChunk_Height];
 
 
 		/**!
 		Chunks can be changed. This variable is used to track the version of a chunk. Implementation must guarantee, that
 		if to chunks have same position and version, they are identical.
 		*/
-		uint64_t Version;
-		int32_t PosX=0, PosZ=0;
+		uint64_t m_version;
+		int32_t m_posX, m_posZ;
 	public:
 
+		LandscapeChunk(int32_t x, int32_t z, uint64_t Version=0) :
+			m_posX(x), m_posZ(z), m_version(Version) {}
+
+
+		LandscapeChunk() :	m_posX(0), m_posZ(0), m_version(0) {}
+
 		inline uint8_t getNodeValue (uint32_t x, uint32_t y, uint32_t z) const
-		{return Nodes[x][z][y].getOverallAmount();}
+		{return m_nodes[x][z][y].getOverallAmount();}
 
 		inline LandscapeChunk_NodeData& getNode(uint32_t x, uint32_t y, uint32_t z)
 		{
-			return Nodes[x][z][y];
+			return m_nodes[x][z][y];
 		}
 
-		inline uint64_t getVersion() const{ return Version; }
-		inline std::pair<int32_t, int32_t> getPosition() const{ return std::make_pair(PosX, PosZ); }
+		inline uint64_t getVersion() const{ return m_version; }
+		inline std::pair<int32_t, int32_t> getPosition() const{ return std::make_pair(m_posX, m_posZ); }
 
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(Version, PosX, PosZ, Nodes);
+			archive(m_version, m_posX, m_posZ, m_nodes);
 		}
 		
 	};

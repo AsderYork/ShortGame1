@@ -205,7 +205,9 @@
     <ClCompile Include="GamePhysics.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="LandscapeMeshGenerator.cpp" />
+    <ClCompile Include="LandscapeMeshGenerator.cpp">
+      <Filter>Landscape\MeshGenerator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyboardEvents.def">

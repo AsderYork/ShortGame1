@@ -12,7 +12,15 @@ namespace GEM::GameSim
 	class LandscapeMeshGenerator
 	{
 	private:
-		std::vector<btVector3> m_vertices;
+		struct VertexType
+		{
+			btVector3 pos;
+			btVector3 normal;
+
+			VertexType(btVector3 _pos) : pos(_pos), normal((btScalar)0, (btScalar)0, (btScalar)0) {}
+		};
+
+		std::vector<VertexType> m_vertices;
 		std::vector<uint32_t> m_indices;
 
 		const LandscapeChunk* m_chunkCenter;
@@ -31,10 +39,22 @@ namespace GEM::GameSim
 			uint32_t Vertex[3] = {(std::numeric_limits<uint32_t>::max)(),
 				(std::numeric_limits<uint32_t>::max)(),
 				(std::numeric_limits<uint32_t>::max)()};
+
+			/**!
+			Used for calculating normals on edges withous creating vertices, that should not be visible
+			*/
+			struct PerVertex
+			{
+				btVector3 pos;
+				btVector3 normal;
+			};
+
+			PerVertex data[3];
+
 		};
 
 		//Holds last last layer of processed nodes and a current one
-		CellRepresentation NodeDecks[2][LandscapeChunk_Size + 1][LandscapeChunk_Size + 1];
+		CellRepresentation NodeDecks[2][LandscapeChunk_Size + 3][LandscapeChunk_Size + 3];
 
 
 		/**!
@@ -76,7 +96,8 @@ namespace GEM::GameSim
 		/**!
 		Processes one cube of a mesh
 		*/
-		void ProcessOneCube(int x, int y, int z);
+		void ProcessOneCube(int x, int y, int z, bool RegisterNewVertices);
+
 
 	public:
 		LandscapeMeshGenerator(const LandscapeChunk* ChunkCenter, const LandscapeChunk* ChunkForward, const LandscapeChunk* ChunkRight, const LandscapeChunk* ChunkForwardRight);
@@ -87,7 +108,7 @@ namespace GEM::GameSim
 		*/
 		inline std::pair<int32_t, int32_t> getPos() const { return std::make_pair(m_chunkPosX, m_chunkPosZ); }
 
-		inline const std::vector<btVector3>& getVertices() const { return m_vertices; }
+		inline std::vector<VertexType>& getVertices() { return m_vertices; }
 		inline const std::vector<uint32_t>& getInidces() const { return m_indices; }
 	
 	};

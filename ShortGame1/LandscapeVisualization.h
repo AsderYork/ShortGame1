@@ -11,7 +11,7 @@ namespace GEM
 	{
 	private:
 		Ogre_Service * m_ogreService;
-		const GameSim::LandscapeMeshGenerator* m_generator;
+		GameSim::LandscapeMeshGenerator* m_generator;
 
 		Ogre::Item* m_marchingCubesItem = nullptr;
 		Ogre::SceneNode* m_marchingCubeNode = nullptr;
@@ -19,9 +19,12 @@ namespace GEM
 
 		Ogre::IndexBufferPacked* createIndexBuffer();
 
+		Ogre::Item* item = nullptr;
+		Ogre::SceneNode* node = nullptr;
+
 
 	public:
-		LandscapeVisualization(Ogre_Service* OgreService, const GameSim::LandscapeMeshGenerator* Chunk)
+		LandscapeVisualization(Ogre_Service* OgreService, GameSim::LandscapeMeshGenerator* Chunk)
 			: m_ogreService(OgreService), m_generator(Chunk) {}
 
 		~LandscapeVisualization();
