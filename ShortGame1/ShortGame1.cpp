@@ -15,6 +15,8 @@
 #include "LoginScreen.h"
 #include "GameVisualization.h"
 
+#include <LandscapeMeshGenerator.h>
+#include "LandVisTmpService.h"
 
 
 //#include <GameSimulation.h>
@@ -24,6 +26,17 @@
 int main(int argc, char *argv[])
 {
 	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
+
+	GEM::GameSim::LandscapeChunk LC1, LC2, LC3, LC4;
+	for (int x = 0; x < 16; x++)
+	{
+		for (int z = 0; z < 16; z++)
+		{
+			LC1.getNode(x, 0, z).Value = 255;
+		}
+	}
+
+	GEM::GameSim::LandscapeMeshGenerator LNDSCPM(&LC1, &LC2, &LC3, &LC4);
 	
 	
 	GEM::EngineController Controller;
@@ -31,15 +44,14 @@ int main(int argc, char *argv[])
 	auto OgreController = Controller.AddService<GEM::Ogre_Service>(SDLController);
 	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
 	auto NetworkController = Controller.AddService<GEM::NetworkController>();
-	auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
-	auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
-	auto GameVisualization = Controller.AddService<GEM::GameVisualization>(GameSimService, OgreController);
 
-	//auto MapService = Controller.AddService<GEM::MapService>(OgreController);
-	//auto DebugMapController = Controller.AddService<GEM::DebugMapGraphicsService>(OgreController, MapService);
+	auto LVTSController = Controller.AddService<GEM::LandVisTmpService>(OgreController, &LNDSCPM);
 
-	//MapService->setDrawDistance(1);
-	//MapService->setPrepareDistance(2);
+	//auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
+	//auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
+	//auto GameVisualization = Controller.AddService<GEM::GameVisualization>(GameSimService, OgreController);
+
+
 
 
 
@@ -57,7 +69,7 @@ int main(int argc, char *argv[])
 	*/
 
 
-	ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
+	//ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
 
     return Controller.start();
 	return 0;

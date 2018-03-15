@@ -41,7 +41,7 @@ namespace GEM::GameSim
 		if to chunks have same position and version, they are identical.
 		*/
 		uint64_t Version;
-		uint32_t PosX, PosZ;
+		int32_t PosX=0, PosZ=0;
 	public:
 
 		inline uint8_t getNodeValue (uint32_t x, uint32_t y, uint32_t z) const
@@ -53,7 +53,7 @@ namespace GEM::GameSim
 		}
 
 		inline uint64_t getVersion() const{ return Version; }
-		inline std::pair<uint32_t, uint32_t> getPosition() const{ return std::make_pair(PosX, PosZ); }
+		inline std::pair<int32_t, int32_t> getPosition() const{ return std::make_pair(PosX, PosZ); }
 
 		template<class Archive>
 		void serialize(Archive & archive)

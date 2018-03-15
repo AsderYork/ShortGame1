@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
+    <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(BULLETPHYSICS_HOME)\Repo\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
   </PropertyGroup>
@@ -174,6 +174,8 @@
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="GameSimService.h" />
     <ClInclude Include="GameVisualization.h" />
+    <ClInclude Include="LandscapeVisualization.h" />
+    <ClInclude Include="LandVisTmpService.h" />
     <ClInclude Include="MainGameScreen.h" />
     <ClInclude Include="NetworkController.h" />
     <ClInclude Include="LoginScreen.h" />
@@ -205,6 +207,8 @@
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="GameSimService.cpp" />
     <ClCompile Include="GameVisualization.cpp" />
+    <ClCompile Include="LandscapeVisualization.cpp" />
+    <ClCompile Include="LandVisTmpService.cpp" />
     <ClCompile Include="MainGameScreen.cpp" />
     <ClCompile Include="NetworkController.cpp" />
     <ClCompile Include="LogHelper.cpp" />

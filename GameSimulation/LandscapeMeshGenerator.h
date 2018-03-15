@@ -13,31 +13,28 @@ namespace GEM::GameSim
 	{
 	private:
 		std::vector<btVector3> m_vertices;
-		std::vector<uint8_t> m_indices;
+		std::vector<uint32_t> m_indices;
 
 		const LandscapeChunk* m_chunkCenter;
 		const LandscapeChunk* m_chunkForward;
 		const LandscapeChunk* m_chunkRight;
 		const LandscapeChunk* m_chunkForwardRight;
 
+		const int32_t m_chunkPosX;
+		const int32_t m_chunkPosZ;
+
 		struct CellRepresentation
 		{
 			/*First part is the actual vertex, second is it's position in Vertices array. Max value of uint32_t is considered as not-set
 			and is used to actually check, if certain vertex allready where created, so avoid meshes with stupidly huge(2^32) ammount of indices!
 			*/
-			/*
-			std::pair<btVector3, uint32_t> Vertex[3] = {
-			{ { 0.0f,0.0f,0.0f }, std::numeric_limits<uint32_t>::max() },
-			{ { 0.0f,0.0f,0.0f }, std::numeric_limits<uint32_t>::max() },
-			{ { 0.0f,0.0f,0.0f }, std::numeric_limits<uint32_t>::max() }
-			};*/
-			uint32_t Vertex[3] = {std::numeric_limits<uint32_t>::max(),
-				std::numeric_limits<uint32_t>::max(),
-				std::numeric_limits<uint32_t>::max()};
+			uint32_t Vertex[3] = {(std::numeric_limits<uint32_t>::max)(),
+				(std::numeric_limits<uint32_t>::max)(),
+				(std::numeric_limits<uint32_t>::max)()};
 		};
 
 		//Holds last last layer of processed nodes and a current one
-		CellRepresentation NodeDecks[LandscapeChunk_Size + 1][LandscapeChunk_Size + 1][2];
+		CellRepresentation NodeDecks[2][LandscapeChunk_Size + 1][LandscapeChunk_Size + 1];
 
 
 		/**!
@@ -82,24 +79,17 @@ namespace GEM::GameSim
 		void ProcessOneCube(int x, int y, int z);
 
 	public:
-		LandscapeMeshGenerator(const LandscapeChunk* ChunkCenter, const LandscapeChunk* ChunkForward, const LandscapeChunk* ChunkRight, const LandscapeChunk* ChunkForwardRight) :
-			m_chunkCenter(ChunkCenter),
-			m_chunkForward(ChunkForward),
-			m_chunkRight(ChunkRight),
-			m_chunkForwardRight(ChunkForwardRight)
-		{
-			for (int y = 0; y < LandscapeChunk_Height; y++)
-			{
-				for (int x = 0; x < LandscapeChunk_Size; x++)
-				{
-					for (int z = 0; z < LandscapeChunk_Size; z++)
-					{
-					
-							ProcessOneCube(x, y, z);
-					}
-				}
-			}
-		}
+		LandscapeMeshGenerator(const LandscapeChunk* ChunkCenter, const LandscapeChunk* ChunkForward, const LandscapeChunk* ChunkRight, const LandscapeChunk* ChunkForwardRight);
+	
+		/**!
+		Returns position of a chunk
+		\returns <x,z> position of a chunk
+		*/
+		inline std::pair<int32_t, int32_t> getPos() const { return std::make_pair(m_chunkPosX, m_chunkPosZ); }
+
+		inline const std::vector<btVector3>& getVertices() const { return m_vertices; }
+		inline const std::vector<uint32_t>& getInidces() const { return m_indices; }
+	
 	};
 }
 

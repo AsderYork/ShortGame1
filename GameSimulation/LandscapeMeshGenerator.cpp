@@ -348,67 +348,107 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z)
 	//Otherwise cell has a non-trivial triangulation
 
 	char ValidityMask = 0;
-	ValidityMask += x > 0 ? 1 : 0;
-	ValidityMask += z > 0 ? 2 : 0;
-	ValidityMask += y > 0 ? 4 : 0;
+	ValidityMask += x > 0 ? 0x10 : 0;
+	ValidityMask += z > 0 ? 0x20 : 0;
+	ValidityMask += y > 0 ? 0x40 : 0;
 		
-
-	for (int traingle = 0; traingle < regularCellData[regularCellClass[caseCode]].GetTriangleCount(); traingle++)
+	//Stores 12 indexes of a vertices, that where used for this cube
+	uint32_t IndexHolder[12];
+	for (int Vertex = 0; Vertex < regularCellData[regularCellClass[caseCode]].GetVertexCount(); Vertex++)
 	{
-		for (int VertexId = 0; VertexId < 3; VertexId++)
-		{
-			auto edgeCode = regularVertexData[caseCode][VertexId + traingle*3];
-			unsigned short v0 = (edgeCode >> 4) & 0x0F;
-			unsigned short v1 = edgeCode & 0x0F;
+		auto edgeCode = regularVertexData[caseCode][Vertex];
+		auto posx = 1 + x - ((((edgeCode >> 8) & 0x10) != 0) ? 1 : 0);
+		auto posy = (y + ((((edgeCode >> 8) & 0x40) != 0) ? 1 : 0)) % 2;
+		auto posz = 1 + z - ((((edgeCode >> 8) & 0x20) != 0) ? 1 : 0);
+		auto Edgecc = ((edgeCode >> 8) & 0x0f) - 1;
+
+		if (((edgeCode >> 8) & ValidityMask) == 0)
+		{//If vertex needs to be added
+			
 
 
-			if ((edgeCode >> 8) & ValidityMask)
-			{//If vertex needs to be added
-				auto& CurrVertex = NodeDecks[1 + x - (edgeCode >> 8) & 0x01 ? 1 : 0]
-					[1 + z - (edgeCode >> 8) & 0x02 ? 1 : 0]
-				[(y + (edgeCode >> 8) & 0x04 ? 1 : 0) % 2].Vertex[edgeCode & 0x0f];
-				
-				if (CurrVertex == std::numeric_limits<uint32_t>::max())
-				{//Create new vertex
-					float t = (float)corner[v1] / (corner[v1] - corner[v0]);
+			auto vrtx = NodeDecks[posy][posx][posz];
 
-					btVector3 NewVertex;
-					switch ((edgeCode >> 8) & 0x0f)
-					{
-					case 1: {NewVertex = btVector3((btScalar)x, (btScalar)y, (btScalar)(z - t)); break; }
-					case 2: {NewVertex = btVector3((btScalar)(x - t), (btScalar)y, (btScalar)z); break; }
-					case 3: {NewVertex = btVector3((btScalar)x, (btScalar)(y - t), (btScalar)z); break; }
-					default:
-						break;
-					}
-					m_vertices.push_back(NewVertex);
-					CurrVertex = static_cast<uint32_t>(m_vertices.size() - 1);
-					m_indices.push_back(CurrVertex);
-				}
-				else
+			auto& CurrVertex = NodeDecks[posy][posx][posz].Vertex[Edgecc];
+
+			if (CurrVertex == std::numeric_limits<uint32_t>::max())
+			{//Create new vertex
+
+				unsigned short v0 = (edgeCode >> 4) & 0x0F;
+				unsigned short v1 = edgeCode & 0x0F;
+				float t = (float)corner[v1] / (corner[v1] - corner[v0]);
+
+				char shiftx = edgeCode >> 8 & 0x10 ? 1 : 0;
+				char shiftz = edgeCode >> 8 & 0x20 ? 1 : 0;
+				char shifty = edgeCode >> 8 & 0x40 ? 1 : 0;
+
+				btVector3 NewVertex;
+				switch ((edgeCode >> 8) & 0x0f)
 				{
-					//We allready created this vertex during this pass, so just find it again!
-					m_indices.push_back(
-						NodeDecks[1 + x - (edgeCode >> 8) & 0x01 ? 1 : 0]
-						[1 + z - (edgeCode >> 8) & 0x02 ? 1 : 0]
-					[(y + (edgeCode >> 8) & 0x04 ? 1 : 0) % 2].Vertex[edgeCode & 0x0f]);
+				case 1: {NewVertex = btVector3((btScalar)x, (btScalar)y, (btScalar)(z - t)); break; }
+				case 2: {NewVertex = btVector3((btScalar)(x - t), (btScalar)y, (btScalar)z); break; }
+				case 3: {NewVertex = btVector3((btScalar)x, (btScalar)(y - t), (btScalar)z); break; }
+				default:
+					break;
 				}
+				NewVertex -= btVector3((btScalar)(shiftx), (btScalar)(shifty), (btScalar)(shiftz));
 
+				m_vertices.push_back(NewVertex);
+				CurrVertex = static_cast<uint32_t>(m_vertices.size() - 1);
+				IndexHolder[Vertex] = CurrVertex;
 			}
 			else
 			{
-				//Add index of a requested vertex in Indices;
-				m_indices.push_back(
-				NodeDecks[1 + x- (edgeCode >> 8) & 0x01 ? 1 : 0]
-					[1 + z - (edgeCode >> 8) & 0x02 ? 1 : 0]
-				[(y + (edgeCode >> 8) & 0x04 ? 1 : 0) % 2].Vertex[edgeCode & 0x0f]);
+				//We allready created this vertex during this pass, so just find it again!
+				IndexHolder[Vertex] = NodeDecks[posy][posx][posz].Vertex[Edgecc];
 			}
 
 		}
+		else
+		{
+
+			auto vrtx = NodeDecks[posy][posx][posz];
+			//Add index of a requested vertex in Indices;
+			IndexHolder[Vertex] = NodeDecks[posy][posx][posz].Vertex[Edgecc];
+		}
+	}
+
+	for (int traingle = 0; traingle < regularCellData[regularCellClass[caseCode]].GetTriangleCount(); traingle++)
+	{
+		//triangles are twisted, becouse culling mode in tables is not the same as in a game
+		m_indices.push_back(IndexHolder[regularCellData[regularCellClass[caseCode]].vertexIndex[traingle * 3 + 0]]);
+		m_indices.push_back(IndexHolder[regularCellData[regularCellClass[caseCode]].vertexIndex[traingle * 3 + 2]]);
+		m_indices.push_back(IndexHolder[regularCellData[regularCellClass[caseCode]].vertexIndex[traingle * 3 + 1]]);
+
 	}
 
 
 
+}
+
+LandscapeMeshGenerator::LandscapeMeshGenerator(const LandscapeChunk* ChunkCenter, const LandscapeChunk* ChunkForward, const LandscapeChunk* ChunkRight, const LandscapeChunk* ChunkForwardRight)
+:
+m_chunkCenter(ChunkCenter),
+m_chunkForward(ChunkForward),
+m_chunkRight(ChunkRight),
+m_chunkForwardRight(ChunkForwardRight),
+m_chunkPosX(ChunkCenter->getPosition().first),
+m_chunkPosZ(ChunkCenter->getPosition().second)
+{
+	for (int y = 0; y < LandscapeChunk_Height; y++)
+	{
+		for (int z = 0; z < LandscapeChunk_Size; z++)
+		{
+			for (int x = 0; x < LandscapeChunk_Size; x++)
+			{
+
+				ProcessOneCube(x, y, z);
+			}
+		}
+		//Clear last layer;
+		memset(NodeDecks + ((y + 1)% 2), 0xff, sizeof(CellRepresentation)*(LandscapeChunk_Size + 1)*(LandscapeChunk_Size + 1));
+
+	}
 }
 
 }

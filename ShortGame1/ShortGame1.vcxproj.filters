@@ -115,6 +115,9 @@
     <Filter Include="PlayerInputEventGenerator">
       <UniqueIdentifier>{ffda274c-e8b0-4bcc-be53-63c1aef7a59a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LandscapeVisualization">
+      <UniqueIdentifier>{2ab2cdb3-87d7-420c-99ce-b9045b123689}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -213,6 +216,12 @@
     <ClInclude Include="PlayerInputEventGenerator.h">
       <Filter>PlayerInputEventGenerator</Filter>
     </ClInclude>
+    <ClInclude Include="LandVisTmpService.h">
+      <Filter>LandscapeVisualization</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeVisualization.h">
+      <Filter>LandscapeVisualization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogHelper.cpp">
@@ -292,6 +301,12 @@
     </ClCompile>
     <ClCompile Include="PlayerInputEventGenerator.cpp">
       <Filter>PlayerInputEventGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeVisualization.cpp">
+      <Filter>LandscapeVisualization</Filter>
+    </ClCompile>
+    <ClCompile Include="LandVisTmpService.cpp">
+      <Filter>LandscapeVisualization</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
