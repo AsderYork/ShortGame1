@@ -23,7 +23,7 @@ namespace GEM
 		float px = 0, py = 0, pz = 0;   //Position
 		float nx = 0, ny = 1, nz = 0;   //Normals
 		float nu = 0, nv = 0; //Texture Coordinates 1
-		float TBR = 1.0f, TBG = 0.0f, TBB = 0.0f, TBA = 0.0f;
+		float TBR = 1.0f, TBG = 0.5f, TBB = 0.5f, TBA = 1.0f;
 
 		MeshVertices() {}
 	};
@@ -61,17 +61,19 @@ namespace GEM
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES));
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT4, Ogre::VES_SPECULAR));
 		
-		MeshVertices *meshVertices = reinterpret_cast<MeshVertices*>(OGRE_MALLOC_SIMD(sizeof(MeshVertices) * m_generator->getVertices().size(), Ogre::MEMCATEGORY_GEOMETRY));
+		auto[Orientations, NewIndices] = processTriangles();
+
+		MeshVertices *meshVertices = reinterpret_cast<MeshVertices*>(OGRE_MALLOC_SIMD(sizeof(MeshVertices) * Orientations.size(), Ogre::MEMCATEGORY_GEOMETRY));
 
 
 		//Translate VertexList from Generator to Ogre
-		for (int i = 0; i < m_generator->getVertices().size(); i++)
+		for (int i = 0; i < Orientations.size(); i++)
 		{
-			auto& Vertex = m_generator->getVertices()[i];
+			auto& Vertex = m_generator->getVertices()[Orientations[i].OriginalVertex];
 
-			meshVertices[i].px = static_cast<float>(Vertex.pos.x()) + ChunkPosX* GameSim::LandscapeChunk_Size;
+			meshVertices[i].px = static_cast<float>(Vertex.pos.x());
 			meshVertices[i].py = static_cast<float>(Vertex.pos.y());
-			meshVertices[i].pz = static_cast<float>(Vertex.pos.z()) + ChunkPosZ* GameSim::LandscapeChunk_Size;
+			meshVertices[i].pz = static_cast<float>(Vertex.pos.z());
 
 
 			Vertex.normal.normalize();
@@ -79,8 +81,25 @@ namespace GEM
 			meshVertices[i].ny = static_cast<float>(Vertex.normal.y());
 			meshVertices[i].nz = static_cast<float>(Vertex.normal.z());
 
-			meshVertices[i].nu = static_cast<float>(Vertex.pos.x());
-			meshVertices[i].nv = static_cast<float>(Vertex.pos.z());
+			switch (Orientations[i].currentPresentation)
+			{
+			case OrientHolder::UPDOWN: {
+				meshVertices[i].nu = static_cast<float>(Vertex.pos.x());
+				meshVertices[i].nv = static_cast<float>(Vertex.pos.z());
+				break; }
+			case OrientHolder::LEFTRIGHT: {
+				meshVertices[i].nu = static_cast<float>(Vertex.pos.y());
+				meshVertices[i].nv = static_cast<float>(Vertex.pos.z());
+				break; }
+			case OrientHolder::FRONTBACK: {
+				meshVertices[i].nu = static_cast<float>(Vertex.pos.y());
+				meshVertices[i].nv = static_cast<float>(Vertex.pos.x());
+				break; }
+			}
+
+			meshVertices[i].TBR = 1.0;
+			meshVertices[i].TBG = 0.0;
+			meshVertices[i].TBB = 0.0;
 
 		}
 
@@ -89,7 +108,7 @@ namespace GEM
 		try
 		{
 			//Create the actual vertex buffer.
-			vertexBuffer = vaoManager->createVertexBuffer(vertexElements, m_generator->getVertices().size(), Ogre::BT_IMMUTABLE, meshVertices, false);
+			vertexBuffer = vaoManager->createVertexBuffer(vertexElements, Orientations.size(), Ogre::BT_IMMUTABLE, meshVertices, false);
 		}
 		catch (Ogre::Exception &e)
 		{
@@ -102,7 +121,7 @@ namespace GEM
 		Ogre::VertexBufferPackedVec vertexBuffers;
 		vertexBuffers.push_back(vertexBuffer);
 
-		Ogre::IndexBufferPacked *indexBuffer = createIndexBuffer(); //Create the actual index buffer
+		Ogre::IndexBufferPacked *indexBuffer = createIndexBuffer(NewIndices); //Create the actual index buffer
 		Ogre::VertexArrayObject *vao = vaoManager->createVertexArrayObject(
 			vertexBuffers, indexBuffer, Ogre::OT_TRIANGLE_LIST);
 
@@ -118,7 +137,7 @@ namespace GEM
 			false);
 		m_mesh->_setBoundingSphereRadius(meshRadius);
 
-		//subMesh->setMaterialName("HlmsPbs1");
+		subMesh->setMaterialName("HlmsPbs1");
 
 
 
@@ -126,24 +145,20 @@ namespace GEM
 		m_marchingCubeNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);
 
 		m_marchingCubeNode->attachObject(m_marchingCubesItem);
-		m_marchingCubeNode->setPosition(0, 0, 0);
+		m_marchingCubeNode->setPosition(ChunkPosX * GameSim::LandscapeChunk_Size, 0, ChunkPosZ * GameSim::LandscapeChunk_Size);
 
 	}
 
-	Ogre::IndexBufferPacked * LandscapeVisualization::createIndexBuffer()
+	Ogre::IndexBufferPacked * LandscapeVisualization::createIndexBuffer(std::vector<uint16_t>& Indices)
 	{
 		Ogre::IndexBufferPacked *indexBuffer = 0;
 
-		Ogre::uint16 *cubeIndices = reinterpret_cast<Ogre::uint16*>(OGRE_MALLOC_SIMD(sizeof(Ogre::uint16) * m_generator->getInidces().size(), Ogre::MEMCATEGORY_GEOMETRY));
 
-		/**!
-		No index can be bigger then 2^16
-		*/
-		assert(m_generator->getVertices().size() < std::numeric_limits<Ogre::uint16>::max());
+		Ogre::uint16 *cubeIndices = reinterpret_cast<Ogre::uint16*>(OGRE_MALLOC_SIMD(sizeof(Ogre::uint16) * Indices.size(), Ogre::MEMCATEGORY_GEOMETRY));
 
-		for (int i = 0; i < m_generator->getInidces().size(); i++)
+		for (int i = 0; i < Indices.size(); i++)
 		{
-			cubeIndices[i] = static_cast<Ogre::uint16>(m_generator->getInidces()[i]);
+			cubeIndices[i] = Indices[i];
 		}
 
 		Ogre::RenderSystem *renderSystem = m_ogreService->getRoot()->getRenderSystem();
@@ -152,7 +167,7 @@ namespace GEM
 		try
 		{
 			indexBuffer = vaoManager->createIndexBuffer(Ogre::IndexBufferPacked::IT_16BIT,
-				m_generator->getInidces().size(),
+				Indices.size(),
 				Ogre::BT_IMMUTABLE,
 				cubeIndices, true);
 		}
@@ -168,6 +183,62 @@ namespace GEM
 		}
 
 		return indexBuffer;
+	}
+
+	std::pair<std::vector<LandscapeVisualization::OrientHolder>, std::vector<uint16_t>> LandscapeVisualization::processTriangles()
+	{
+		std::vector<OrientHolder> Orientations;
+		std::vector<uint16_t> NewIndices;
+		Orientations.resize(m_generator->getVertices().size());
+
+		for (int trinagleNum = 0; trinagleNum < m_generator->getTriangles().size(); trinagleNum++)
+		{
+			auto& triangle = m_generator->getTriangles()[trinagleNum];
+			OrientHolder::Presentation TriangleState;
+
+			if (triangle.normal.absolute().angle(btVector3(0, 1, 0)) < 0.9f)// ~51 degres
+			{
+				TriangleState = OrientHolder::UPDOWN;
+			}
+			else if (triangle.normal.absolute().angle(btVector3(1, 0, 0)) < 0.9f)// ~51 degres
+			{
+				TriangleState = OrientHolder::LEFTRIGHT;
+			}
+			else
+			{
+				TriangleState = OrientHolder::FRONTBACK;
+			}
+
+			/*switch (triangle.normal.closestAxis())
+			{
+			case 0: {TriangleState = OrientHolder::LEFTRIGHT; break; }
+			case 1: {TriangleState = OrientHolder::UPDOWN;  break; }
+			case 2: {TriangleState = OrientHolder::FRONTBACK;  break; }
+			}*/
+			
+			for (int i = 0; i < 3; i++)
+			{
+				if (Orientations[triangle.indices[i]].currentPresentation == OrientHolder::UNDEF)
+				{
+					Orientations[triangle.indices[i]].OriginalVertex = triangle.indices[i];
+					Orientations[triangle.indices[i]].accessPos(TriangleState) = triangle.indices[i];
+					Orientations[triangle.indices[i]].currentPresentation = TriangleState;
+
+					NewIndices.push_back(triangle.indices[i]);
+				}
+				else if (Orientations[triangle.indices[i]].accessPos(TriangleState) == std::numeric_limits<uint16_t>::max())
+				{
+					Orientations.emplace_back(triangle.indices[i], TriangleState);
+					NewIndices.push_back(static_cast<uint16_t>(Orientations.size() - 1));
+					Orientations[triangle.indices[i]].accessPos(TriangleState) = static_cast<uint16_t>(Orientations.size() - 1);
+				}
+				else
+				{
+					NewIndices.push_back(static_cast<uint16_t>(Orientations[triangle.indices[i]].accessPos(TriangleState)));
+				}
+			}
+		}
+		return std::make_pair(Orientations, NewIndices);
 	}
 
 	void LandscapeVisualization::RemoveMesh()

@@ -52,12 +52,24 @@ int main(int argc, char *argv[])
 		LC00.getNode(x, 6, 8).Value = 255;
 	}
 
-	LC00.getNode(8, 6, 8).Value = 255;
-	
-	auto start = std::chrono::steady_clock::now();
+	LC00.getNode(10, 4, 8).Value = 255;
+	LC00.getNode(10, 5, 8).Value = 255;
+	LC00.getNode(10, 6, 8).Value = 255;
+
+	LC00.getNode(10, 4, 9).Value = 255;
+	LC00.getNode(10, 5, 9).Value = 255;
+	LC00.getNode(10, 6, 9).Value = 255;
+
+	LC00.getNode(11, 4, 8).Value = 255;
+	LC00.getNode(11, 5, 8).Value = 255;
+	LC00.getNode(11, 6, 8).Value = 255;
+
+	LC00.getNode(11, 4, 9).Value = 255;
+	LC00.getNode(11, 5, 9).Value = 255;
+	LC00.getNode(11, 6, 9).Value = 255;
+
+
 	GEM::GameSim::LandscapeMeshGenerator LNDSCPM1(&LC00, &LC01, &LC10, &LC11);
-	auto finish = std::chrono::steady_clock::now();
-	printf("BuildTime:%14.8f\n", std::chrono::duration<float>(finish - start).count());
 	GEM::GameSim::LandscapeMeshGenerator LNDSCPM2(&LC10, &LC11, &LC20, &LC21);
 	
 	

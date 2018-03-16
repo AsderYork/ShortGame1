@@ -20,8 +20,20 @@ namespace GEM::GameSim
 			VertexType(btVector3 _pos) : pos(_pos), normal((btScalar)0, (btScalar)0, (btScalar)0) {}
 		};
 
+		/**!
+		It's really hard to texture a 3d object with a 2d texture. So we keep track of all the 
+		created triangles during the mesh creation with the normal a particular triangle is having
+		so that visualizator could do something with it.
+		*/
+		struct triangleType
+		{
+			uint32_t indices[3];
+			btVector3 normal;
+		};
+
 		std::vector<VertexType> m_vertices;
 		std::vector<uint32_t> m_indices;
+		std::vector<triangleType> m_triangles;
 
 		const LandscapeChunk* m_chunkCenter;
 		const LandscapeChunk* m_chunkForward;
@@ -109,6 +121,7 @@ namespace GEM::GameSim
 		inline std::pair<int32_t, int32_t> getPos() const { return std::make_pair(m_chunkPosX, m_chunkPosZ); }
 
 		inline std::vector<VertexType>& getVertices() { return m_vertices; }
+		inline std::vector<triangleType>& getTriangles() { return m_triangles; }
 		inline const std::vector<uint32_t>& getInidces() const { return m_indices; }
 	
 	};

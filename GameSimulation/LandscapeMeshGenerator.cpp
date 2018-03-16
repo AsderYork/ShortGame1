@@ -443,13 +443,6 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNe
 		auto Ind2 = regularCellData[regularCellClass[caseCode]].vertexIndex[traingle * 3 + 2];
 		auto Ind3 = regularCellData[regularCellClass[caseCode]].vertexIndex[traingle * 3 + 1];
 
-		if (RegisterNewVertices)
-		{
-			m_indices.push_back(IndexHolder[Ind1]);
-			m_indices.push_back(IndexHolder[Ind2]);
-			m_indices.push_back(IndexHolder[Ind3]);
-		}
-
 		auto norm = (NormalsPtrHolder[Ind1]->pos - NormalsPtrHolder[Ind2]->pos).cross(NormalsPtrHolder[Ind1]->pos - NormalsPtrHolder[Ind3]->pos);
 
 
@@ -459,9 +452,20 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNe
 
 		if (RegisterNewVertices)
 		{
+			m_indices.push_back(IndexHolder[Ind1]);
+			m_indices.push_back(IndexHolder[Ind2]);
+			m_indices.push_back(IndexHolder[Ind3]);
+
 			m_vertices[IndexHolder[Ind1]].normal = NormalsPtrHolder[Ind1]->normal;
 			m_vertices[IndexHolder[Ind2]].normal = NormalsPtrHolder[Ind2]->normal;
 			m_vertices[IndexHolder[Ind3]].normal = NormalsPtrHolder[Ind3]->normal;
+
+			triangleType newTriangle;
+			newTriangle.indices[0] = IndexHolder[Ind1];
+			newTriangle.indices[1] = IndexHolder[Ind2];
+			newTriangle.indices[2] = IndexHolder[Ind3];
+			newTriangle.normal = norm;
+			m_triangles.emplace_back(std::move(newTriangle));
 		}
 		else
 		{
