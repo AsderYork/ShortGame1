@@ -163,6 +163,7 @@
     <ClInclude Include="GS_PlayerController.h" />
     <ClInclude Include="GS_Server.h" />
     <ClInclude Include="LandscapeChunk.h" />
+    <ClInclude Include="LandscapeChunkController.h" />
     <ClInclude Include="LandscapeChunkPack.h" />
     <ClInclude Include="LandscapeMeshGenerator.h" />
     <ClInclude Include="NumerableEvents.def" />

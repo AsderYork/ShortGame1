@@ -9,11 +9,27 @@
 #include <cereal\types\vector.hpp>
 
 #include <GamePhysics.h>
-#include <LandscapeMeshGenerator.h>
+#include <LandscapeChunkController.h>
 
 
 int main(int argc, char *argv[])
 {
+	std::vector<int> a1{ 1,3,5,6,7 }, a2{ 1,2,3,4,5,8 };
+
+
+	/*auto [dif1, dif2] = GEM::GameSim::GetArraysDifferences(a1.begin(), a1.end(), a2.begin(), a2.end());
+	printf("Unique1:");
+	for (auto& un : dif1)
+	{
+		printf("%i; ", un);
+	}
+	printf("\nUnique2:");
+	for (auto& un : dif2)
+	{
+		printf("%i; ", un);
+	}
+	*/
+
 	//GEM::GameSim::DoPhysics();
 	
 	GEM::GameSim::LandscapeChunk LC1, LC2, LC3, LC4;
