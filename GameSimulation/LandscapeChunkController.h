@@ -16,7 +16,7 @@ namespace GEM::GameSim
 	Let's start from the begining.
 
 	Player connects to a server and requests chunks.
-	Techicly speacking, server will now the position of a player at this moment, so it can predict it's request.
+	Techicly speacking, server will know the position of a player at this moment, so it can predict it's request.
 	But can it predict all the chunks, that player already have on a hard drive? Well, it probably can, but it's actually
 	difficult, so let's say that it can't. In that case player's request will consist of vector of pairs[chunkVersion, ChunkPos].
 	When server recives this messages, it should, for every specified chunk:
@@ -94,45 +94,43 @@ namespace GEM::GameSim
 
 	*/
 
-	template<class T, class ForwardIterator>
-	std::pair<std::vector<T>, std::vector<T>> GetArraysDifferences(ForwardIterator vec1begin, ForwardIterator vec1end,
-		ForwardIterator vec2begin, ForwardIterator vec2end)
+
+	template<typename T>
+	std::pair<std::vector<T>, std::vector<T>> FindDifferences(std::vector<T>& A1, std::vector<T>& A2)
 	{
-		std::size_t i = 0, j = 0;
+		int i = 0, j = 0;
 		std::vector<T> A1Unique, A2Unique;
 
-		
-		
-
-		while (vec1begin != vec1end || vec2begin != vec2end)
+		while (i < A1.size() || j < A2.size())
 		{
-			
-			if (vec2begin == vec2end) { A1Unique.push_back(vec1begin); vec1begin++; }
-			else if (vec1begin == vec1end) { A2Unique.push_back(vec2begin); vec2begin++; }
-
-			auto& el1 = (*vec1begin);
-			auto& el2 = (*vec2begin);
-
-			if (el1 != el2)
+			if (j >= A2.size()) { A1Unique.push_back(A1[i]); i++; }
+			else if (i >= A1.size()) { A2Unique.push_back(A2[j]); j++; }
+			else
 			{
-				if (el1 < el2) {
-					A1Unique.push_back(el1);
-					vec1begin++;
+				auto& el1 = A1[i];
+				auto& el2 = A2[j];
+
+				if (el1 != el2)
+				{
+					if (el1 < el2) {
+						A1Unique.push_back(el1);
+						i++;
+					}
+					else
+					{
+						A2Unique.push_back(el2);
+						j++;
+					}
 				}
 				else
 				{
-					A2Unique.push_back(el2);
-					vec2begin++;
+					if (i < A1.size()) { i++; }
+					if (j < A2.size()) { j++; }
 				}
-			}
-			else
-			{
-				vec1begin++;
-				vec2begin++;
 			}
 		}
 		return std::make_pair(A1Unique, A2Unique);
-	};
+	}
 
 	class LandscapeChunkController
 	{
@@ -181,7 +179,7 @@ namespace GEM::GameSim
 
 			LoaderIDType loaderUniqueID;
 
-			LoaderType(std::function<btVector3()> _posFunc) : loaderUniqueID(LastLoaderUniqueID++), posFunc(_posFunc){};
+			LoaderType(std::function<btVector3()> _posFunc) : loaderUniqueID(LastLoaderUniqueID++), posFunc(_posFunc) {};
 		};
 
 	private:
@@ -195,13 +193,17 @@ namespace GEM::GameSim
 		int m_loadRadius;
 	public:
 
-		LoaderType::LoaderIDType createNewLoader(std::function<btVector3()> PosFunc)
+		LandscapeChunkController() : m_loadRadius(3) {};
+
+		inline void setloadRadius(unsigned int newVal) { m_loadRadius = newVal; }
+
+		inline LoaderType::LoaderIDType createNewLoader(std::function<btVector3()> PosFunc)
 		{
 			m_loaders.emplace_back(PosFunc);
 			return m_loaders.back().loaderUniqueID;
 		}
 
-		bool RemoveLoader(LoaderType::LoaderIDType loaderID)
+		inline bool RemoveLoader(LoaderType::LoaderIDType loaderID)
 		{
 			auto Loader = std::find_if(m_loaders.begin(), m_loaders.end(), [&](LoaderType& loader) {return loader.loaderUniqueID == loaderID; });
 			if (Loader == m_loaders.end()) { return false; }
@@ -209,130 +211,7 @@ namespace GEM::GameSim
 			return true;
 		}
 
-		void ProcessChunks()
-		{
-			//Pass 1
-			for (auto& loader : m_loaders)
-			{
-				std::vector<ChunkPos> NewlyVisibleChunksForLoader;
-				auto LoaderPos = ChunkPos::getChunkFromPoint(loader.posFunc());
-
-				for (auto x = LoaderPos.x - m_loadRadius; x < LoaderPos.x - m_loadRadius + 1; x++)
-				{
-					for (auto z = LoaderPos.z - m_loadRadius; z < LoaderPos.z - m_loadRadius + 1; z++)
-					{
-						NewlyVisibleChunksForLoader.emplace_back(x, z);
-
-						auto ChunkIter = std::upper_bound(m_globalyVisibleChunks.begin(), m_globalyVisibleChunks.end(), ChunkPos(x,z), [](const ChunkPos& LP, const ChunkPos& CP) {return LP <= CP; });
-						if (ChunkIter == m_globalyVisibleChunks.end())
-						{
-							m_globalyVisibleChunks.emplace_back(x, z);
-						}
-						else if ((*ChunkIter) != LoaderPos)
-						{
-							m_globalyVisibleChunks.emplace(ChunkIter, x, z);
-						}
-						else
-						{
-							continue;
-						}
-					}
-				}
-
-
-			}
-		}
-
-		
-		
-
-	};
-
-	/**!
-	Controlls chunks. 
-	Manages loading and and preparing chunks to be
-	shown, processed or otherwise became accessable for
-	other systems, that uses chunks.
-
-	It's a network thing. Maybe from the start. Becouse network is really a substential part of this system.
-	Maybe later it will be changed.
-	For example, only server have ability to create chunk anew.
-	*/
-	class LandscapeChunkController_Server
-	{
-	public:
-		using LoaderTicket = uint16_t;
-	private:
-		int m_loadRadius = 4;
-		struct ChunkInfo
-		{
-			std::unique_ptr<LandscapeChunk> data;
-			uint16_t RequestNumber;
-		
-
-		};
-		std::vector<std::vector<ChunkInfo>> m_chunks;
-
-
-		struct LoaderInfo
-		{
-			std::function<btVector3()> positionFunc;
-
-			std::vector<std::pair<int, int>> AvalaibleChunks;
-			std::vector<std::pair<int, int>> NewChunks;
-			std::vector<std::pair<int, int>> ChunksForRemoval;
-		};
-		std::map<LoaderTicket, LoaderInfo> m_loaders;
-		LoaderTicket m_lastGivenTicket = 0;
-
-		/**!
-		Returns position of a chunk, that contains that point
-		*/
-		std::pair<int, int> getChunkFromPoint(float x, float y, float z) const
-		{
-			return std::make_pair(static_cast<int>(ceil(abs(x)) * (std::signbit(x) ? -1 : 1)) / 16 + (std::signbit(x) ? -1 : 0),
-				static_cast<int>(ceil(abs(z)) * (std::signbit(z) ? -1 : 1)) / 16 + (std::signbit(z) ? -1 : 0));
-		}
-
-		std::vector<std::pair<int, int>> EveryChunkAroundPoint(float x, float z) const
-		{
-			auto[ChunkPX, ChunkPZ] = getChunkFromPoint(x, 0, z);
-
-			std::vector<std::pair<int, int>> returnChunks;
-			for (int ix = -m_loadRadius; ix <= m_loadRadius; ix++)
-			{
-				for (int iz = -m_loadRadius; iz <= m_loadRadius; iz++)
-				{
-					returnChunks.emplace_back(ChunkPX + ix, ChunkPZ + iz);
-				}
-			}
-		}
-
-		
-
-	public:
-
-		LandscapeChunkController_Server(std::size_t MapSize)
-		{
-			m_chunks.resize(MapSize);
-			for(auto& row : m_chunks)
-			{
-				row.resize(MapSize);
-			}
-		}
-
-		/**!
-		Creates new loader that will guarantee, that all the chunks around it in a specific radius
-		will be loaded.
-		\param[in] getPosMethod a method, that returns loader position. Must return correct position during every call of FindUsedChunks();
-		*/
-		LoaderTicket CreateLoader(std::function<btVector3()> getPosMethod)
-		{
-			m_loaders.emplace(m_lastGivenTicket, getPosMethod);
-			return m_lastGivenTicket++;
-		}
-		
-		
+		void ProcessChunks();
 	};
 
 }

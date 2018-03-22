@@ -170,6 +170,9 @@
     <ClInclude Include="LandscapeChunkController.h">
       <Filter>Landscape\ChunkController</Filter>
     </ClInclude>
+    <ClInclude Include="LandscapeChunkProvider.h">
+      <Filter>Landscape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -213,6 +216,9 @@
     </ClCompile>
     <ClCompile Include="LandscapeMeshGenerator.cpp">
       <Filter>Landscape\MeshGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeChunkController.cpp">
+      <Filter>Landscape\ChunkController</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

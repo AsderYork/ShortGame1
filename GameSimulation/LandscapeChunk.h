@@ -31,6 +31,49 @@ namespace GEM::GameSim
 		}
 	};
 
+	/**!
+	incapsulates small change in chunk data.
+
+	*/
+	struct LandscapeChunkSmallChange
+	{
+		struct Change
+		{
+			uint8_t nodePosX, nodePosY, nodePosZ;
+			LandscapeChunk_NodeData newNodeData;
+
+			template<class Archive>
+			void serialize(Archive & archive)
+			{
+				archive(nodePosX, nodePosY, nodePosZ, newNodeData);
+			}
+		};
+
+		std::vector<Change> changes;
+		template<class Archive>
+		void save(Archive & archive)
+		{
+			archive(static_cast<uint8_t>(changes.size()));
+			for (auto& change : changes)
+			{
+				archive(change);
+			}
+
+			
+		}
+		template<class Archive>
+		void load(Archive & archive)
+		{
+			uint8_t ChnagesAmount = 0;
+			archive(ChnagesAmount);
+			changes.resize(ChnagesAmount);
+			for (auto& change : changes)
+			{
+				archive(change);
+			}
+		}
+	};
+
 	class LandscapeChunk
 	{
 		LandscapeChunk_NodeData m_nodes[LandscapeChunk_Size][LandscapeChunk_Size][LandscapeChunk_Height];
@@ -66,7 +109,18 @@ namespace GEM::GameSim
 		{
 			archive(m_version, m_posX, m_posZ, m_nodes);
 		}
+
+		void ApplySmallChanges(const LandscapeChunkSmallChange& changes, uint64_t newVersion)
+		{
+			for (const auto& change : changes.changes)
+			{
+				m_nodes[change.nodePosX][change.nodePosY][change.nodePosZ] = change.newNodeData;
+			}
+			m_version = newVersion;
+		}
 		
 	};
+
+	
 
 }

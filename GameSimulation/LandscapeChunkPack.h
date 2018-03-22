@@ -25,6 +25,18 @@ namespace GEM::GameSim
 		*/
 		LandscapeChunkPack(std::vector<const LandscapeChunk*> Chunks);
 
+		/**!
+		Creates empty chunkPack
+		*/
+		LandscapeChunkPack() {};
+
+		LandscapeChunkPack& operator=(LandscapeChunkPack &&other) {
+			m_data = std::move(other.m_data);
+			m_initialSize = other.m_initialSize;
+
+			other.m_initialSize = 0; 
+		}
+
 		template<class Archive>
 		void serialize(Archive & archive)
 		{

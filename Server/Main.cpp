@@ -11,24 +11,33 @@
 #include <GamePhysics.h>
 #include <LandscapeChunkController.h>
 
+struct Pospos
+{
+	float x = 0, y = 0, z = 0;
+	btVector3 getPos() { return btVector3(x, y, z); }
+};
 
 int main(int argc, char *argv[])
 {
-	std::vector<int> a1{ 1,3,5,6,7 }, a2{ 1,2,3,4,5,8 };
+	GEM::GameSim::LandscapeChunkController LCCC;
 
+	Pospos pp1, pp2;
+	auto N1 = LCCC.createNewLoader([&]() {return pp1.getPos(); });
 
-	/*auto [dif1, dif2] = GEM::GameSim::GetArraysDifferences(a1.begin(), a1.end(), a2.begin(), a2.end());
-	printf("Unique1:");
-	for (auto& un : dif1)
-	{
-		printf("%i; ", un);
-	}
-	printf("\nUnique2:");
-	for (auto& un : dif2)
-	{
-		printf("%i; ", un);
-	}
-	*/
+	LCCC.ProcessChunks();
+	LCCC.ProcessChunks();
+	pp1.x += 16.0f;
+	LCCC.ProcessChunks();
+	LCCC.RemoveLoader(N1);
+	LCCC.ProcessChunks();
+
+	N1 = LCCC.createNewLoader([&]() {return pp1.getPos(); });
+	LCCC.ProcessChunks();
+	auto N2 = LCCC.createNewLoader([&]() {return pp2.getPos(); });
+	LCCC.ProcessChunks();
+
+	LCCC.RemoveLoader(N1);
+	LCCC.ProcessChunks();
 
 	//GEM::GameSim::DoPhysics();
 	
