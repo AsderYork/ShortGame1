@@ -57,92 +57,6 @@ If at least one change was rejected, we should...
 
 */
 
-/**!
-Ok. So it all comes down to events. It's clear, that we need some general way to communicate between
-client and server. Right now we have some parody of this. It's Updates system. But it works only for exchanging
-full states of entities, and have no mechanisms to perform rollbacks if needed. And they ARE needed.
-We allready had some parody on that in Events system, which could, actually, be used to perform what is needed
-but, it's just not working right now. So the tasl is to analize current system and what it's doing, analize
-flaws in design of a new system, analize what is needed from this system from a landscape system and then
-come up with a new design.
-
-First is waht is required.
-Right now "Updates" system just grab state from entities by special methods and transfer them to a server.
-Server checks the validity of those states and tries, end, if it's needed, updates current state of an entity.
-It also tries to predict that new state, but it handled in entities themself.
-
-What we need is a simple mechanism, that would allow to transfer events from one client to server and vice versa
-with some predictability mechanism to illiminate delay.
-
-And here it is. EventBase class. A main interface of all events. It should work for updates.
-And it should work terrain. But "Should" doesn't mean "will". And yeah, it's only "syncing" events.
-Some events in a game, probably, should not be sync'd. Like sprite creation or something. Could they use
-same event base, but without network? Well, they can't. And probably shouldn't. Becouse this EventBase
-is all about synchronization. So be it "SynchroEventBase" then. And every event in there will be used only
-with network.
-
-*/
-
-class SynchroEventBase
-{
-	/**!
-	Determines unique value for an event, so that it could be easily tracked by other systems
-	*/
-	uint64_t m_uniqueEventID;
-	
-	/**!
-	If event is in play, somehow, but it's not confirmed by a server, this method will
-	be called. Event must be performed, but user should be prepared to revert
-	this event, if server refuses to apply this event.
-	If event can't be applied, false must be returned. If event applied successfuly, return true.
-	This method will be called only once for every event
-	*/
-	virtual bool ApplyEventUnconfirmed()=0;
-
-	/**!
-	Every event is stored in history. If something changes in history, every event in it
-	will be teared down and then reapplied. Re-application can happen multiple times
-	for one entitiy, if history is unstable enough. This method will never be called for a confirmed
-	event. It is assumed, that when this method is called, gameState will be the same every time
-	and it will be just like when ApplyEventUnconfirmed was called, or some previous
-	events was discarded by the server.
-	True must be returned, if event was applied successfuly. False if event cannot be re-applied.
-	*/
-	virtual bool ReapplyEventUnconfirmed() {};
-
-	/**!
-	Events are stored in history. If some event in a history was discarded by the server, or something
-	else had jeopardized validity of a history, every event in it, up to the most recent valid ones
-	will be reverted in order from most reacent ones to the oldest ones, and then events that wasn't rejected
-	will be put back in the same order they where put in in the first time.
-	This method should return a gameState to where it was, before this event was applied.
-
-	\note. Events are different. Some events store only partial information, and for them
-	there is a difference, in which state the system in right now, becuse result of applyment of
-	an event depends on a current state event's subject is in right now.
-	But there is also events that contains full state of subjects. Such events doesn't need
-	this revert mechanism, becouse for them, result of applying en event doesn't depend on
-	a current state of a subject
-	*/
-	virtual bool RevertEventUnconfirmed() {};
-
-	/**!
-	If an event was rejected by the server, history will throw it off and call this method.
-	If system, that uses events wants some mean of knowing, when event was canceled, here it is.
-	End yeah, btw, this is one of two final steps in event's liftime. It either get's confirmed,
-	or it get's rejected. So no calls will be made after this one
-	*/
-	virtual void RejectEvent() {};
-
-	/**!
-	Events in history are held till server confirms them. This method is called for an event right
-	when it get's confirmed and leaves history. This is one of the final steps in event's lifetime
-	so no calls will be made after this one.
-	*/
-	virtual void ConfirmEvent() {};
-
-};
-
 namespace GEM::GameSim
 {
 	class LandscapeChunkProvider
@@ -249,6 +163,6 @@ namespace GEM::GameSim
 		\param[in] PlayersCurrentStatus contains info about versions of a chunk, that player should currently have
 		\returns returns a list of chunks that should be updated and a chunkPack, that contains newest versions of this chunks.
 		*/ 
-		std::optional<ResponceForm> PrepareUpdate(std::vector<ChunkHeader> PlayersCurrentStatus)
+		//std::optional<ResponceForm> PrepareUpdate(std::vector<ChunkHeader> PlayersCurrentStatus) {};
 	};
 }

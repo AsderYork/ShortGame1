@@ -7,37 +7,68 @@
 #include <EventBase.h>
 #include <EventSerializator.h>
 #include <cereal\types\vector.hpp>
+#include <cereal\types\string.hpp>
 
 #include <GamePhysics.h>
 #include <LandscapeChunkController.h>
 
-struct Pospos
+#include <TestPlace.h>
+
+struct PreData
 {
-	float x = 0, y = 0, z = 0;
-	btVector3 getPos() { return btVector3(x, y, z); }
+	std::string Mnstr;
+	PreData() {}
+	PreData(std::string b) : Mnstr(b) {}
+
+	template<class Archive>
+	void serialize(Archive & archive)
+	{
+		archive(x, y);
+	}
 };
+
+struct Datastr
+{
+	std::vector<PreData> dat;
+	
+	template<class Archive>
+	void save(Archive & archive) const
+	{
+		GEM::Helper::SaveVector<uint8_t>(archive,dat);
+	}
+
+
+	template<class Archive>
+	void load(Archive & archive)
+	{
+		GEM::Helper::LoadVector<uint8_t>(archive, dat);
+	}
+	
+};
+
 
 int main(int argc, char *argv[])
 {
-	GEM::GameSim::LandscapeChunkController LCCC;
+	Datastr A;
+	A.dat.emplace_back(23,13);
 
-	Pospos pp1, pp2;
-	auto N1 = LCCC.createNewLoader([&]() {return pp1.getPos(); });
 
-	LCCC.ProcessChunks();
-	LCCC.ProcessChunks();
-	pp1.x += 16.0f;
-	LCCC.ProcessChunks();
-	LCCC.RemoveLoader(N1);
-	LCCC.ProcessChunks();
+	std::stringstream stst;
+	{
+		cereal::BinaryOutputArchive ar(stst);
+		ar(A);
 
-	N1 = LCCC.createNewLoader([&]() {return pp1.getPos(); });
-	LCCC.ProcessChunks();
-	auto N2 = LCCC.createNewLoader([&]() {return pp2.getPos(); });
-	LCCC.ProcessChunks();
+	}
 
-	LCCC.RemoveLoader(N1);
-	LCCC.ProcessChunks();
+
+	auto sz = stst.str().size();
+	Datastr B;
+	{
+		cereal::BinaryInputArchive ar(stst);
+		ar(B);
+
+	}
+
 
 	//GEM::GameSim::DoPhysics();
 	

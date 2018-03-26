@@ -149,6 +149,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClientCommandDispatcher.h" />
+    <ClInclude Include="CommandHistoryInterface.h" />
     <ClInclude Include="EntitiesBase.h" />
     <ClInclude Include="EntityGenerator.h" />
     <ClInclude Include="EntityIDType.h" />
@@ -162,11 +164,14 @@
     <ClInclude Include="GS_EntityController.h" />
     <ClInclude Include="GS_PlayerController.h" />
     <ClInclude Include="GS_Server.h" />
+    <ClInclude Include="Helper_VariableSizeSerialization.h" />
     <ClInclude Include="LandscapeChunk.h" />
     <ClInclude Include="LandscapeChunkController.h" />
     <ClInclude Include="LandscapeChunkPack.h" />
     <ClInclude Include="LandscapeChunkProvider.h" />
     <ClInclude Include="LandscapeMeshGenerator.h" />
+    <ClInclude Include="NetworkCommandBase.h" />
+    <ClInclude Include="NetworkCommandsProcessor.h" />
     <ClInclude Include="NumerableEvents.def" />
     <ClInclude Include="Helper_TupleForeach.h" />
     <ClInclude Include="KeyboardEvents.h" />
@@ -175,12 +180,15 @@
     <ClInclude Include="Mixin_Health.h" />
     <ClInclude Include="Mixin_Movable.h" />
     <ClInclude Include="NumerableEvents.h" />
+    <ClInclude Include="ServerCommandDispatcher.h" />
+    <ClInclude Include="SharedDataPackets.h" />
     <ClInclude Include="TestPlace.h" />
     <ClInclude Include="UpdateStructures.h" />
     <ClInclude Include="Words.txt" />
     <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClientCommandDispatcher.cpp" />
     <ClCompile Include="EntityGenerator.cpp" />
     <ClCompile Include="GameHistory.cpp" />
     <ClCompile Include="GamePhysics.cpp" />
@@ -196,6 +204,7 @@
     <ClCompile Include="Mixin_Controller.cpp" />
     <ClCompile Include="Mixin_Health.cpp" />
     <ClCompile Include="Mixin_Movable.cpp" />
+    <ClCompile Include="ServerCommandDispatcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyboardEvents.def" />
