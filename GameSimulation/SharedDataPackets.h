@@ -1,9 +1,13 @@
 #pragma once
 #include "GameTime.h"
 #include "NetworkCommandBase.h"
+#include "NetworkCommandsProcessor.h"
 #include "Helper_VariableSizeSerialization.h"
 #include <memory>
 #include <vector>
+#include <array>
+#include <cereal\cereal.hpp>
+#include <cereal\archives\binary.hpp>
 
 namespace GEM::GameSim
 {
@@ -34,27 +38,38 @@ namespace GEM::GameSim
 	struct ServerCommandPack
 	{
 		GameTime time;
-		std::vector<std::unique_ptr<NetworkCommand>> commands;
 		ServerHistoryPack HistoryPack;
+		std::vector<std::unique_ptr<NetworkCommand>> commands;
 
-		template<class Archive>
-		void save(Archive & archive) const
+		void SerealizeIn(cereal::BinaryOutputArchive& ar, std::array<NetworkExchangeProcessor*, 256>& Processors) const
 		{
-			archive(time);
-			archive(HistoryPack);
-			//To much commands in one pack!
-			assert(commands.size() < std::numeric_limits<uint32_t>::max());
-			Helper::SaveVector<uint32_t>(archive, commands);
+			ar(time);
+			ar(HistoryPack);
 
-
+			ar( static_cast<uint32_t>(commands.size()) );
+			for (const auto& command : commands)
+			{
+				ar(command->m_header);
+				//ar(command->m_uniqueID); Commands from server doesn't require confirmation hence they don't need unique ID
+				Processors[command->m_header]->SerializeCommand(ar, command.get());
+			}
 		}
 
-		template<class Archive>
-		void load(Archive & archive)
+		void SerializeOut(cereal::BinaryInputArchive& ar, std::array<NetworkExchangeProcessor*, 256>& Processors)
 		{
-			archive(time);
-			archive(HistoryPack);
-			Helper::LoadVector<uint32_t>(archive, commands);
+			ar(time);
+			ar(HistoryPack);
+			uint32_t commandsSize = 0;
+			ar(commandsSize);
+
+			uint8_t header;
+
+			for (uint32_t i = 0; i < commandsSize; i++)
+			{
+				ar(header);
+				commands.emplace_back(Processors[header]->deserializeCommand(ar));
+				commands.front()->m_header = header;
+			}
 		}
 	};
 
@@ -63,24 +78,35 @@ namespace GEM::GameSim
 		GameTime time;
 		std::vector<std::unique_ptr<NetworkCommand>> commands;
 
-		template<class Archive>
-		void save(Archive & archive) const
+		void SerealizeIn(cereal::BinaryOutputArchive& ar, std::array<NetworkExchangeProcessor*, 256>& Processors) const
 		{
-			archive(time);
-			archive(HistoryPack);
-			//To much commands in one pack!
-			assert(commands.size() < std::numeric_limits<uint32_t>::max());
-			Helper::SaveVector<uint32_t>(archive, commands);
+			ar(time);
 
-
+			ar(static_cast<uint32_t>(commands.size()));
+			for (const auto& command : commands)
+			{
+				ar(command->m_header);
+				ar(command->m_uniqueID);
+				Processors[command->m_header]->SerializeCommand(ar, command.get());
+			}
 		}
 
-		template<class Archive>
-		void load(Archive & archive)
+		void SerializeOut(cereal::BinaryInputArchive& ar, std::array<NetworkExchangeProcessor*, 256>& Processors)
 		{
-			archive(time);
-			archive(HistoryPack);
-			Helper::LoadVector<uint32_t>(archive, commands);
+			ar(time);
+			uint32_t commandsSize = 0;
+			ar(commandsSize);
+
+			uint8_t header;
+			NetworkCommandIDType id;
+
+			for (uint32_t i = 0; i < commandsSize; i++)
+			{
+				ar(header);
+				ar(id);
+				commands.emplace_back(Processors[header]->deserializeCommand(ar));
+				commands.front()->m_header = header;
+			}
 		}
 	};
 }

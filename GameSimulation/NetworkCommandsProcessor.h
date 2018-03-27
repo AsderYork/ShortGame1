@@ -1,5 +1,8 @@
 #pragma once
 #include "NetworkCommandBase.h"
+#include "GameTime.h"
+#include <memory>
+#include <cereal\cereal.hpp>
 
 namespace GEM::GameSim
 {
@@ -21,7 +24,7 @@ namespace GEM::GameSim
 		This means, every call should be the same.
 		\returns Returns true, if command applied successfuly, false otherwise
 		*/
-		virtual bool ApplyCommand(const NetworkCommand* Command) = 0;
+		virtual bool ApplyCommand(const NetworkCommand* Command, GameTime PacketTime) = 0;
 
 		/**!
 		Undoes a command. This method is called, when command is still not confirmed,
@@ -51,10 +54,32 @@ namespace GEM::GameSim
 		virtual void RejectCommand(const NetworkCommand* Command) = 0;
 
 		/**!
+		Only Processor knows it commands and how to serialize them. That's why this method is called
+		when command need serialization.
+
+		\note header of command will be written right before this method is called, so it's like an onion.
+		*/
+		virtual void SerializeCommand(cereal::BinaryOutputArchive& ar, const NetworkCommand* Command)=0;
+
+		/**!
+		Deserializes one command from archive.
+		\returns Command, that was deserialized.
+
+		\note Archive is a stateful thing, so be careful and construct your commands in such a way
+		that when you would deserialize them, you would not accedentally demage other things still in archve
+		*/
+		virtual std::unique_ptr<NetworkCommand> deserializeCommand(cereal::BinaryInputArchive& ar) = 0;
+		/**!
 		this method is called right after all recived events are processed and history is reconsidered.
 		*/
 		virtual void EndNetworkProcessing() {};
 
+		/**!
+		Every processor MUST have unique ID. That history/Dispacher can quickly find processor to which a command belongs
+		*/
+		virtual uint8_t getIdOfProcessor() const = 0;
+
+		
 
 	};
 

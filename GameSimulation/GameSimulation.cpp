@@ -50,7 +50,7 @@ namespace GEM::GameSim
 	}
 
 
-	EntityBase* GameSimulation::AddEntity(ENTITY_ID_TYPE ID, std::vector<MIXIN_ID_TYPE> mixins)
+	EntityBase* GameSimulation::AddEntity(const ENTITY_ID_TYPE ID, const std::vector<MIXIN_ID_TYPE> mixins)
 	{
 		auto ent = m_entities.AddFreeEntity(ID, m_generator.GenerateEntity(std::move(mixins), this, ID));
 		return ent;

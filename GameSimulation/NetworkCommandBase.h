@@ -13,5 +13,6 @@ namespace GEM::GameSim
 		NetworkCommandIDType m_uniqueID;
 
 		NetworkCommand(uint8_t header) : m_header(header) {}
+		NetworkCommand() : m_header(0) {}
 	};
 }

@@ -184,6 +184,8 @@
     <ClInclude Include="SharedDataPackets.h" />
     <ClInclude Include="TestPlace.h" />
     <ClInclude Include="UpdateStructures.h" />
+    <ClInclude Include="UpdateSystem_Command.h" />
+    <ClInclude Include="UpdateSystem_Processor.h" />
     <ClInclude Include="Words.txt" />
     <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
   </ItemGroup>
@@ -205,6 +207,7 @@
     <ClCompile Include="Mixin_Health.cpp" />
     <ClCompile Include="Mixin_Movable.cpp" />
     <ClCompile Include="ServerCommandDispatcher.cpp" />
+    <ClCompile Include="UpdateSystem_Processor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyboardEvents.def" />

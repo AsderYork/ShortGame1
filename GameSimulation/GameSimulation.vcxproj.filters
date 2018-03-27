@@ -106,6 +106,12 @@
     <Filter Include="GameSimulation\NetworkCommands\ClientCommandDispatcher">
       <UniqueIdentifier>{5c904501-0f81-4a55-a4e3-41b8bb16fe16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands">
+      <UniqueIdentifier>{d64ab255-108d-4020-bbf1-4a388e1f38d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem">
+      <UniqueIdentifier>{f6722405-3831-4632-932a-9255dec1f525}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -215,6 +221,12 @@
     <ClInclude Include="ClientCommandDispatcher.h">
       <Filter>GameSimulation\NetworkCommands\ClientCommandDispatcher</Filter>
     </ClInclude>
+    <ClInclude Include="UpdateSystem_Command.h">
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateSystem_Processor.h">
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -268,6 +280,7 @@
     <ClCompile Include="ClientCommandDispatcher.cpp">
       <Filter>GameSimulation\NetworkCommands\ClientCommandDispatcher</Filter>
     </ClCompile>
+    <ClCompile Include="UpdateSystem_Processor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyboardEvents.def">
