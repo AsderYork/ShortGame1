@@ -8,13 +8,14 @@
 #include <array>
 #include <cereal\cereal.hpp>
 #include <cereal\archives\binary.hpp>
+#include <cassert>
 
 namespace GEM::GameSim
 {
 	struct ServerHistoryPack
 	{
 		uint64_t m_lastRecivedCommand;
-		std::vector<uint64_t> rejectedCommands;
+		std::vector<uint64_t> m_rejectedCommands;
 
 		inline ServerHistoryPack() : m_lastRecivedCommand(0) {};
 
@@ -22,16 +23,14 @@ namespace GEM::GameSim
 		void save(Archive & archive) const
 		{
 			archive(m_lastRecivedCommand);
-			//To much commands in one pack!
-			assert(commands.size() < std::numeric_limits<uint16_t>::max());
-			Helper::SaveVector<uint16_t>(archive, m_lastRecivedCommand);
+			Helper::SaveVector<uint16_t>(archive, m_rejectedCommands);
 		}
 
 		template<class Archive>
 		void load(Archive & archive)
 		{
 			archive(m_lastRecivedCommand);
-			Helper::LoadVector<uint16_t>(archive, m_lastRecivedCommand);
+			Helper::LoadVector<uint16_t>(archive, m_rejectedCommands);
 		}
 	};
 
@@ -41,7 +40,7 @@ namespace GEM::GameSim
 		ServerHistoryPack HistoryPack;
 		std::vector<std::unique_ptr<NetworkCommand>> commands;
 
-		void SerealizeIn(cereal::BinaryOutputArchive& ar, std::array<NetworkExchangeProcessor*, 256>& Processors) const
+		void SerealizeIn(cereal::BinaryOutputArchive& ar,const std::array<NetworkExchangeProcessor*, 256>& Processors) const
 		{
 			ar(time);
 			ar(HistoryPack);
@@ -55,7 +54,7 @@ namespace GEM::GameSim
 			}
 		}
 
-		void SerializeOut(cereal::BinaryInputArchive& ar, std::array<NetworkExchangeProcessor*, 256>& Processors)
+		void SerializeOut(cereal::BinaryInputArchive& ar,const std::array<NetworkExchangeProcessor*, 256>& Processors)
 		{
 			ar(time);
 			ar(HistoryPack);
@@ -78,7 +77,7 @@ namespace GEM::GameSim
 		GameTime time;
 		std::vector<std::unique_ptr<NetworkCommand>> commands;
 
-		void SerealizeIn(cereal::BinaryOutputArchive& ar, std::array<NetworkExchangeProcessor*, 256>& Processors) const
+		void SerealizeIn(cereal::BinaryOutputArchive& ar, const std::array<NetworkExchangeProcessor*, 256>& Processors) const
 		{
 			ar(time);
 
@@ -91,7 +90,7 @@ namespace GEM::GameSim
 			}
 		}
 
-		void SerializeOut(cereal::BinaryInputArchive& ar, std::array<NetworkExchangeProcessor*, 256>& Processors)
+		void SerializeOut(cereal::BinaryInputArchive& ar, const std::array<NetworkExchangeProcessor*, 256>& Processors)
 		{
 			ar(time);
 			uint32_t commandsSize = 0;

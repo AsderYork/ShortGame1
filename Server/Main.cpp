@@ -14,62 +14,10 @@
 
 #include <TestPlace.h>
 
-struct PreData
-{
-	std::string Mnstr;
-	PreData() {}
-	PreData(std::string b) : Mnstr(b) {}
-
-	template<class Archive>
-	void serialize(Archive & archive)
-	{
-		archive(x, y);
-	}
-};
-
-struct Datastr
-{
-	std::vector<PreData> dat;
-	
-	template<class Archive>
-	void save(Archive & archive) const
-	{
-		GEM::Helper::SaveVector<uint8_t>(archive,dat);
-	}
-
-
-	template<class Archive>
-	void load(Archive & archive)
-	{
-		GEM::Helper::LoadVector<uint8_t>(archive, dat);
-	}
-	
-};
 
 
 int main(int argc, char *argv[])
 {
-	Datastr A;
-	A.dat.emplace_back(23,13);
-
-
-	std::stringstream stst;
-	{
-		cereal::BinaryOutputArchive ar(stst);
-		ar(A);
-
-	}
-
-
-	auto sz = stst.str().size();
-	Datastr B;
-	{
-		cereal::BinaryInputArchive ar(stst);
-		ar(B);
-
-	}
-
-
 	//GEM::GameSim::DoPhysics();
 	
 	GEM::GameSim::LandscapeChunk LC1, LC2, LC3, LC4;

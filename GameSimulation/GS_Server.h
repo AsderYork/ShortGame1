@@ -2,6 +2,10 @@
 #include "GameSimulation.h"
 #include "UpdateStructures.h"
 #include "GameHistory.h"
+
+#include "ServerCommandDispatcher.h"
+#include "UpdateSystem_Processor.h"
+
 #include <string>
 #include <map>
 
@@ -43,7 +47,9 @@ namespace GEM::GameSim
 			std::vector<std::pair<SyncingUpdate_Packet, GameTime>> SynchroUpdates;
 			InSync_Packet currentInSync;
 			OutOfSync_Packet currentOOS;
+			ServerHistory ExchangeHistory;
 
+			PerPlayerInfo(ServerCommandDispatcher& Dispatcher) : ExchangeHistory(Dispatcher) {}
 		};
 		std::map<PLAYER_ID_TYPE, PerPlayerInfo> m_perPlayerInfo;
 
@@ -63,7 +69,16 @@ namespace GEM::GameSim
 
 		void ProcessPlayerSyncingUpdates();
 
+	protected:
+		ServerCommandDispatcher m_commandDispatcher;
+		UpdateSystemProcessor m_updateSystemProcessor;
+
 	public:
+
+		GS_Server() : m_updateSystemProcessor(&m_gs)
+		{
+			m_commandDispatcher.AddProcessor(&m_updateSystemProcessor);
+		}
 
 		std::optional<PlayerTicket> NewPlayerRoutine(Player&& player);
 
@@ -82,6 +97,8 @@ namespace GEM::GameSim
 		This method should be called only once for every player per tick.
 		*/
 		PlayerUpdatePack GatherDataForPlayer(PLAYER_ID_TYPE id);
+
+		std::stringstream GatherOtherDataForPlayer(PLAYER_ID_TYPE id);
 		
 	};
 }

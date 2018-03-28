@@ -280,7 +280,9 @@
     <ClCompile Include="ClientCommandDispatcher.cpp">
       <Filter>GameSimulation\NetworkCommands\ClientCommandDispatcher</Filter>
     </ClCompile>
-    <ClCompile Include="UpdateSystem_Processor.cpp" />
+    <ClCompile Include="UpdateSystem_Processor.cpp">
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyboardEvents.def">

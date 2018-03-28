@@ -79,12 +79,12 @@ int main(int argc, char *argv[])
 	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
 	auto NetworkController = Controller.AddService<GEM::NetworkController>();
 
-	auto LVTSController1 = Controller.AddService<GEM::LandVisTmpService>(OgreController, &LNDSCPM1);
-	auto LVTSController2 = Controller.AddService<GEM::LandVisTmpService>(OgreController, &LNDSCPM2);
+	//auto LVTSController1 = Controller.AddService<GEM::LandVisTmpService>(OgreController, &LNDSCPM1);
+	//auto LVTSController2 = Controller.AddService<GEM::LandVisTmpService>(OgreController, &LNDSCPM2);
 
-	//auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
-	//auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
-	//auto GameVisualization = Controller.AddService<GEM::GameVisualization>(GameSimService, OgreController);
+	auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
+	auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
+	auto GameVisualization = Controller.AddService<GEM::GameVisualization>(GameSimService, OgreController);
 
 
 
@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 	*/
 
 
-	//ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
+	ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
 
     return Controller.start();
 	return 0;

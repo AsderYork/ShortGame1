@@ -6,12 +6,19 @@
 
 #include <vector>
 #include <memory>
+#include <array>
 
 namespace GEM::GameSim
 {
 	class ClientHistory : public HistoryInterface
 	{
 	private:
+
+		/**!
+		Every processor have unique ID and we have less then 256 processors.
+		So we just use this array as table for quick search of processors
+		*/
+		std::array<NetworkExchangeProcessor*, 256> m_processors;
 
 		boost::circular_buffer<std::pair<std::unique_ptr<NetworkCommand>, bool>> m_commandBuffer;
 		NetworkCommandIDType m_lastUsedID;

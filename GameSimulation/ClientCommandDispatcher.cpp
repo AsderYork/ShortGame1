@@ -4,7 +4,7 @@ namespace GEM::GameSim
 {
 	void ClientHistory::InjectCommand(std::unique_ptr<NetworkCommand>&& command, GameTime PacketTime)
 	{
-		m_processors[command->m_header]->ApplyCommand(command.get());
+		m_processors[command->m_header]->ApplyCommand(command.get(), PacketTime);
 	}
 	bool ClientHistory::InsertCommandInHistory(std::unique_ptr<NetworkCommand>&& command)
 	{
@@ -18,7 +18,7 @@ namespace GEM::GameSim
 		//But it's a serialization problem.
 		command->m_uniqueID = m_lastUsedID++;
 
-		auto ApplyResult = m_processors[command->m_header]->ApplyCommand(command.get());
+		auto ApplyResult = m_processors[command->m_header]->ApplyCommand(command.get(), 0);
 		m_commandBuffer.push_back(std::make_pair(std::move(command), ApplyResult));
 		return true;
 	}
@@ -26,7 +26,7 @@ namespace GEM::GameSim
 	{
 		//Then history might be wrong. But it's also possible, that rejected events 
 		//Was also rejected by the client allready, so we should check this first
-		for (const auto& rejectedCommand : serverHistoryPack.rejectedCommands)
+		for (const auto& rejectedCommand : serverHistoryPack.m_rejectedCommands)
 		{
 			//Get command, that was rejected
 			//Assumes that ID's of commands in a history increments correctly

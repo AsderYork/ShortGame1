@@ -1,7 +1,10 @@
 #include "GS_Server.h"
+#include "UpdateSystem_Command.h"
 #include <sstream>
 #include <limits>
 
+#include <cereal\cereal.hpp>
+#include <cereal\archives\binary.hpp>
 
 namespace GEM::GameSim
 {
@@ -22,6 +25,22 @@ namespace GEM::GameSim
 
 		return PPI;
 	}
+
+
+	std::stringstream GS_Server::GatherOtherDataForPlayer(PLAYER_ID_TYPE id)
+	{
+		std::stringstream SendStream;
+		{
+			cereal::BinaryOutputArchive ar(SendStream);
+
+			m_commandDispatcher.GatherResults(
+				&(m_perPlayerInfo.find(id)->second.ExchangeHistory), m_gs.getGameTime()).
+				SerealizeIn(ar, m_commandDispatcher.getProcessorsTable());
+		}
+
+		return SendStream;
+	}
+
 	void GS_Server::ReciveSynchroUpdatesFromClient(PLAYER_ID_TYPE id, cereal::BinaryInputArchive ar)
 	{
 		auto& TmpPlayerInfo = m_perPlayerInfo.find(id)->second;
@@ -114,7 +133,7 @@ namespace GEM::GameSim
 		newPlayer->get().characterPtr = CharPtr;
 		newPlayer->get().characterID = CharId;
 
-		m_perPlayerInfo.emplace(newPlayer->get().id, PerPlayerInfo());
+		m_perPlayerInfo.emplace(newPlayer->get().id, PerPlayerInfo(m_commandDispatcher));
 
 
 		return newPlayer;
@@ -179,10 +198,14 @@ namespace GEM::GameSim
 					{//It have the entity
 						//Check if it's in a radius for update
 						if (PlayerPos.distance(EntityMovability->getPos()) < m_playerUpldateRadius)
-						{//It is in radius of update. Send regular
+						{//It its in radius of update. Send regular
 							if (IsThereGeneralUpdate)
 							{
 								m_perPlayerInfo.find(pl.id)->second.UpdateVector.emplace_back(RegEntry);
+
+								m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
+									std::make_unique<UpdateSystemCommand>(RegEntry.EntityID, RegUpdate.PerMixinUpdates)
+								);
 							}
 						}
 						else
@@ -197,6 +220,10 @@ namespace GEM::GameSim
 						{//It is in radius of update. Send Appearing
 							pl.trackedEntities.insert(Entity->first);
 							m_perPlayerInfo.find(pl.id)->second.UpdateVector.emplace_back(AppearingEntry);
+
+							m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
+								std::make_unique<UpdateSystemCommand>(RegEntry.EntityID, AppearUpdate.EntityMixins, AppearUpdate.PerMixinUpdates)
+							);
 						}
 					}
 				}
@@ -210,11 +237,20 @@ namespace GEM::GameSim
 						if (IsThereGeneralUpdate)
 						{
 							m_perPlayerInfo.find(pl.id)->second.UpdateVector.emplace_back(RegEntry);
+
+							m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
+								std::make_unique<UpdateSystemCommand>(RegEntry.EntityID, RegUpdate.PerMixinUpdates)
+							);
 						}
 					}
 					else {//Player doesn't have this entity. Send Appearing
 						pl.trackedEntities.insert(Entity->first);
 						m_perPlayerInfo.find(pl.id)->second.UpdateVector.emplace_back(AppearingEntry);
+
+						m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
+							std::make_unique<UpdateSystemCommand>(RegEntry.EntityID, AppearUpdate.EntityMixins, AppearUpdate.PerMixinUpdates)
+						);
+
 					}
 				}
 			}

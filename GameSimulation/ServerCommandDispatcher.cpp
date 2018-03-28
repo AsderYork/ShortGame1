@@ -2,6 +2,10 @@
 
 namespace GEM::GameSim
 {
+
+
+	ServerHistory::ServerHistory(ServerCommandDispatcher& dispatcher) : m_processors(dispatcher.m_processors) { }
+
 	void ServerCommandDispatcher::ProcessCommands(std::vector<ClientCommandPack> commandPacks, ServerHistory* History)
 	{
 		for (auto& commandPack : commandPacks)
@@ -18,7 +22,7 @@ namespace GEM::GameSim
 	{
 		ServerCommandPack newCommandPack;
 		newCommandPack.time = CurrentTime;
-		newCommandPack.commands.swap(m_commandsToSend);
+		newCommandPack.commands.swap(History->m_commandsToSend);
 		newCommandPack.HistoryPack = History->getHistoryPack();
 		return newCommandPack;
 	}
