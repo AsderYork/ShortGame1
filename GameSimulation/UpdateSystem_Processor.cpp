@@ -1,6 +1,8 @@
 #include "UpdateSystem_Processor.h"
 #include "UpdateSystem_Command.h"
 #include <cereal\archives\binary.hpp>
+#include <cereal\types\string.hpp>
+#include <cereal\types\utility.hpp>
 
 namespace GEM::GameSim
 {
@@ -25,11 +27,15 @@ namespace GEM::GameSim
 
 	void UpdateSystemProcessor::SerializeCommand(cereal::BinaryOutputArchive & ar, const NetworkCommand * Command)
 	{
+		auto CommandRecast = static_cast<const UpdateSystemCommand*>(Command);
+		ar((*CommandRecast));
 	}
 
 	std::unique_ptr<NetworkCommand> GEM::GameSim::UpdateSystemProcessor::deserializeCommand(cereal::BinaryInputArchive & ar)
 	{
-		return std::unique_ptr<NetworkCommand>();
+		auto NewCommand = std::make_unique<UpdateSystemCommand>();
+		ar((*NewCommand));
+		return NewCommand;
 	}
 
 	bool UpdateSystemProcessor::ApplyCommand(const NetworkCommand * Command, GameTime PacketTime)
@@ -40,6 +46,10 @@ namespace GEM::GameSim
 		if (!CommandRecast->m_mixins.empty())
 		{
 			EntIt = m_gameSim->AddEntity(CommandRecast->m_entityID, CommandRecast->m_mixins);
+		}
+		else
+		{
+			EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID);
 		}
 
 		bool UpdateFullyAccepted = true;

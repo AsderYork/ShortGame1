@@ -1,6 +1,10 @@
 #pragma once
 #include "GameSimulation.h"
 #include "GameHistory.h"
+
+#include "ClientCommandDispatcher.h"
+#include "UpdateSystemClientProcessor.h"
+
 #include <cereal\cereal.hpp>
 #include <cereal\archives\binary.hpp>
 #include <cereal\types\string.hpp>
@@ -16,21 +20,25 @@ namespace GEM::GameSim
 		bool m_timeIsSet = false;
 
 	protected:
-		ENTITY_ID_TYPE m_playerCharacterID;
 		GameHistoryController m_gameHistory;
+		ClientCommandDispatcher m_dispatcher;
+		UpdateSystemClientProcessor m_updatesProcessor;
 
 
 	public:
-		//GameSimulation m_gs;
 		std::chrono::system_clock::time_point m_lastUpdateTime;
+		ENTITY_ID_TYPE m_playerCharacterID;
+
+
+		inline void Reset() { m_timeIsSet = false; }
 
 		inline void InsertPlayerEvent(std::unique_ptr<EventBase>&& Event) {
 			InsertEvent(std::move(Event), m_playerCharacterID);
 		}
 
-		inline void Reset() { m_timeIsSet = false; }
-
-		GS_Client() : m_timeIsSet(false) {}
+		inline GS_Client() : m_timeIsSet(false), m_updatesProcessor(this) {
+			m_dispatcher.AddProcessor(&m_updatesProcessor);
+		}
 
 
 

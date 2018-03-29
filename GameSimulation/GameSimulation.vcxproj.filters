@@ -112,6 +112,12 @@
     <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem">
       <UniqueIdentifier>{f6722405-3831-4632-932a-9255dec1f525}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Client%27s version">
+      <UniqueIdentifier>{144ace72-4180-4fa2-a19c-e1f245d06edc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Server%27s version">
+      <UniqueIdentifier>{bdcb05f4-07e0-4551-ab2e-f4dce5bfef63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -221,10 +227,13 @@
     <ClInclude Include="ClientCommandDispatcher.h">
       <Filter>GameSimulation\NetworkCommands\ClientCommandDispatcher</Filter>
     </ClInclude>
-    <ClInclude Include="UpdateSystem_Command.h">
-      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem</Filter>
-    </ClInclude>
     <ClInclude Include="UpdateSystem_Processor.h">
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Server%27s version</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateSystemClientProcessor.h">
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Client%27s version</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateSystem_Command.h">
       <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem</Filter>
     </ClInclude>
   </ItemGroup>
@@ -281,7 +290,10 @@
       <Filter>GameSimulation\NetworkCommands\ClientCommandDispatcher</Filter>
     </ClCompile>
     <ClCompile Include="UpdateSystem_Processor.cpp">
-      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem</Filter>
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Server%27s version</Filter>
+    </ClCompile>
+    <ClCompile Include="UpdateSystemClientProcessor.cpp">
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Client%27s version</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

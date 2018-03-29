@@ -54,6 +54,11 @@ namespace GEM::GameSim
 	template<typename...T>
 	class EntityGenerator;
 
+
+	/**!
+	Represents a dedicated part of an entitie's state.
+	For every aspect of every entity there must be a mixin, representing that mixin.
+	*/
 	class Mixin_base
 	{
 		template<typename... T>

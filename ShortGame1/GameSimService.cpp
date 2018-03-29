@@ -17,6 +17,7 @@ namespace GEM
 		else
 		{
 			m_playerCharacterID = maybePlayerID.value();
+			m_updatesProcessor.AddControlledEntity(maybePlayerID.value());
 		}
 
 	}

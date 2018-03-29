@@ -10,10 +10,12 @@
 
 namespace GEM::GameSim
 {
+	class ClientCommandDispatcher;
+
 	class ClientHistory : public HistoryInterface
 	{
 	private:
-
+		friend class ClientCommandDispatcher;
 		/**!
 		Every processor have unique ID and we have less then 256 processors.
 		So we just use this array as table for quick search of processors
@@ -26,7 +28,7 @@ namespace GEM::GameSim
 
 	public:
 
-		ClientHistory(std::size_t buffSize = 400) : m_commandBuffer(buffSize), m_isHistoryStable(true) {}
+		ClientHistory(std::size_t buffSize = 400) : m_commandBuffer(buffSize), m_isHistoryStable(true) { m_processors.fill(nullptr); }
 
 		virtual void InjectCommand(std::unique_ptr<NetworkCommand>&& command, GameTime PacketTime) override;
 
@@ -41,7 +43,6 @@ namespace GEM::GameSim
 		*/
 		bool InsertCommandInHistory(std::unique_ptr<NetworkCommand>&& command);
 
-
 		void processHistoryPack(const ServerHistoryPack& serverHistoryPack);
 
 		void ReconsiderHistory();
@@ -49,12 +50,21 @@ namespace GEM::GameSim
 	};
 
 
-	class ClientCommandProcessor
+	class ClientCommandDispatcher
 	{
 		std::vector<std::unique_ptr<NetworkCommand>> m_commandsToSend;
 		ClientHistory m_history;
 
 	public:
+
+		/**!
+		Prepares a command to be sent without performing it on the client
+		*/
+		void InsertPerformedCommand(std::unique_ptr<NetworkCommand> command);
+
+		const std::array<NetworkExchangeProcessor*, 256>& getProcessorsTable() const;
+
+		void AddProcessor(NetworkExchangeProcessor* newProcessor);
 
 		void ProcessCommands(std::vector<ServerCommandPack> commandPacks);
 

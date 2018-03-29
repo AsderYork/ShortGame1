@@ -20,33 +20,12 @@ namespace GEM::GameSim
 	
 	class GS_Server
 	{
-	public:
 
-		/**!
-		Holds everything, that should be sended to a player
-		*/
-		struct PlayerUpdatePack
-		{
-			GameTime UpdateTime;
-			std::vector<UpdateData> updates;
-			OutOfSync_Packet OOS;
-			InSync_Packet InSync;
-
-			template<class Archive>
-			void serialize(Archive & archive)
-			{
-				archive(UpdateTime, OOS, InSync, updates);
-			}
-		};
 	private:
 	
 
 		struct PerPlayerInfo
 		{
-			std::vector<UpdateData> UpdateVector;
-			std::vector<std::pair<SyncingUpdate_Packet, GameTime>> SynchroUpdates;
-			InSync_Packet currentInSync;
-			OutOfSync_Packet currentOOS;
 			ServerHistory ExchangeHistory;
 
 			PerPlayerInfo(ServerCommandDispatcher& Dispatcher) : ExchangeHistory(Dispatcher) {}
@@ -89,8 +68,9 @@ namespace GEM::GameSim
 		Fills UpdateList.
 		*/
 		void Tick(float Delta);
+		
 
-		void ReciveSynchroUpdatesFromClient(PLAYER_ID_TYPE id, cereal::BinaryInputArchive ar);
+		void ReciveDataFromClient(PLAYER_ID_TYPE id, cereal::BinaryInputArchive ar);
 
 		/**!
 		Returns a block of data, that should be sended to a given player.

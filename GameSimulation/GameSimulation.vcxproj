@@ -184,6 +184,7 @@
     <ClInclude Include="SharedDataPackets.h" />
     <ClInclude Include="TestPlace.h" />
     <ClInclude Include="UpdateStructures.h" />
+    <ClInclude Include="UpdateSystemClientProcessor.h" />
     <ClInclude Include="UpdateSystem_Command.h" />
     <ClInclude Include="UpdateSystem_Processor.h" />
     <ClInclude Include="Words.txt" />
@@ -207,6 +208,7 @@
     <ClCompile Include="Mixin_Health.cpp" />
     <ClCompile Include="Mixin_Movable.cpp" />
     <ClCompile Include="ServerCommandDispatcher.cpp" />
+    <ClCompile Include="UpdateSystemClientProcessor.cpp" />
     <ClCompile Include="UpdateSystem_Processor.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -72,7 +72,31 @@ namespace GEM::GameSim
 			HistoryCommand.second = m_processors[HistoryCommand.first->m_header]->ReapplyCommand(HistoryCommand.first.get());
 		}
 	}
-	void ClientCommandProcessor::ProcessCommands(std::vector<ServerCommandPack> commandPacks)
+
+
+	void ClientCommandDispatcher::InsertPerformedCommand(std::unique_ptr<NetworkCommand> command)
+	{
+		m_commandsToSend.emplace_back(std::move(command));
+	}
+
+	const std::array<NetworkExchangeProcessor*, 256>& ClientCommandDispatcher::getProcessorsTable() const
+	{
+		return m_history.m_processors;
+	}
+
+	void ClientCommandDispatcher::AddProcessor(NetworkExchangeProcessor * newProcessor)
+	{
+		if (m_history.m_processors[newProcessor->getIdOfProcessor()] == nullptr)
+		{
+			m_history.m_processors[newProcessor->getIdOfProcessor()] = newProcessor;
+		}
+		else
+		{
+			throw std::exception("New processor overwrites current one! Two processors have same ID?");
+		}
+	}
+
+	void ClientCommandDispatcher::ProcessCommands(std::vector<ServerCommandPack> commandPacks)
 	{
 		for (auto& commandPack : commandPacks)
 		{
@@ -80,13 +104,23 @@ namespace GEM::GameSim
 
 			for (auto& command : commandPack.commands)
 			{
-				m_history.InjectCommand(std::move(command), commandPack.time);
+				//Commands from server should be confirmed right away!
+
+				//WARNING! It still unknown if we should Apply and confirm or just confirm
+				m_history.m_processors[command->m_header]->ApplyCommand(command.get(), 0);
+				m_history.m_processors[command->m_header]->ConfirmCommand(command.get());
+			}
+			for (auto& processor : m_history.m_processors)
+			{
+				if (processor == nullptr) { continue; }
+				processor->EndNetworkProcessing();
 			}
 		}
 		m_history.ReconsiderHistory();
 	}
-	ClientCommandPack ClientCommandProcessor::GatherResults(GameTime CurrentTime)
+	ClientCommandPack ClientCommandDispatcher::GatherResults(GameTime CurrentTime)
 	{
+
 		ClientCommandPack newCommandPack;
 		newCommandPack.time = CurrentTime;
 		newCommandPack.commands.swap(m_commandsToSend);

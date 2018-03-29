@@ -98,7 +98,7 @@ namespace GEM
 
 	NetworkController::state NetworkController::s_READY()
 	{
-		m_connection->Recive().str(std::string());
+		m_connection->ClearReciveBuffer();
 		m_connection->ProcessConnection();
 		return state::READY;
 	}

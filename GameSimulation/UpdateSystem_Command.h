@@ -16,11 +16,9 @@ namespace GEM::GameSim
 
 	private:
 
-		//!Default constructor just for Cereal
-		UpdateSystemCommand() : m_entityID(0), NetworkCommand(0) {}
-		friend class cereal::access;
 	public:
 
+		UpdateSystemCommand() : m_entityID(0), NetworkCommand(0) {}
 		/**!
 		Packs up an entity update.
 		Currently same idea is represented defferently in an engine and there is a Appearing/Regular distinction.
@@ -47,7 +45,7 @@ namespace GEM::GameSim
 
 			Helper::SaveVector<uint8_t>(archive, m_mixins);
 			Helper::SaveVector<uint8_t>(archive, m_perMixinUpdates);
-			ar(m_entityID);
+			archive(m_entityID);
 		}
 
 		template<class Archive>
@@ -55,7 +53,7 @@ namespace GEM::GameSim
 		{
 			Helper::LoadVector<uint8_t>(archive, m_mixins);
 			Helper::LoadVector<uint8_t>(archive, m_perMixinUpdates);
-			ar(m_entityID);
+			archive(m_entityID);
 		}
 		
 	};
