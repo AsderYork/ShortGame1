@@ -183,7 +183,6 @@
     <ClInclude Include="ServerCommandDispatcher.h" />
     <ClInclude Include="SharedDataPackets.h" />
     <ClInclude Include="TestPlace.h" />
-    <ClInclude Include="UpdateStructures.h" />
     <ClInclude Include="UpdateSystemClientProcessor.h" />
     <ClInclude Include="UpdateSystem_Command.h" />
     <ClInclude Include="UpdateSystem_Processor.h" />

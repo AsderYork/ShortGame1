@@ -49,9 +49,6 @@
     <Filter Include="GameSimulation\GS_Server">
       <UniqueIdentifier>{e922a798-589d-4b44-86d7-78fc429719c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameSimulation\UpdateStructures">
-      <UniqueIdentifier>{55c3d5d2-510d-4990-bdc3-165ef9221908}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Events">
       <UniqueIdentifier>{f0debbd5-f40e-4f68-8307-d9efc3f5ef68}</UniqueIdentifier>
     </Filter>
@@ -160,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="GS_Server.h">
       <Filter>GameSimulation\GS_Server</Filter>
-    </ClInclude>
-    <ClInclude Include="UpdateStructures.h">
-      <Filter>GameSimulation\UpdateStructures</Filter>
     </ClInclude>
     <ClInclude Include="EventBase.h">
       <Filter>Events\EventBase</Filter>

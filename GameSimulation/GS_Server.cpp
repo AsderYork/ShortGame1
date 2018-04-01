@@ -1,5 +1,4 @@
 #include "GS_Server.h"
-#include "UpdateSystem_Command.h"
 #include <sstream>
 #include <limits>
 
@@ -10,7 +9,7 @@ namespace GEM::GameSim
 {
 
 
-	std::stringstream GS_Server::GatherOtherDataForPlayer(PLAYER_ID_TYPE id)
+	std::stringstream GS_Server::GatherDataForPlayer(PLAYER_ID_TYPE id)
 	{
 		std::stringstream SendStream;
 		{
@@ -50,12 +49,15 @@ namespace GEM::GameSim
 	
 
 	
-	std::pair<EntityRegularUpdate, EntityAppearingUpdate> GS_Server::GetEntityUpdate(std::pair<ENTITY_ID_TYPE, EntityBase*>& Entity)
+	std::pair<UpdateSystemCommand, UpdateSystemCommand>  GS_Server::GetEntityUpdate(std::pair<ENTITY_ID_TYPE, EntityBase*>& Entity)
 	{
 		auto& mixinvec = Entity.second->getAllMixins();
 
-		EntityRegularUpdate Regular;
-		EntityAppearingUpdate Appearing;
+		UpdateSystemCommand NewPartialUpdate;
+		UpdateSystemCommand NewFullUpdate;
+
+		NewPartialUpdate.m_entityID = Entity.first;
+		NewFullUpdate.m_entityID = Entity.first;
 
 		for (auto& mixin : mixinvec)
 		{
@@ -66,7 +68,7 @@ namespace GEM::GameSim
 					cereal::BinaryOutputArchive ar(DataStream);
 					mixin->SendUpdate(ar, Mixin_base::UpdateReason::REGULAR);
 				}
-				Regular.PerMixinUpdates.emplace_back(mixin->getMixinID(), DataStream.str());
+				NewPartialUpdate.m_perMixinUpdates.emplace_back(mixin->getMixinID(), DataStream.str());
 			}
 
 			DataStream.str(std::string());
@@ -74,13 +76,13 @@ namespace GEM::GameSim
 				cereal::BinaryOutputArchive ar(DataStream);
 				mixin->SendUpdate(ar, Mixin_base::UpdateReason::APPEAR);
 			}
-			Appearing.EntityMixins.push_back(mixin->getMixinID());
-			Appearing.PerMixinUpdates.emplace_back(mixin->getMixinID(), DataStream.str());
+			NewFullUpdate.m_mixins.push_back(mixin->getMixinID());
+			NewFullUpdate.m_perMixinUpdates.emplace_back(mixin->getMixinID(), DataStream.str());
 
 		}
 
 
-		return std::make_pair(Regular, Appearing);
+		return std::make_pair(NewPartialUpdate, NewFullUpdate);
 	}
 
 	void GS_Server::ProcessPlayerSyncingUpdates()
@@ -139,12 +141,9 @@ namespace GEM::GameSim
 		while (Entity)
 		{
 			auto[RegUpdate, AppearUpdate] = GetEntityUpdate(Entity.value());
-
-			UpdateData RegEntry(std::move(RegUpdate), Entity->first);
-			UpdateData AppearingEntry(std::move(AppearUpdate), Entity->first);
+						
 			
-			
-			if (RegUpdate.PerMixinUpdates.size() == 0)
+			if (RegUpdate.m_perMixinUpdates.size() == 0)
 			{//This entity doesn't have a regular update for this tick.
 				IsThereGeneralUpdate = false;
 			}
@@ -171,7 +170,7 @@ namespace GEM::GameSim
 							if (IsThereGeneralUpdate)
 							{
 								m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
-									std::make_unique<UpdateSystemCommand>(RegEntry.EntityID, RegUpdate.PerMixinUpdates)
+									std::make_unique<UpdateSystemCommand>(RegUpdate.m_entityID, RegUpdate.m_perMixinUpdates)
 								);
 							}
 						}
@@ -188,7 +187,7 @@ namespace GEM::GameSim
 							pl.trackedEntities.insert(Entity->first);
 
 							m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
-								std::make_unique<UpdateSystemCommand>(RegEntry.EntityID, AppearUpdate.EntityMixins, AppearUpdate.PerMixinUpdates)
+								std::make_unique<UpdateSystemCommand>(AppearUpdate.m_entityID, AppearUpdate.m_mixins, AppearUpdate.m_perMixinUpdates)
 							);
 						}
 					}
@@ -203,14 +202,14 @@ namespace GEM::GameSim
 						if (IsThereGeneralUpdate)
 						{
 							m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
-								std::make_unique<UpdateSystemCommand>(RegEntry.EntityID, RegUpdate.PerMixinUpdates)
+								std::make_unique<UpdateSystemCommand>(RegUpdate.m_entityID, RegUpdate.m_perMixinUpdates)
 							);
 						}
 					}
 					else {//Player doesn't have this entity. Send Appearing
 						pl.trackedEntities.insert(Entity->first);
 						m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
-							std::make_unique<UpdateSystemCommand>(RegEntry.EntityID, AppearUpdate.EntityMixins, AppearUpdate.PerMixinUpdates)
+							std::make_unique<UpdateSystemCommand>(AppearUpdate.m_entityID, AppearUpdate.m_mixins, AppearUpdate.m_perMixinUpdates)
 						);
 
 					}

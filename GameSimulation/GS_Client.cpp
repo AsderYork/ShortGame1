@@ -1,5 +1,4 @@
 #include "GS_Client.h"
-#include "UpdateStructures.h"
 
 #include "SharedDataPackets.h"
 #include "UpdateSystem_Command.h"

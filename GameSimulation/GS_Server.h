@@ -1,10 +1,10 @@
 #pragma once
 #include "GameSimulation.h"
-#include "UpdateStructures.h"
 #include "GameHistory.h"
 
 #include "ServerCommandDispatcher.h"
 #include "UpdateSystem_Processor.h"
+#include "UpdateSystem_Command.h"
 
 #include <string>
 #include <map>
@@ -44,7 +44,7 @@ namespace GEM::GameSim
 		/**!
 		Gathers entity updates;		
 		*/
-		std::pair<EntityRegularUpdate, EntityAppearingUpdate>  GetEntityUpdate(std::pair<ENTITY_ID_TYPE, EntityBase*>& Entity);
+		std::pair<UpdateSystemCommand, UpdateSystemCommand>  GetEntityUpdate(std::pair<ENTITY_ID_TYPE, EntityBase*>& Entity);
 
 		void ProcessPlayerSyncingUpdates();
 
@@ -72,13 +72,8 @@ namespace GEM::GameSim
 
 		void ReciveDataFromClient(PLAYER_ID_TYPE id, cereal::BinaryInputArchive ar);
 
-		/**!
-		Returns a block of data, that should be sended to a given player.
-		This method should be called only once for every player per tick.
-		*/
-		PlayerUpdatePack GatherDataForPlayer(PLAYER_ID_TYPE id);
 
-		std::stringstream GatherOtherDataForPlayer(PLAYER_ID_TYPE id);
+		std::stringstream GatherDataForPlayer(PLAYER_ID_TYPE id);
 		
 	};
 }
