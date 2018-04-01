@@ -4,7 +4,14 @@ namespace GEM::GameSim
 {
 	uint64_t LandscapeChunkController::LoaderType::LastLoaderUniqueID = 0;
 
-void LandscapeChunkController::ProcessChunks()
+	LandscapeChunkController::LoaderType * LandscapeChunkController::findLoader(LandscapeChunkController::LoaderType::LoaderIDType id)
+	{
+		auto Loader = std::find_if(m_loaders.begin(), m_loaders.end(), [&](LoaderType& loader) {return loader.loaderUniqueID == id; });
+		if (Loader == m_loaders.end()) { return nullptr; }
+		return &(*Loader);
+	}
+
+	void LandscapeChunkController::ProcessChunks()
 {
 	std::vector<ChunkPos> ThisTickVisibleChunks;
 	//Pass 1. Find chunks, that are visible now and find newly visible chunks for evry loader
@@ -45,6 +52,8 @@ void LandscapeChunkController::ProcessChunks()
 	m_noLongerVisibleChunks = NoLongerVisibleChunks;
 	m_newlyGlobalyVisibleChunks = NewChunks;
 	m_globalyVisibleChunks = ThisTickVisibleChunks;
+
+
 }
 
 

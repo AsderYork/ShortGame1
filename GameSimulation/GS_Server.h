@@ -1,6 +1,5 @@
 #pragma once
 #include "GameSimulation.h"
-#include "GameHistory.h"
 
 #include "ServerCommandDispatcher.h"
 #include "UpdateSystem_Processor.h"

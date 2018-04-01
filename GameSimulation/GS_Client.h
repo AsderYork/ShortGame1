@@ -1,6 +1,5 @@
 #pragma once
 #include "GameSimulation.h"
-#include "GameHistory.h"
 
 #include "ClientCommandDispatcher.h"
 #include "UpdateSystemClientProcessor.h"
@@ -20,7 +19,6 @@ namespace GEM::GameSim
 		bool m_timeIsSet = false;
 
 	protected:
-		GameHistoryController m_gameHistory;
 		ClientCommandDispatcher m_dispatcher;
 		UpdateSystemClientProcessor m_updatesProcessor;
 

@@ -182,7 +182,11 @@ namespace GEM::GameSim
 			LoaderType(std::function<btVector3()> _posFunc) : loaderUniqueID(LastLoaderUniqueID++), posFunc(_posFunc) {};
 		};
 
+		
+
 	private:
+
+		
 
 		std::vector<ChunkPos> m_globalyVisibleChunks;
 		std::vector<ChunkPos> m_noLongerVisibleChunks;
@@ -191,9 +195,12 @@ namespace GEM::GameSim
 		std::vector<LoaderType> m_loaders;
 
 		int m_loadRadius;
+
+		LoaderType* findLoader(LoaderType::LoaderIDType id);
+
 	public:
 
-		LandscapeChunkController() : m_loadRadius(3) {};
+		LandscapeChunkController() : m_loadRadius(3){};		
 
 		inline void setloadRadius(unsigned int newVal) { m_loadRadius = newVal; }
 
@@ -211,7 +218,12 @@ namespace GEM::GameSim
 			return true;
 		}
 
+		inline std::vector<ChunkPos>& getGlobalyNewlyVisibleChunks() { return m_newlyGlobalyVisibleChunks; }
+		inline std::vector<ChunkPos>& getGlobalyNoLongerVisibleChunks() { return m_noLongerVisibleChunks; }
+
 		void ProcessChunks();
+
+		
 	};
 
 }

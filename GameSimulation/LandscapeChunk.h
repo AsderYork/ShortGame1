@@ -104,6 +104,10 @@ namespace GEM::GameSim
 		inline uint64_t getVersion() const{ return m_version; }
 		inline std::pair<int32_t, int32_t> getPosition() const{ return std::make_pair(m_posX, m_posZ); }
 
+		inline void setVersion(uint64_t newVersion) { m_version = newVersion; }
+		inline void setPosX(int32_t posX) {	m_posX = posX; }
+		inline void setPosZ(int32_t posZ) { m_posZ = posZ; }
+
 		template<class Archive>
 		void serialize(Archive & archive)
 		{

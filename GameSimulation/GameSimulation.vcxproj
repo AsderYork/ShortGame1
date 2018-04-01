@@ -149,6 +149,9 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ChunkLoadDispatcher.h" />
+    <ClInclude Include="ChunkLoader_Generator.h" />
+    <ClInclude Include="ChunkLoader_Storage.h" />
     <ClInclude Include="ClientCommandDispatcher.h" />
     <ClInclude Include="CommandHistoryInterface.h" />
     <ClInclude Include="EntitiesBase.h" />
@@ -156,7 +159,6 @@
     <ClInclude Include="EntityIDType.h" />
     <ClInclude Include="EventBase.h" />
     <ClInclude Include="EventSerializator.h" />
-    <ClInclude Include="GameHistory.h" />
     <ClInclude Include="GamePhysics.h" />
     <ClInclude Include="GameSimulation.h" />
     <ClInclude Include="GameTime.h" />
@@ -190,9 +192,11 @@
     <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ChunkLoadDispatcher.cpp" />
+    <ClCompile Include="ChunkLoader_Generator.cpp" />
+    <ClCompile Include="ChunkLoader_Storage.cpp" />
     <ClCompile Include="ClientCommandDispatcher.cpp" />
     <ClCompile Include="EntityGenerator.cpp" />
-    <ClCompile Include="GameHistory.cpp" />
     <ClCompile Include="GamePhysics.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
     <ClCompile Include="GS_Client.cpp" />

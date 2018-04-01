@@ -61,9 +61,6 @@
     <Filter Include="Events\NumerableEvents">
       <UniqueIdentifier>{0e49bca4-0f07-44c7-bc3b-67a474b3d1d5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameSimulation\GameHistory">
-      <UniqueIdentifier>{5d5838f2-372f-48a4-b22e-f44017421265}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameSimulation\GameTime">
       <UniqueIdentifier>{612e9852-2cca-4181-a411-f0550470f79f}</UniqueIdentifier>
     </Filter>
@@ -114,6 +111,15 @@
     </Filter>
     <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Server%27s version">
       <UniqueIdentifier>{bdcb05f4-07e0-4551-ab2e-f4dce5bfef63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\ChunkLoadDispatcher">
+      <UniqueIdentifier>{1618334d-230e-46b0-bc3a-383149a6a74d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\ChunkLoadDispatcher\ChunkLoader_Generator">
+      <UniqueIdentifier>{4cdfc5df-592e-4bd1-95e2-56ae0b11a2c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\ChunkLoadDispatcher\ChunkLoader_Storage">
+      <UniqueIdentifier>{c7c6b098-2bbe-415b-bef4-63c5db2b7327}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -176,9 +182,6 @@
     <ClInclude Include="EntityIDType.h">
       <Filter>Entities\Base</Filter>
     </ClInclude>
-    <ClInclude Include="GameHistory.h">
-      <Filter>GameSimulation\GameHistory</Filter>
-    </ClInclude>
     <ClInclude Include="GameTime.h">
       <Filter>GameSimulation\GameTime</Filter>
     </ClInclude>
@@ -230,6 +233,15 @@
     <ClInclude Include="UpdateSystem_Command.h">
       <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem</Filter>
     </ClInclude>
+    <ClInclude Include="ChunkLoadDispatcher.h">
+      <Filter>Landscape\ChunkLoadDispatcher</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkLoader_Generator.h">
+      <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkLoader_Storage.h">
+      <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Storage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -259,9 +271,6 @@
     <ClCompile Include="Mixin_Movable.cpp">
       <Filter>Entities\Mixins\Mixin_Movable</Filter>
     </ClCompile>
-    <ClCompile Include="GameHistory.cpp">
-      <Filter>GameSimulation\GameHistory</Filter>
-    </ClCompile>
     <ClCompile Include="Mixin_Base.cpp">
       <Filter>Entities\Mixins\Mixin_base</Filter>
     </ClCompile>
@@ -289,6 +298,13 @@
     <ClCompile Include="UpdateSystemClientProcessor.cpp">
       <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Client%27s version</Filter>
     </ClCompile>
+    <ClCompile Include="ChunkLoader_Generator.cpp">
+      <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkLoader_Storage.cpp">
+      <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkLoadDispatcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyboardEvents.def">
