@@ -38,10 +38,27 @@ namespace GEM::GameSim
 		}
 
 		template<class Archive>
-		void serialize(Archive & archive)
+		void save(Archive & archive) const
 		{
-			archive(m_initialSize, m_data);
+			archive(m_initialSize);
+
+			archive(cereal::make_size_tag(static_cast<uint32_t>(m_data.size())));
+			archive(cereal::binary_data(m_data.data(), m_data.size()));
 		}
+
+		template<class Archive>
+		void load(Archive & archive)
+		{
+			archive(m_initialSize);
+
+			uint32_t strSize;
+			archive(cereal::make_size_tag(strSize));
+
+			m_data.resize(static_cast<std::size_t>(strSize));
+			archive(cereal::binary_data(m_data.data(), static_cast<std::size_t>(strSize)));
+
+		}
+
 
 		/**!
 		Unpacks stored chunks.

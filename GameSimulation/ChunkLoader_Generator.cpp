@@ -3,7 +3,7 @@
 namespace GEM::GameSim
 {
 
-	void ChunlLoader_Generator::FillChunkIn(int x, int z, LandscapeChunk * target)
+	void ChunkLoader_Generator::FillChunkIn(int x, int z, LandscapeChunk * target)
 	{
 		target->setVersion(0);
 		target->setPosX(x);

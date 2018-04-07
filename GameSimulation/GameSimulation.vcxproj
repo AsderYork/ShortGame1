@@ -174,14 +174,12 @@
     <ClInclude Include="LandscapeMeshGenerator.h" />
     <ClInclude Include="NetworkCommandBase.h" />
     <ClInclude Include="NetworkCommandsProcessor.h" />
-    <ClInclude Include="NumerableEvents.def" />
     <ClInclude Include="Helper_TupleForeach.h" />
     <ClInclude Include="KeyboardEvents.h" />
     <ClInclude Include="Mixin_Base.h" />
     <ClInclude Include="Mixin_Controller.h" />
     <ClInclude Include="Mixin_Health.h" />
     <ClInclude Include="Mixin_Movable.h" />
-    <ClInclude Include="NumerableEvents.h" />
     <ClInclude Include="ServerCommandDispatcher.h" />
     <ClInclude Include="SharedDataPackets.h" />
     <ClInclude Include="TestPlace.h" />

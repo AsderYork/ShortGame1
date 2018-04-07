@@ -55,9 +55,6 @@
     <Filter Include="Events\KeyboardEvents">
       <UniqueIdentifier>{0f1dc085-7670-4a0d-9337-3640cc3606da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Events\NumerableEvents">
-      <UniqueIdentifier>{0e49bca4-0f07-44c7-bc3b-67a474b3d1d5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameSimulation\GameTime">
       <UniqueIdentifier>{612e9852-2cca-4181-a411-f0550470f79f}</UniqueIdentifier>
     </Filter>
@@ -169,12 +166,6 @@
     </ClInclude>
     <ClInclude Include="EventSerializator.h">
       <Filter>Events\EventBase</Filter>
-    </ClInclude>
-    <ClInclude Include="NumerableEvents.h">
-      <Filter>Events\NumerableEvents</Filter>
-    </ClInclude>
-    <ClInclude Include="NumerableEvents.def">
-      <Filter>Events\NumerableEvents</Filter>
     </ClInclude>
     <ClInclude Include="EntityIDType.h">
       <Filter>Entities\Base</Filter>

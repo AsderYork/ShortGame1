@@ -38,15 +38,15 @@ namespace GEM::GameSim
 
 	void ChunkLoader_Storage::SaveChunk(LandscapeChunk * target)
 	{
-		auto[TargetPosX, TargetPosZ] = target->getPosition();
+		/*auto[TargetPosX, TargetPosZ] = target->getPosition();
 		auto& It = std::lower_bound(m_magistral.begin(), m_magistral.end(), MagistralRecord(TargetPosX, TargetPosZ));
 		if ((It != m_magistral.end()) && (*It == MagistralRecord(TargetPosX, TargetPosZ)))
 		{
-			if (It->ChunkVersion == target->getVersion) { return; }
+			if (It->ChunkVersion == target->getVersion()) { return; }
 		}
 		else
 		{
-			m_magistral.insert(It, MagistralRecord(TargetPosX, TargetPosZ, target->getVersion));
+			m_magistral.insert(It, MagistralRecord(target->getVersion(), TargetPosX, TargetPosZ));
 		}
 
 		std::ifstream magistralFile(m_mapFolderPath + "\\x" + std::to_string(TargetPosX) + "z" + std::to_string(TargetPosZ) + ".chunk", std::ios::binary);
@@ -55,7 +55,7 @@ namespace GEM::GameSim
 		LandscapeChunkPack newChunkPack;
 		archive(LandscapeChunkPack({target}));
 
-		It->ChunkVersion = target->getVersion;
+		It->ChunkVersion = target->getVersion();*/
 	}
 
 	void ChunkLoader_Storage::Start(std::string MapFolderPath)
