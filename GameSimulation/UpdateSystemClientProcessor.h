@@ -1,6 +1,7 @@
 #pragma once
 #include "NetworkCommandsProcessor.h"
 #include "GameSimulation.h"
+#include "ClientCommandDispatcher.h"
 
 namespace GEM::GameSim
 {
@@ -39,7 +40,7 @@ namespace GEM::GameSim
 
 		UpdateSystemClientProcessor(GameSimulation* GameSim) : m_gameSim(GameSim) {};
 
-		void GatherStatesOfControlledEntities(ClientCommandDispatcher* dispatcher);
+		void GatherStatesOfControlledEntities(ClientHistory* dispatcher);
 
 		void AddControlledEntity(ENTITY_ID_TYPE id);
 		void RemoveControlledEntity(ENTITY_ID_TYPE id);

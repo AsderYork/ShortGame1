@@ -3,6 +3,8 @@
 
 #include "ClientCommandDispatcher.h"
 #include "UpdateSystemClientProcessor.h"
+#include "ChunkLoadClientDispatcher.h"
+#include "LandscapeSystem_ClientProcessor.h"
 
 #include <cereal\cereal.hpp>
 #include <cereal\archives\binary.hpp>
@@ -22,6 +24,10 @@ namespace GEM::GameSim
 		ClientCommandDispatcher m_dispatcher;
 		UpdateSystemClientProcessor m_updatesProcessor;
 
+		LandscapeChunkController m_chunkController;
+		ChunkLoadClientDispatcher m_chunkDispatcher;
+
+		LandscapeSystemClientProcessor m_landscapeProcessor;
 
 	public:
 		std::chrono::system_clock::time_point m_lastUpdateTime;
@@ -34,11 +40,15 @@ namespace GEM::GameSim
 			InsertEvent(std::move(Event), m_playerCharacterID);
 		}
 
-		inline GS_Client() : m_timeIsSet(false), m_updatesProcessor(this) {
+		inline GS_Client() : m_timeIsSet(false), m_updatesProcessor(this), m_chunkDispatcher(m_chunkController){
 			m_dispatcher.AddProcessor(&m_updatesProcessor);
+			m_dispatcher.AddProcessor(&m_landscapeProcessor);
 		}
 
-
+		/**!
+		This method is called right after simulation actually started.
+		*/
+		void SimulationStarted();
 
 
 		/**!

@@ -1,7 +1,9 @@
 #pragma once
 #include "Mixin_Base.h"
-#include <vmmlib\vector.hpp>
-#include <vmmlib/math.hpp>
+//#include <vmmlib\vector.hpp>
+//#include <vmmlib/math.hpp>
+
+#include <LinearMath\btVector3.h>
 #include <chrono>
 
 namespace GEM::GameSim
@@ -14,8 +16,8 @@ namespace GEM::GameSim
 	private:
 
 	protected:
-		vmml::vec3f m_pos = vmml::vec3f(0, 0, 0);
-		vmml::vec3f m_velocity = vmml::vec3f(0, 0, 0);
+		btVector3 m_pos = btVector3(0, 0, 0);
+		btVector3 m_velocity = btVector3(0, 0, 0);
 		//Remembers when was the last time of gathering update from this mixin. If it was too long, it will start asking for an update
 		std::chrono::system_clock::time_point m_lastUpdate;
 
@@ -33,14 +35,14 @@ namespace GEM::GameSim
 		*/
 		void Shift(float X, float Y, float Z)
 		{
-			m_pos += vmml::vec3f(X, Y, Z);
+			m_pos += btVector3(X, Y, Z);
 		}
 
 		void SetVelocity(float X, float Y, float Z);
 
 		bool tick(const GameTime delta);
 
-		inline vmml::vec3f getPos() {	return m_pos;	}
+		inline const btVector3& getPos() {	return m_pos;	}
 
 		virtual bool NeedsUpdate() override;
 

@@ -22,6 +22,21 @@ namespace GEM::GameSim
 		m_commandBuffer.push_back(std::make_pair(std::move(command), ApplyResult));
 		return true;
 	}
+	bool ClientHistory::InsertPerformedCommandInHistory(std::unique_ptr<NetworkCommand>&& command)
+	{
+		if (m_commandBuffer.full())
+		{//Buffer is full! Can't accept this command
+			return false;
+		}
+
+		//Commands actually recive their ID's in histories only.
+		//Actually, server commands doesn't even have to have an ID
+		//But it's a serialization problem.
+		command->m_uniqueID = m_lastUsedID++;
+
+		m_commandBuffer.push_back(std::make_pair(std::move(command), true));
+		return true;
+	}
 	void ClientHistory::processHistoryPack(const ServerHistoryPack & serverHistoryPack)
 	{
 		//Then history might be wrong. But it's also possible, that rejected events 
@@ -74,9 +89,15 @@ namespace GEM::GameSim
 	}
 
 
-	void ClientCommandDispatcher::InsertPerformedCommand(std::unique_ptr<NetworkCommand> command)
+	void ClientCommandDispatcher::InsertPerformedCommand(std::unique_ptr<NetworkCommand>&& command)
 	{
+		m_history.InsertCommandInHistory(std::move(command));
 		m_commandsToSend.emplace_back(std::move(command));
+		m_commandsToSend.back()->m_uniqueID = 0;
+	}
+
+	void ClientCommandDispatcher::InsertCommand(std::unique_ptr<NetworkCommand>&& command)
+	{
 	}
 
 	const std::array<NetworkExchangeProcessor*, 256>& ClientCommandDispatcher::getProcessorsTable() const

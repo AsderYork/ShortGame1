@@ -115,6 +115,21 @@
     <Filter Include="Landscape\ChunkLoadDispatcher\ChunkLoader_Storage">
       <UniqueIdentifier>{c7c6b098-2bbe-415b-bef4-63c5db2b7327}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem">
+      <UniqueIdentifier>{f5044459-c026-4843-9db8-7215b2b0b020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Commands">
+      <UniqueIdentifier>{987c52ec-a329-4052-af0d-07688f836ae7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Client%27s processor">
+      <UniqueIdentifier>{0ce2a1bf-525a-4f5e-93ba-2dedd653f212}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor">
+      <UniqueIdentifier>{482dfc29-c5c9-49e3-9de9-2a89e3a34d29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\ChunkLoadDispatcher\ChunkLoadClientDispatcher">
+      <UniqueIdentifier>{dabbb3cc-fb5e-40bf-b6de-40756ff08321}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -230,6 +245,18 @@
     <ClInclude Include="ChunkLoader_Storage.h">
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Storage</Filter>
     </ClInclude>
+    <ClInclude Include="LandscapeSystem_ClientProcessor.h">
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Client%27s processor</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeSystem_Command.h">
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkLoadClientDispatcher.h">
+      <Filter>Landscape\ChunkLoadDispatcher\ChunkLoadClientDispatcher</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeSystem_ServerProcessor.h">
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -294,6 +321,15 @@
     </ClCompile>
     <ClCompile Include="ChunkLoadDispatcher.cpp">
       <Filter>Landscape\ChunkLoadDispatcher</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeSystem_ClientProcessor.cpp">
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Client%27s processor</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkLoadClientDispatcher.cpp">
+      <Filter>Landscape\ChunkLoadDispatcher\ChunkLoadClientDispatcher</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeSystem_ServerProcessor.cpp">
+      <Filter>GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

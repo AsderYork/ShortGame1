@@ -5,9 +5,10 @@
 
 namespace GEM::GameSim
 {
+
 	void Mixin_Movable::SetVelocity(float X, float Y, float Z)
 	{
-		m_velocity = vmml::vec3f(X, Y, Z);
+		m_velocity = btVector3(X, Y, Z);
 	}
 	bool Mixin_Movable::tick(const GameTime delta)
 	{
@@ -20,7 +21,7 @@ namespace GEM::GameSim
 		{
 			return true;
 		}
-		if (m_velocity.squared_length() != 0)
+		if (m_velocity.length2() != 0)
 		{
 			m_keepUpdating = true;
 			return true;
@@ -43,14 +44,20 @@ namespace GEM::GameSim
 
 	void Mixin_Movable::ReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime UpdateLag)
 	{
-		vmml::vec3f NewPos, NewVel;
-		archive(NewPos.x(), NewPos.y(), NewPos.z());
-		archive(NewVel.x(), NewVel.y(), NewVel.z());
+		btVector3 NewPos;
+		btScalar posx, posy, posz;
+		archive(posx, posx, posx);
+		NewPos.setValue(posx, posy, posz);
+
+		btVector3 NewVel;
+		btScalar vex, vey, vez;
+		archive(vex, vey, vez);
+		NewVel.setValue(vex, vey, vez);
 
 
 		if (NewVel == m_velocity)
 		{			
-			if (m_pos.equals(NewPos + (NewVel * GameTimeToSeconds(UpdateLag)), NewVel.length()/100)) { return; }
+			if ((m_pos - (NewPos + (NewVel * GameTimeToSeconds(UpdateLag)))).length2() < (NewVel.length2() / 1000)) { return; }
 		}
 
 		m_pos = NewPos;
@@ -65,22 +72,22 @@ namespace GEM::GameSim
 		case KeyboardEvent_PlayerMoveBackward::id: {
 			if (!static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
 			{
-				m_velocity += vmml::vec3f(m_speed, 0.0f, 0.0f);
+				m_velocity += btVector3(m_speed, 0.0f, 0.0f);
 			}
 			else
 			{
-				m_velocity -= vmml::vec3f(m_speed, 0.0f, 0.0f);
+				m_velocity -= btVector3(m_speed, 0.0f, 0.0f);
 			}
 			break;
 		}
 		case KeyboardEvent_PlayerMoveForward::id: {
 			if (static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
 			{
-				m_velocity += vmml::vec3f(m_speed, 0.0f, 0.0f);
+				m_velocity += btVector3(m_speed, 0.0f, 0.0f);
 			}
 			else
 			{
-				m_velocity -= vmml::vec3f(m_speed, 0.0f, 0.0f);
+				m_velocity -= btVector3(m_speed, 0.0f, 0.0f);
 			}
 			break;
 		}
@@ -88,22 +95,22 @@ namespace GEM::GameSim
 		case KeyboardEvent_PlayerMoveLeft::id: {
 			if (!static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
 			{
-				m_velocity += vmml::vec3f(0.0f, 0.0f, m_speed);
+				m_velocity += btVector3(0.0f, 0.0f, m_speed);
 			}
 			else
 			{
-				m_velocity -= vmml::vec3f(0.0f, 0.0f, m_speed);
+				m_velocity -= btVector3(0.0f, 0.0f, m_speed);
 			}
 			break;
 		}
 		case KeyboardEvent_PlayerMoveRight::id: {
 			if (static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
 			{
-				m_velocity += vmml::vec3f(0.0f, 0.0f, m_speed);
+				m_velocity += btVector3(0.0f, 0.0f, m_speed);
 			}
 			else
 			{
-				m_velocity -= vmml::vec3f(0.0f, 0.0f, m_speed);
+				m_velocity -= btVector3(0.0f, 0.0f, m_speed);
 			}
 			break;
 		}
@@ -114,11 +121,13 @@ namespace GEM::GameSim
 
 	void Mixin_Movable::ApplyEvent(cereal::BinaryInputArchive& archive)
 	{
-		auto CurrX = m_pos.x();
-		archive(m_pos.x(), m_pos.y(), m_pos.z());
-		auto RecvX = m_pos.x();
+		btScalar posx, posy, posz;
+		archive(posx, posx, posx);
+		m_pos.setValue(posx, posy, posz);
 
-		archive(m_velocity.x(), m_velocity.y(), m_velocity.z());
+		btScalar vex, vey, vez;
+		archive(vex, vey, vez);
+		m_velocity.setValue(vex, vey, vez);
 	}
 
 }

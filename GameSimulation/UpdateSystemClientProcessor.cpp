@@ -21,7 +21,7 @@ namespace GEM::GameSim
 		return UpdateFullyAccepted;
 	}
 
-	void UpdateSystemClientProcessor::GatherStatesOfControlledEntities(ClientCommandDispatcher* dispatcher)
+	void UpdateSystemClientProcessor::GatherStatesOfControlledEntities(ClientHistory* dispatcher)
 	{
 		for (auto& ent : m_controlledEntities)
 		{
@@ -46,7 +46,7 @@ namespace GEM::GameSim
 			}
 
 
-			dispatcher->InsertPerformedCommand(std::make_unique<UpdateSystemCommand>(ent.id, UpdateForEntity));
+			dispatcher->InsertPerformedCommandInHistory(std::make_unique<UpdateSystemCommand>(ent.id, UpdateForEntity));
 		}
 	}
 

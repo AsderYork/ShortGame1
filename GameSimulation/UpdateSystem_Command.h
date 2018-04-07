@@ -4,6 +4,7 @@
 #include "EntityIDType.h"
 #include "Helper_VariableSizeSerialization.h"
 #include <vector>
+#include <cassert>
 
 namespace GEM::GameSim
 {

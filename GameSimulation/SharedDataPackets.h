@@ -67,7 +67,7 @@ namespace GEM::GameSim
 			{
 				ar(header);
 				commands.emplace_back(Processors[header]->deserializeCommand(ar));
-				commands.front()->m_header = header;
+				commands.back()->m_header = header;
 			}
 		}
 	};
@@ -104,7 +104,7 @@ namespace GEM::GameSim
 				ar(header);
 				ar(id);
 				commands.emplace_back(Processors[header]->deserializeCommand(ar));
-				commands.front()->m_header = header;
+				commands.back()->m_header = header;
 			}
 		}
 	};

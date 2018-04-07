@@ -4,6 +4,8 @@
 #include "ServerCommandDispatcher.h"
 #include "UpdateSystem_Processor.h"
 #include "UpdateSystem_Command.h"
+#include "LandscapeSystem_ServerProcessor.h"
+
 
 #include <string>
 #include <map>
@@ -50,12 +52,14 @@ namespace GEM::GameSim
 	protected:
 		ServerCommandDispatcher m_commandDispatcher;
 		UpdateSystemProcessor m_updateSystemProcessor;
+		LandscapeSystemServerProcessor m_ladnscapeProcessor;
 
 	public:
 
 		GS_Server() : m_updateSystemProcessor(&m_gs)
 		{
 			m_commandDispatcher.AddProcessor(&m_updateSystemProcessor);
+			m_commandDispatcher.AddProcessor(&m_ladnscapeProcessor);
 		}
 
 		std::optional<PlayerTicket> NewPlayerRoutine(Player&& player);

@@ -24,14 +24,7 @@ namespace GEM::GameSim
 		std::vector<std::unique_ptr<NetworkCommand>> m_commandsToSend;
 
 
-		virtual void InjectCommand(std::unique_ptr<NetworkCommand>&& command, GameTime PacketTime) override {
-			m_lastRecivedCommand = command->m_uniqueID;
-
-			if (!m_processors[command->m_header]->ApplyCommand(command.get(), PacketTime))
-			{
-				m_rejectedCommands.push_back(m_lastRecivedCommand);
-			}
-		}
+		virtual void InjectCommand(std::unique_ptr<NetworkCommand>&& command, GameTime PacketTime) override;
 
 		/**!
 		Server usualy performs command as part of it's simulation and then just sends updates.

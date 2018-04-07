@@ -5,7 +5,7 @@ namespace GEM::GameSim
 
 	void ChunkLoader_Generator::FillChunkIn(int x, int z, LandscapeChunk * target)
 	{
-		target->setVersion(0);
+		target->setVersion(1);
 		target->setPosX(x);
 		target->setPosZ(z);
 
