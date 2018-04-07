@@ -7,9 +7,6 @@
     <Filter Include="GameSimulation">
       <UniqueIdentifier>{ccde9806-a584-426c-9056-e12e127793a8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Player">
-      <UniqueIdentifier>{0dad55ec-0ee6-4790-ac7b-7d311d875f45}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Entities">
       <UniqueIdentifier>{56a67337-293f-462f-95cb-bf94c42184ce}</UniqueIdentifier>
     </Filter>
@@ -304,7 +301,9 @@
     <ClCompile Include="ChunkLoader_Storage.cpp">
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Storage</Filter>
     </ClCompile>
-    <ClCompile Include="ChunkLoadDispatcher.cpp" />
+    <ClCompile Include="ChunkLoadDispatcher.cpp">
+      <Filter>Landscape\ChunkLoadDispatcher</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyboardEvents.def">

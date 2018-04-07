@@ -5,6 +5,8 @@
 #include "ChunkLoader_Generator.h"
 #include "ChunkLoader_Storage.h"
 
+#include <list>
+
 
 
 namespace GEM::GameSim
@@ -18,7 +20,7 @@ namespace GEM::GameSim
 		ChunkLoader_Generator m_chunkGenerator;
 		ChunkLoader_Storage m_chunkLoader;
 
-		std::vector<LandscapeChunk> m_chunks;
+		std::list<LandscapeChunk> m_chunks;
 	public:
 
 		void ProcessChunksRequirements();

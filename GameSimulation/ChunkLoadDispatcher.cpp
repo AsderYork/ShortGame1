@@ -23,13 +23,12 @@ namespace GEM::GameSim
 		auto NoLongerVisibleChunks = m_chunkController.getGlobalyNoLongerVisibleChunks();
 		for (auto& outvisibleChunk : NoLongerVisibleChunks)
 		{
-			for (int i = 0; i < m_chunks.size(); i++)
+			for (auto it = m_chunks.begin(); it != m_chunks.end(); it++)
 			{
-				auto[x, z] = m_chunks[i].getPosition();
+				auto[x, z] = it->getPosition();
 				if (x == outvisibleChunk.x && z == outvisibleChunk.z)
 				{
-					m_chunkLoader.SaveChunk(&(m_chunks[i]));
-					m_chunks.erase(m_chunks.begin() + i);
+					m_chunks.erase(it);
 					break;
 				}
 			}
