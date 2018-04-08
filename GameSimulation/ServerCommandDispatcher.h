@@ -69,7 +69,7 @@ namespace GEM::GameSim
 			}
 		}
 
-		void ProcessCommands(std::vector<ClientCommandPack> commandPacks, ServerHistory* History);
+		void ProcessCommands(std::vector<ClientCommandPack_Server> commandPacks, ServerHistory* History);
 		
 
 		ServerCommandPack GatherResults(ServerHistory* History, GameTime CurrentTime);

@@ -9,6 +9,7 @@
 #include <cereal\cereal.hpp>
 #include <cereal\archives\binary.hpp>
 #include <cassert>
+#include <variant>
 
 namespace GEM::GameSim
 {
@@ -72,23 +73,10 @@ namespace GEM::GameSim
 		}
 	};
 
-	struct ClientCommandPack
+	struct ClientCommandPack_Server
 	{
 		GameTime time;
 		std::vector<std::unique_ptr<NetworkCommand>> commands;
-
-		void SerealizeIn(cereal::BinaryOutputArchive& ar, const std::array<NetworkExchangeProcessor*, 256>& Processors) const
-		{
-			ar(time);
-
-			ar(static_cast<uint32_t>(commands.size()));
-			for (const auto& command : commands)
-			{
-				ar(command->m_header);
-				ar(command->m_uniqueID);
-				Processors[command->m_header]->SerializeCommand(ar, command.get());
-			}
-		}
 
 		void SerializeOut(cereal::BinaryInputArchive& ar, const std::array<NetworkExchangeProcessor*, 256>& Processors)
 		{
@@ -105,7 +93,35 @@ namespace GEM::GameSim
 				ar(id);
 				commands.emplace_back(Processors[header]->deserializeCommand(ar));
 				commands.back()->m_header = header;
+				commands.back()->m_uniqueID = id;
 			}
 		}
+
+	};
+
+	struct ClientCommandPack
+	{
+		GameTime time;
+		//Command queued for sending can either completely be owned by Pack
+		//Or it can be owned by some other systems and just refrence it
+		//On reciving end though, it's allways unqiue_ptr
+		std::vector<std::variant<std::unique_ptr<NetworkCommand>, NetworkCommand*>> commands;
+
+		void SerealizeIn(cereal::BinaryOutputArchive& ar, const std::array<NetworkExchangeProcessor*, 256>& Processors) const
+		{
+			ar(time);
+
+			ar(static_cast<uint32_t>(commands.size()));
+			for (auto& command : commands)
+			{
+				std::visit([&](auto&& arg) {
+					ar(arg->m_header);
+					ar(arg->m_uniqueID);
+					Processors[arg->m_header]->SerializeCommand(ar, &(*arg));
+				}, command);
+				
+				
+			}
+		}		
 	};
 }

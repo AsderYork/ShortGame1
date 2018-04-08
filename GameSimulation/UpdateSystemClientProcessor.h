@@ -40,7 +40,7 @@ namespace GEM::GameSim
 
 		UpdateSystemClientProcessor(GameSimulation* GameSim) : m_gameSim(GameSim) {};
 
-		void GatherStatesOfControlledEntities(ClientHistory* dispatcher);
+		void GatherStatesOfControlledEntities(ClientCommandDispatcher* dispatcher);
 
 		void AddControlledEntity(ENTITY_ID_TYPE id);
 		void RemoveControlledEntity(ENTITY_ID_TYPE id);

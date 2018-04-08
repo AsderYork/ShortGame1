@@ -59,7 +59,7 @@ namespace GEM::GameSim
 		for (auto& ConfirmedCommand : m_commandBuffer)
 		{
 			//Skip rejected commands
-			if (ConfirmedCommand.first == nullptr) { continue; }
+			if (ConfirmedCommand.first == nullptr) { ConfirmedCommandNumber++; continue; }
 
 			//If we've reached non-confirmed command, stop
 			if (ConfirmedCommand.first->m_uniqueID > serverHistoryPack.m_lastRecivedCommand) { break; }
@@ -90,14 +90,23 @@ namespace GEM::GameSim
 
 
 	void ClientCommandDispatcher::InsertPerformedCommand(std::unique_ptr<NetworkCommand>&& command)
-	{
-		m_history.InsertCommandInHistory(std::move(command));
-		m_commandsToSend.emplace_back(std::move(command));
-		m_commandsToSend.back()->m_uniqueID = 0;
+	{		
+		auto ptr = command.get();
+		m_history.InsertPerformedCommandInHistory(std::move(command));
+		m_commandsToSend.emplace_back(ptr);
 	}
 
 	void ClientCommandDispatcher::InsertCommand(std::unique_ptr<NetworkCommand>&& command)
 	{
+		auto ptr = command.get();
+		m_history.InsertCommandInHistory(std::move(command));
+		m_commandsToSend.emplace_back(ptr);
+	}
+
+	void ClientCommandDispatcher::InsertCommandWithoutHistory(std::unique_ptr<NetworkCommand>&& command)
+	{
+		command->m_uniqueID = 0;
+		m_commandsToSend.emplace_back(std::move(command));
 	}
 
 	const std::array<NetworkExchangeProcessor*, 256>& ClientCommandDispatcher::getProcessorsTable() const

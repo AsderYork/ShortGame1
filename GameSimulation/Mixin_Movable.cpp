@@ -122,7 +122,7 @@ namespace GEM::GameSim
 	void Mixin_Movable::ApplyEvent(cereal::BinaryInputArchive& archive)
 	{
 		btScalar posx, posy, posz;
-		archive(posx, posx, posx);
+		archive(posx, posy, posz);
 		m_pos.setValue(posx, posy, posz);
 
 		btScalar vex, vey, vez;

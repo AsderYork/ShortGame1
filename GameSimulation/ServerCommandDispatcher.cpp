@@ -12,9 +12,9 @@ namespace GEM::GameSim
 			m_rejectedCommands.push_back(m_lastRecivedCommand);
 		}
 	}
-	ServerHistory::ServerHistory(ServerCommandDispatcher& dispatcher) : m_processors(dispatcher.m_processors), m_lastRecivedCommand(1) { }
+	ServerHistory::ServerHistory(ServerCommandDispatcher& dispatcher) : m_processors(dispatcher.m_processors), m_lastRecivedCommand(0) { }
 
-	void ServerCommandDispatcher::ProcessCommands(std::vector<ClientCommandPack> commandPacks, ServerHistory* History)
+	void ServerCommandDispatcher::ProcessCommands(std::vector<ClientCommandPack_Server> commandPacks, ServerHistory* History)
 	{
 		for (auto& commandPack : commandPacks)
 		{

@@ -58,7 +58,7 @@ namespace GEM::GameSim
 
 	class ClientCommandDispatcher
 	{
-		std::vector<std::unique_ptr<NetworkCommand>> m_commandsToSend;
+		std::vector<std::variant<std::unique_ptr<NetworkCommand>, NetworkCommand*>> m_commandsToSend;
 
 	public:
 
@@ -66,8 +66,7 @@ namespace GEM::GameSim
 
 
 		/**!
-		Prepares a command to be sent without perorming it and inserts it into history
-		
+		Prepares a command to be sent without perorming it and inserts it into history		
 		*/
 		void InsertPerformedCommand(std::unique_ptr<NetworkCommand>&& command);
 
@@ -75,6 +74,8 @@ namespace GEM::GameSim
 		Inserts command in a history and prepares it to be sent out.
 		*/
 		void InsertCommand(std::unique_ptr<NetworkCommand>&& command);
+
+		void InsertCommandWithoutHistory(std::unique_ptr<NetworkCommand>&& command);
 
 		const std::array<NetworkExchangeProcessor*, 256>& getProcessorsTable() const;
 

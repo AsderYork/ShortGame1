@@ -67,7 +67,7 @@ namespace GEM::GameSim
 		//Perform basic simulation tick
 		auto Retval = GameSimulation::Tick(Delta);
 	
-		m_updatesProcessor.GatherStatesOfControlledEntities(&(m_dispatcher.m_history));
+		m_updatesProcessor.GatherStatesOfControlledEntities(&m_dispatcher);
 		{
 			cereal::BinaryOutputArchive OutputAr(OutputStream);
 			m_dispatcher.GatherResults(getGameTime()).SerealizeIn(OutputAr, m_dispatcher.getProcessorsTable());

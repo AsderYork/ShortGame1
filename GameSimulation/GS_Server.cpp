@@ -27,12 +27,12 @@ namespace GEM::GameSim
 	void GS_Server::ReciveDataFromClient(PLAYER_ID_TYPE id, cereal::BinaryInputArchive ar)
 	{
 
-		std::vector<ClientCommandPack> ClientCommandPacks;
+		std::vector<ClientCommandPack_Server> ClientCommandPacks;
 		try
 		{
 			while (true)
 			{
-				ClientCommandPack NewClientCommandPack;
+				ClientCommandPack_Server NewClientCommandPack;
 
 				NewClientCommandPack.SerializeOut(ar, m_commandDispatcher.getProcessorsTable());
 
