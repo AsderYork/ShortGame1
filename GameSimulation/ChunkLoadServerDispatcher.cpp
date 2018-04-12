@@ -1,9 +1,26 @@
-#include "ChunkLoadDispatcher.h"
+#include "ChunkLoadServerDispatcher.h"
+#include <chrono>
 
 namespace GEM::GameSim
 {
-	void GEM::GameSim::ChunkLoadDispatcher_Server::ProcessChunksRequirements()
+	void ChunkLoadServerDispatcher::PerformOccasionalSave()
 	{
+		static auto LastSaveTime = std::chrono::system_clock::now();
+
+		auto CurrTime = std::chrono::system_clock::now();
+		if (std::chrono::duration_cast<std::chrono::seconds>(CurrTime - LastSaveTime).count() > 30)
+		{
+			LastSaveTime = CurrTime;
+			m_chunkLoader.SaveMagistral();
+		}
+
+	}
+
+	void ChunkLoadServerDispatcher::ProcessChunks()
+	{
+		m_chunkController.ProcessChunks();
+		PerformOccasionalSave();
+
 		auto NewlyVisibleChunks = m_chunkController.getGlobalyNewlyVisibleChunks();
 
 		for (auto& visibleChunk : NewlyVisibleChunks)
@@ -17,6 +34,7 @@ namespace GEM::GameSim
 			{
 				m_chunks.emplace_back();
 				m_chunkGenerator.FillChunkIn(visibleChunk.x, visibleChunk.z, &(m_chunks.back()));
+				m_chunkLoader.SaveChunk(&(m_chunks.back()));
 			}
 		}
 
@@ -28,10 +46,17 @@ namespace GEM::GameSim
 				auto[x, z] = it->getPosition();
 				if (x == outvisibleChunk.x && z == outvisibleChunk.z)
 				{
+					m_chunkLoader.SaveChunk(&(*it));
 					m_chunks.erase(it);
 					break;
 				}
 			}
 		}
+	}
+
+
+	void ChunkLoadServerDispatcher::Start()
+	{
+		m_chunkLoader.Start("./Map");
 	}
 }

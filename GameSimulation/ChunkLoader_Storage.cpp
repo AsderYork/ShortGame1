@@ -1,5 +1,6 @@
 #include "ChunkLoader_Storage.h"
 #include "LandscapeChunkPack.h"
+#include "LogHelper.h"
 
 #include <cereal\cereal.hpp>
 #include <cereal\archives\binary.hpp>
@@ -47,8 +48,8 @@ namespace GEM::GameSim
 		else
 		{
 			m_magistral.insert(It, MagistralRecord(target->getVersion(), TargetPosX, TargetPosZ));
+			isMagistralChanged = true;
 		}
-
 		std::ifstream magistralFile(m_mapFolderPath + "\\x" + std::to_string(TargetPosX) + "z" + std::to_string(TargetPosZ) + ".chunk", std::ios::binary);
 		cereal::BinaryInputArchive archive(magistralFile);
 
@@ -64,13 +65,24 @@ namespace GEM::GameSim
 		std::ifstream magistralFile(m_mapFolderPath + "\\magistral", std::ios::binary);
 		cereal::BinaryInputArchive archive(magistralFile);
 
-		archive(m_magistral);
+		try {
+			archive(m_magistral);
+		}
+		catch (cereal::Exception&)
+		{
+			LOGCATEGORY("ChunkLoader/Start").info("Can't read magistral. It probably doesn't exist! So we just create it!");
+			std::fstream NewMagistralFile;
+			NewMagistralFile.open(m_mapFolderPath + "\\magistral", std::ios::out);
+			NewMagistralFile.close();
+		}
 	}
 	void ChunkLoader_Storage::SaveMagistral()
 	{
+		if (!isMagistralChanged) { return; }
 		std::ofstream magistralFile(m_mapFolderPath + "\\magistral", std::ios::binary);
 		cereal::BinaryOutputArchive archive(magistralFile);
 
 		archive(m_magistral);
+		isMagistralChanged = false;
 	}
 }

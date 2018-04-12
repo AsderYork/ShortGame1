@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="LogHelper">
-      <UniqueIdentifier>{cdc32473-2078-4886-9a5d-bf184dabbc7a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Main">
       <UniqueIdentifier>{5161b6c7-2c2d-4ca0-8ead-e5186aa3b2fa}</UniqueIdentifier>
     </Filter>
@@ -123,9 +120,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LogHelper.h">
-      <Filter>LogHelper</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>PrecompiledHeader</Filter>
     </ClInclude>
@@ -224,9 +218,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LogHelper.cpp">
-      <Filter>LogHelper</Filter>
-    </ClCompile>
     <ClCompile Include="ShortGame1.cpp">
       <Filter>Main</Filter>
     </ClCompile>

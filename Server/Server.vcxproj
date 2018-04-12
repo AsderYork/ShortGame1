@@ -74,6 +74,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(BOOST_HOME);$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(ProjectDir)\..\ExternalDeps\include;$(BULLETPHYSICS_HOME)\Repo\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)ServerBuild/$(Platform)/$(Configuration)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>

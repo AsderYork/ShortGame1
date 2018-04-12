@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <tchar.h>
 
-#include "LogHelper.h"
+#include <LogHelper.h>
 
 
 

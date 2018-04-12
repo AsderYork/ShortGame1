@@ -1,4 +1,6 @@
 #include "GS_Server.h"
+#include "LogHelper.h"
+
 #include <sstream>
 #include <limits>
 
@@ -7,6 +9,15 @@
 
 namespace GEM::GameSim
 {
+
+	GS_Server::GS_Server() : m_updateSystemProcessor(&m_gs)
+	{
+		logHelper::setLog("./logs/log.txt");
+		m_commandDispatcher.AddProcessor(&m_updateSystemProcessor);
+		m_commandDispatcher.AddProcessor(&m_ladnscapeProcessor);
+		m_chunkLoadDispatcher.Start();
+
+	}
 
 
 	std::stringstream GS_Server::GatherDataForPlayer(PLAYER_ID_TYPE id)
@@ -104,14 +115,21 @@ namespace GEM::GameSim
 		newPlayer->get().characterPtr = CharPtr;
 		newPlayer->get().characterID = CharId;
 
-		m_perPlayerInfo.emplace(newPlayer->get().id, PerPlayerInfo(m_commandDispatcher));
+		auto LoaderID = m_chunkLoadDispatcher.getChunkController().createNewLoader(
+			[CharPtr]() {return dynamic_cast<Mixin_Movable*>(CharPtr->GetMixinByID(Mixin_Movable::MixinID))->getPos(); }
+		);
 
+		m_perPlayerInfo.emplace(newPlayer->get().id, PerPlayerInfo(m_commandDispatcher, LoaderID));
 
+		
 		return newPlayer;
 	}
 
 	void GS_Server::RemovePlayer(PlayerTicket && player)
 	{
+		auto& PlayerInfo = m_perPlayerInfo.find(player.get().id);
+		m_chunkLoadDispatcher.getChunkController().RemoveLoader(PlayerInfo->second.MapLoaderId);
+
 		m_perPlayerInfo.erase(player.get().id);
 		m_gs.m_entities.RemoveEntity(player.get().characterID);
 		m_gs.m_players.RemovePlayer(std::move(player));
@@ -120,6 +138,7 @@ namespace GEM::GameSim
 	void  GS_Server::Tick(float Delta)
 	{
 
+		m_chunkLoadDispatcher.ProcessChunks();
 		ProcessPlayerSyncingUpdates();
 		//Perform basic tick
 		auto Reval = m_gs.Tick(Delta);
@@ -218,6 +237,7 @@ namespace GEM::GameSim
 
 			Entity = m_gs.m_entities.IterateOverEntities(std::move(iter));
 		}
+
 	}
 
 }

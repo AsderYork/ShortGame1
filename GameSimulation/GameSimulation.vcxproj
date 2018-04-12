@@ -150,7 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChunkLoadClientDispatcher.h" />
-    <ClInclude Include="ChunkLoadDispatcher.h" />
+    <ClInclude Include="ChunkLoadServerDispatcher.h" />
     <ClInclude Include="ChunkLoader_Generator.h" />
     <ClInclude Include="ChunkLoader_Storage.h" />
     <ClInclude Include="ClientCommandDispatcher.h" />
@@ -176,6 +176,7 @@
     <ClInclude Include="LandscapeSystem_ClientProcessor.h" />
     <ClInclude Include="LandscapeSystem_Command.h" />
     <ClInclude Include="LandscapeSystem_ServerProcessor.h" />
+    <ClInclude Include="LogHelper.h" />
     <ClInclude Include="NetworkCommandBase.h" />
     <ClInclude Include="NetworkCommandsProcessor.h" />
     <ClInclude Include="Helper_TupleForeach.h" />
@@ -195,7 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChunkLoadClientDispatcher.cpp" />
-    <ClCompile Include="ChunkLoadDispatcher.cpp" />
+    <ClCompile Include="ChunkLoadServerDispatcher.cpp" />
     <ClCompile Include="ChunkLoader_Generator.cpp" />
     <ClCompile Include="ChunkLoader_Storage.cpp" />
     <ClCompile Include="ClientCommandDispatcher.cpp" />
@@ -211,6 +212,7 @@
     <ClCompile Include="LandscapeMeshGenerator.cpp" />
     <ClCompile Include="LandscapeSystem_ClientProcessor.cpp" />
     <ClCompile Include="LandscapeSystem_ServerProcessor.cpp" />
+    <ClCompile Include="LogHelper.cpp" />
     <ClCompile Include="Mixin_Base.cpp" />
     <ClCompile Include="Mixin_Controller.cpp" />
     <ClCompile Include="Mixin_Health.cpp" />

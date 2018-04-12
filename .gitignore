@@ -262,3 +262,6 @@ __pycache__/
 
 #ignore game resoucres. Even shaders.
 build/
+
+#ignore documentation
+documentation/

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "LogHelper.h"
 
 #include <log4cpp/Appender.hh>

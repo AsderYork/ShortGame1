@@ -130,6 +130,12 @@
     <Filter Include="Landscape\ChunkLoadDispatcher\ChunkLoadClientDispatcher">
       <UniqueIdentifier>{dabbb3cc-fb5e-40bf-b6de-40756ff08321}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Landscape\ChunkLoadDispatcher\ChunkLoadServerDispatcher">
+      <UniqueIdentifier>{63262ac6-ba37-4507-a536-cddc985576fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LogHelper">
+      <UniqueIdentifier>{e75269f5-b2e3-483e-bf80-ece140cdf23b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -236,9 +242,6 @@
     <ClInclude Include="UpdateSystem_Command.h">
       <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ChunkLoadDispatcher.h">
-      <Filter>Landscape\ChunkLoadDispatcher</Filter>
-    </ClInclude>
     <ClInclude Include="ChunkLoader_Generator.h">
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Generator</Filter>
     </ClInclude>
@@ -256,6 +259,12 @@
     </ClInclude>
     <ClInclude Include="LandscapeSystem_ServerProcessor.h">
       <Filter>GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkLoadServerDispatcher.h">
+      <Filter>Landscape\ChunkLoadDispatcher\ChunkLoadServerDispatcher</Filter>
+    </ClInclude>
+    <ClInclude Include="LogHelper.h">
+      <Filter>LogHelper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -319,9 +328,6 @@
     <ClCompile Include="ChunkLoader_Storage.cpp">
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Storage</Filter>
     </ClCompile>
-    <ClCompile Include="ChunkLoadDispatcher.cpp">
-      <Filter>Landscape\ChunkLoadDispatcher</Filter>
-    </ClCompile>
     <ClCompile Include="LandscapeSystem_ClientProcessor.cpp">
       <Filter>GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Client%27s processor</Filter>
     </ClCompile>
@@ -330,6 +336,12 @@
     </ClCompile>
     <ClCompile Include="LandscapeSystem_ServerProcessor.cpp">
       <Filter>GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkLoadServerDispatcher.cpp">
+      <Filter>Landscape\ChunkLoadDispatcher\ChunkLoadServerDispatcher</Filter>
+    </ClCompile>
+    <ClCompile Include="LogHelper.cpp">
+      <Filter>LogHelper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

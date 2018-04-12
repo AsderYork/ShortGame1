@@ -45,6 +45,7 @@ namespace GEM::GameSim
 
 		std::vector<MagistralRecord> m_magistral;
 		std::string m_mapFolderPath;
+		bool isMagistralChanged;
 
 	public:
 		/**!

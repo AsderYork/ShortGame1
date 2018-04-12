@@ -180,7 +180,6 @@
     <ClInclude Include="NetworkController.h" />
     <ClInclude Include="LoginScreen.h" />
     <ClInclude Include="NetworkClient.h" />
-    <ClInclude Include="LogHelper.h" />
     <ClInclude Include="MapService.h" />
     <ClInclude Include="MCToMesh.h" />
     <ClInclude Include="NodeChunk.h" />
@@ -211,7 +210,6 @@
     <ClCompile Include="LandVisTmpService.cpp" />
     <ClCompile Include="MainGameScreen.cpp" />
     <ClCompile Include="NetworkController.cpp" />
-    <ClCompile Include="LogHelper.cpp" />
     <ClCompile Include="LoginScreen.cpp" />
     <ClCompile Include="MapService.cpp" />
     <ClCompile Include="MCToMesh.cpp" />

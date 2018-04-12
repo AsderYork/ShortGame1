@@ -5,6 +5,7 @@
 #include "UpdateSystem_Processor.h"
 #include "UpdateSystem_Command.h"
 #include "LandscapeSystem_ServerProcessor.h"
+#include "ChunkLoadServerDispatcher.h"
 
 
 #include <string>
@@ -28,8 +29,9 @@ namespace GEM::GameSim
 		struct PerPlayerInfo
 		{
 			ServerHistory ExchangeHistory;
+			uint64_t MapLoaderId;
 
-			PerPlayerInfo(ServerCommandDispatcher& Dispatcher) : ExchangeHistory(Dispatcher) {}
+			PerPlayerInfo(ServerCommandDispatcher& Dispatcher, uint64_t LoaderID) : ExchangeHistory(Dispatcher), MapLoaderId(LoaderID) {}
 		};
 		std::map<PLAYER_ID_TYPE, PerPlayerInfo> m_perPlayerInfo;
 
@@ -52,15 +54,14 @@ namespace GEM::GameSim
 	protected:
 		ServerCommandDispatcher m_commandDispatcher;
 		UpdateSystemProcessor m_updateSystemProcessor;
+
+
 		LandscapeSystemServerProcessor m_ladnscapeProcessor;
+		ChunkLoadServerDispatcher m_chunkLoadDispatcher;
 
 	public:
 
-		GS_Server() : m_updateSystemProcessor(&m_gs)
-		{
-			m_commandDispatcher.AddProcessor(&m_updateSystemProcessor);
-			m_commandDispatcher.AddProcessor(&m_ladnscapeProcessor);
-		}
+		GS_Server();
 
 		std::optional<PlayerTicket> NewPlayerRoutine(Player&& player);
 
