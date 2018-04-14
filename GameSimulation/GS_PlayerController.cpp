@@ -1,5 +1,6 @@
 #include "GS_PlayerController.h"
 #include <limits>
+#include <algorithm>
 
 namespace GEM::GameSim
 {
@@ -41,6 +42,8 @@ namespace GEM::GameSim
 
 
 		//THIS METHOD OF GIVING IDS IS TEMPORRARY! IT IS BROKEN!
+		//Not that broken, though
+		//But yeah, if it get's replaced, new method should also guarantee sorted vector of players
 		if (m_lastGivenID == std::numeric_limits<PLAYER_ID_TYPE>::max())
 		{
 			m_lastGivenID = 0;
@@ -51,7 +54,7 @@ namespace GEM::GameSim
 		}
 
 
-		m_players.emplace_back(Player);
+		m_players.emplace_back(std::move(Player));
 		return PlayerTicket(m_players.size()-1, this, m_listEnd);
 
 		
@@ -67,6 +70,14 @@ namespace GEM::GameSim
 			NextTcket->m_playerIndex--;
 			NextTcket = NextTcket->m_next;
 		}
+	}
+
+	Player * PlayerController::getPlayer(PLAYER_ID_TYPE id)
+	{
+		auto it = std::lower_bound(m_players.begin(), m_players.end(), id, [](Player& pl, PLAYER_ID_TYPE id) {return pl.id < id; });
+		if (it == m_players.end()) { return nullptr; }
+		else if (it->id == id) { return &(*(it)); }
+		return nullptr;
 	}
 
 

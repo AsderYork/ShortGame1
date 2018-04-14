@@ -25,16 +25,6 @@ namespace GEM::GameSim
 
 	private:
 	
-
-		struct PerPlayerInfo
-		{
-			ServerHistory ExchangeHistory;
-			uint64_t MapLoaderId;
-
-			PerPlayerInfo(ServerCommandDispatcher& Dispatcher, uint64_t LoaderID) : ExchangeHistory(Dispatcher), MapLoaderId(LoaderID) {}
-		};
-		std::map<PLAYER_ID_TYPE, PerPlayerInfo> m_perPlayerInfo;
-
 		GameSimulation m_gs;
 
 		/**!
@@ -55,8 +45,6 @@ namespace GEM::GameSim
 		ServerCommandDispatcher m_commandDispatcher;
 		UpdateSystemProcessor m_updateSystemProcessor;
 
-
-		LandscapeSystemServerProcessor m_ladnscapeProcessor;
 		ChunkLoadServerDispatcher m_chunkLoadDispatcher;
 
 	public:

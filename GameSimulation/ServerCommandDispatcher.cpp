@@ -6,13 +6,15 @@ namespace GEM::GameSim
 	{
 		if (command->m_uniqueID == 0) { return; }//Commands with id 0 don't use histories
 		m_lastRecivedCommand = command->m_uniqueID;
-
+		
+		m_processors[command->m_header]->setCurrentPlayer(m_playerID);
 		if (!m_processors[command->m_header]->ApplyCommand(command.get(), PacketTime))
 		{
 			m_rejectedCommands.push_back(m_lastRecivedCommand);
 		}
 	}
-	ServerHistory::ServerHistory(ServerCommandDispatcher& dispatcher) : m_processors(dispatcher.m_processors), m_lastRecivedCommand(0) { }
+	ServerHistory::ServerHistory(ServerCommandDispatcher& dispatcher, PLAYER_ID_TYPE playerID) : m_processors(dispatcher.m_processors),
+		m_lastRecivedCommand(0), m_playerID(playerID) { }
 
 	void ServerCommandDispatcher::ProcessCommands(std::vector<ClientCommandPack_Server> commandPacks, ServerHistory* History)
 	{

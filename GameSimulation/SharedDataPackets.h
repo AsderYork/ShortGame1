@@ -107,21 +107,6 @@ namespace GEM::GameSim
 		//On reciving end though, it's allways unqiue_ptr
 		std::vector<std::variant<std::unique_ptr<NetworkCommand>, NetworkCommand*>> commands;
 
-		void SerealizeIn(cereal::BinaryOutputArchive& ar, const std::array<NetworkExchangeProcessor*, 256>& Processors) const
-		{
-			ar(time);
-
-			ar(static_cast<uint32_t>(commands.size()));
-			for (auto& command : commands)
-			{
-				std::visit([&](auto&& arg) {
-					ar(arg->m_header);
-					ar(arg->m_uniqueID);
-					Processors[arg->m_header]->SerializeCommand(ar, &(*arg));
-				}, command);
-				
-				
-			}
-		}		
+		void SerealizeIn(cereal::BinaryOutputArchive& ar, const std::array<NetworkExchangeProcessor*, 256>& Processors) const;
 	};
 }

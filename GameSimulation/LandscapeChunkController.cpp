@@ -11,6 +11,30 @@ namespace GEM::GameSim
 		return &(*Loader);
 	}
 
+	std::vector<std::pair<int, int>> LandscapeChunkController::getVisibleChunksOfLoader(LoaderType::LoaderIDType id)
+	{
+		auto LoaderIt = std::lower_bound(m_loaders.begin(), m_loaders.end(), id, [](const LoaderType& loadr, LoaderType::LoaderIDType Id) {return loadr.loaderUniqueID < Id; });
+
+		if (LoaderIt == m_loaders.end())
+		{
+			return std::vector<std::pair<int, int>>();
+		}
+
+
+
+		std::vector<std::pair<int, int>> result;
+		auto LoaderPos = ChunkPos::getChunkFromPoint(LoaderIt->posFunc());
+		for (auto x = LoaderPos.x - m_loadRadius; x < LoaderPos.x + m_loadRadius + 1; x++)
+		{
+			for (auto z = LoaderPos.z - m_loadRadius; z < LoaderPos.z + m_loadRadius + 1; z++)
+			{
+				result.emplace_back(x, z);
+			}
+		}
+
+		return result;
+	}
+
 	void LandscapeChunkController::ProcessChunks()
 {
 	std::vector<ChunkPos> ThisTickVisibleChunks;

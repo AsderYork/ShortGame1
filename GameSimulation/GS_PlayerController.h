@@ -1,5 +1,8 @@
 #pragma once
+#include "Player_id_type.h"
+#include "ServerCommandDispatcher.h"
 #include "GS_EntityController.h"
+
 #include <string>
 #include <optional>
 #include <set>
@@ -7,8 +10,9 @@
 
 namespace GEM::GameSim
 {
-	using PLAYER_ID_TYPE = uint32_t;
 	class PlayerController;
+
+	
 
 	struct Player
 	{
@@ -17,6 +21,17 @@ namespace GEM::GameSim
 		//!ID of a player character entity
 		EntityBase* characterPtr;
 		ENTITY_ID_TYPE characterID;
+
+		struct ServerRelatedPart
+		{
+			ServerHistory ExchangeHistory;
+			uint64_t MapLoaderId;
+
+			ServerRelatedPart(ServerCommandDispatcher& Dispatcher, uint64_t LoaderID, PLAYER_ID_TYPE playerid) :
+				ExchangeHistory(Dispatcher, playerid), MapLoaderId(LoaderID) {}
+		};
+
+		std::unique_ptr<ServerRelatedPart> additional_data;
 
 		//!Set of all entities, that should be updated for this client.
 		mutable std::set<ENTITY_ID_TYPE> trackedEntities;
@@ -99,5 +114,10 @@ namespace GEM::GameSim
 		void RemovePlayer(PlayerTicket&& ticket);
 
 		inline const decltype(m_players)& getPlayersVector() { return m_players; }
+
+		/**!
+		Returns player by it's ID. If no player is found with given id, nullptr is returned
+		*/
+		Player* getPlayer(PLAYER_ID_TYPE id);
 	};
 }

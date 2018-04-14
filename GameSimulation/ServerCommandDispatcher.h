@@ -1,6 +1,8 @@
 #pragma once
+#include "Player_id_type.h"
 #include "CommandHistoryInterface.h"
 #include "SharedDataPackets.h"
+
 #include <vector>
 #include <array>
 
@@ -10,6 +12,8 @@ namespace GEM::GameSim
 
 	class ServerHistory : public HistoryInterface
 	{
+	private:
+		PLAYER_ID_TYPE m_playerID;
 	public:
 
 		/**!
@@ -46,7 +50,7 @@ namespace GEM::GameSim
 			return result;
 		}
 
-		ServerHistory(ServerCommandDispatcher& dispatcher);
+		ServerHistory(ServerCommandDispatcher& dispatcher, PLAYER_ID_TYPE playerID);
 	};
 
 

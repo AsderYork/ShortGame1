@@ -74,5 +74,6 @@ namespace GEM::GameSim
 			Helper::LoadVector<uint16_t>(archive, requests);
 			archive(pack);
 		}
+		
 	};
 }

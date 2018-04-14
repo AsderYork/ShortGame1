@@ -16,6 +16,45 @@ namespace GEM::GameSim
 
 	}
 
+	LandscapeChunk * ChunkLoadServerDispatcher::getChunk(int x, int z)
+	{
+		auto SearchLambda = [](const LandscapeChunk& chunk, std::pair<int, int> cord) {
+			return chunk.getPosition() < cord;
+		};
+
+		auto SearchResult = std::lower_bound(m_chunks.begin(), m_chunks.end(), std::make_pair(x, z), SearchLambda);
+		if (SearchResult == m_chunks.end())
+		{
+			return nullptr;
+		}
+		else if (SearchResult->getPosition() != std::make_pair(x, z))
+		{
+			return nullptr;
+		}
+
+		return &(*SearchResult);
+	}
+
+	LandscapeChunk * ChunkLoadServerDispatcher::addNewChunk(int x, int z)
+	{
+		auto SearchLambda = [](const LandscapeChunk& chunk, std::pair<int, int> cord) {
+			return chunk.getPosition() < cord;
+		};
+
+		auto SearchResult = std::lower_bound(m_chunks.begin(), m_chunks.end(), std::make_pair(x, z), SearchLambda);
+		if (SearchResult == m_chunks.end())
+		{
+			SearchResult = m_chunks.emplace(SearchResult);
+		}
+		else if (SearchResult->getPosition() != std::make_pair(x, z))
+		{
+			SearchResult = m_chunks.emplace(SearchResult);
+		}
+
+		return &(*SearchResult);
+	}
+
+	
 	void ChunkLoadServerDispatcher::ProcessChunks()
 	{
 		m_chunkController.ProcessChunks();
@@ -27,14 +66,14 @@ namespace GEM::GameSim
 		{
 			if (m_chunkLoader.isChunkAvaliable(visibleChunk.x, visibleChunk.z))
 			{
-				m_chunks.emplace_back();
-				m_chunkLoader.LoadChunkIn(visibleChunk.x, visibleChunk.z, &(m_chunks.back()));
+				auto Chunkptr = addNewChunk(visibleChunk.x, visibleChunk.z);
+				m_chunkLoader.LoadChunkIn(visibleChunk.x, visibleChunk.z, Chunkptr);
 			}
 			else
 			{
-				m_chunks.emplace_back();
-				m_chunkGenerator.FillChunkIn(visibleChunk.x, visibleChunk.z, &(m_chunks.back()));
-				m_chunkLoader.SaveChunk(&(m_chunks.back()));
+				auto Chunkptr = addNewChunk(visibleChunk.x, visibleChunk.z);
+				m_chunkGenerator.FillChunkIn(visibleChunk.x, visibleChunk.z, Chunkptr);
+				m_chunkLoader.SaveChunk(Chunkptr);
 			}
 		}
 

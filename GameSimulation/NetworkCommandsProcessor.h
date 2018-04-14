@@ -1,6 +1,7 @@
 #pragma once
 #include "NetworkCommandBase.h"
 #include "GameTime.h"
+#include "Player_id_type.h"
 #include <memory>
 #include <cereal\cereal.hpp>
 
@@ -15,7 +16,18 @@ namespace GEM::GameSim
 	*/
 	class NetworkExchangeProcessor
 	{
+	private:
+		/**!
+		Signals which player's command is gonna be processed.
+		Dispatcher must guarantee, that for every call to other methods, this variable is set correctly.
+		*/
+		PLAYER_ID_TYPE m_currentPlayer;
 	public:
+
+		inline void setCurrentPlayer(PLAYER_ID_TYPE currPlayerID) { m_currentPlayer = currPlayerID; }
+		
+		inline PLAYER_ID_TYPE getCurrentPlayer() { return m_currentPlayer; }
+
 		/**!
 		Applies a command. This method can be called only once for every command just when it is recived.
 		\param[in] Command A command, that should be performed.

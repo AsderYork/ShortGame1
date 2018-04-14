@@ -200,6 +200,8 @@ namespace GEM::GameSim
 
 	public:
 
+		std::vector<std::pair<int, int>> getVisibleChunksOfLoader(LoaderType::LoaderIDType id);
+
 		LandscapeChunkController() : m_loadRadius(3){};		
 
 		inline void setloadRadius(unsigned int newVal) { m_loadRadius = newVal; }

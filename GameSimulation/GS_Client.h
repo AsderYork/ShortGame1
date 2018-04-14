@@ -42,7 +42,7 @@ namespace GEM::GameSim
 
 		inline GS_Client() : m_timeIsSet(false), m_updatesProcessor(this), m_chunkDispatcher(m_chunkController){
 			m_dispatcher.AddProcessor(&m_updatesProcessor);
-			//m_dispatcher.AddProcessor(&m_landscapeProcessor);
+			m_dispatcher.AddProcessor(&m_landscapeProcessor);
 		}
 
 		/**!

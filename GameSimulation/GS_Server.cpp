@@ -10,11 +10,13 @@
 namespace GEM::GameSim
 {
 
-	GS_Server::GS_Server() : m_updateSystemProcessor(&m_gs)
+	GS_Server::GS_Server() :
+		m_updateSystemProcessor(&m_gs),
+		m_chunkLoadDispatcher(m_gs.m_players)
 	{
 		logHelper::setLog("./logs/log.txt");
 		m_commandDispatcher.AddProcessor(&m_updateSystemProcessor);
-		m_commandDispatcher.AddProcessor(&m_ladnscapeProcessor);
+		m_commandDispatcher.AddProcessor(&(m_chunkLoadDispatcher.getProcessor()));
 		m_chunkLoadDispatcher.Start();
 
 	}
@@ -27,7 +29,7 @@ namespace GEM::GameSim
 			cereal::BinaryOutputArchive ar(SendStream);
 
 			m_commandDispatcher.GatherResults(
-				&(m_perPlayerInfo.find(id)->second.ExchangeHistory), m_gs.getGameTime()).
+				&(m_gs.m_players.getPlayer(id)->additional_data->ExchangeHistory), m_gs.getGameTime()).
 				SerealizeIn(ar, m_commandDispatcher.getProcessorsTable());
 		}
 
@@ -54,8 +56,8 @@ namespace GEM::GameSim
 		}
 		catch (cereal::Exception&) {}
 
-		auto& TmpPlayerInfo = m_perPlayerInfo.find(id)->second;
-		m_commandDispatcher.ProcessCommands(std::move(ClientCommandPacks), &TmpPlayerInfo.ExchangeHistory);
+		auto& TmpPlayerInfo = m_gs.m_players.getPlayer(id)->additional_data;
+		m_commandDispatcher.ProcessCommands(std::move(ClientCommandPacks), &TmpPlayerInfo->ExchangeHistory);
 	}
 	
 
@@ -100,15 +102,14 @@ namespace GEM::GameSim
 	{
 		for (auto& player : m_gs.m_players.getPlayersVector())
 		{
-			auto& playerIt = m_perPlayerInfo.find(player.id);
-			playerIt->second.ExchangeHistory.ReconsiderHistory();
+			player.additional_data->ExchangeHistory.ReconsiderHistory();
 		}
 		
 	}
 
 	std::optional<PlayerTicket> GS_Server::NewPlayerRoutine(Player && player)
 	{
-		auto newPlayer = m_gs.m_players.addPlayer(player);
+		auto newPlayer = m_gs.m_players.addPlayer(std::move(player));
 		if (!newPlayer) { return std::nullopt; }
 		
 		auto [CharPtr, CharId] = m_gs.AddEntity({ Mixin_Movable::MixinID, Mixin_Health::MixinID});
@@ -119,7 +120,7 @@ namespace GEM::GameSim
 			[CharPtr]() {return dynamic_cast<Mixin_Movable*>(CharPtr->GetMixinByID(Mixin_Movable::MixinID))->getPos(); }
 		);
 
-		m_perPlayerInfo.emplace(newPlayer->get().id, PerPlayerInfo(m_commandDispatcher, LoaderID));
+		newPlayer->get().additional_data = std::make_unique<Player::ServerRelatedPart>(m_commandDispatcher, LoaderID, newPlayer->get().id);
 
 		
 		return newPlayer;
@@ -127,17 +128,14 @@ namespace GEM::GameSim
 
 	void GS_Server::RemovePlayer(PlayerTicket && player)
 	{
-		auto& PlayerInfo = m_perPlayerInfo.find(player.get().id);
-		m_chunkLoadDispatcher.getChunkController().RemoveLoader(PlayerInfo->second.MapLoaderId);
+		m_chunkLoadDispatcher.getChunkController().RemoveLoader(player.get().additional_data->MapLoaderId);
 
-		m_perPlayerInfo.erase(player.get().id);
 		m_gs.m_entities.RemoveEntity(player.get().characterID);
 		m_gs.m_players.RemovePlayer(std::move(player));
 	}
 
 	void  GS_Server::Tick(float Delta)
 	{
-
 		m_chunkLoadDispatcher.ProcessChunks();
 		ProcessPlayerSyncingUpdates();
 		//Perform basic tick
@@ -188,7 +186,8 @@ namespace GEM::GameSim
 						{//It its in radius of update. Send regular
 							if (IsThereGeneralUpdate)
 							{
-								m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
+																
+								pl.additional_data->ExchangeHistory.SendAllreadyPerformedCommand(
 									std::make_unique<UpdateSystemCommand>(RegUpdate.m_entityID, RegUpdate.m_perMixinUpdates)
 								);
 							}
@@ -205,7 +204,7 @@ namespace GEM::GameSim
 						{//It is in radius of update. Send Appearing
 							pl.trackedEntities.insert(Entity->first);
 
-							m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
+							pl.additional_data->ExchangeHistory.SendAllreadyPerformedCommand(
 								std::make_unique<UpdateSystemCommand>(AppearUpdate.m_entityID, AppearUpdate.m_mixins, AppearUpdate.m_perMixinUpdates)
 							);
 						}
@@ -220,14 +219,14 @@ namespace GEM::GameSim
 					{//Player have this entity. Send regular
 						if (IsThereGeneralUpdate)
 						{
-							m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
+							pl.additional_data->ExchangeHistory.SendAllreadyPerformedCommand(
 								std::make_unique<UpdateSystemCommand>(RegUpdate.m_entityID, RegUpdate.m_perMixinUpdates)
 							);
 						}
 					}
 					else {//Player doesn't have this entity. Send Appearing
 						pl.trackedEntities.insert(Entity->first);
-						m_perPlayerInfo.find(pl.id)->second.ExchangeHistory.SendAllreadyPerformedCommand(
+						pl.additional_data->ExchangeHistory.SendAllreadyPerformedCommand(
 							std::make_unique<UpdateSystemCommand>(AppearUpdate.m_entityID, AppearUpdate.m_mixins, AppearUpdate.m_perMixinUpdates)
 						);
 

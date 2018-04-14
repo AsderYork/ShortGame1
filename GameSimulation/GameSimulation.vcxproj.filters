@@ -266,6 +266,9 @@
     <ClInclude Include="LogHelper.h">
       <Filter>LogHelper</Filter>
     </ClInclude>
+    <ClInclude Include="Player_id_type.h">
+      <Filter>GameSimulation\PlayerController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -342,6 +345,9 @@
     </ClCompile>
     <ClCompile Include="LogHelper.cpp">
       <Filter>LogHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedDataPackets.cpp">
+      <Filter>GameSimulation\NetworkCommands\SharedDataPackets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

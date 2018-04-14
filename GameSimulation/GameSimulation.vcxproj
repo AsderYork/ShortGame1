@@ -185,6 +185,7 @@
     <ClInclude Include="Mixin_Controller.h" />
     <ClInclude Include="Mixin_Health.h" />
     <ClInclude Include="Mixin_Movable.h" />
+    <ClInclude Include="Player_id_type.h" />
     <ClInclude Include="ServerCommandDispatcher.h" />
     <ClInclude Include="SharedDataPackets.h" />
     <ClInclude Include="TestPlace.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="Mixin_Health.cpp" />
     <ClCompile Include="Mixin_Movable.cpp" />
     <ClCompile Include="ServerCommandDispatcher.cpp" />
+    <ClCompile Include="SharedDataPackets.cpp" />
     <ClCompile Include="UpdateSystemClientProcessor.cpp" />
     <ClCompile Include="UpdateSystem_Processor.cpp" />
   </ItemGroup>

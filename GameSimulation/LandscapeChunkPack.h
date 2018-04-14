@@ -30,12 +30,13 @@ namespace GEM::GameSim
 		*/
 		LandscapeChunkPack() {};
 
-		LandscapeChunkPack& operator=(LandscapeChunkPack &&other) {
+		void operator=(LandscapeChunkPack &&other) {
 			m_data = std::move(other.m_data);
 			m_initialSize = other.m_initialSize;
 
 			other.m_initialSize = 0; 
 		}
+
 
 		template<class Archive>
 		void save(Archive & archive) const
