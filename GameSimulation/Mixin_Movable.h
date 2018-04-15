@@ -37,6 +37,7 @@ namespace GEM::GameSim
 		{
 			m_pos += btVector3(X, Y, Z);
 		}
+		void SetPosition(float x, float y, float z);
 
 		void SetVelocity(float X, float Y, float Z);
 

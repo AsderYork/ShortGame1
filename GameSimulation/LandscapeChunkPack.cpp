@@ -32,15 +32,14 @@ namespace GEM::GameSim
 
 	};
 
-	std::vector<LandscapeChunk> LandscapeChunkPack::UnpackLandscapeChunks()
+	std::vector<LandscapeChunk> LandscapeChunkPack::UnpackLandscapeChunks() const
 	{
 		std::string OutBuffer;
 		OutBuffer.resize(m_initialSize);
 		auto InitBufferSize = static_cast<uLongf>(m_initialSize);
-		uncompress(reinterpret_cast<Bytef*>(OutBuffer.data()), &InitBufferSize, reinterpret_cast<Bytef*>(m_data.data()), static_cast<uLongf>(m_data.size()));
-		m_data.swap(OutBuffer);
-
-		std::stringstream Strbuf(m_data);
+		uncompress(reinterpret_cast<Bytef*>(OutBuffer.data()), &InitBufferSize, reinterpret_cast<const Bytef*>(m_data.data()), static_cast<uLongf>(m_data.size()));
+		
+		std::stringstream Strbuf(OutBuffer);
 
 		cereal::BinaryInputArchive ar(Strbuf);
 		uint32_t VecSize = 0;

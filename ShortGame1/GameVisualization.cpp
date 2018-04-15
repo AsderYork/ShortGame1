@@ -5,7 +5,8 @@
 
 namespace GEM
 {
-	GameVisualization::GameVisualization(GameSimController * gs, Ogre_Service * ogre) : m_gsController(gs), m_ogreController(ogre)
+	GameVisualization::GameVisualization(GameSimController * gs, Ogre_Service * ogre) : m_gsController(gs), m_ogreController(ogre),
+		m_landscape(gs, ogre)
 	{}
 	Service::ActionResult GameVisualization::initialize()
 	{
@@ -13,6 +14,7 @@ namespace GEM
 	}
 	void GameVisualization::shutdown()
 	{
+		m_landscape.Clear();
 		m_visibleEntities.clear();
 	}
 	Service::ActionResult GameVisualization::preFrame(float timeDelta)
@@ -44,6 +46,9 @@ namespace GEM
 		}
 		
 		m_visibleEntities = std::move(newMap);
+
+		m_landscape.updateVisual();
+
 		return ActionResult::AR_OK;
 	}
 	Service::ActionResult GameVisualization::frame(float timeDelta)

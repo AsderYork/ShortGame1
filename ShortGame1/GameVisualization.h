@@ -1,6 +1,7 @@
 #pragma once
 #include "Ogre_Service.h"
 #include "GameSimService.h"
+#include "LandscapeVisualizationController.h"
 
 #include <map>
 //#include <OGRE\OgreItem.h>
@@ -16,6 +17,8 @@ namespace GEM
 	private:
 		GameSimController * m_gsController;
 		Ogre_Service* m_ogreController;
+
+		LandscapeVisualizationController m_landscape;
 
 		struct ObjectRAII
 		{

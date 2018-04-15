@@ -1,11 +1,23 @@
 #include "LandscapeSystem_ClientProcessor.h"
 #include "LandscapeSystem_Command.h"
+#include "ChunkLoadClientDispatcher.h"
 
 namespace GEM::GameSim
 {
 	bool LandscapeSystemClientProcessor::ApplyCommand(const NetworkCommand * Command, GameTime PacketTime)
 	{
-		return false;
+		auto CommandRecast = static_cast<const LandscapeSystemCommand_Responce*>(Command);
+
+		auto UnpackedChunks = CommandRecast->pack.UnpackLandscapeChunks();
+
+		for (auto& chnk : UnpackedChunks)
+		{
+			auto chnkPos = chnk.getPosition();
+			auto NewChunkPlace = m_dispatcher->addNewChunk(chnkPos.first, chnkPos.second);
+			NewChunkPlace->chunk = chnk;
+			NewChunkPlace->isConfirmed = true;
+		}
+		return true;
 	}
 
 	void LandscapeSystemClientProcessor::RollbackCommand(const NetworkCommand * Command)

@@ -16,7 +16,7 @@
 #include "GameVisualization.h"
 
 #include <LandscapeMeshGenerator.h>
-#include "LandVisTmpService.h"
+//#include "LandVisTmpService.h"
 
 
 //#include <GameSimulation.h>
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 {
 	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
 
-	GEM::GameSim::LandscapeChunk LC01(0, 1), LC11(1, 1), LC21(2, 1);
+	/*GEM::GameSim::LandscapeChunk LC01(0, 1), LC11(1, 1), LC21(2, 1);
 	GEM::GameSim::LandscapeChunk LC00(0, 0), LC10(1, 0), LC20(2, 0);
 
 	for (int x = 0; x < 16; x++)
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 
 
 	GEM::GameSim::LandscapeMeshGenerator LNDSCPM1(&LC00, &LC01, &LC10, &LC11);
-	GEM::GameSim::LandscapeMeshGenerator LNDSCPM2(&LC10, &LC11, &LC20, &LC21);
+	GEM::GameSim::LandscapeMeshGenerator LNDSCPM2(&LC10, &LC11, &LC20, &LC21);*/
 	
 	
 	GEM::EngineController Controller;

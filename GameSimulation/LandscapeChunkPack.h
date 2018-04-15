@@ -66,6 +66,6 @@ namespace GEM::GameSim
 		\returns Returns stored chunks in a vector.
 		\note Decompression happens for every call, so it is recomended to call it once and store it result.
 		*/
-		std::vector<LandscapeChunk> UnpackLandscapeChunks();
+		std::vector<LandscapeChunk> UnpackLandscapeChunks() const;
 	};
 }

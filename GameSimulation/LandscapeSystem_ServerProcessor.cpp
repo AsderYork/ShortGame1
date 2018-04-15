@@ -22,7 +22,7 @@ namespace GEM::GameSim
 		//We assume, that chunks in request are sorted exactly as in VisChunks;
 		for (auto& reqchunk : VisChunks)
 		{
-			if (PorcessedReqChunks > RecastedCommand->requests.size()) { break; }
+			if (PorcessedReqChunks >= RecastedCommand->requests.size()) { break; }
 
 			auto& TmpChunkRequest = RecastedCommand->requests[PorcessedReqChunks];
 			if ((TmpChunkRequest.x != reqchunk.first) || (TmpChunkRequest.z != reqchunk.second))

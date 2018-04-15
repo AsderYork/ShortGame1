@@ -6,6 +6,12 @@
 namespace GEM::GameSim
 {
 
+
+	void Mixin_Movable::SetPosition(float x, float y, float z)
+	{
+		m_pos = btVector3(x,y,z);
+	}
+
 	void Mixin_Movable::SetVelocity(float X, float Y, float Z)
 	{
 		m_velocity = btVector3(X, Y, Z);

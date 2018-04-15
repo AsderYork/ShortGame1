@@ -14,7 +14,7 @@ namespace GEM::GameSim
 	void GS_Client::SimulationStarted()
 	{
 		m_updatesProcessor.AddControlledEntity(m_playerCharacterID);
-		m_chunkController.createNewLoader([&]() {return dynamic_cast<Mixin_Movable*>(m_entities.GetEntity(m_playerCharacterID)->GetMixinByID(Mixin_Movable::MixinID))->getPos(); });
+		m_chunkDispatcher.getController().createNewLoader([&]() {return dynamic_cast<Mixin_Movable*>(m_entities.GetEntity(m_playerCharacterID)->GetMixinByID(Mixin_Movable::MixinID))->getPos(); });
 	}
 
 	bool GS_Client::Tick(float Delta, cereal::BinaryInputArchive& archive, std::stringstream& OutputStream, bool ArchiveIsEmpty)
@@ -60,8 +60,7 @@ namespace GEM::GameSim
 		if (m_entities.GetEntitiesCount() == 0) { return GameSimulation::Tick(Delta); }
 
 
-		m_chunkController.ProcessChunks();
-		m_chunkDispatcher.FormRequest(&m_dispatcher);
+		m_chunkDispatcher.Process(&m_dispatcher);
 
 
 		//Perform basic simulation tick

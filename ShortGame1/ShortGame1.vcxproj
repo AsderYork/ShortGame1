@@ -175,7 +175,7 @@
     <ClInclude Include="GameSimService.h" />
     <ClInclude Include="GameVisualization.h" />
     <ClInclude Include="LandscapeVisualization.h" />
-    <ClInclude Include="LandVisTmpService.h" />
+    <ClInclude Include="LandscapeVisualizationController.h" />
     <ClInclude Include="MainGameScreen.h" />
     <ClInclude Include="NetworkController.h" />
     <ClInclude Include="LoginScreen.h" />
@@ -207,7 +207,7 @@
     <ClCompile Include="GameSimService.cpp" />
     <ClCompile Include="GameVisualization.cpp" />
     <ClCompile Include="LandscapeVisualization.cpp" />
-    <ClCompile Include="LandVisTmpService.cpp" />
+    <ClCompile Include="LandscapeVisualizationController.cpp" />
     <ClCompile Include="MainGameScreen.cpp" />
     <ClCompile Include="NetworkController.cpp" />
     <ClCompile Include="LoginScreen.cpp" />

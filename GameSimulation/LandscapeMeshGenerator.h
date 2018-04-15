@@ -7,7 +7,7 @@
 namespace GEM::GameSim
 {
 	/**!
-	Generates vertex mesh from provided LandscapeChunk
+	Generates vertex mesh from provided LandscapeChunk and holds it!
 	*/
 	class LandscapeMeshGenerator
 	{

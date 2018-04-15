@@ -210,10 +210,10 @@
     <ClInclude Include="PlayerInputEventGenerator.h">
       <Filter>PlayerInputEventGenerator</Filter>
     </ClInclude>
-    <ClInclude Include="LandVisTmpService.h">
+    <ClInclude Include="LandscapeVisualization.h">
       <Filter>LandscapeVisualization</Filter>
     </ClInclude>
-    <ClInclude Include="LandscapeVisualization.h">
+    <ClInclude Include="LandscapeVisualizationController.h">
       <Filter>LandscapeVisualization</Filter>
     </ClInclude>
   </ItemGroup>
@@ -296,7 +296,7 @@
     <ClCompile Include="LandscapeVisualization.cpp">
       <Filter>LandscapeVisualization</Filter>
     </ClCompile>
-    <ClCompile Include="LandVisTmpService.cpp">
+    <ClCompile Include="LandscapeVisualizationController.cpp">
       <Filter>LandscapeVisualization</Filter>
     </ClCompile>
   </ItemGroup>

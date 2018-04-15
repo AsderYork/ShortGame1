@@ -5,10 +5,14 @@
 namespace GEM::GameSim
 {
 
+	class ChunkLoadClientDispatcher;
+
 	class LandscapeSystemClientProcessor : public NetworkExchangeProcessor
 	{
 	private:
+		ChunkLoadClientDispatcher* m_dispatcher;
 	public:
+		LandscapeSystemClientProcessor(ChunkLoadClientDispatcher* dispatcher) : m_dispatcher(dispatcher) {}
 
 		virtual bool ApplyCommand(const NetworkCommand * Command, GameTime PacketTime) override;
 		virtual void RollbackCommand(const NetworkCommand * Command) override;

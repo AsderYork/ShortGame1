@@ -24,12 +24,11 @@ namespace GEM::GameSim
 		ClientCommandDispatcher m_dispatcher;
 		UpdateSystemClientProcessor m_updatesProcessor;
 
-		LandscapeChunkController m_chunkController;
-		ChunkLoadClientDispatcher m_chunkDispatcher;
 
-		LandscapeSystemClientProcessor m_landscapeProcessor;
 
 	public:
+		ChunkLoadClientDispatcher m_chunkDispatcher;
+
 		std::chrono::system_clock::time_point m_lastUpdateTime;
 		ENTITY_ID_TYPE m_playerCharacterID;
 
@@ -40,9 +39,9 @@ namespace GEM::GameSim
 			InsertEvent(std::move(Event), m_playerCharacterID);
 		}
 
-		inline GS_Client() : m_timeIsSet(false), m_updatesProcessor(this), m_chunkDispatcher(m_chunkController){
+		inline GS_Client() : m_timeIsSet(false), m_updatesProcessor(this) {
 			m_dispatcher.AddProcessor(&m_updatesProcessor);
-			m_dispatcher.AddProcessor(&m_landscapeProcessor);
+			m_dispatcher.AddProcessor(&m_chunkDispatcher.getProcessor());
 		}
 
 		/**!

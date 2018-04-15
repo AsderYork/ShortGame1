@@ -116,6 +116,9 @@ namespace GEM::GameSim
 		newPlayer->get().characterPtr = CharPtr;
 		newPlayer->get().characterID = CharId;
 
+		//Set player's starting pos
+		dynamic_cast<Mixin_Movable*>(CharPtr->GetMixinByID(Mixin_Movable::MixinID))->Shift(0.0f, 40.0f, 0.0f);
+
 		auto LoaderID = m_chunkLoadDispatcher.getChunkController().createNewLoader(
 			[CharPtr]() {return dynamic_cast<Mixin_Movable*>(CharPtr->GetMixinByID(Mixin_Movable::MixinID))->getPos(); }
 		);
