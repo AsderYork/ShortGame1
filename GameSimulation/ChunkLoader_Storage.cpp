@@ -26,7 +26,7 @@ namespace GEM::GameSim
 
 	void ChunkLoader_Storage::LoadChunkIn(int x, int z, LandscapeChunk * target)
 	{
-		std::ifstream magistralFile(m_mapFolderPath + "\\x" + std::to_string(x)+"z" + std::to_string(x) + ".chunk", std::ios::binary);
+		std::ifstream magistralFile(m_mapFolderPath + "\\x" + std::to_string(x)+"z" + std::to_string(z) + ".chunk", std::ios::binary);
 		cereal::BinaryInputArchive archive(magistralFile);
 
 		LandscapeChunkPack newChunkPack;

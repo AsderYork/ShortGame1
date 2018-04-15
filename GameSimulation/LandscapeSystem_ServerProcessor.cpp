@@ -9,6 +9,8 @@ namespace GEM::GameSim
 	{
 		auto RecastedCommand = static_cast<const LandscapeSystemCommand_RequestChunks*>(Command);
 
+		if (RecastedCommand->requests.size() == 0) { return true; }
+
 		auto Player = m_playerController.getPlayer(getCurrentPlayer());
 
 		auto respond = std::make_unique<LandscapeSystemCommand_Responce>();
@@ -20,6 +22,8 @@ namespace GEM::GameSim
 		//We assume, that chunks in request are sorted exactly as in VisChunks;
 		for (auto& reqchunk : VisChunks)
 		{
+			if (PorcessedReqChunks > RecastedCommand->requests.size()) { break; }
+
 			auto& TmpChunkRequest = RecastedCommand->requests[PorcessedReqChunks];
 			if ((TmpChunkRequest.x != reqchunk.first) || (TmpChunkRequest.z != reqchunk.second))
 			{
@@ -34,6 +38,7 @@ namespace GEM::GameSim
 		}
 
 		respond->pack = LandscapeChunkPack(ChunkPtrs);
+		respond->m_header = 1;
 		Player->additional_data->ExchangeHistory.SendAllreadyPerformedCommand(std::move(respond));
 
 		return true;
@@ -58,7 +63,7 @@ namespace GEM::GameSim
 
 	void LandscapeSystemServerProcessor::SerializeCommand(cereal::BinaryOutputArchive & ar, const NetworkCommand * Command)
 	{
-		auto CommandRecast = static_cast<const LandscapeSystemCommand_RequestChunks*>(Command);
+		auto CommandRecast = static_cast<const LandscapeSystemCommand_Responce*>(Command);
 		ar((*CommandRecast));
 	}
 

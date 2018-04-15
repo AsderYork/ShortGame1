@@ -1,4 +1,5 @@
 #include "ClientCommandDispatcher.h"
+#include "LogHelper.h"
 
 namespace GEM::GameSim
 {
@@ -35,6 +36,7 @@ namespace GEM::GameSim
 		command->m_uniqueID = m_lastUsedID++;
 
 		m_commandBuffer.push_back(std::make_pair(std::move(command), true));
+		bool Res = m_commandBuffer.full();
 		return true;
 	}
 	void ClientHistory::processHistoryPack(const ServerHistoryPack & serverHistoryPack)
@@ -92,15 +94,19 @@ namespace GEM::GameSim
 	void ClientCommandDispatcher::InsertPerformedCommand(std::unique_ptr<NetworkCommand>&& command)
 	{		
 		auto ptr = command.get();
-		m_history.InsertPerformedCommandInHistory(std::move(command));
-		m_commandsToSend.emplace_back(ptr);
+		if (m_history.InsertPerformedCommandInHistory(std::move(command)))
+		{//Insert command only if it's really in history, otherwise pointer will be lost right after this method ends
+			m_commandsToSend.emplace_back(ptr);
+		}
 	}
 
 	void ClientCommandDispatcher::InsertCommand(std::unique_ptr<NetworkCommand>&& command)
 	{
 		auto ptr = command.get();
-		m_history.InsertCommandInHistory(std::move(command));
-		m_commandsToSend.emplace_back(ptr);
+		if(m_history.InsertCommandInHistory(std::move(command)))
+		{//Insert command only if it's really in history, otherwise pointer will be lost right after this method ends
+			m_commandsToSend.emplace_back(ptr);
+		}
 	}
 
 	void ClientCommandDispatcher::InsertCommandWithoutHistory(std::unique_ptr<NetworkCommand>&& command)
@@ -153,7 +159,8 @@ namespace GEM::GameSim
 
 		ClientCommandPack newCommandPack;
 		newCommandPack.time = CurrentTime;
-		newCommandPack.commands.swap(m_commandsToSend);
+		newCommandPack.commands.swap(m_commandsToSend);		
+
 		return newCommandPack;
 	}
 }

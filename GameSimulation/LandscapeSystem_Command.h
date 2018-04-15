@@ -61,6 +61,9 @@ namespace GEM::GameSim
 		std::vector<ChunkRequest> requests;
 		LandscapeChunkPack pack;
 
+		LandscapeSystemCommand_Responce() : NetworkCommand(1) {}
+
+
 		template<class Archive>
 		void save(Archive & archive) const
 		{

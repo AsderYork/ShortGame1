@@ -19,6 +19,7 @@ namespace GEM::GameSim
 
 	void LandscapeSystemClientProcessor::ConfirmCommand(const NetworkCommand * Command)
 	{
+
 	}
 
 	void LandscapeSystemClientProcessor::RejectCommand(const NetworkCommand * Command)
@@ -33,7 +34,7 @@ namespace GEM::GameSim
 
 	std::unique_ptr<NetworkCommand> LandscapeSystemClientProcessor::deserializeCommand(cereal::BinaryInputArchive & ar)
 	{
-		auto NewCommand = std::make_unique<LandscapeSystemCommand_RequestChunks>();
+		auto NewCommand = std::make_unique<LandscapeSystemCommand_Responce>();
 		ar((*NewCommand));
 		return NewCommand;
 	}
