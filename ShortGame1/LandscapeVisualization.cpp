@@ -145,7 +145,7 @@ namespace GEM
 		m_marchingCubeNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);
 
 		m_marchingCubeNode->attachObject(m_marchingCubesItem);
-		m_marchingCubeNode->setPosition(ChunkPosX * GameSim::LandscapeChunk_Size, 0, ChunkPosZ * GameSim::LandscapeChunk_Size);
+		m_marchingCubeNode->setPosition(ChunkPosX * (int)GameSim::LandscapeChunk_Size, 0, ChunkPosZ * (int)GameSim::LandscapeChunk_Size);
 
 	}
 
