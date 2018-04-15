@@ -19,11 +19,12 @@ namespace GEM::GameSim
 			EntityBase* ptr;
 			bool IsConfirmedStateApplied;
 			std::vector<std::pair<MIXIN_ID_TYPE, std::string>> lastConfirmedUpdate;
+			bool IsInitialized;
 			
 
 			bool operator<(const ControlledEntity& other) { return id < other.id; }
 			bool operator<(const ENTITY_ID_TYPE& otherid) { return id < otherid; }
-			ControlledEntity(ENTITY_ID_TYPE entid) : id(entid), IsConfirmedStateApplied(false), ptr(nullptr) {}
+			ControlledEntity(ENTITY_ID_TYPE entid) : id(entid), IsConfirmedStateApplied(false), ptr(nullptr), IsInitialized(false){}
 
 			friend bool operator<(const ENTITY_ID_TYPE& l, const ControlledEntity& r)
 			{

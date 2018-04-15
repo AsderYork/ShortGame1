@@ -82,6 +82,14 @@ namespace GEM::GameSim
 		{
 			//It's a controlled entity, so just overwrite it's LastConfirmedUpdate
 			it->lastConfirmedUpdate = CommandRecast->m_perMixinUpdates;
+			if (!it->IsInitialized)
+			{
+				it->IsInitialized = true;
+				it->IsConfirmedStateApplied = true;
+
+				auto EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID);
+				ApplyState(EntIt, it->lastConfirmedUpdate);
+			}
 		}
 
 
