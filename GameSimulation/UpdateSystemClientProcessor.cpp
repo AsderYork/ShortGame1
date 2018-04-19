@@ -73,12 +73,7 @@ namespace GEM::GameSim
 	{
 		auto CommandRecast = static_cast<const UpdateSystemCommand*>(Command);
 		auto it = std::lower_bound(m_controlledEntities.begin(), m_controlledEntities.end(), CommandRecast->m_entityID);
-		if (it == m_controlledEntities.end())
-		{
-			//This is not controlled entity.
-			//Which means that it's state was correctly applied by \c ApplyCommand.
-		}
-		else
+		if (it != m_controlledEntities.end() && it->id == CommandRecast->m_entityID)
 		{
 			//It's a controlled entity, so just overwrite it's LastConfirmedUpdate
 			it->lastConfirmedUpdate = CommandRecast->m_perMixinUpdates;
@@ -90,6 +85,11 @@ namespace GEM::GameSim
 				auto EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID);
 				ApplyState(EntIt, it->lastConfirmedUpdate);
 			}
+		}
+		else
+		{
+			//This is not controlled entity.
+			//Which means that it's state was correctly applied by \c ApplyCommand.
 		}
 
 
