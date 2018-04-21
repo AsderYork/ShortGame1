@@ -34,7 +34,7 @@ namespace GEM::GameSim
 			PorcessedReqChunks++;
 
 			respond->requests.push_back(TmpChunkRequest);
-			ChunkPtrs.push_back(m_chunkDispatcher->getChunk(TmpChunkRequest.x, TmpChunkRequest.z));
+			ChunkPtrs.push_back(&(m_chunkDispatcher->getStorage().getChunk(TmpChunkRequest.x, TmpChunkRequest.z)->chunk));
 		}
 
 		respond->pack = LandscapeChunkPack(ChunkPtrs);

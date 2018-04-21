@@ -17,7 +17,7 @@ namespace GEM::GameSim
 	{
 	public:
 		/**!
-		Called for every new chunk added in dispather.
+		Called for every new chunk added in dispather, right after it filled with data
 		\param[in] NewChunk a pointer to a chunk being added
 		\note Whant to know chunk's position? It's in a chunk itself!
 		*/

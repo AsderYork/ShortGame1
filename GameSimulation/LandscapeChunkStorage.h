@@ -89,13 +89,15 @@ namespace GEM::GameSim
 		Adds new chunks and returns a pointer to it.
 		If a chunk with given coordinates allready exists, no new chunks will be added and a pointer to an
 		existing one will be returned.
+		\param[in] generatorFunc a function, that should fill chunk data before it will be passed to listeners
 		*/
-		inline ChunkStruct * addChunk(int x, int z)
+		inline ChunkStruct * addChunk(int x, int z, std::function<void(LandscapeChunk*)> generatorFunc)
 		{
 			auto it = m_data.find(std::make_pair(x, z));
 			if (it != m_data.end()) { return &(it->second); }
 
 			auto ptr = &(m_data.emplace(std::piecewise_construct, std::forward_as_tuple(x, z), std::forward_as_tuple(x, z)).first->second);
+			generatorFunc(&(ptr->chunk));
 			ListenerRoutine(ptr, CallAction::AddNewChunk);
 			return ptr;
 		}
@@ -106,11 +108,12 @@ namespace GEM::GameSim
 		listener and then chunk will be removed from storage.
 		If there is no chunk with specified position,
 		*/
-		inline void RemoveChunk(int x, int z)
+		inline void RemoveChunk(int x, int z, std::function<void(LandscapeChunk*)> generatorFunc)
 		{
 			auto it = m_data.find(std::make_pair(x, z));
 			if (it == m_data.end()) { return; }
 
+			generatorFunc(&(it->second.chunk));
 			ListenerRoutine(&(it->second), CallAction::RemoveChunk);
 			m_data.erase(it);
 		}

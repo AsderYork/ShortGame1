@@ -6,14 +6,14 @@
 #include "ChunkLoader_Storage.h"
 
 #include "LandscapeSystem_ServerProcessor.h"
-
-#include <list>
+#include "LandscapeChunkStorage.h"
 
 
 
 namespace GEM::GameSim
 {
-	
+	using ChunkStorageType = ChunkStorage<>;
+
 	/**!
 	Completely manages server-side chunk's stuff. Creates chunks when needed, stores them
 	on disk and in memory, responds to client's requests and so on.
@@ -28,7 +28,7 @@ namespace GEM::GameSim
 
 		LandscapeSystemServerProcessor m_processor;
 
-		std::list<LandscapeChunk> m_chunks;
+		ChunkStorageType m_chunks;
 
 		/**!
 		Sever must save the state of the map from time to time.
@@ -36,20 +36,7 @@ namespace GEM::GameSim
 		*/
 		void PerformOccasionalSave();
 
-		/**!
-		Creates new place in a storage for this chunk
-		If chunk with a given cordinates allready present, a pointer to it will be returned
-		without affecting this chunk in any way or creating new chunks.
-		*/
-		LandscapeChunk* addNewChunk(int x, int z);
-
 	public:
-
-		/**!
-		Returns a pointer to a chunk in a storage.
-		\returns Returs 0 if chunk is not present, otherwise returns a pointer to a chunk with given position
-		*/
-		LandscapeChunk* getChunk(int x, int z);
 
 		ChunkLoadServerDispatcher(PlayerController& PlayerController) :
 			m_processor(PlayerController, this) {}
@@ -61,6 +48,8 @@ namespace GEM::GameSim
 		void Start();
 
 		inline LandscapeChunkController& getChunkController() { return m_chunkController; }
+
+		inline ChunkStorageType& getStorage() { return m_chunks; }
 
 	};
 }

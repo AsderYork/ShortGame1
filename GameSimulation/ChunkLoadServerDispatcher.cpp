@@ -15,45 +15,6 @@ namespace GEM::GameSim
 		}
 
 	}
-
-	LandscapeChunk * ChunkLoadServerDispatcher::getChunk(int x, int z)
-	{
-		auto SearchLambda = [](const LandscapeChunk& chunk, std::pair<int, int> cord) {
-			return chunk.getPosition() < cord;
-		};
-
-		auto SearchResult = std::lower_bound(m_chunks.begin(), m_chunks.end(), std::make_pair(x, z), SearchLambda);
-		if (SearchResult == m_chunks.end())
-		{
-			return nullptr;
-		}
-		else if (SearchResult->getPosition() != std::make_pair(x, z))
-		{
-			return nullptr;
-		}
-
-		return &(*SearchResult);
-	}
-
-	LandscapeChunk * ChunkLoadServerDispatcher::addNewChunk(int x, int z)
-	{
-		auto SearchLambda = [](const LandscapeChunk& chunk, std::pair<int, int> cord) {
-			return chunk.getPosition() < cord;
-		};
-
-		auto SearchResult = std::lower_bound(m_chunks.begin(), m_chunks.end(), std::make_pair(x, z), SearchLambda);
-		if (SearchResult == m_chunks.end())
-		{
-			SearchResult = m_chunks.emplace(SearchResult);
-		}
-		else if (SearchResult->getPosition() != std::make_pair(x, z))
-		{
-			SearchResult = m_chunks.emplace(SearchResult);
-		}
-
-		return &(*SearchResult);
-	}
-
 	
 	void ChunkLoadServerDispatcher::ProcessChunks()
 	{
@@ -66,30 +27,25 @@ namespace GEM::GameSim
 		{
 			if (m_chunkLoader.isChunkAvaliable(visibleChunk.x, visibleChunk.z))
 			{
-				auto Chunkptr = addNewChunk(visibleChunk.x, visibleChunk.z);
-				m_chunkLoader.LoadChunkIn(visibleChunk.x, visibleChunk.z, Chunkptr);
+				m_chunks.addChunk(visibleChunk.x, visibleChunk.z,
+					[&](LandscapeChunk* chptr) {m_chunkLoader.LoadChunkIn(visibleChunk.x, visibleChunk.z, chptr); }
+				);				
 			}
 			else
 			{
-				auto Chunkptr = addNewChunk(visibleChunk.x, visibleChunk.z);
-				m_chunkGenerator.FillChunkIn(visibleChunk.x, visibleChunk.z, Chunkptr);
-				m_chunkLoader.SaveChunk(Chunkptr);
+				m_chunks.addChunk(visibleChunk.x, visibleChunk.z,
+					[&](LandscapeChunk* chptr)
+					{
+						m_chunkGenerator.FillChunkIn(visibleChunk.x, visibleChunk.z, chptr);
+						m_chunkLoader.SaveChunk(chptr);
+					});
 			}
 		}
 
 		auto NoLongerVisibleChunks = m_chunkController.getGlobalyNoLongerVisibleChunks();
 		for (auto& outvisibleChunk : NoLongerVisibleChunks)
 		{
-			for (auto it = m_chunks.begin(); it != m_chunks.end(); it++)
-			{
-				auto[x, z] = it->getPosition();
-				if (x == outvisibleChunk.x && z == outvisibleChunk.z)
-				{
-					m_chunkLoader.SaveChunk(&(*it));
-					m_chunks.erase(it);
-					break;
-				}
-			}
+			m_chunks.RemoveChunk(outvisibleChunk.x, outvisibleChunk.z, [&](LandscapeChunk* chunk) {m_chunkLoader.SaveChunk(chunk); });
 		}
 	}
 
