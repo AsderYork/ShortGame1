@@ -1,8 +1,8 @@
 #pragma once
-#include "GameSimulation.h"
+#include <GameSimulation.h>
 
-#include "ClientCommandDispatcher.h"
-#include "UpdateSystemClientProcessor.h"
+#include <ClientCommandDispatcher.h>
+#include <UpdateSystemClientProcessor.h>
 #include "ChunkLoadClientDispatcher.h"
 #include "LandscapeSystem_ClientProcessor.h"
 
@@ -13,16 +13,16 @@
 #include <cereal\types\utility.hpp>
 #include <chrono>
 
-namespace GEM::GameSim
+namespace GEM
 {
-	class GS_Client : public GameSimulation
+	class GS_Client : public GameSim::GameSimulation
 	{
 	private:
 		bool m_timeIsSet = false;
 
 	protected:
-		ClientCommandDispatcher m_dispatcher;
-		UpdateSystemClientProcessor m_updatesProcessor;
+		GameSim::ClientCommandDispatcher m_dispatcher;
+		GameSim::UpdateSystemClientProcessor m_updatesProcessor;
 
 
 
@@ -30,12 +30,12 @@ namespace GEM::GameSim
 		ChunkLoadClientDispatcher m_chunkDispatcher;
 
 		std::chrono::system_clock::time_point m_lastUpdateTime;
-		ENTITY_ID_TYPE m_playerCharacterID;
+		GameSim::ENTITY_ID_TYPE m_playerCharacterID;
 
 
 		inline void Reset() { m_timeIsSet = false; }
 
-		inline void InsertPlayerEvent(std::unique_ptr<EventBase>&& Event) {
+		inline void InsertPlayerEvent(std::unique_ptr<GameSim::EventBase>&& Event) {
 			InsertEvent(std::move(Event), m_playerCharacterID);
 		}
 

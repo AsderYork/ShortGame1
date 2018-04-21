@@ -1,5 +1,6 @@
 #pragma once
 #include "LandscapeChunk.h"
+#include "LandscapeMeshGenerator.h"
 
 #include <map>
 #include <vector>
@@ -21,7 +22,7 @@ namespace GEM::GameSim
 		\param[in] NewChunk a pointer to a chunk being added
 		\note Whant to know chunk's position? It's in a chunk itself!
 		*/
-		virtual void NewChunkAdded(LandscapeChunk* NewChunk, StorageType* SpecificData) = 0;
+		virtual void NewChunkAdded(LandscapeChunk* NewChunk, LandscapeMesh* NewMesh, StorageType* SpecificData) = 0;
 
 		/**!
 		Called for every chunk right before it is removed.
@@ -29,7 +30,7 @@ namespace GEM::GameSim
 		\note It is possible to perform cleanup of some added per-chunk stuff right here
 		but it's adviced to do it in distructors of a data being added.
 		*/
-		virtual void ChunkRemoved(LandscapeChunk* NewChunk, StorageType* SpecificData) = 0;
+		virtual void ChunkRemoved(LandscapeChunk* NewChunk, LandscapeMesh* NewMesh, StorageType* SpecificData) = 0;
 	};
 	/**!
 	ChunkStorageListener Specialization of a ChunkStorageListener with no specific storage type

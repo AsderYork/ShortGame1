@@ -319,17 +319,17 @@ namespace GEM::GameSim
 	{}
 	};
 
-void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNewVertices)
+void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNewVertices, ProcessingData& tmpData)
 {
 	uint8_t corner[8];
-	corner[0] = getNodeValue(x - 1	, y	-1	, z	- 1	);
-	corner[1] = getNodeValue(x   	, y	-1	, z	- 1	);
-	corner[2] = getNodeValue(x - 1	, y -1	, z    	);
-	corner[3] = getNodeValue(x   	, y	-1	, z  	);
-	corner[4] = getNodeValue(x - 1	, y 	, z	- 1	);
-	corner[5] = getNodeValue(x   	, y 	, z	- 1	);
-	corner[6] = getNodeValue(x - 1	, y 	, z  	);
-	corner[7] = getNodeValue(x   	, y 	, z  	);
+	corner[0] = getNodeValue(x - 1	, y	-1	, z	- 1	, tmpData);
+	corner[1] = getNodeValue(x   	, y	-1	, z	- 1 , tmpData);
+	corner[2] = getNodeValue(x - 1	, y -1	, z		, tmpData);
+	corner[3] = getNodeValue(x   	, y	-1	, z		, tmpData);
+	corner[4] = getNodeValue(x - 1	, y 	, z	- 1	, tmpData);
+	corner[5] = getNodeValue(x   	, y 	, z	- 1	, tmpData);
+	corner[6] = getNodeValue(x - 1	, y 	, z		, tmpData);
+	corner[7] = getNodeValue(x   	, y 	, z		, tmpData);
 
 	unsigned long caseCode = 0;
 	caseCode += corner[0] > 0 ? 1   : 0;
@@ -368,7 +368,7 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNe
 
 		if (((edgeCode >> 8) & ValidityMask) == 0)
 		{//If vertex needs to be added
-			auto& CurrVertex = NodeDecks[posy][posx][posz].Vertex[Edgecc];
+			auto& CurrVertex = tmpData.NodeDecks[posy][posx][posz].Vertex[Edgecc];
 
 			if (CurrVertex == std::numeric_limits<uint32_t>::max())
 			{//Create new vertex
@@ -397,42 +397,42 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNe
 				*/
 				if (RegisterNewVertices)
 				{
-					m_vertices.push_back(NewVertex);
-					CurrVertex = static_cast<uint32_t>(m_vertices.size() - 1);
+					tmpData.tmpMesh.m_vertices.push_back(NewVertex);
+					CurrVertex = static_cast<uint32_t>(tmpData.tmpMesh.m_vertices.size() - 1);
 					IndexHolder[Vertex] = CurrVertex;
 				}
 
 
-				NodeDecks[posy][posx][posz].data[Edgecc].pos = NewVertex;
+				tmpData.NodeDecks[posy][posx][posz].data[Edgecc].pos = NewVertex;
 				/**!
 				When we work with deck it's important to remember, that it gets reset from time to time. and
 				it resets with 0xff so right after reset, values of normal would not be zeroes, they would be garbage
 				To avoid that, whenever we create a new vertex, we also check corresponding normal in a deck and if last value
 				(which allways should be zero) contains garbage, then all the normal is garbage and needs to be reset
 				*/
-				if (NodeDecks[posy][posx][posz].data[Edgecc].normal.w() != 0)
+				if (tmpData.NodeDecks[posy][posx][posz].data[Edgecc].normal.w() != 0)
 				{
-					NodeDecks[posy][posx][posz].data[Edgecc].normal.setZero();
+					tmpData.NodeDecks[posy][posx][posz].data[Edgecc].normal.setZero();
 				}
 
-				NormalsPtrHolder[Vertex] = &NodeDecks[posy][posx][posz].data[Edgecc];
+				NormalsPtrHolder[Vertex] = &tmpData.NodeDecks[posy][posx][posz].data[Edgecc];
 			}
 			else
 			{
 				//We allready created this vertex during this pass, so just find it again!
 				//Notice that we're adding to IndexHolder even if we're just calculating normals
 				//This is done to allow new normal values to be applied to a vertex if it's allready exist
-				IndexHolder[Vertex] = NodeDecks[posy][posx][posz].Vertex[Edgecc];
-				NormalsPtrHolder[Vertex] = &NodeDecks[posy][posx][posz].data[Edgecc];
+				IndexHolder[Vertex] = tmpData.NodeDecks[posy][posx][posz].Vertex[Edgecc];
+				NormalsPtrHolder[Vertex] = &tmpData.NodeDecks[posy][posx][posz].data[Edgecc];
 			}
 
 		}
 		else
 		{
-			auto vrtx = NodeDecks[posy][posx][posz];
+			auto vrtx = tmpData.NodeDecks[posy][posx][posz];
 			//Add index of a requested vertex in Indices;
-			IndexHolder[Vertex] = NodeDecks[posy][posx][posz].Vertex[Edgecc];
-			NormalsPtrHolder[Vertex] = &NodeDecks[posy][posx][posz].data[Edgecc];
+			IndexHolder[Vertex] = tmpData.NodeDecks[posy][posx][posz].Vertex[Edgecc];
+			NormalsPtrHolder[Vertex] = &tmpData.NodeDecks[posy][posx][posz].data[Edgecc];
 		}
 	}
 
@@ -452,26 +452,26 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNe
 
 		if (RegisterNewVertices)
 		{
-			m_indices.push_back(IndexHolder[Ind1]);
-			m_indices.push_back(IndexHolder[Ind2]);
-			m_indices.push_back(IndexHolder[Ind3]);
+			tmpData.tmpMesh.m_indices.push_back(IndexHolder[Ind1]);
+			tmpData.tmpMesh.m_indices.push_back(IndexHolder[Ind2]);
+			tmpData.tmpMesh.m_indices.push_back(IndexHolder[Ind3]);
 
-			m_vertices[IndexHolder[Ind1]].normal = NormalsPtrHolder[Ind1]->normal;
-			m_vertices[IndexHolder[Ind2]].normal = NormalsPtrHolder[Ind2]->normal;
-			m_vertices[IndexHolder[Ind3]].normal = NormalsPtrHolder[Ind3]->normal;
+			tmpData.tmpMesh.m_vertices[IndexHolder[Ind1]].normal = NormalsPtrHolder[Ind1]->normal;
+			tmpData.tmpMesh.m_vertices[IndexHolder[Ind2]].normal = NormalsPtrHolder[Ind2]->normal;
+			tmpData.tmpMesh.m_vertices[IndexHolder[Ind3]].normal = NormalsPtrHolder[Ind3]->normal;
 
 			triangleType newTriangle;
 			newTriangle.indices[0] = IndexHolder[Ind1];
 			newTriangle.indices[1] = IndexHolder[Ind2];
 			newTriangle.indices[2] = IndexHolder[Ind3];
 			newTriangle.normal = norm;
-			m_triangles.emplace_back(std::move(newTriangle));
+			tmpData.tmpMesh.m_triangles.emplace_back(std::move(newTriangle));
 		}
 		else
 		{
-			if (IndexHolder[Ind1] != std::numeric_limits<uint32_t>::max()) { m_vertices[IndexHolder[Ind1]].normal = NormalsPtrHolder[Ind1]->normal; }
-			if (IndexHolder[Ind2] != std::numeric_limits<uint32_t>::max()) { m_vertices[IndexHolder[Ind2]].normal = NormalsPtrHolder[Ind2]->normal; }
-			if (IndexHolder[Ind3] != std::numeric_limits<uint32_t>::max()) { m_vertices[IndexHolder[Ind3]].normal = NormalsPtrHolder[Ind3]->normal; }
+			if (IndexHolder[Ind1] != std::numeric_limits<uint32_t>::max()) { tmpData.tmpMesh.m_vertices[IndexHolder[Ind1]].normal = NormalsPtrHolder[Ind1]->normal; }
+			if (IndexHolder[Ind2] != std::numeric_limits<uint32_t>::max()) { tmpData.tmpMesh.m_vertices[IndexHolder[Ind2]].normal = NormalsPtrHolder[Ind2]->normal; }
+			if (IndexHolder[Ind3] != std::numeric_limits<uint32_t>::max()) { tmpData.tmpMesh.m_vertices[IndexHolder[Ind3]].normal = NormalsPtrHolder[Ind3]->normal; }
 		}
 
 	}
@@ -480,33 +480,34 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNe
 
 }
 
-LandscapeMeshGenerator::LandscapeMeshGenerator(const LandscapeChunk* ChunkCenter, const LandscapeChunk* ChunkForward, const LandscapeChunk* ChunkRight, const LandscapeChunk* ChunkForwardRight)
-:
-m_chunkCenter(ChunkCenter),
-m_chunkForward(ChunkForward),
-m_chunkRight(ChunkRight),
-m_chunkForwardRight(ChunkForwardRight),
-m_chunkPosX(ChunkCenter->getPosition().first),
-m_chunkPosZ(ChunkCenter->getPosition().second)
+LandscapeMesh LandscapeMeshGenerator::Generate(LandscapeChunk* ChunkCenter, LandscapeChunk* ChunkForward, LandscapeChunk* ChunkRight, LandscapeChunk* ChunkForwardRight)
 {
+	ProcessingData CurrData;
+	CurrData.m_chunkCenter = ChunkCenter;
+	CurrData.m_chunkForward = ChunkForward;
+	CurrData.m_chunkRight = ChunkRight;
+	CurrData.m_chunkForwardRight = ChunkForwardRight;
 
 	for (int y = 0; y < LandscapeChunk_Height; y++)
 	{
-		ProcessOneCube(0, y, 0, false);
+		ProcessOneCube(0, y, 0, false, CurrData);
 		for (int z = 1; z < LandscapeChunk_Size + 1; z++)
 		{
-			ProcessOneCube(0, y, z, false);
+			ProcessOneCube(0, y, z, false, CurrData);
 			for (int x = 1; x < LandscapeChunk_Size + 1; x++)
 			{
-				ProcessOneCube(x, y, z, true);
+				ProcessOneCube(x, y, z, true, CurrData);
 			}
-			ProcessOneCube(LandscapeChunk_Size + 1, y, z, false);
+			ProcessOneCube(LandscapeChunk_Size + 1, y, z, false, CurrData);
 		}
-		ProcessOneCube(0, y, LandscapeChunk_Size + 1, false);
+		ProcessOneCube(0, y, LandscapeChunk_Size + 1, false, CurrData);
 		//Clear last layer;
-		memset(NodeDecks + ((y + 1)% 2), 0xff, sizeof(CellRepresentation)*(LandscapeChunk_Size + 3)*(LandscapeChunk_Size + 3));
+		memset(CurrData.NodeDecks + ((y + 1) % 2), 0xff, sizeof(CellRepresentation)*(LandscapeChunk_Size + 3)*(LandscapeChunk_Size + 3));
 
 	}
+
+	return CurrData.tmpMesh;
 }
+
 
 }

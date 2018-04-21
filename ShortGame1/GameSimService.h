@@ -1,5 +1,5 @@
 #pragma once
-#include <GS_Client.h>
+#include "GS_Client.h"
 #include "EngineController.h"
 #include "NetworkController.h"
 #include "GameSimService.h"
@@ -11,7 +11,7 @@ namespace GEM
 	The only problem is that it doesn't know when connection it's connected to a server and when it isn't.
 	For that purpose, simulation have two methods, that can start simulation and turn it off
 	*/
-	class GameSimController : public GameSim::GS_Client, public Service
+	class GameSimController : public GS_Client, public Service
 	{
 	private:
 		NetworkController * m_network;

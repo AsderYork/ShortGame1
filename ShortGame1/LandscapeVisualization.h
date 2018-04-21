@@ -4,23 +4,42 @@
 
 namespace GEM
 {
+	struct LandscapeVisualMesh
+	{
+		Ogre::Item* marchingCubesItem = nullptr;
+		Ogre::SceneNode* marchingCubeNode = nullptr;
+		Ogre::MeshPtr mesh;
+
+		inline LandscapeVisualMesh() {}
+		inline LandscapeVisualMesh(LandscapeVisualMesh && other) :
+			marchingCubesItem(other.marchingCubesItem),
+			marchingCubeNode(other.marchingCubeNode),
+			mesh(std::move(other.mesh))
+		{}
+		inline LandscapeVisualMesh & operator=(LandscapeVisualMesh && other)
+		{
+			marchingCubesItem = other.marchingCubesItem;
+			marchingCubeNode = other.marchingCubeNode;
+			mesh = std::move(other.mesh);
+			return *this;
+		}
+
+		inline ~LandscapeVisualMesh()
+		{
+			mesh;
+		}
+
+		void Clear();
+
+	};
 	/**!
 	Builds Ogre-compatable mesh from LandscapeMeshGenerator
 	*/
 	class LandscapeVisualization
 	{
 	private:
-		Ogre_Service * m_ogreService;
-		GameSim::LandscapeMeshGenerator* m_generator;
+		static Ogre::IndexBufferPacked* createIndexBuffer(std::vector<uint16_t>& Indices);
 
-		Ogre::Item* m_marchingCubesItem = nullptr;
-		Ogre::SceneNode* m_marchingCubeNode = nullptr;
-		Ogre::MeshPtr m_mesh;
-
-		Ogre::IndexBufferPacked* createIndexBuffer(std::vector<uint16_t>& Indices);
-
-		Ogre::Item* item = nullptr;
-		Ogre::SceneNode* node = nullptr;
 
 		/**!
 		Helper structure. Used to add orientation to a triangles in a mesh to allow
@@ -57,22 +76,14 @@ namespace GEM
 		};
 
 
-		std::pair<std::vector<OrientHolder>, std::vector<uint16_t>> processTriangles();
+		static std::pair<std::vector<OrientHolder>, std::vector<uint16_t>> processTriangles(GameSim::LandscapeMesh* Chunk);
 
 
 	public:
-		LandscapeVisualization(Ogre_Service* OgreService, GameSim::LandscapeMeshGenerator* Chunk)
-			: m_ogreService(OgreService), m_generator(Chunk) {}
-
-		~LandscapeVisualization();
-		void GenerateMesh();
-		/**
-		Removes mesh, if it's exist
-		*/
-		void RemoveMesh();
 
 
-		void DoCube();
-		void UndoCube();
+		static LandscapeVisualMesh GenerateVisualMesh(GameSim::LandscapeMesh* Chunk, std::pair<int, int> ChunkPos);
+
+		static LandscapeVisualMesh DoCube();
 	};
 }

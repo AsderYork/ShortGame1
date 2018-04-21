@@ -115,6 +115,21 @@
     <Filter Include="LandscapeVisualization">
       <UniqueIdentifier>{2ab2cdb3-87d7-420c-99ce-b9045b123689}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameClient">
+      <UniqueIdentifier>{fbb4683d-ca07-48b9-9ca6-a155207aaa45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\GS_Client">
+      <UniqueIdentifier>{023b3951-6224-4f36-8b68-74659ce2e7b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\LandscapeSystem">
+      <UniqueIdentifier>{519e301c-87e8-4e05-91e2-6177d5893194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\LandscapeSystem\ClientChunkDispatcher">
+      <UniqueIdentifier>{e3b59e09-871a-411f-ad5b-cfc049587b18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\LandscapeSystem\NetworkProcessor">
+      <UniqueIdentifier>{e0780e30-2c5f-4896-afe7-5d0a563abf09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -216,6 +231,15 @@
     <ClInclude Include="LandscapeVisualizationController.h">
       <Filter>LandscapeVisualization</Filter>
     </ClInclude>
+    <ClInclude Include="GS_Client.h">
+      <Filter>GameClient\GS_Client</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkLoadClientDispatcher.h">
+      <Filter>GameClient\LandscapeSystem\ClientChunkDispatcher</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeSystem_ClientProcessor.h">
+      <Filter>GameClient\LandscapeSystem\NetworkProcessor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShortGame1.cpp">
@@ -298,6 +322,15 @@
     </ClCompile>
     <ClCompile Include="LandscapeVisualizationController.cpp">
       <Filter>LandscapeVisualization</Filter>
+    </ClCompile>
+    <ClCompile Include="GS_Client.cpp">
+      <Filter>GameClient\GS_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkLoadClientDispatcher.cpp">
+      <Filter>GameClient\LandscapeSystem\ClientChunkDispatcher</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeSystem_ClientProcessor.cpp">
+      <Filter>GameClient\LandscapeSystem\NetworkProcessor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

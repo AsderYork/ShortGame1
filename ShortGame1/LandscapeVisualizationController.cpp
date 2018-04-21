@@ -4,23 +4,12 @@
 namespace GEM
 {
 
-	void LandscapeVisualizationController::updateVisual()
+	void LandscapeVisualizationController::NewChunkAdded(GameSim::LandscapeChunk * NewChunk, GameSim::LandscapeMesh* newMesh, LandscapeVisualMesh* VisMesh)
 	{
-		for (auto& chunk : m_client->m_chunkDispatcher.m_chunks)
-		{
-			if (chunk.mesh == nullptr) { continue; }
-			auto it = m_visualizations.find(chunk.chunk.getPosition());
-			if (it == m_visualizations.end())
-			{
-				auto newModel = m_visualizations.emplace(std::piecewise_construct, std::make_tuple(chunk.chunk.getPosition()), std::make_tuple(m_ogre, chunk.mesh.get()));
-				newModel.first->second.GenerateMesh();
-			}
-		}
+		*VisMesh = LandscapeVisualization::GenerateVisualMesh(newMesh, NewChunk->getPosition());
 	}
-
-
-	void LandscapeVisualizationController::Clear()
+	void LandscapeVisualizationController::ChunkRemoved(GameSim::LandscapeChunk * NewChunk, GameSim::LandscapeMesh* newMesh, LandscapeVisualMesh* VisMesh)
 	{
-		m_visualizations.clear();
+		VisMesh->Clear();
 	}
 }

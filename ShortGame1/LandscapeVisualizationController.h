@@ -1,23 +1,25 @@
 #pragma once
 #include "LandscapeVisualization.h"
 #include "Ogre_Service.h"
-#include <GS_Client.h>
+#include "GS_Client.h"
 #include <map>
+#include <LandscapeChunkStorageListener.h>
 
 namespace GEM
 {
-	class LandscapeVisualizationController
+	class LandscapeVisualizationController : GameSim::ChunkStorageListener<LandscapeVisualMesh>
 	{
-		GameSim::GS_Client* m_client;
-		Ogre_Service* m_ogre;
-
-		std::map<std::pair<int,int>,LandscapeVisualization> m_visualizations;
-
+		GS_Client* m_client;
+		
 	public:
-		inline LandscapeVisualizationController(GameSim::GS_Client* client, Ogre_Service* ogre) : m_client(client), m_ogre(ogre) {}
+		inline LandscapeVisualizationController(GS_Client* client, Ogre_Service* ogre) : m_client(client)
+		{
+			client->m_chunkDispatcher.m_chunks.RegisterListener(this);
+		}
 
-		void updateVisual();
+		std::vector<LandscapeVisualMesh> viss;
 
-		void Clear();
+		virtual void NewChunkAdded(GameSim::LandscapeChunk * NewChunk, GameSim::LandscapeMesh* newMesh, LandscapeVisualMesh* VisMesh) override;
+		virtual void ChunkRemoved(GameSim::LandscapeChunk * NewChunk, GameSim::LandscapeMesh* newMesh, LandscapeVisualMesh* VisMesh) override;
 	};
 }

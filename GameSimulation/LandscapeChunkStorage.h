@@ -1,5 +1,6 @@
 #pragma once
 #include "LandscapeChunkStorageListener.h"
+#include "LandscapeMeshGenerator.h"
 
 namespace GEM::GameSim
 {
@@ -18,7 +19,11 @@ namespace GEM::GameSim
 		struct ChunkStruct
 		{
 			LandscapeChunk chunk;
+			LandscapeMesh mesh;
 			std::tuple<AdditionalDataPacks...> AdditionalData;
+			//Turns out allmost every system needs, that before processing, chunk shuould also have
+			//It's mesh avaliable.
+			bool isProcessed = false;
 
 			ChunkStruct(int x, int z) : chunk(x, z) {}
 		};
@@ -52,9 +57,9 @@ namespace GEM::GameSim
 				switch (action)
 				{
 				case CallAction::AddNewChunk:
-				{listener->NewChunkAdded(&(chunk->chunk), &std::get<DataBlockOfInterest>(chunk->AdditionalData)); break; }
+				{listener->NewChunkAdded(&(chunk->chunk), &chunk->mesh, &std::get<DataBlockOfInterest>(chunk->AdditionalData)); break; }
 				case CallAction::RemoveChunk:
-				{listener->ChunkRemoved(&(chunk->chunk), &std::get<DataBlockOfInterest>(chunk->AdditionalData)); break; }
+				{listener->ChunkRemoved(&(chunk->chunk), &chunk->mesh, &std::get<DataBlockOfInterest>(chunk->AdditionalData)); break; }
 				}
 			};
 			m_listeners.emplace_back(NewListenerLambda);
@@ -67,9 +72,9 @@ namespace GEM::GameSim
 				switch (action)
 				{
 				case CallAction::AddNewChunk:
-				{listener->NewChunkAdded(&(chunk->chunk)); break; }
+				{listener->NewChunkAdded(&(chunk->chunk), &chunk->mesh); break; }
 				case CallAction::RemoveChunk:
-				{listener->ChunkRemoved(&(chunk->chunk)); break; }
+				{listener->ChunkRemoved(&(chunk->chunk&chunk->mesh)); break; }
 				}
 			};
 			m_listeners.emplace_back(NewListenerLambda);
@@ -90,6 +95,8 @@ namespace GEM::GameSim
 		If a chunk with given coordinates allready exists, no new chunks will be added and a pointer to an
 		existing one will be returned.
 		\param[in] generatorFunc a function, that should fill chunk data before it will be passed to listeners
+		This method won't trigger NewChunkAdded event! It requires a pass of generateMeshesForUnpreparedChunks
+		and creation of a mesh for this event to be raised.
 		*/
 		inline ChunkStruct * addChunk(int x, int z, std::function<void(LandscapeChunk*)> generatorFunc)
 		{
@@ -98,9 +105,10 @@ namespace GEM::GameSim
 
 			auto ptr = &(m_data.emplace(std::piecewise_construct, std::forward_as_tuple(x, z), std::forward_as_tuple(x, z)).first->second);
 			generatorFunc(&(ptr->chunk));
-			ListenerRoutine(ptr, CallAction::AddNewChunk);
 			return ptr;
 		}
+
+		
 
 		/**!
 		Removes a chunk from storage.
@@ -116,6 +124,33 @@ namespace GEM::GameSim
 			generatorFunc(&(it->second.chunk));
 			ListenerRoutine(&(it->second), CallAction::RemoveChunk);
 			m_data.erase(it);
+		}
+
+		/**!
+		Chunk is truly working only if it's mesh is also present. This method should be called
+		after every succession of chunk creations, to build meshes for chunks, where it's possible.
+		Only when mesh is build, NewChunkAdded of listenres will be called!
+		
+		\note to generate a mesh for chunk (x,y), chunks (x+1,y),(x,y+1) and (x+1,y+1) must also be in a storage!
+		*/
+		void generateMeshesForUnpreparedChunks()
+		{
+			for (auto& ch : m_data)
+			{
+				if (!ch.second.isProcessed)
+				{
+					auto[x, z] = ch.first;
+					auto Forward = getChunk(x, z+1);
+					auto Right = getChunk(x+1, z);
+					auto ForwardRight = getChunk(x + 1, z+1);
+					if ((Forward != nullptr) && (Right != nullptr) && (ForwardRight != nullptr))
+					{
+						ch.second.mesh = LandscapeMeshGenerator::Generate(&ch.second.chunk, &Forward->chunk, &Right->chunk, &ForwardRight->chunk);
+						ch.second.isProcessed = true;
+						ListenerRoutine(&ch.second, CallAction::AddNewChunk);
+					}
+				}
+			}
 		}
 
 	};

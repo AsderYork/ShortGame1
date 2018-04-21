@@ -14,7 +14,6 @@ namespace GEM
 	}
 	void GameVisualization::shutdown()
 	{
-		m_landscape.Clear();
 		m_visibleEntities.clear();
 	}
 	Service::ActionResult GameVisualization::preFrame(float timeDelta)
@@ -47,7 +46,6 @@ namespace GEM
 		
 		m_visibleEntities = std::move(newMap);
 
-		m_landscape.updateVisual();
 
 		return ActionResult::AR_OK;
 	}

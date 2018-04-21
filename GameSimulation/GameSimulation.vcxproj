@@ -149,7 +149,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ChunkLoadClientDispatcher.h" />
     <ClInclude Include="LandscapeChunkStorageListener.h" />
     <ClInclude Include="ChunkLoadServerDispatcher.h" />
     <ClInclude Include="ChunkLoader_Generator.h" />
@@ -164,7 +163,6 @@
     <ClInclude Include="GamePhysics.h" />
     <ClInclude Include="GameSimulation.h" />
     <ClInclude Include="GameTime.h" />
-    <ClInclude Include="GS_Client.h" />
     <ClInclude Include="GS_EntityController.h" />
     <ClInclude Include="GS_PlayerController.h" />
     <ClInclude Include="GS_Server.h" />
@@ -176,7 +174,6 @@
     <ClInclude Include="LandscapeChunkStorage.h" />
     <ClInclude Include="LandscapeMeshGenerator.h" />
     <ClInclude Include="LandscapePhysics.h" />
-    <ClInclude Include="LandscapeSystem_ClientProcessor.h" />
     <ClInclude Include="LandscapeSystem_Command.h" />
     <ClInclude Include="LandscapeSystem_ServerProcessor.h" />
     <ClInclude Include="LogHelper.h" />
@@ -200,7 +197,6 @@
     <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChunkLoadClientDispatcher.cpp" />
     <ClCompile Include="ChunkLoadServerDispatcher.cpp" />
     <ClCompile Include="ChunkLoader_Generator.cpp" />
     <ClCompile Include="ChunkLoader_Storage.cpp" />
@@ -208,14 +204,13 @@
     <ClCompile Include="EntityGenerator.cpp" />
     <ClCompile Include="GamePhysics.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
-    <ClCompile Include="GS_Client.cpp" />
     <ClCompile Include="GS_EntityController.cpp" />
     <ClCompile Include="GS_PlayerController.cpp" />
     <ClCompile Include="GS_Server.cpp" />
     <ClCompile Include="LandscapeChunkController.cpp" />
     <ClCompile Include="LandscapeChunkPack.cpp" />
     <ClCompile Include="LandscapeMeshGenerator.cpp" />
-    <ClCompile Include="LandscapeSystem_ClientProcessor.cpp" />
+    <ClCompile Include="LandscapePhysics.cpp" />
     <ClCompile Include="LandscapeSystem_ServerProcessor.cpp" />
     <ClCompile Include="LogHelper.cpp" />
     <ClCompile Include="Mixin_Base.cpp" />

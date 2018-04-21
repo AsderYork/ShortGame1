@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "GS_Client.h"
 
 #include "SharedDataPackets.h"
@@ -9,12 +10,12 @@
 #include <cereal\types\string.hpp>
 #include <cereal\types\chrono.hpp>
 
-namespace GEM::GameSim
+namespace GEM
 {
 	void GS_Client::SimulationStarted()
 	{
 		m_updatesProcessor.AddControlledEntity(m_playerCharacterID);
-		m_chunkDispatcher.getController().createNewLoader([&]() {return dynamic_cast<Mixin_Movable*>(m_entities.GetEntity(m_playerCharacterID)->GetMixinByID(Mixin_Movable::MixinID))->getPos(); });
+		m_chunkDispatcher.getController().createNewLoader([&]() {return dynamic_cast<GameSim::Mixin_Movable*>(m_entities.GetEntity(m_playerCharacterID)->GetMixinByID(GameSim::Mixin_Movable::MixinID))->getPos(); });
 	}
 
 	bool GS_Client::Tick(float Delta, cereal::BinaryInputArchive& archive, std::stringstream& OutputStream, bool ArchiveIsEmpty)
@@ -22,12 +23,12 @@ namespace GEM::GameSim
 		
 		if (!ArchiveIsEmpty)
 		{
-			std::vector<ServerCommandPack> ServerPacks;
+			std::vector<GameSim::ServerCommandPack> ServerPacks;
 			try
 			{
 				while (true)
 				{
-					ServerCommandPack NewPack;
+					GameSim::ServerCommandPack NewPack;
 					NewPack.SerializeOut(archive, m_dispatcher.getProcessorsTable());
 					ServerPacks.emplace_back(std::move(NewPack));
 				}

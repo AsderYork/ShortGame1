@@ -28,32 +28,21 @@ namespace GEM
 		MeshVertices() {}
 	};
 
-	void LandscapeVisualization::GenerateMesh()
+	LandscapeVisualMesh LandscapeVisualization::GenerateVisualMesh(GameSim::LandscapeMesh* Chunk, std::pair<int, int> ChunkPos)
 	{
-		Ogre::RenderSystem *renderSystem = m_ogreService->getRoot()->getRenderSystem();
+		auto[ChunkPosX, ChunkPosZ] = ChunkPos;
+		Ogre::RenderSystem *renderSystem = Ogre::Root::getSingleton().getRenderSystem();
 		Ogre::VaoManager *vaoManager = renderSystem->getVaoManager();
-		auto SceneManager = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance");
+		auto SceneManager = Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance");
 
-		auto [ChunkPosX, ChunkPosZ] = m_generator->getPos();
 		std::string MeshName = "MarchingCubies" + std::to_string(ChunkPosX) + "X" + std::to_string(ChunkPosZ);
 
-		//Remove previously created mesh if it's exist
-		if (m_marchingCubesItem != nullptr)
-		{
-			m_marchingCubesItem->detachFromParent();
-			SceneManager->destroyItem(m_marchingCubesItem);
-		}
-		if (m_mesh != nullptr)
-		{
-			Ogre::MeshManager::getSingleton().remove(m_mesh);
-		}
+		LandscapeVisualMesh ReturnMesh;
+		if (Chunk->m_vertices.size() == 0)//Then there is no vertices to draw!
+		{return ReturnMesh; }
 
-
-		if (m_generator->getVertices().size() == 0)//Then there is no vertices to draw!
-		{return;}
-
-		m_mesh = Ogre::MeshManager::getSingleton().createManual(MeshName, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-		Ogre::SubMesh *subMesh = m_mesh->createSubMesh();
+		ReturnMesh.mesh = Ogre::MeshManager::getSingleton().createManual(MeshName, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		Ogre::SubMesh *subMesh = ReturnMesh.mesh->createSubMesh();
 
 		Ogre::VertexElement2Vec vertexElements;
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_POSITION));
@@ -61,7 +50,7 @@ namespace GEM
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES));
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT4, Ogre::VES_SPECULAR));
 		
-		auto[Orientations, NewIndices] = processTriangles();
+		auto[Orientations, NewIndices] = processTriangles(Chunk);
 
 		MeshVertices *meshVertices = reinterpret_cast<MeshVertices*>(OGRE_MALLOC_SIMD(sizeof(MeshVertices) * Orientations.size(), Ogre::MEMCATEGORY_GEOMETRY));
 
@@ -69,7 +58,7 @@ namespace GEM
 		//Translate VertexList from Generator to Ogre
 		for (int i = 0; i < Orientations.size(); i++)
 		{
-			auto& Vertex = m_generator->getVertices()[Orientations[i].OriginalVertex];
+			auto& Vertex = Chunk->m_vertices[Orientations[i].OriginalVertex];
 
 			meshVertices[i].px = static_cast<float>(Vertex.pos.x());
 			meshVertices[i].py = static_cast<float>(Vertex.pos.y());
@@ -131,22 +120,22 @@ namespace GEM
 
 		float meshSize = GameSim::LandscapeChunk_Size / 2;
 		float meshRadius = (float)pow(((GameSim::LandscapeChunk_Size*GameSim::LandscapeChunk_Size) / 2) + ((GameSim::LandscapeChunk_Height*GameSim::LandscapeChunk_Height) / 4), 0.5f);
-		m_mesh->_setBounds(Ogre::Aabb(
+		ReturnMesh.mesh->_setBounds(Ogre::Aabb(
 			Ogre::Vector3::ZERO + Ogre::Vector3(ChunkPosX + meshSize, GameSim::LandscapeChunk_Height / 2, ChunkPosZ + meshSize),
 			Ogre::Vector3(GameSim::LandscapeChunk_Size / 2, GameSim::LandscapeChunk_Height / 2, GameSim::LandscapeChunk_Size / 2)),
 			false);
-		m_mesh->_setBoundingSphereRadius(meshRadius);
+		ReturnMesh.mesh->_setBoundingSphereRadius(meshRadius);
 
 		subMesh->setMaterialName("HlmsPbs1");
 
 
 
-		m_marchingCubesItem = SceneManager->createItem(MeshName);
-		m_marchingCubeNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);
+		ReturnMesh.marchingCubesItem = SceneManager->createItem(MeshName);
+		ReturnMesh.marchingCubeNode = SceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->createChildSceneNode(Ogre::SCENE_DYNAMIC);
 
-		m_marchingCubeNode->attachObject(m_marchingCubesItem);
-		m_marchingCubeNode->setPosition(ChunkPosX * (int)GameSim::LandscapeChunk_Size, 0, ChunkPosZ * (int)GameSim::LandscapeChunk_Size);
-
+		ReturnMesh.marchingCubeNode->attachObject(ReturnMesh.marchingCubesItem);
+		ReturnMesh.marchingCubeNode->setPosition(ChunkPosX * (int)GameSim::LandscapeChunk_Size, 0, ChunkPosZ * (int)GameSim::LandscapeChunk_Size);
+		return ReturnMesh;
 	}
 
 	Ogre::IndexBufferPacked * LandscapeVisualization::createIndexBuffer(std::vector<uint16_t>& Indices)
@@ -161,7 +150,7 @@ namespace GEM
 			cubeIndices[i] = Indices[i];
 		}
 
-		Ogre::RenderSystem *renderSystem = m_ogreService->getRoot()->getRenderSystem();
+		Ogre::RenderSystem *renderSystem = Ogre::Root::getSingleton().getRenderSystem();
 		Ogre::VaoManager *vaoManager = renderSystem->getVaoManager();
 
 		try
@@ -185,15 +174,15 @@ namespace GEM
 		return indexBuffer;
 	}
 
-	std::pair<std::vector<LandscapeVisualization::OrientHolder>, std::vector<uint16_t>> LandscapeVisualization::processTriangles()
+	std::pair<std::vector<LandscapeVisualization::OrientHolder>, std::vector<uint16_t>> LandscapeVisualization::processTriangles(GameSim::LandscapeMesh* Chunk)
 	{
 		std::vector<OrientHolder> Orientations;
 		std::vector<uint16_t> NewIndices;
-		Orientations.resize(m_generator->getVertices().size());
+		Orientations.resize(Chunk->m_vertices.size());
 
-		for (int trinagleNum = 0; trinagleNum < m_generator->getTriangles().size(); trinagleNum++)
+		for (int trinagleNum = 0; trinagleNum < Chunk->m_triangles.size(); trinagleNum++)
 		{
-			auto& triangle = m_generator->getTriangles()[trinagleNum];
+			auto& triangle = Chunk->m_triangles[trinagleNum];
 			OrientHolder::Presentation TriangleState;
 
 			if (triangle.normal.absolute().angle(btVector3(0, 1, 0)) < 0.9f)// ~51 degres
@@ -208,13 +197,6 @@ namespace GEM
 			{
 				TriangleState = OrientHolder::FRONTBACK;
 			}
-
-			/*switch (triangle.normal.closestAxis())
-			{
-			case 0: {TriangleState = OrientHolder::LEFTRIGHT; break; }
-			case 1: {TriangleState = OrientHolder::UPDOWN;  break; }
-			case 2: {TriangleState = OrientHolder::FRONTBACK;  break; }
-			}*/
 			
 			for (int i = 0; i < 3; i++)
 			{
@@ -241,42 +223,33 @@ namespace GEM
 		return std::make_pair(Orientations, NewIndices);
 	}
 
-	void LandscapeVisualization::RemoveMesh()
+
+	LandscapeVisualMesh LandscapeVisualization::DoCube()
 	{
-		if (m_marchingCubesItem != nullptr)
+		LandscapeVisualMesh VisMesh;
+		auto mSceneMgr = Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance");
+		VisMesh.marchingCubesItem = mSceneMgr->createItem("Cubexa.mesh");
+
+		VisMesh.marchingCubeNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+		VisMesh.marchingCubeNode->attachObject(VisMesh.marchingCubesItem);
+		VisMesh.marchingCubeNode->setPosition(0, 20.0f, 0);
+		return VisMesh;
+	}
+
+	void LandscapeVisualMesh::Clear()
+	{
+		if (marchingCubesItem != nullptr)
 		{
-			m_marchingCubeNode->removeAndDestroyAllChildren();
-			auto SceneManager = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance");
-			SceneManager->destroyItem(m_marchingCubesItem);
-			m_marchingCubesItem = nullptr;
+			marchingCubeNode->removeAndDestroyAllChildren();
+			
+			auto SceneManager = Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance");
+			SceneManager->destroyItem(marchingCubesItem);
+			marchingCubesItem = nullptr;
 		}
-		if (m_mesh != nullptr)
+		if (mesh != nullptr)
 		{
-			Ogre::MeshManager::getSingleton().remove(m_mesh);
-			m_mesh.setNull();
+			Ogre::MeshManager::getSingleton().remove(mesh);
+			mesh.setNull();
 		}
-	}
-
-	void LandscapeVisualization::DoCube()
-	{
-		auto mSceneMgr = m_ogreService->getRoot()->getSceneManager("ExampleSMInstance");
-		item = mSceneMgr->createItem("Cubexa.mesh");
-
-		node = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-		node->attachObject(item);
-		node->setPosition(0, 0, 0);
-	}
-
-	void LandscapeVisualization::UndoCube()
-	{
-		if (node == nullptr) { return; }
-		node->removeAndDestroyAllChildren();
-		m_ogreService->getRoot()->getSceneManager("ExampleSMInstance")->destroyItem(item);
-	}
-
-	LandscapeVisualization::~LandscapeVisualization()
-	{
-		RemoveMesh();
-
 	}
 }

@@ -16,12 +16,41 @@
 #include "GameVisualization.h"
 
 #include <LandscapeMeshGenerator.h>
-//#include "LandVisTmpService.h"
+#include "LandscapeVisualization.h"
 
+class TmpService : public GEM::Service
+{
+public:
+	GEM::LandscapeVisualMesh vm1;
+	GEM::LandscapeVisualMesh vm2;
+	GEM::GameSim::LandscapeMesh *lm;
+	GEM::Ogre_Service* ogs;
+	std::pair<int, int> pos;
+	bool done = false;
 
-//#include <GameSimulation.h>
-//#include <Mixin_Controller.h>
+	virtual ActionResult initialize() override
+	{
 
+		vm2 = GEM::LandscapeVisualization::GenerateVisualMesh(lm, pos);
+		vm1 = GEM::LandscapeVisualization::DoCube();
+		return ActionResult::AR_OK;
+	}
+	virtual void shutdown() override
+	{
+	}
+	virtual ActionResult preFrame(float timeDelta) override
+	{
+		return ActionResult::AR_OK;
+	}
+	virtual ActionResult frame(float timeDelta) override
+	{
+		return ActionResult::AR_OK;
+	}
+	virtual ActionResult postFrame(float timeDelta) override
+	{
+		return ActionResult::AR_OK;
+	}
+};
 
 int main(int argc, char *argv[])
 {
@@ -30,7 +59,26 @@ int main(int argc, char *argv[])
 	/*GEM::GameSim::LandscapeChunk LC01(0, 1), LC11(1, 1), LC21(2, 1);
 	GEM::GameSim::LandscapeChunk LC00(0, 0), LC10(1, 0), LC20(2, 0);
 
-	for (int x = 0; x < 16; x++)
+	auto FillChunk = [](GEM::GameSim::LandscapeChunk& LC)
+	{
+		for (int y = 0; y < 20; y++)
+		{
+			for (int x = 0; x < 16; x++)
+			{
+				for (int z = 0; z < 16; z++)
+				{					
+					LC.getNode(x, y, z).Value = 255;
+				}
+			}
+		}
+	};
+
+	FillChunk(LC00);
+	FillChunk(LC01);
+	FillChunk(LC10);
+	FillChunk(LC11);
+	*/
+	/*for (int x = 0; x < 16; x++)
 	{
 		for (int z = 0; z < 16; z++)
 		{
@@ -67,20 +115,22 @@ int main(int argc, char *argv[])
 	LC00.getNode(11, 4, 9).Value = 255;
 	LC00.getNode(11, 5, 9).Value = 255;
 	LC00.getNode(11, 6, 9).Value = 255;
+	*/
 
-
-	GEM::GameSim::LandscapeMeshGenerator LNDSCPM1(&LC00, &LC01, &LC10, &LC11);
-	GEM::GameSim::LandscapeMeshGenerator LNDSCPM2(&LC10, &LC11, &LC20, &LC21);*/
-	
+	/*auto LNDSCPM1 = GEM::GameSim::LandscapeMeshGenerator::Generate(&LC00, &LC01, &LC10, &LC11);
+	GEM::LandscapeVisualMesh vm;
+	*/
 	
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
 	auto OgreController = Controller.AddService<GEM::Ogre_Service>(SDLController);
 	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
 	auto NetworkController = Controller.AddService<GEM::NetworkController>();
+	/*auto TmpSe = Controller.AddService<TmpService>();
+	TmpSe->pos = LC00.getPosition();
+	TmpSe->lm = &LNDSCPM1;
+	TmpSe->ogs = OgreController;*/
 
-	//auto LVTSController1 = Controller.AddService<GEM::LandVisTmpService>(OgreController, &LNDSCPM1);
-	//auto LVTSController2 = Controller.AddService<GEM::LandVisTmpService>(OgreController, &LNDSCPM2);
 
 	auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
 	auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);

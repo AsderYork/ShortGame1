@@ -164,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEGUI_Service.h" />
+    <ClInclude Include="ChunkLoadClientDispatcher.h" />
     <ClInclude Include="ChunkLoader.h" />
     <ClInclude Include="ConsoleLayout.h" />
     <ClInclude Include="ConsoleParser.h" />
@@ -174,6 +175,8 @@
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="GameSimService.h" />
     <ClInclude Include="GameVisualization.h" />
+    <ClInclude Include="GS_Client.h" />
+    <ClInclude Include="LandscapeSystem_ClientProcessor.h" />
     <ClInclude Include="LandscapeVisualization.h" />
     <ClInclude Include="LandscapeVisualizationController.h" />
     <ClInclude Include="MainGameScreen.h" />
@@ -198,6 +201,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEGUI_Service.cpp" />
+    <ClCompile Include="ChunkLoadClientDispatcher.cpp" />
     <ClCompile Include="ConsoleLayout.cpp" />
     <ClCompile Include="ConsoleParser.cpp" />
     <ClCompile Include="DebugLayout.cpp" />
@@ -206,6 +210,8 @@
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="GameSimService.cpp" />
     <ClCompile Include="GameVisualization.cpp" />
+    <ClCompile Include="GS_Client.cpp" />
+    <ClCompile Include="LandscapeSystem_ClientProcessor.cpp" />
     <ClCompile Include="LandscapeVisualization.cpp" />
     <ClCompile Include="LandscapeVisualizationController.cpp" />
     <ClCompile Include="MainGameScreen.cpp" />
