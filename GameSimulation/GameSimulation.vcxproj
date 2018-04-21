@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChunkLoadClientDispatcher.h" />
+    <ClInclude Include="LandscapeChunkStorageListener.h" />
     <ClInclude Include="ChunkLoadServerDispatcher.h" />
     <ClInclude Include="ChunkLoader_Generator.h" />
     <ClInclude Include="ChunkLoader_Storage.h" />
@@ -172,11 +173,14 @@
     <ClInclude Include="LandscapeChunkController.h" />
     <ClInclude Include="LandscapeChunkPack.h" />
     <ClInclude Include="LandscapeChunkProvider.h" />
+    <ClInclude Include="LandscapeChunkStorage.h" />
     <ClInclude Include="LandscapeMeshGenerator.h" />
+    <ClInclude Include="LandscapePhysics.h" />
     <ClInclude Include="LandscapeSystem_ClientProcessor.h" />
     <ClInclude Include="LandscapeSystem_Command.h" />
     <ClInclude Include="LandscapeSystem_ServerProcessor.h" />
     <ClInclude Include="LogHelper.h" />
+    <ClInclude Include="Mixin_Movable Singleton.h" />
     <ClInclude Include="NetworkCommandBase.h" />
     <ClInclude Include="NetworkCommandsProcessor.h" />
     <ClInclude Include="Helper_TupleForeach.h" />

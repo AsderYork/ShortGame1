@@ -136,6 +136,15 @@
     <Filter Include="LogHelper">
       <UniqueIdentifier>{e75269f5-b2e3-483e-bf80-ece140cdf23b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\Mixins\Mixin_Movable\Mixin_Movable Singleton">
+      <UniqueIdentifier>{d461f87e-c298-4dac-90d5-c69f2f4f6271}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\LandscapePhysics">
+      <UniqueIdentifier>{747e3b21-4189-4eab-bb40-4c7bf6c07a70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\ChunkLoadDispatcher\ChunkStorage">
+      <UniqueIdentifier>{95d5a87a-bcd4-40b2-b66b-fe0d3b110d5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -268,6 +277,18 @@
     </ClInclude>
     <ClInclude Include="Player_id_type.h">
       <Filter>GameSimulation\PlayerController</Filter>
+    </ClInclude>
+    <ClInclude Include="Mixin_Movable Singleton.h">
+      <Filter>Entities\Mixins\Mixin_Movable\Mixin_Movable Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapePhysics.h">
+      <Filter>Landscape\LandscapePhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeChunkStorage.h">
+      <Filter>Landscape\ChunkLoadDispatcher\ChunkStorage</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeChunkStorageListener.h">
+      <Filter>Landscape\ChunkLoadDispatcher\ChunkStorage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
