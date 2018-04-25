@@ -8,11 +8,13 @@
 #include "LandscapeSystem_ServerProcessor.h"
 #include "LandscapeChunkStorage.h"
 
+#include "LandscapePhysics.h"
+
 
 
 namespace GEM::GameSim
 {
-	using ChunkStorageType = ChunkStorage<>;
+	using ChunkStorageType = ChunkStorage<PerChunkCollisionObject>;
 
 	/**!
 	Completely manages server-side chunk's stuff. Creates chunks when needed, stores them
@@ -36,12 +38,23 @@ namespace GEM::GameSim
 		*/
 		void PerformOccasionalSave();
 
+		/**!
+		Performs loading or creation of one chunk
+		*/
+		void getOneChunk(int x, int z);
+
 	public:
 
 		ChunkLoadServerDispatcher(PlayerController& PlayerController) :
 			m_processor(PlayerController, this) {}
 		
 		inline LandscapeSystemServerProcessor& getProcessor() { return m_processor; }
+
+		/**!
+		Forces chunk (x,z) to be completely loaded,
+		meaning that it will have mesh and every per-chunk data prepared.
+		*/
+		void ForceChunkCreation(int x, int z);
 
 		void ProcessChunks();
 

@@ -1,4 +1,5 @@
 #include "GameSimulation.h"
+#include "LogHelper.h"
 
 
 namespace GEM::GameSim
@@ -13,6 +14,11 @@ namespace GEM::GameSim
 	}
 	bool GameSimulation::Tick(float delta)
 	{
+		if (delta > 1.0f)
+		{
+			LOGCATEGORY("GameSimulation/Tick").warn("TimeDelta was %f which is too big! If this message repeats - server can't keep up!", delta);
+			delta = 1.0;
+		}
 		auto GameTimeDelta = SecondsToGameTimeInterval(delta);
 		//Apply all commands
 		while (!m_commandBuffer.empty())
@@ -45,6 +51,7 @@ namespace GEM::GameSim
 			Entity = m_entities.IterateOverEntities(std::move(iter));
 		}
 
+		m_physics.Tick(GameTimeDelta);
 		m_simulationTime += GameTimeDelta;
 		return true;
 	}
@@ -60,7 +67,7 @@ namespace GEM::GameSim
 		m_lastAddedEntity++;
 		while (m_entities.GetEntity(m_lastAddedEntity) != nullptr)
 		{
-			if (m_lastAddedEntity == std::numeric_limits<ENTITY_ID_TYPE>::max())
+			if (m_lastAddedEntity == (std::numeric_limits<ENTITY_ID_TYPE>::max)())
 			{
 				m_lastAddedEntity = 0;
 			}

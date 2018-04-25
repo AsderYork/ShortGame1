@@ -6,6 +6,7 @@
 #include "UpdateSystem_Command.h"
 #include "LandscapeSystem_ServerProcessor.h"
 #include "ChunkLoadServerDispatcher.h"
+#include "LandscapePhysics.h"
 
 
 #include <string>
@@ -46,6 +47,7 @@ namespace GEM::GameSim
 		UpdateSystemProcessor m_updateSystemProcessor;
 
 		ChunkLoadServerDispatcher m_chunkLoadDispatcher;
+		LandscapePhysics m_landscapePhysicsController;
 
 	public:
 

@@ -64,8 +64,8 @@ namespace GEM
 			meshVertices[i].py = static_cast<float>(Vertex.pos.y());
 			meshVertices[i].pz = static_cast<float>(Vertex.pos.z());
 
-
 			Vertex.normal.normalize();
+			
 			meshVertices[i].nx = static_cast<float>(Vertex.normal.x());
 			meshVertices[i].ny = static_cast<float>(Vertex.normal.y());
 			meshVertices[i].nz = static_cast<float>(Vertex.normal.z());

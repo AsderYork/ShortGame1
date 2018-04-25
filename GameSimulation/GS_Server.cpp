@@ -12,13 +12,15 @@ namespace GEM::GameSim
 
 	GS_Server::GS_Server() :
 		m_updateSystemProcessor(&m_gs),
-		m_chunkLoadDispatcher(m_gs.m_players)
+		m_chunkLoadDispatcher(m_gs.m_players),
+		m_landscapePhysicsController((&m_gs.m_physics))
 	{
 		logHelper::setLog("./logs/log.txt");
 		m_commandDispatcher.AddProcessor(&m_updateSystemProcessor);
 		m_commandDispatcher.AddProcessor(&(m_chunkLoadDispatcher.getProcessor()));
 		m_chunkLoadDispatcher.Start();
 
+		m_chunkLoadDispatcher.getStorage().RegisterListener(&m_landscapePhysicsController);
 	}
 
 
@@ -117,7 +119,19 @@ namespace GEM::GameSim
 		newPlayer->get().characterID = CharId;
 
 		//Set player's starting pos
-		dynamic_cast<Mixin_Movable*>(CharPtr->GetMixinByID(Mixin_Movable::MixinID))->Shift(0.0f, 20.0f, 0.0f);
+		m_chunkLoadDispatcher.ForceChunkCreation(0, 0);
+
+		btVector3 Start(0, 512, 0), End(0, 0, 0);
+		btCollisionWorld::ClosestRayResultCallback RayCallback(Start, End);
+
+		float Height = 20.0f;
+		m_gs.m_physics.getWorld()->rayTest(Start, End, RayCallback);
+		if (RayCallback.hasHit())
+		{
+			Height = static_cast<float>(RayCallback.m_hitPointWorld.y());
+		}
+
+		dynamic_cast<Mixin_Movable*>(CharPtr->GetMixinByID(Mixin_Movable::MixinID))->Shift(0.0f, Height, 0.0f);
 
 		auto LoaderID = m_chunkLoadDispatcher.getChunkController().createNewLoader(
 			[CharPtr]() {return dynamic_cast<Mixin_Movable*>(CharPtr->GetMixinByID(Mixin_Movable::MixinID))->getPos(); }

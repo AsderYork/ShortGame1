@@ -7,6 +7,7 @@
 #include "EntityGenerator.h"
 #include "EventBase.h"
 #include "GameTime.h"
+#include "GamePhysics.h"
 
 //Mixins
 #include "Mixin_Movable.h"
@@ -42,10 +43,10 @@ namespace GEM::GameSim
 
 
 	public:
-		//GameSim_PlayerController m_players;
 		EntityController m_entities;
 		EntityGenerator<Mixin_Health, Mixin_Movable> m_generator;
 		PlayerController m_players;
+		GamePhysics m_physics;
 
 
 		std::queue<std::pair<std::unique_ptr<EventBase>, ENTITY_ID_TYPE>> m_eventsBuffer;
@@ -54,6 +55,7 @@ namespace GEM::GameSim
 
 		GameSimulation() {
 			RegisterMixins();
+			m_physics.Initialize();
 		}
 
 		/**!

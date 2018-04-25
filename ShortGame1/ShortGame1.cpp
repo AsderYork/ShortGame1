@@ -56,28 +56,36 @@ int main(int argc, char *argv[])
 {
 	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
 
-	/*GEM::GameSim::LandscapeChunk LC01(0, 1), LC11(1, 1), LC21(2, 1);
+	GEM::GameSim::LandscapeChunk LC01(0, 1), LC11(1, 1), LC21(2, 1);
 	GEM::GameSim::LandscapeChunk LC00(0, 0), LC10(1, 0), LC20(2, 0);
 
 	auto FillChunk = [](GEM::GameSim::LandscapeChunk& LC)
 	{
-		for (int y = 0; y < 20; y++)
+		for (int y = 0; y < 64; y++)
 		{
 			for (int x = 0; x < 16; x++)
 			{
-				for (int z = 0; z < 16; z++)
-				{					
-					LC.getNode(x, y, z).Value = 255;
+				for (int z = 0; z < 4; z++)
+				{	
+					if( y < 12 + x)
+					{
+						LC.getNode(x, y, z).Value = 255;
+					}
+					else
+					{
+						LC.getNode(x, y, z).Value = 0;
+					}
 				}
 			}
 		}
+
 	};
 
 	FillChunk(LC00);
 	FillChunk(LC01);
 	FillChunk(LC10);
 	FillChunk(LC11);
-	*/
+	
 	/*for (int x = 0; x < 16; x++)
 	{
 		for (int z = 0; z < 16; z++)
@@ -117,24 +125,24 @@ int main(int argc, char *argv[])
 	LC00.getNode(11, 6, 9).Value = 255;
 	*/
 
-	/*auto LNDSCPM1 = GEM::GameSim::LandscapeMeshGenerator::Generate(&LC00, &LC01, &LC10, &LC11);
+	auto LNDSCPM1 = GEM::GameSim::LandscapeMeshGenerator::Generate(&LC00, &LC01, &LC10, &LC11);
 	GEM::LandscapeVisualMesh vm;
-	*/
+	
 	
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
 	auto OgreController = Controller.AddService<GEM::Ogre_Service>(SDLController);
 	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
 	auto NetworkController = Controller.AddService<GEM::NetworkController>();
-	/*auto TmpSe = Controller.AddService<TmpService>();
+	auto TmpSe = Controller.AddService<TmpService>();
 	TmpSe->pos = LC00.getPosition();
 	TmpSe->lm = &LNDSCPM1;
-	TmpSe->ogs = OgreController;*/
+	TmpSe->ogs = OgreController;
 
 
-	auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
-	auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
-	auto GameVisualization = Controller.AddService<GEM::GameVisualization>(GameSimService, OgreController);
+	//auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
+	//auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
+	//auto GameVisualization = Controller.AddService<GEM::GameVisualization>(GameSimService, OgreController);
 
 
 
@@ -154,7 +162,7 @@ int main(int argc, char *argv[])
 	*/
 
 
-	ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
+	//ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
 
     return Controller.start();
 	return 0;

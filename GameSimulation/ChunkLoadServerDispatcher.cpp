@@ -15,7 +15,28 @@ namespace GEM::GameSim
 		}
 
 	}
+
+	void ChunkLoadServerDispatcher::getOneChunk(int x, int z)
+	{
+		if (m_chunkLoader.isChunkAvaliable(x, z))
+		{
+			m_chunks.addChunk(x, z,	[&](LandscapeChunk* chptr) {m_chunkLoader.LoadChunkIn(x, z, chptr); });
+		}
+		else
+		{
+			m_chunks.addChunk(x,z,	[&](LandscapeChunk* chptr){	m_chunkGenerator.FillChunkIn(x, z, chptr);	m_chunkLoader.SaveChunk(chptr);	});
+		}
+	}
 	
+	void ChunkLoadServerDispatcher::ForceChunkCreation(int x, int z)
+	{
+		getOneChunk(x, z);
+		getOneChunk(x + 1, z);
+		getOneChunk(x, z + 1);
+		getOneChunk(x + 1, z + 1);
+		m_chunks.generateMeshesForUnpreparedChunks();
+	}
+
 	void ChunkLoadServerDispatcher::ProcessChunks()
 	{
 		m_chunkController.ProcessChunks();
@@ -25,21 +46,12 @@ namespace GEM::GameSim
 
 		for (auto& visibleChunk : NewlyVisibleChunks)
 		{
-			if (m_chunkLoader.isChunkAvaliable(visibleChunk.x, visibleChunk.z))
-			{
-				m_chunks.addChunk(visibleChunk.x, visibleChunk.z,
-					[&](LandscapeChunk* chptr) {m_chunkLoader.LoadChunkIn(visibleChunk.x, visibleChunk.z, chptr); }
-				);				
-			}
-			else
-			{
-				m_chunks.addChunk(visibleChunk.x, visibleChunk.z,
-					[&](LandscapeChunk* chptr)
-					{
-						m_chunkGenerator.FillChunkIn(visibleChunk.x, visibleChunk.z, chptr);
-						m_chunkLoader.SaveChunk(chptr);
-					});
-			}
+			getOneChunk(visibleChunk.x, visibleChunk.z);
+		}
+
+		if (NewlyVisibleChunks.size() > 0)
+		{
+			m_chunks.generateMeshesForUnpreparedChunks();
 		}
 
 		auto NoLongerVisibleChunks = m_chunkController.getGlobalyNoLongerVisibleChunks();

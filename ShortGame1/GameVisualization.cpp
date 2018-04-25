@@ -63,10 +63,13 @@ namespace GEM
 	{
 		item = other.item;
 		node = other.node;
+		PlayerNode = other.PlayerNode;
 		ogre = other.ogre;
 
 		other.item = nullptr;
 		other.node = nullptr;
+		other.PlayerNode = nullptr;
+
 
 	}
 
@@ -75,13 +78,16 @@ namespace GEM
 		auto mSceneMgr = ogre->getRoot()->getSceneManager("ExampleSMInstance");
 		item = mSceneMgr->createItem("Cubexa.mesh");
 
+		
 		node = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-		node->attachObject(item);
+		PlayerNode = node->createChildSceneNode(Ogre::SCENE_DYNAMIC, Ogre::Vector3(0.0f, 1.0f, 0.0f));
+		PlayerNode->attachObject(item);
 	}
 
 	GameVisualization::ObjectRAII::~ObjectRAII()
 	{//So yeah, distructor is called even for moved-from objects. So we first have to check state and only then we can destroy
 		if (node == nullptr) { return; }
+		PlayerNode->removeAndDestroyAllChildren();
 		node->removeAndDestroyAllChildren();
 		ogre->getRoot()->getSceneManager("ExampleSMInstance")->destroyItem(item);
 	}

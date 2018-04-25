@@ -27,6 +27,7 @@ namespace GEM
 		public:
 			Ogre::Item* item;
 			Ogre::SceneNode* node;
+			Ogre::SceneNode* PlayerNode;
 
 			ObjectRAII(const ObjectRAII&) = delete;
 			ObjectRAII(ObjectRAII&& other);
