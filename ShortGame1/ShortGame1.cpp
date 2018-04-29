@@ -18,6 +18,8 @@
 #include <LandscapeMeshGenerator.h>
 #include "LandscapeVisualization.h"
 
+#include <LandscapeChunkPack.h>
+
 class TmpService : public GEM::Service
 {
 public:
@@ -61,6 +63,32 @@ public:
 	virtual ActionResult postFrame(float timeDelta) override
 	{
 		return ActionResult::AR_OK;
+	}
+};
+
+auto LandscapeTest = [](GEM::GameSim::LandscapeChunk * NewChunk)
+{
+	auto[ActualX, ActualZ] = NewChunk->getPosition();
+
+	for (int x = 0; x < 16; x++)
+	{
+		for (int z = 0; z < 16; z++)
+		{
+			int ThisX = (ActualZ * 16) + x;
+			int ThisZ = (ActualX * 16) + z;
+			float NodeHeight = 20 + sin(ThisX / 3.0f) * 2 + sin(ThisZ / 3.83f + 1)*1.43f;
+
+			for (int y = 0; y < (int)floor(NodeHeight); y++)
+			{
+				if (NewChunk->getNode(z, y, x).Value != 255) {
+					printf("Chunk[%i;%i] differs in position (%i;%i;%i); Have %i but should %i!\n", ActualX, ActualZ, x, y, z, NewChunk->getNode(z, y, x).Value, 255);
+				}
+			}
+
+			if (NewChunk->getNode(z, (int)floor(NodeHeight), x).Value != (int)(255 * (NodeHeight - floor(NodeHeight)))) {
+				printf("Chunk[%i;%i] differs in position (%i;%i;%i); Have %i but should %i!\n", ActualX, ActualZ, x, (int)floor(NodeHeight), z, NewChunk->getNode(z, (int)floor(NodeHeight), x).Value, (int)(255 * (NodeHeight - floor(NodeHeight))));
+			}
+		}
 	}
 };
 
@@ -198,6 +226,8 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 	static GEM::GameSim::LandscapeChunk LC02(0, 2), LC12(1, 2), LC22(2, 2);
 	static GEM::GameSim::LandscapeChunk LC01(0, 1), LC11(1, 1), LC21(2, 1);
 	static GEM::GameSim::LandscapeChunk LC00(0, 0), LC10(1, 0), LC20(2, 0);
+
+
 
 
 	MakeHarmonics(LC00); MakeHarmonics(LC01); MakeHarmonics(LC02);
