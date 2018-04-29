@@ -9,43 +9,25 @@ namespace GEM::GameSim
 		target->setPosX(x);
 		target->setPosZ(z);
 
-		std::vector<std::vector<float>> Heights;
+		auto[ActualX, ActualZ] = target->getPosition();
 
-		float PosX, PosZ;
-		for (int tz = 0; tz < LandscapeChunk_Size; tz++)
+		for (int x = 0; x < 16; x++)
 		{
-			Heights.emplace_back();
-			for (int tx = 0; tx < LandscapeChunk_Size; tx++)
+			for (int z = 0; z < 16; z++)
 			{
-				PosX = x + tx;
-				PosZ = z + tz;
+				int ThisX = (ActualZ * 16) + x;
+				int ThisZ = (ActualX * 16) + z;
+				float NodeHeight = 20 + sin(ThisX / 3.0f) * 2 + sin(ThisZ / 3.83f + 1)*1.43f;
 
-				Heights[tz].push_back(20.0f + sinf(PosX / 100) * 12 + sinf(PosZ / 143) * 8 + cosf(PosX / 10 + PosZ / 4) * 4);
-			}
-		}
-
-		for (int y = 0; y < LandscapeChunk_Height; y++)
-		{
-			
-			for (int z = 0; z < LandscapeChunk_Size; z++)
-			{
-				for (int x = 0; x < LandscapeChunk_Size; x++)
+				for (int y = 0; y < (int)floor(NodeHeight); y++)
 				{
-					uint8_t val;
-					if (Heights[x][z] < y)
-					{
-						val = 255;
-					}
-					else if (ceilf(Heights[x][z]) < y)
-					{
-						val = 0;
-						//val = (Heights[x][z] - y) * 255;
-					}
-					else { val = 0; }
-					target->getNode(x, y, z).Value = val;
+					target->getNode(z, y, x).Value = 255;
 				}
+				target->getNode(z, (int)floor(NodeHeight), x).Value = (int)(255 * (NodeHeight - floor(NodeHeight)));
+
 			}
 		}
+
 	}
 
 }

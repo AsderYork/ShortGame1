@@ -60,6 +60,8 @@ namespace GEM
 		{
 			auto& Vertex = Chunk->m_vertices[Orientations[i].OriginalVertex];
 
+			//if (Vertex.normal.fuzzyZero()) { continue; }
+
 			meshVertices[i].px = static_cast<float>(Vertex.pos.x());
 			meshVertices[i].py = static_cast<float>(Vertex.pos.y());
 			meshVertices[i].pz = static_cast<float>(Vertex.pos.z());

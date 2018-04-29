@@ -321,15 +321,15 @@ namespace GEM::GameSim
 
 void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNewVertices, ProcessingData& tmpData)
 {
-	uint8_t corner[8];
-	corner[0] = getNodeValue(x - 1	, y	-1	, z	- 1	, tmpData);
-	corner[1] = getNodeValue(x   	, y	-1	, z	- 1 , tmpData);
-	corner[2] = getNodeValue(x - 1	, y -1	, z		, tmpData);
-	corner[3] = getNodeValue(x   	, y	-1	, z		, tmpData);
-	corner[4] = getNodeValue(x - 1	, y 	, z	- 1	, tmpData);
-	corner[5] = getNodeValue(x   	, y 	, z	- 1	, tmpData);
-	corner[6] = getNodeValue(x - 1	, y 	, z		, tmpData);
-	corner[7] = getNodeValue(x   	, y 	, z		, tmpData);
+	int8_t corner[8];
+	corner[0] = getNodeValue(x - 1	, y		, z	- 1	, tmpData) - 128;
+	corner[1] = getNodeValue(x   	, y		, z	- 1 , tmpData) - 128;
+	corner[2] = getNodeValue(x - 1	, y 	, z		, tmpData) - 128;
+	corner[3] = getNodeValue(x   	, y		, z		, tmpData) - 128;
+	corner[4] = getNodeValue(x - 1	, y +1 	, z	- 1	, tmpData) - 128;
+	corner[5] = getNodeValue(x   	, y +1	, z	- 1	, tmpData) - 128;
+	corner[6] = getNodeValue(x - 1	, y +1	, z		, tmpData) - 128;
+	corner[7] = getNodeValue(x   	, y +1	, z		, tmpData) - 128;
 
 	unsigned long caseCode = 0;
 	caseCode += corner[0] > 0 ? 1   : 0;
@@ -488,24 +488,38 @@ LandscapeMesh LandscapeMeshGenerator::Generate(LandscapeChunk* ChunkCenter, Land
 	CurrData.m_chunkRight = ChunkRight;
 	CurrData.m_chunkForwardRight = ChunkForwardRight;
 
-	for (int y = 0; y < LandscapeChunk_Height; y++)
+	for (int y = 0; y < LandscapeChunk_Height - 1; y++)
 	{
-		ProcessOneCube(0, y, 0, false, CurrData);
+
+		//Process first z-row withoud adding vertices. It is used only for normals!
+		for (int x = 0; x < LandscapeChunk_Size + 2; x++)
+		{
+			ProcessOneCube(x, y, 0, false, CurrData);
+		}
+
+		//Process actual landscape
 		for (int z = 1; z < LandscapeChunk_Size + 1; z++)
 		{
-			ProcessOneCube(0, y, z, false, CurrData);
+			ProcessOneCube(0, y, z, false, CurrData);//Skip one in the beginning
 			for (int x = 1; x < LandscapeChunk_Size + 1; x++)
 			{
 				ProcessOneCube(x, y, z, true, CurrData);
 			}
-			ProcessOneCube(LandscapeChunk_Size + 1, y, z, false, CurrData);
+			ProcessOneCube(LandscapeChunk_Size + 1, y, z, false, CurrData);//And one at the end
 		}
-		ProcessOneCube(0, y, LandscapeChunk_Size + 1, false, CurrData);
+		//Process first z-row withoud adding vertices. It is used only for normals!
+		for (int x = 0; x < LandscapeChunk_Size + 2; x++)
+		{
+			ProcessOneCube(x, y, LandscapeChunk_Size + 1, false, CurrData);
+		}
+
+
+
+
 		//Clear last layer;
 		memset(CurrData.NodeDecks + ((y + 1) % 2), 0xff, sizeof(CellRepresentation)*(LandscapeChunk_Size + 3)*(LandscapeChunk_Size + 3));
 
 	}
-
 	return CurrData.tmpMesh;
 }
 
