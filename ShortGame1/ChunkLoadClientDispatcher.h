@@ -12,6 +12,7 @@
 #include <LandscapeChunkStorage.h>
 
 #include "LandscapeVisualization.h"
+#include "LandscapePhysics.h"
 
 #include <memory>
 
@@ -24,7 +25,7 @@ namespace GEM
 		bool isConfirmed;
 	};
 
-	using ChunkStorageType = GameSim::ChunkStorage<ChunkConfirmationEnsurance, LandscapeVisualMesh>;
+	using ChunkStorageType = GameSim::ChunkStorage<ChunkConfirmationEnsurance, LandscapeVisualMesh, GameSim::PerChunkCollisionObject>;
 	/**!
 	Manages chunks on the client. Loading from network and disk. Requesting neccessary chunks
 	and so on.

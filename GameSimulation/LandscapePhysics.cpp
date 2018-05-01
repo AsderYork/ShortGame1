@@ -1,11 +1,15 @@
 #include "LandscapePhysics.h"
 #include "LandscapeMeshGenerator.h"
+#include "Mixin_Movable Singleton.h"
 
 #include <btBulletDynamicsCommon.h>
 
 namespace GEM::GameSim
 {
-
+	LandscapePhysics::LandscapePhysics(GamePhysics * Physics) : m_physics(Physics)
+	{
+		Mixin_Movable_Singleton::Instance().SetLandscapePhysicsPtr(this);
+	}
 	void LandscapePhysics::NewChunkAdded(LandscapeChunk * NewChunk, LandscapeMesh* newMesh, PerChunkCollisionObject * SpecificData)
 	{
 		SpecificData->m_mesh = std::make_unique<btTriangleIndexVertexArray>(
@@ -19,7 +23,7 @@ namespace GEM::GameSim
 		SpecificData->collisionShape = std::make_unique<btBvhTriangleMeshShape>(SpecificData->m_mesh.get(), true);
 
 		auto[PosX, PosZ] = NewChunk->getPosition();
-		SpecificData->motionState =  std::make_unique<btDefaultMotionState>(btTransform(btQuaternion(0, 0, 0, 1), btVector3(PosX*LandscapeChunk_Size, 0, PosZ*LandscapeChunk_Size)));
+		SpecificData->motionState =  std::make_unique<btDefaultMotionState>(btTransform(btQuaternion(0, 0, 0, 1), btVector3(PosX*(int)LandscapeChunk_Size, 0, PosZ*(int)LandscapeChunk_Size)));
 
 		btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, SpecificData->motionState.get(), SpecificData->collisionShape.get(), btVector3(0, 0, 0));
 
@@ -36,6 +40,19 @@ namespace GEM::GameSim
 		{		
 			m_physics->getWorld()->removeRigidBody(SpecificData->rigidBody.get());
 		}
+	}
+
+	std::optional<btVector3> LandscapePhysics::RayTest(btVector3 start, btVector3 onLine)
+	{
+		btCollisionWorld::ClosestRayResultCallback RayCallback(start, onLine);
+
+		float Height = 20.0f;
+		m_physics->getWorld()->rayTest(start, onLine, RayCallback);
+		if (RayCallback.hasHit())
+		{
+			return RayCallback.m_hitPointWorld;
+		}
+		return std::nullopt;
 	}
 
 }

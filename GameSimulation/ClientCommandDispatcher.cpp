@@ -20,7 +20,7 @@ namespace GEM::GameSim
 		command->m_uniqueID = m_lastUsedID++;
 
 		auto ApplyResult = m_processors[command->m_header]->ApplyCommand(command.get(), 0);
-		m_commandBuffer.push_back(std::make_pair(std::move(command), ApplyResult));
+		m_commandBuffer.push_back(CommandStorageItem(std::move(command), ApplyResult));
 		return true;
 	}
 	bool ClientHistory::InsertPerformedCommandInHistory(std::unique_ptr<NetworkCommand>&& command)
@@ -35,7 +35,7 @@ namespace GEM::GameSim
 		//But it's a serialization problem.
 		command->m_uniqueID = m_lastUsedID++;
 
-		m_commandBuffer.push_back(std::make_pair(std::move(command), true));
+		m_commandBuffer.push_back(CommandStorageItem(std::move(command)));
 		bool Res = m_commandBuffer.full();
 		return true;
 	}
@@ -47,27 +47,32 @@ namespace GEM::GameSim
 		{
 			//Get command, that was rejected
 			//Assumes that ID's of commands in a history increments correctly
-			auto& rjcCommand = m_commandBuffer[rejectedCommand - m_commandBuffer.begin()->first->m_uniqueID];
-			if (rjcCommand.second)
+			auto& rjcCommand = m_commandBuffer[rejectedCommand - m_commandBuffer.front().ptr->m_uniqueID];
+			if (rjcCommand.ExpectedToSucceed)
 			{
 				//If at least one command in history was unexpectedly rejected, history is no longer stable
 				m_isHistoryStable = false;
 			}
-			m_processors[rjcCommand.first->m_header]->RejectCommand(rjcCommand.first.get());
-			rjcCommand.first.reset();
+			m_processors[rjcCommand.ptr->m_header]->RejectCommand(rjcCommand.ptr.get());
+			rjcCommand.IsRejected = true;
 		}
 		//After all rejected commands was properly rejected, all the other commands is confirmed up to the number from server
 		std::size_t ConfirmedCommandNumber = 0;
 		for (auto& ConfirmedCommand : m_commandBuffer)
 		{
 			//Skip rejected commands
-			if (ConfirmedCommand.first == nullptr) { ConfirmedCommandNumber++; continue; }
+			if (ConfirmedCommand.IsRejected)
+			{ 
+				ConfirmedCommand.ptr.reset();
+				ConfirmedCommandNumber++;
+				continue; 
+			}
 
 			//If we've reached non-confirmed command, stop
-			if (ConfirmedCommand.first->m_uniqueID > serverHistoryPack.m_lastRecivedCommand) { break; }
+			if (ConfirmedCommand.ptr->m_uniqueID > serverHistoryPack.m_lastRecivedCommand) { break; }
 
 			//And then just confirm commands
-			m_processors[ConfirmedCommand.first->m_header]->ConfirmCommand(ConfirmedCommand.first.get());
+			m_processors[ConfirmedCommand.ptr->m_header]->ConfirmCommand(ConfirmedCommand.ptr.get());
 			ConfirmedCommandNumber++;
 		}
 		//Erase confirmed commands. And rejected ones. It doesn't matter no more!
@@ -81,12 +86,12 @@ namespace GEM::GameSim
 
 		for (auto reverseIt = m_commandBuffer.rbegin(); reverseIt != m_commandBuffer.rend(); reverseIt++)
 		{
-			m_processors[reverseIt->first->m_header]->RollbackCommand(reverseIt->first.get());
+			m_processors[reverseIt->ptr->m_header]->RollbackCommand(reverseIt->ptr.get());
 		}
 
 		for (auto& HistoryCommand : m_commandBuffer)
 		{
-			HistoryCommand.second = m_processors[HistoryCommand.first->m_header]->ReapplyCommand(HistoryCommand.first.get());
+			HistoryCommand.ExpectedToSucceed = m_processors[HistoryCommand.ptr->m_header]->ReapplyCommand(HistoryCommand.ptr.get());
 		}
 	}
 

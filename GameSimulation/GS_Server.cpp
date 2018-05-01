@@ -59,7 +59,7 @@ namespace GEM::GameSim
 		catch (cereal::Exception&) {}
 
 		auto& TmpPlayerInfo = m_gs.m_players.getPlayer(id)->additional_data;
-		m_commandDispatcher.ProcessCommands(std::move(ClientCommandPacks), &TmpPlayerInfo->ExchangeHistory);
+		m_commandDispatcher.ProcessCommands(std::move(ClientCommandPacks), &TmpPlayerInfo->ExchangeHistory, m_gs.getGameTime());
 	}
 	
 
@@ -102,11 +102,7 @@ namespace GEM::GameSim
 
 	void GS_Server::ProcessPlayerSyncingUpdates()
 	{
-		for (auto& player : m_gs.m_players.getPlayersVector())
-		{
-			player.additional_data->ExchangeHistory.ReconsiderHistory();
-		}
-		
+			
 	}
 
 	std::optional<PlayerTicket> GS_Server::NewPlayerRoutine(Player && player)

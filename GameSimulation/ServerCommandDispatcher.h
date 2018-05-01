@@ -10,7 +10,7 @@ namespace GEM::GameSim
 {
 	class ServerCommandDispatcher;
 
-	class ServerHistory : public HistoryInterface
+	class ServerHistory
 	{
 	private:
 		PLAYER_ID_TYPE m_playerID;
@@ -27,8 +27,13 @@ namespace GEM::GameSim
 		//Commands to send are on per-player basis, so they are kept as history of network exchange with a palyer. I mean, it's still history, right?
 		std::vector<std::unique_ptr<NetworkCommand>> m_commandsToSend;
 
-
-		virtual void InjectCommand(std::unique_ptr<NetworkCommand>&& command, GameTime PacketTime) override;
+		/**!
+		Inserts command in processing loop for a given client
+		\param[in] command A command, that should be processed
+		\param[in] PacketTime A time from packet, that came with a given command
+		\param[in] CurrTime Current time of a server simulation
+		*/
+		virtual void InjectCommand(std::unique_ptr<NetworkCommand>&& command, GameTime PacketTime, GameTime CurrTime);
 
 		/**!
 		Server usualy performs command as part of it's simulation and then just sends updates.
@@ -73,7 +78,10 @@ namespace GEM::GameSim
 			}
 		}
 
-		void ProcessCommands(std::vector<ClientCommandPack_Server> commandPacks, ServerHistory* History);
+		/**!
+		Process all the commands in commandPack for a client with a given history
+		*/
+		void ProcessCommands(std::vector<ClientCommandPack_Server> commandPacks, ServerHistory* History, GameTime CurrentTime);
 		
 
 		ServerCommandPack GatherResults(ServerHistory* History, GameTime CurrentTime);

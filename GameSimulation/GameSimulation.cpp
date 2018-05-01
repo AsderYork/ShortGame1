@@ -30,7 +30,7 @@ namespace GEM::GameSim
 		}
 
 		//Apply all events. Commands is deprecated now, don't they?
-		while (!m_eventsBuffer.empty())
+		while (!m_eventsBuffer.empty()) 
 		{
 			for (auto& mixin : m_entities.GetEntity(m_eventsBuffer.front().second)->getAllMixins())
 			{

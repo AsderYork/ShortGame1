@@ -4,8 +4,9 @@ void GEM::GameSim::Mixin_Health::SendUpdate(cereal::BinaryOutputArchive & archiv
 {
 }
 
-void GEM::GameSim::Mixin_Health::ReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime updateTime)
+bool GEM::GameSim::Mixin_Health::CheckAndReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime updateTime)
 {
+	return true;
 }
 
 void GEM::GameSim::Mixin_Health::ApplyEvent(cereal::BinaryInputArchive& archive)

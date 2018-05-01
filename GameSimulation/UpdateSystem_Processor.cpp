@@ -38,26 +38,43 @@ namespace GEM::GameSim
 		return NewCommand;
 	}
 
-	bool UpdateSystemProcessor::ApplyCommand(const NetworkCommand * Command, GameTime PacketTime)
+	bool UpdateSystemProcessor::ApplyCommand(const NetworkCommand * Command, GameTime TimeLag)
 	{
 		auto CommandRecast = static_cast<const UpdateSystemCommand*>(Command);
 		EntityBase* EntIt=nullptr;
-
-		if (!CommandRecast->m_mixins.empty())
-		{
-			EntIt = m_gameSim->AddEntity(CommandRecast->m_entityID, CommandRecast->m_mixins);
-		}
-		else
-		{
-			EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID);
-		}
+		
+		
+		EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID);
+		if (EntIt == nullptr) { return false; }
 
 		bool UpdateFullyAccepted = true;
+
+		//Store current mixin states in case of rollback
+		std::vector<std::pair<MIXIN_ID_TYPE, std::stringstream>> PrevStates;
+
 		for (auto& mixin : CommandRecast->m_perMixinUpdates)
 		{
+			{//Current state storing part
+				PrevStates.emplace_back();
+				PrevStates.back().first = mixin.first;
+				cereal::BinaryOutputArchive storeAr(PrevStates.back().second);
+				EntIt->GetMixinByID(mixin.first)->SendUpdate(storeAr, Mixin_base::UpdateReason::APPEAR);
+			}
+
+			
 			std::stringstream sstream(mixin.second);
 			cereal::BinaryInputArchive ar(sstream);
-			EntIt->GetMixinByID(mixin.first)->ApplyEvent(ar);
+			if (!EntIt->GetMixinByID(mixin.first)->CheckAndReciveUpdate(ar, TimeLag))
+			{
+				//If at least one update failed. Rollback and return false!
+				for (auto& oldState : PrevStates)
+				{
+					cereal::BinaryInputArchive ar(oldState.second);
+					EntIt->GetMixinByID(oldState.first)->ApplyEvent(ar);
+				}
+
+				return false;
+			}
 		}
 
 		return true;

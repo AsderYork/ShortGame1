@@ -1,6 +1,10 @@
 #pragma once
+#include "LandscapePhysics.h"
+
 namespace GEM::GameSim
 {
+	class Mixin_Movable;
+
 	/**!
 	Yup. It's a singleton. This singleton provides a way for Mixin_Movables to interract with 
 	other systems, such as LandscapePhysics without the need to somehow pass those systems as
@@ -13,6 +17,10 @@ namespace GEM::GameSim
 	{
 	private:
 		Mixin_Movable_Singleton() = default;
+
+		LandscapePhysics* m_landPhys;
+
+		friend class Mixin_Movable;
 	public:
 		Mixin_Movable_Singleton(Mixin_Movable_Singleton const&) = delete;
 		Mixin_Movable_Singleton& operator= (Mixin_Movable_Singleton const&) = delete;
@@ -22,5 +30,7 @@ namespace GEM::GameSim
 			static Mixin_Movable_Singleton s;
 			return s;
 		}
+
+		static void SetLandscapePhysicsPtr(LandscapePhysics* PhysPtr);
 	};
 }

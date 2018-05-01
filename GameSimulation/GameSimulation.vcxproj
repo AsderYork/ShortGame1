@@ -216,6 +216,7 @@
     <ClCompile Include="Mixin_Base.cpp" />
     <ClCompile Include="Mixin_Controller.cpp" />
     <ClCompile Include="Mixin_Health.cpp" />
+    <ClCompile Include="Mixin_Movable Singleton.cpp" />
     <ClCompile Include="Mixin_Movable.cpp" />
     <ClCompile Include="ServerCommandDispatcher.cpp" />
     <ClCompile Include="SharedDataPackets.cpp" />

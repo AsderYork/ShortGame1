@@ -70,39 +70,6 @@
     <Filter Include="Landscape\ChunkController">
       <UniqueIdentifier>{f3c3ace1-6e9e-460d-bef9-cf8b5be815a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameSimulation\NetworkCommands">
-      <UniqueIdentifier>{24a2f1e1-f223-40cd-8717-68cc7ed89f6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\BaseProcessor">
-      <UniqueIdentifier>{cfc472cf-2bfe-42bb-b37f-8a07ecd4f631}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\BaseCommand">
-      <UniqueIdentifier>{8d9b7ba4-3d6c-4762-896d-a85d2196cb18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\ServerCommandDispatcher">
-      <UniqueIdentifier>{818c5b9c-8e15-4327-b0b0-423d1dbea0d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\History">
-      <UniqueIdentifier>{3bb78c85-ac07-4ed2-8601-46f06f4fa570}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\SharedDataPackets">
-      <UniqueIdentifier>{b7556a03-bcc7-486e-a2c8-44437fb8464c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\ClientCommandDispatcher">
-      <UniqueIdentifier>{5c904501-0f81-4a55-a4e3-41b8bb16fe16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands">
-      <UniqueIdentifier>{d64ab255-108d-4020-bbf1-4a388e1f38d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem">
-      <UniqueIdentifier>{f6722405-3831-4632-932a-9255dec1f525}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Client%27s version">
-      <UniqueIdentifier>{144ace72-4180-4fa2-a19c-e1f245d06edc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Server%27s version">
-      <UniqueIdentifier>{bdcb05f4-07e0-4551-ab2e-f4dce5bfef63}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Landscape\ChunkLoadDispatcher">
       <UniqueIdentifier>{1618334d-230e-46b0-bc3a-383149a6a74d}</UniqueIdentifier>
     </Filter>
@@ -111,15 +78,6 @@
     </Filter>
     <Filter Include="Landscape\ChunkLoadDispatcher\ChunkLoader_Storage">
       <UniqueIdentifier>{c7c6b098-2bbe-415b-bef4-63c5db2b7327}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem">
-      <UniqueIdentifier>{f5044459-c026-4843-9db8-7215b2b0b020}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Commands">
-      <UniqueIdentifier>{987c52ec-a329-4052-af0d-07688f836ae7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor">
-      <UniqueIdentifier>{482dfc29-c5c9-49e3-9de9-2a89e3a34d29}</UniqueIdentifier>
     </Filter>
     <Filter Include="Landscape\ChunkLoadDispatcher\ChunkLoadServerDispatcher">
       <UniqueIdentifier>{63262ac6-ba37-4507-a536-cddc985576fa}</UniqueIdentifier>
@@ -135,6 +93,48 @@
     </Filter>
     <Filter Include="Landscape\ChunkLoadDispatcher\ChunkStorage">
       <UniqueIdentifier>{95d5a87a-bcd4-40b2-b66b-fe0d3b110d5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands">
+      <UniqueIdentifier>{24a2f1e1-f223-40cd-8717-68cc7ed89f6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\BaseProcessor">
+      <UniqueIdentifier>{cfc472cf-2bfe-42bb-b37f-8a07ecd4f631}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\BaseCommand">
+      <UniqueIdentifier>{8d9b7ba4-3d6c-4762-896d-a85d2196cb18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\ServerCommandDispatcher">
+      <UniqueIdentifier>{818c5b9c-8e15-4327-b0b0-423d1dbea0d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\History">
+      <UniqueIdentifier>{3bb78c85-ac07-4ed2-8601-46f06f4fa570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\SharedDataPackets">
+      <UniqueIdentifier>{b7556a03-bcc7-486e-a2c8-44437fb8464c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\ClientCommandDispatcher">
+      <UniqueIdentifier>{5c904501-0f81-4a55-a4e3-41b8bb16fe16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\Processors and Commands">
+      <UniqueIdentifier>{d64ab255-108d-4020-bbf1-4a388e1f38d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\Processors and Commands\UpdateSystem">
+      <UniqueIdentifier>{f6722405-3831-4632-932a-9255dec1f525}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\Processors and Commands\UpdateSystem\Client%27s version">
+      <UniqueIdentifier>{144ace72-4180-4fa2-a19c-e1f245d06edc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\Processors and Commands\UpdateSystem\Server%27s version">
+      <UniqueIdentifier>{bdcb05f4-07e0-4551-ab2e-f4dce5bfef63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\Processors and Commands\LandscapeSystem">
+      <UniqueIdentifier>{f5044459-c026-4843-9db8-7215b2b0b020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\Processors and Commands\LandscapeSystem\Commands">
+      <UniqueIdentifier>{987c52ec-a329-4052-af0d-07688f836ae7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor">
+      <UniqueIdentifier>{482dfc29-c5c9-49e3-9de9-2a89e3a34d29}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -213,31 +213,31 @@
       <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="NetworkCommandsProcessor.h">
-      <Filter>GameSimulation\NetworkCommands\BaseProcessor</Filter>
+      <Filter>NetworkCommands\BaseProcessor</Filter>
     </ClInclude>
     <ClInclude Include="NetworkCommandBase.h">
-      <Filter>GameSimulation\NetworkCommands\BaseCommand</Filter>
+      <Filter>NetworkCommands\BaseCommand</Filter>
     </ClInclude>
     <ClInclude Include="ServerCommandDispatcher.h">
-      <Filter>GameSimulation\NetworkCommands\ServerCommandDispatcher</Filter>
+      <Filter>NetworkCommands\ServerCommandDispatcher</Filter>
     </ClInclude>
     <ClInclude Include="CommandHistoryInterface.h">
-      <Filter>GameSimulation\NetworkCommands\History</Filter>
+      <Filter>NetworkCommands\History</Filter>
     </ClInclude>
     <ClInclude Include="SharedDataPackets.h">
-      <Filter>GameSimulation\NetworkCommands\SharedDataPackets</Filter>
+      <Filter>NetworkCommands\SharedDataPackets</Filter>
     </ClInclude>
     <ClInclude Include="ClientCommandDispatcher.h">
-      <Filter>GameSimulation\NetworkCommands\ClientCommandDispatcher</Filter>
+      <Filter>NetworkCommands\ClientCommandDispatcher</Filter>
     </ClInclude>
     <ClInclude Include="UpdateSystem_Processor.h">
-      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Server%27s version</Filter>
+      <Filter>NetworkCommands\Processors and Commands\UpdateSystem\Server%27s version</Filter>
     </ClInclude>
     <ClInclude Include="UpdateSystemClientProcessor.h">
-      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Client%27s version</Filter>
+      <Filter>NetworkCommands\Processors and Commands\UpdateSystem\Client%27s version</Filter>
     </ClInclude>
     <ClInclude Include="UpdateSystem_Command.h">
-      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem</Filter>
+      <Filter>NetworkCommands\Processors and Commands\UpdateSystem</Filter>
     </ClInclude>
     <ClInclude Include="ChunkLoader_Generator.h">
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Generator</Filter>
@@ -246,10 +246,10 @@
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Storage</Filter>
     </ClInclude>
     <ClInclude Include="LandscapeSystem_Command.h">
-      <Filter>GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Commands</Filter>
+      <Filter>NetworkCommands\Processors and Commands\LandscapeSystem\Commands</Filter>
     </ClInclude>
     <ClInclude Include="LandscapeSystem_ServerProcessor.h">
-      <Filter>GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor</Filter>
+      <Filter>NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor</Filter>
     </ClInclude>
     <ClInclude Include="ChunkLoadServerDispatcher.h">
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoadServerDispatcher</Filter>
@@ -314,16 +314,16 @@
       <Filter>Landscape\ChunkController</Filter>
     </ClCompile>
     <ClCompile Include="ServerCommandDispatcher.cpp">
-      <Filter>GameSimulation\NetworkCommands\ServerCommandDispatcher</Filter>
+      <Filter>NetworkCommands\ServerCommandDispatcher</Filter>
     </ClCompile>
     <ClCompile Include="ClientCommandDispatcher.cpp">
-      <Filter>GameSimulation\NetworkCommands\ClientCommandDispatcher</Filter>
+      <Filter>NetworkCommands\ClientCommandDispatcher</Filter>
     </ClCompile>
     <ClCompile Include="UpdateSystem_Processor.cpp">
-      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Server%27s version</Filter>
+      <Filter>NetworkCommands\Processors and Commands\UpdateSystem\Server%27s version</Filter>
     </ClCompile>
     <ClCompile Include="UpdateSystemClientProcessor.cpp">
-      <Filter>GameSimulation\NetworkCommands\Processors and Commands\UpdateSystem\Client%27s version</Filter>
+      <Filter>NetworkCommands\Processors and Commands\UpdateSystem\Client%27s version</Filter>
     </ClCompile>
     <ClCompile Include="ChunkLoader_Generator.cpp">
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Generator</Filter>
@@ -332,7 +332,7 @@
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoader_Storage</Filter>
     </ClCompile>
     <ClCompile Include="LandscapeSystem_ServerProcessor.cpp">
-      <Filter>GameSimulation\NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor</Filter>
+      <Filter>NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor</Filter>
     </ClCompile>
     <ClCompile Include="ChunkLoadServerDispatcher.cpp">
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoadServerDispatcher</Filter>
@@ -341,10 +341,13 @@
       <Filter>LogHelper</Filter>
     </ClCompile>
     <ClCompile Include="SharedDataPackets.cpp">
-      <Filter>GameSimulation\NetworkCommands\SharedDataPackets</Filter>
+      <Filter>NetworkCommands\SharedDataPackets</Filter>
     </ClCompile>
     <ClCompile Include="LandscapePhysics.cpp">
       <Filter>Landscape\LandscapePhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="Mixin_Movable Singleton.cpp">
+      <Filter>Entities\Mixins\Mixin_Movable\Mixin_Movable Singleton</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

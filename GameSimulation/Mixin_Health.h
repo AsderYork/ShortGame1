@@ -61,7 +61,7 @@ namespace GEM::GameSim
 
 		virtual void SendUpdate(cereal::BinaryOutputArchive & archive, const UpdateReason reason) override;
 
-		virtual void ReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime LagTime) override;
+		virtual bool CheckAndReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime LagTime) override;
 
 		virtual void ApplyEvent(cereal::BinaryInputArchive& archive) override;
 

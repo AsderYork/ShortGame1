@@ -112,21 +112,14 @@ namespace GEM::GameSim
 		virtual void SendUpdate(cereal::BinaryOutputArchive& archive, const UpdateReason reason) = 0;
 
 		/**!
-		This one for clients. Entity on a server can alter it state, so client's entity should be altered in a same way.
-		Beware of various update scheems!
-
-		Applies event only if this event is clearly deviates from expected state with respect to time difference.
-		Updates comes with a certain lag due to a transfering channel. And sometimes it could be that update contain a state
-		that this mixin allready passed. For example if it's a Movable, Server sends an Update that it's 1 unit left and 
-		continue moving that way, but when it reached client, it's allready on 2 units both on client and server, but client
-		just recived a "1 unit" update. To negate this effect, implementation MUST perform any avaliable checks to determine
-		if new update is just an older version of a current state.
-
-		\note Currently when client recives Updates, it applies them all from oldest one to a newest. But is it good?
-		Oldest events are more likely to contain updates, that would be just a previous state, so they are, actually,
-		pretty good, and only new ones really by applied, if entity's state-changing pattern wasn't expected.
+		Checks if update is correct and if it is, applies it.
+		\param[in] archive An archive, that contains new mixin state
+		\param[in] UpdateLag A time correction based on a lag between client and server
+		\returns Returns true if update is correct and applied, returns false if update is incorrect.
+		\note, update might be skiped if UpdateLag calculation shows, that new state is somehow close to a current one
+		with respect to time lag. In that case true will be returned
 		*/
-		virtual void ReciveUpdate(cereal::BinaryInputArchive& archive, const GameTime UpdateLag) = 0;
+		virtual bool CheckAndReciveUpdate(cereal::BinaryInputArchive& archive, const GameTime UpdateLag) = 0;
 
 		/**!
 		Applies event to a mixin. Unlike \c ReciveUpdate this method MUST apply the update as-is, without any tests.
@@ -146,6 +139,7 @@ namespace GEM::GameSim
 		in the queue and processed on the same frame, so beware of infinite loops, were two or more mixins exchange events indefinitely.
 		*/
 		virtual void ReciveEvent(const EventBase * const event) {};
+
 		virtual ~Mixin_base() {};
 	};
 }

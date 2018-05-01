@@ -3,6 +3,7 @@
 #include "GamePhysics.h"
 
 #include <memory>
+#include <optional>
 
 namespace GEM::GameSim
 {
@@ -25,8 +26,10 @@ namespace GEM::GameSim
 	private:
 		GamePhysics * m_physics;
 	public:
-		LandscapePhysics(GamePhysics* Physics) : m_physics(Physics){}
+		LandscapePhysics(GamePhysics* Physics);
 		virtual void NewChunkAdded(LandscapeChunk * NewChunk, LandscapeMesh* newMesh, PerChunkCollisionObject * SpecificData) override;
 		virtual void ChunkRemoved(LandscapeChunk * NewChunk, LandscapeMesh* newMesh, PerChunkCollisionObject * SpecificData) override;
+
+		std::optional<btVector3> RayTest(btVector3 start, btVector3 onLine);
 	};
 }

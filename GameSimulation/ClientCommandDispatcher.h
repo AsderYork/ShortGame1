@@ -22,7 +22,26 @@ namespace GEM::GameSim
 		*/
 		std::array<NetworkExchangeProcessor*, 256> m_processors;
 
-		boost::circular_buffer<std::pair<std::unique_ptr<NetworkCommand>, bool>> m_commandBuffer;
+		struct CommandStorageItem
+		{
+			//A command itself.
+			std::unique_ptr<NetworkCommand> ptr;
+			//Command may fail during re-applyment. If it is allready expected, that this command fails, and then server rejects it
+			//It actually doesn't change the state of a client. This variable allows tracking of such things
+			bool ExpectedToSucceed;
+			//When command get's rejected, we can't immediately remove it from buffer
+			//Becouse we still need it's ID. So we just remember that it must be freed instead of re-applied
+			//And do that during re-applyment state
+			bool IsRejected;
+
+			CommandStorageItem(std::unique_ptr<NetworkCommand>&& _ptr, bool ExpectedResult=true) :
+				ptr(std::move(_ptr)),
+				ExpectedToSucceed(ExpectedResult),
+				IsRejected(false)
+			{}
+		};
+
+		boost::circular_buffer<CommandStorageItem> m_commandBuffer;
 		NetworkCommandIDType m_lastUsedID;
 		bool m_isHistoryStable;
 

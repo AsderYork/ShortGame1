@@ -6,6 +6,8 @@
 #include "ChunkLoadClientDispatcher.h"
 #include "LandscapeSystem_ClientProcessor.h"
 
+#include <LandscapePhysics.h>
+
 #include <cereal\cereal.hpp>
 #include <cereal\archives\binary.hpp>
 #include <cereal\types\string.hpp>
@@ -28,6 +30,7 @@ namespace GEM
 
 	public:
 		ChunkLoadClientDispatcher m_chunkDispatcher;
+		GameSim::LandscapePhysics m_landPhys;
 
 		std::chrono::system_clock::time_point m_lastUpdateTime;
 		GameSim::ENTITY_ID_TYPE m_playerCharacterID;
@@ -39,10 +42,7 @@ namespace GEM
 			InsertEvent(std::move(Event), m_playerCharacterID);
 		}
 
-		inline GS_Client() : m_timeIsSet(false), m_updatesProcessor(this) {
-			m_dispatcher.AddProcessor(&m_updatesProcessor);
-			m_dispatcher.AddProcessor(&m_chunkDispatcher.getProcessor());
-		}
+		GS_Client();
 
 		/**!
 		This method is called right after simulation actually started.

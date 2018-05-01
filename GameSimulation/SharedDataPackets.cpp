@@ -34,7 +34,8 @@ namespace GEM::GameSim
 		ar(time);
 		ar(HistoryPack);
 
-		ar(static_cast<uint32_t>(commands.size()));
+		uint32_t CastSize = static_cast<uint32_t>(commands.size());
+		ar(CastSize);
 		for (const auto& command : commands)
 		{
 			ar(command->m_header);

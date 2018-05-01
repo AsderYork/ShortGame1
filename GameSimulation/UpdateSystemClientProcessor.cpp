@@ -45,6 +45,8 @@ namespace GEM::GameSim
 				}
 			}
 
+			//Do not send empty updates!
+			if (UpdateForEntity.size() == 0) { continue; }
 
 			dispatcher->InsertPerformedCommand(std::make_unique<UpdateSystemCommand>(ent.id, UpdateForEntity));
 		}

@@ -12,6 +12,15 @@
 
 namespace GEM
 {
+	GS_Client::GS_Client() : m_timeIsSet(false),
+		m_updatesProcessor(this),
+		m_landPhys((&m_physics)) 
+	{
+		m_dispatcher.AddProcessor(&m_updatesProcessor);
+		m_dispatcher.AddProcessor(&m_chunkDispatcher.getProcessor());
+
+		m_chunkDispatcher.m_chunks.RegisterListener(&m_landPhys);
+	}
 	void GS_Client::SimulationStarted()
 	{
 		m_updatesProcessor.AddControlledEntity(m_playerCharacterID);

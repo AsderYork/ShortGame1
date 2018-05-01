@@ -44,7 +44,7 @@ namespace GEM::GameSim
 		//THIS METHOD OF GIVING IDS IS TEMPORRARY! IT IS BROKEN!
 		//Not that broken, though
 		//But yeah, if it get's replaced, new method should also guarantee sorted vector of players
-		if (m_lastGivenID == std::numeric_limits<PLAYER_ID_TYPE>::max())
+		if (m_lastGivenID == (std::numeric_limits<PLAYER_ID_TYPE>::max)())
 		{
 			m_lastGivenID = 0;
 		}
