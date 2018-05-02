@@ -24,11 +24,6 @@ namespace GEM
 			return *this;
 		}
 
-		inline ~LandscapeVisualMesh()
-		{
-			mesh;
-		}
-
 		void Clear();
 
 	};

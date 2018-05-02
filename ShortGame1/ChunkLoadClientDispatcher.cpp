@@ -39,6 +39,12 @@ namespace GEM
 		}
 		if (NewlyVisibleChunks.size() != 0) { m_chunks.generateMeshesForUnpreparedChunks(); }
 		MessageDispatcher->InsertPerformedCommand(std::make_unique<GameSim::LandscapeSystemCommand_RequestChunks>(RequestCommand));
+
+		auto& NoLongerVisibleChunks = m_chunkController.getGlobalyNoLongerVisibleChunks();
+		for (auto& chunk : NoLongerVisibleChunks)
+		{
+			m_chunks.RemoveChunk(chunk.x, chunk.z, [](GameSim::LandscapeChunk* ch) {});
+		}
 	}
 
 
