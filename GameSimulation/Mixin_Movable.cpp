@@ -178,11 +178,7 @@ namespace GEM::GameSim
 
 		btScalar vex, vey, vez;
 		archive(vex, vey, vez);
-
-		if ((btVector3(vex,vey,vez).length() == 1.0f) && (m_velocity.length() == 0.0f))
-		{
-			printf("a");
-		}
+		
 
 		SetVelocity(vex, vey, vez);
 	}

@@ -294,7 +294,18 @@ int main(int argc, char *argv[])
 
 	ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
 
-    return Controller.start();
+	try
+	{
+		return Controller.start();
+	}
+	catch (std::exception &e)
+	{
+		LOGCATEGORY("Main").crit("Exception reached main! Exception:%s", e.what());
+	}
+	catch (...)
+	{
+		LOGCATEGORY("Main").crit("Exception reached main! And it's not std::excpetion!");
+	}
 	return 0;
 }
 

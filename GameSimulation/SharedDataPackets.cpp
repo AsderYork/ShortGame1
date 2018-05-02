@@ -1,4 +1,5 @@
 #include "SharedDataPackets.h"
+#include "LogHelper.h"
 
 namespace GEM::GameSim
 {
@@ -56,6 +57,10 @@ namespace GEM::GameSim
 		for (uint32_t i = 0; i < commandsSize; i++)
 		{
 			ar(header);
+			if (Processors[header] == nullptr) {
+				LOGCATEGORY("ServerCommandPack/SerializeOut").error("Command is addressed to processor %i that doesn't exist!", header);
+				continue;
+			}
 			commands.emplace_back(Processors[header]->deserializeCommand(ar));
 			commands.back()->m_header = header;
 		}
