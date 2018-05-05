@@ -42,8 +42,9 @@ namespace GEM
 					ServerPacks.emplace_back(std::move(NewPack));
 				}
 			}
-			catch (...)
+			catch (cereal::Exception)
 			{
+				//If we're here, then archive just ended.
 			}
 
 

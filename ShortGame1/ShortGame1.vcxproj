@@ -90,7 +90,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
+    <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(BULLETPHYSICS_HOME)\Repo\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
   </PropertyGroup>
@@ -155,7 +155,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>log4cpp.lib;zlib.lib;GameSimulation.lib;NetworkShared.lib;OgreMain.lib;CEGUIBase-9999.lib;CEGUIOgreRenderer-9999.lib;SDL2.lib;SDL2main.lib;OgreHlmsPbs.lib;OgreHlmsUnlit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>log4cpp.lib;zlib.lib;GameSimulation.lib;NetworkShared.lib;OgreMain.lib;CEGUIBase-9999.lib;CEGUIOgreRenderer-9999.lib;SDL2main.lib;SDL2.lib;OgreHlmsPbs.lib;OgreHlmsUnlit.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

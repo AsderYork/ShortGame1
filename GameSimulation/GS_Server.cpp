@@ -15,7 +15,6 @@ namespace GEM::GameSim
 		m_chunkLoadDispatcher(m_gs.m_players),
 		m_landscapePhysicsController((&m_gs.m_physics))
 	{
-		logHelper::setLog("./logs/log.txt");
 		m_commandDispatcher.AddProcessor(&m_updateSystemProcessor);
 		m_commandDispatcher.AddProcessor(&(m_chunkLoadDispatcher.getProcessor()));
 		m_chunkLoadDispatcher.Start();

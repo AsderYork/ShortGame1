@@ -4,6 +4,7 @@
 
 int main(int argc, char *argv[])
 {
+	GEM::logHelper::setLog("./logs/log.txt");
 	//GEM::GameSim::DoPhysics();
 	
 	try

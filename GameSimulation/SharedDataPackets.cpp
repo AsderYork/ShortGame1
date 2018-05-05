@@ -65,4 +65,22 @@ namespace GEM::GameSim
 			commands.back()->m_header = header;
 		}
 	}
+	void ClientCommandPack_Server::SerializeOut(cereal::BinaryInputArchive & ar, const std::array<NetworkExchangeProcessor*, 256>& Processors)
+	{
+		ar(time);
+		uint32_t commandsSize = 0;
+		ar(commandsSize);
+
+		uint8_t header;
+		NetworkCommandIDType id;
+
+		for (uint32_t i = 0; i < commandsSize; i++)
+		{
+			ar(header);
+			ar(id);
+			commands.emplace_back(Processors[header]->deserializeCommand(ar));
+			commands.back()->m_header = header;
+			commands.back()->m_uniqueID = id;
+		}
+	}
 }

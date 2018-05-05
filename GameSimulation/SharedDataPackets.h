@@ -51,24 +51,13 @@ namespace GEM::GameSim
 		GameTime time;
 		std::vector<std::unique_ptr<NetworkCommand>> commands;
 
-		void SerializeOut(cereal::BinaryInputArchive& ar, const std::array<NetworkExchangeProcessor*, 256>& Processors)
-		{
-			ar(time);
-			uint32_t commandsSize = 0;
-			ar(commandsSize);
-
-			uint8_t header;
-			NetworkCommandIDType id;
-
-			for (uint32_t i = 0; i < commandsSize; i++)
-			{
-				ar(header);
-				ar(id);
-				commands.emplace_back(Processors[header]->deserializeCommand(ar));
-				commands.back()->m_header = header;
-				commands.back()->m_uniqueID = id;
-			}
-		}
+		/**!
+		Serializes CommandPack from binary string.
+		\param[in] ar InputArchive of binary string, that contains command pack
+		\param[in] Processors processors that provide serilaization facilities for commands
+		\returns Returns the ammount of bytes, that where read
+		*/
+		void SerializeOut(cereal::BinaryInputArchive& ar, const std::array<NetworkExchangeProcessor*, 256>& Processors);
 
 	};
 
