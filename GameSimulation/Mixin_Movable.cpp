@@ -113,12 +113,10 @@ namespace GEM::GameSim
 		case KeyboardEvent_PlayerMoveBackward::id: {
 			if (static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
 			{
-				LOGCATEGORY("EVENTS!").info("MoveBackwards.Pressed");
 				m_movementState.Normal = CurrentMovement::NormalMovement::BACKWARD;
 			}
 			else
 			{
-				LOGCATEGORY("EVENTS!").info("MoveBackwards.Released");
 				m_movementState.Normal = CurrentMovement::NormalMovement::NONE;
 			}
 			break;
@@ -126,12 +124,10 @@ namespace GEM::GameSim
 		case KeyboardEvent_PlayerMoveForward::id: {
 			if (static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
 			{
-				LOGCATEGORY("EVENTS!").info("MoveForward.Preesed");
 				m_movementState.Normal = CurrentMovement::NormalMovement::FORWARD;
 			}
 			else
 			{
-				LOGCATEGORY("EVENTS!").info("MoveForward.released");
 				m_movementState.Normal = CurrentMovement::NormalMovement::NONE;
 			}
 			break;
@@ -140,12 +136,10 @@ namespace GEM::GameSim
 		case KeyboardEvent_PlayerMoveLeft::id: {
 			if (static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
 			{
-				LOGCATEGORY("EVENTS!").info("MoveLeft.Preesed");
 				m_movementState.Strafe = CurrentMovement::StrafeMovement::LEFT;
 			}
 			else
 			{
-				LOGCATEGORY("EVENTS!").info("MoveLeft.Released");
 				m_movementState.Strafe = CurrentMovement::StrafeMovement::NONE;
 			}
 			break;
@@ -153,12 +147,10 @@ namespace GEM::GameSim
 		case KeyboardEvent_PlayerMoveRight::id: {
 			if (static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
 			{
-				LOGCATEGORY("EVENTS!").info("MoveRight.Preesed");
 				m_movementState.Strafe = CurrentMovement::StrafeMovement::RIGHT;
 			}
 			else
 			{
-				LOGCATEGORY("EVENTS!").info("MoveRight.Released");
 				m_movementState.Strafe = CurrentMovement::StrafeMovement::NONE;
 			}
 			break;

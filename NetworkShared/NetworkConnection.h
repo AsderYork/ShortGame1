@@ -18,8 +18,7 @@ namespace GEM
 		std::stringstream m_StreamToSend;
 		std::stringstream m_StreamToRecive;
 	public:
-		NetworkConnection(boost::asio::ip::tcp::socket&& socket) : m_socket(std::move(socket))
-		{}
+		NetworkConnection(boost::asio::ip::tcp::socket&& socket);
 
 		NetworkConnection(const NetworkConnection&) = delete;
 		NetworkConnection(NetworkConnection&&) = default;

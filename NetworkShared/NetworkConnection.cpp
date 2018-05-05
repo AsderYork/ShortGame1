@@ -22,17 +22,28 @@ namespace GEM
 		if (ec) { m_socket.close();  return; }
 
 		m_StreamToSend.str(m_StreamToSend.str().substr(Sended, std::string::npos));
-		auto Avaliable = m_socket.available();
+		
+		
 		std::string Recive;
-		std::vector<char> VecChar;
-		VecChar.resize(Avaliable);
-		auto BytesRead = boost::asio::read(m_socket, boost::asio::buffer(VecChar.data(), Avaliable), boost::asio::transfer_exactly(Avaliable));
+		std::size_t BytesRead = 0;
+		while (m_socket.available() != 0)
+		{
+			auto Avaliable = m_socket.available();
+			std::vector<char> VecChar;
+			VecChar.resize(Avaliable);
+			BytesRead += boost::asio::read(m_socket, boost::asio::buffer(VecChar.data(), Avaliable), boost::asio::transfer_exactly(Avaliable));
+			Recive += std::string(VecChar.begin(), VecChar.end());
+		}
 
-		Recive = std::string(VecChar.begin(), VecChar.end());
 		m_StreamToRecive.str(m_StreamToRecive.str() + Recive.substr(0, BytesRead));
 	}
 	bool NetworkConnection::isOpen()
 	{
 		return m_socket.is_open();
+	}
+
+
+	NetworkConnection::NetworkConnection(boost::asio::ip::tcp::socket&& socket) : m_socket(std::move(socket))
+	{
 	}
 }
