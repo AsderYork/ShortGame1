@@ -153,5 +153,14 @@ namespace GEM::GameSim
 			}
 		}
 
+		inline ~ChunkStorage()
+		{
+			for (auto& ch : m_data)
+			{
+				ListenerRoutine(&(ch.second), CallAction::RemoveChunk);
+			}
+			m_data.clear();
+		}
+
 	};
 }

@@ -23,6 +23,7 @@ namespace GEM::GameSim
 
 		inline btDiscreteDynamicsWorld* getWorld() { return m_world.get(); }
 		void Initialize();
+		~GamePhysics();
 
 		void Tick(GameTime time);
 	};

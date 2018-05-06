@@ -25,17 +25,16 @@ namespace GEM
 		
 		
 		std::string Recive;
-		std::size_t BytesRead = 0;
+		std::size_t PreviousSize = 0;
 		while (m_socket.available() != 0)
 		{
 			auto Avaliable = m_socket.available();
-			std::vector<char> VecChar;
-			VecChar.resize(Avaliable);
-			BytesRead += boost::asio::read(m_socket, boost::asio::buffer(VecChar.data(), Avaliable), boost::asio::transfer_exactly(Avaliable));
-			Recive += std::string(VecChar.begin(), VecChar.end());
+			PreviousSize = Recive.size();
+			Recive.resize(Recive.size() + Avaliable);
+			boost::asio::read(m_socket, boost::asio::buffer(Recive.data() + PreviousSize, Avaliable), boost::asio::transfer_exactly(Avaliable));
 		}
 
-		m_StreamToRecive.str(m_StreamToRecive.str() + Recive.substr(0, BytesRead));
+		m_StreamToRecive.str(m_StreamToRecive.str() + Recive);
 	}
 	bool NetworkConnection::isOpen()
 	{

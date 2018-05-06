@@ -21,5 +21,15 @@ namespace GEM::GameSim
 		m_world->stepSimulation(GameTimeToSeconds(time), 10);
 	}
 
+	GamePhysics::~GamePhysics()
+	{
+		m_world.reset();
+		m_solver.reset();
+		m_collisionDispatcher.reset();
+		m_collisionConfiguration.reset();
+		m_broadphase.reset();
+
+	}
+
 	
 }
