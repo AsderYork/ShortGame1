@@ -34,6 +34,13 @@ namespace GEM::GameSim
 				SerealizeIn(ar, m_commandDispatcher.getProcessorsTable());
 		}
 
+		std::stringstream SizeStream;
+		{
+			cereal::BinaryOutputArchive ar(SizeStream);
+			ar(static_cast<std::size_t>(SendStream.gcount()));
+		}
+
+		SendStream.str(SizeStream.str() + SendStream.str());
 		return SendStream;
 	}
 

@@ -3,32 +3,6 @@
 
 namespace GEM::GameSim
 {
-	void ClientCommandPack::SerealizeIn(cereal::BinaryOutputArchive & ar, const std::array<NetworkExchangeProcessor*, 256>& Processors) const
-	{
-		ar(time);
-
-		ar(static_cast<uint32_t>(commands.size()));
-		for (auto& command : commands)
-		{
-			if (std::holds_alternative<NetworkCommand*>(command))
-			{
-				auto& ptr = std::get<NetworkCommand*>(command);
-				ar(ptr->m_header);
-				ar(ptr->m_uniqueID);
-				Processors[ptr->m_header]->SerializeCommand(ar, ptr);
-			}
-			else if (std::holds_alternative<std::unique_ptr<NetworkCommand>>(command))
-			{
-				auto& ptr = std::get<std::unique_ptr<NetworkCommand>>(command);
-				ar(ptr->m_header);
-				ar(ptr->m_uniqueID);
-				Processors[ptr->m_header]->SerializeCommand(ar, ptr.get());
-			}
-			
-
-
-		}
-	}
 	
 	void ServerCommandPack::SerealizeIn(cereal::BinaryOutputArchive & ar, const std::array<NetworkExchangeProcessor*, 256>& Processors) const
 	{
@@ -63,6 +37,35 @@ namespace GEM::GameSim
 			}
 			commands.emplace_back(Processors[header]->deserializeCommand(ar));
 			commands.back()->m_header = header;
+		}
+	}
+
+
+
+	void ClientCommandPack::SerealizeIn(cereal::BinaryOutputArchive & ar, const std::array<NetworkExchangeProcessor*, 256>& Processors) const
+	{
+		ar(time);
+
+		ar(static_cast<uint32_t>(commands.size()));
+		for (auto& command : commands)
+		{
+			if (std::holds_alternative<NetworkCommand*>(command))
+			{
+				auto& ptr = std::get<NetworkCommand*>(command);
+				ar(ptr->m_header);
+				ar(ptr->m_uniqueID);
+				Processors[ptr->m_header]->SerializeCommand(ar, ptr);
+			}
+			else if (std::holds_alternative<std::unique_ptr<NetworkCommand>>(command))
+			{
+				auto& ptr = std::get<std::unique_ptr<NetworkCommand>>(command);
+				ar(ptr->m_header);
+				ar(ptr->m_uniqueID);
+				Processors[ptr->m_header]->SerializeCommand(ar, ptr.get());
+			}
+
+
+
 		}
 	}
 	void ClientCommandPack_Server::SerializeOut(cereal::BinaryInputArchive & ar, const std::array<NetworkExchangeProcessor*, 256>& Processors)

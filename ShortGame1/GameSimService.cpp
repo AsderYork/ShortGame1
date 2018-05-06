@@ -45,9 +45,8 @@ namespace GEM
 				DeactivateSimmulation();
 				return ActionResult::AR_OK;
 			}
-			cereal::BinaryInputArchive ar(conn->Recive());
 			std::stringstream OutStream;
-			if (!Tick(timeDelta, ar, OutStream, conn->Recive().str().size() == 0))
+			if (!Tick(timeDelta, conn->Recive(), OutStream))
 			{
 				DeactivateSimmulation();
 				return ActionResult::AR_OK;

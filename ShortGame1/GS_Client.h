@@ -54,6 +54,6 @@ namespace GEM
 		Performs one tick of a simulation
 		\returns returns true if simmulation should continue ticking, false if something gone worng and simulation should be stopped.
 		*/
-		bool Tick(float Delta, cereal::BinaryInputArchive& archive, std::stringstream& OutputStream, bool ArchiveIsEmpty=false);
+		bool Tick(float Delta, std::stringstream& InputStream, std::stringstream& OutputStream);
 	};
 }
