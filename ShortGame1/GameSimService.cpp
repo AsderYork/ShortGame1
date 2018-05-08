@@ -46,12 +46,11 @@ namespace GEM
 				return ActionResult::AR_OK;
 			}
 			std::stringstream OutStream;
-			if (!Tick(timeDelta, conn->Recive(), OutStream))
+			if (!Tick(timeDelta, conn))
 			{
 				DeactivateSimmulation();
 				return ActionResult::AR_OK;
 			}
-			conn->Send(OutStream);
 		}
 		return ActionResult::AR_OK;
 	}

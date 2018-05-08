@@ -265,3 +265,5 @@ build/
 
 #ignore documentation
 documentation/
+/ClientRelease.zip
+/ServerRelease.zip

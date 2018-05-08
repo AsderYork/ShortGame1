@@ -37,7 +37,7 @@ namespace GEM::GameSim
 		std::stringstream SizeStream;
 		{
 			cereal::BinaryOutputArchive ar(SizeStream);
-			ar(static_cast<std::size_t>(SendStream.gcount()));
+			ar(static_cast<std::size_t>(SendStream.str().size()));
 		}
 
 		SendStream.str(SizeStream.str() + SendStream.str());

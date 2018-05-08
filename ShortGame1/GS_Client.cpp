@@ -27,31 +27,40 @@ namespace GEM
 		m_chunkDispatcher.getController().createNewLoader([&]() {return dynamic_cast<GameSim::Mixin_Movable*>(m_entities.GetEntity(m_playerCharacterID)->GetMixinByID(GameSim::Mixin_Movable::MixinID))->getPos(); });
 	}
 
-	bool GS_Client::Tick(float Delta, std::stringstream& InputStream, std::stringstream& OutputStream)
+	bool GS_Client::Tick(float Delta, GEM::NetworkConnection* connection)
 	{
-		if (InputStream.rdbuf()->in_avail() > 0)
+		if (connection->ReciveData().size() > 0)
 		{
-			cereal::BinaryInputArchive archive(InputStream);
+			
 			std::vector<GameSim::ServerCommandPack> ServerPacks;
 			try
 			{
-				while (InputStream.rdbuf()->in_avail() > 0)
+				while (connection->ReciveData().size() > 0)
 				{
-					std::size_t PacketSize = 0;
-					archive(PacketSize);
-					if (InputStream.rdbuf()->in_avail() < PacketSize)
+					auto ReciveStream = connection->getReciveStream();
+					cereal::BinaryInputArchive archive(ReciveStream);
+
+					static std::size_t PacketSize = 0;
+
+					if (PacketSize == 0)
+					{
+						archive(PacketSize);
+					}
+					
+					if (connection->ReciveData().size() < PacketSize + sizeof(std::size_t))
 					{//If current packet is not completely recived
-						//Unget PacketSize and stop reading
-						for (int i = 0; i < sizeof(std::size_t); i++) { InputStream.unget(); }
 						//This packet should be processed on the next tick
 						//When the rest will be recived
-
-						LOGCATEGORY("GS_Client/MainLoop").info("Uncomplited datapack recived! It calims that it's size is %s but we have only %i!", PacketSize, InputStream.rdbuf()->in_avail());
+						LOGCATEGORY("GS_Client/MainLoop").info("Uncomplited datapack recived! It calims that it's size is %i but we have only %i!", PacketSize, connection->ReciveData().size() - 8);
+						break;
 					}
 
 					GameSim::ServerCommandPack NewPack;
 					NewPack.SerializeOut(archive, m_dispatcher.getProcessorsTable());
+
 					ServerPacks.emplace_back(std::move(NewPack));
+
+					PacketSize = 0;
 				}
 			}
 			catch (cereal::Exception& e)
@@ -102,8 +111,10 @@ namespace GEM
 	
 		m_updatesProcessor.GatherStatesOfControlledEntities(&m_dispatcher);
 		{
-			cereal::BinaryOutputArchive OutputAr(OutputStream);
+			std::stringstream stream;
+			cereal::BinaryOutputArchive OutputAr(stream);
 			m_dispatcher.GatherResults(getGameTime()).SerealizeIn(OutputAr, m_dispatcher.getProcessorsTable());
+			connection->SendData() += stream.str();
 		}
 		
 

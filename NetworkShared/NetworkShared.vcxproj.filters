@@ -19,6 +19,9 @@
     <Filter Include="InformationalStructers">
       <UniqueIdentifier>{3da7aa28-2cf3-4ff8-b2c0-c8323c656750}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Streams">
+      <UniqueIdentifier>{c82deb8b-8b97-45b2-af22-1e021a6c95af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -33,6 +36,9 @@
     <ClInclude Include="InformationalStructers.h">
       <Filter>InformationalStructers</Filter>
     </ClInclude>
+    <ClInclude Include="BufferStream.h">
+      <Filter>Streams</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -40,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="NetworkConnection.cpp">
       <Filter>NetworkConnection</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferStream.cpp">
+      <Filter>Streams</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

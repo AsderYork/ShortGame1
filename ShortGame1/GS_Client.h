@@ -8,6 +8,7 @@
 
 #include <LandscapePhysics.h>
 
+#include <NetworkConnection.h>
 #include <cereal\cereal.hpp>
 #include <cereal\archives\binary.hpp>
 #include <cereal\types\string.hpp>
@@ -54,6 +55,6 @@ namespace GEM
 		Performs one tick of a simulation
 		\returns returns true if simmulation should continue ticking, false if something gone worng and simulation should be stopped.
 		*/
-		bool Tick(float Delta, std::stringstream& InputStream, std::stringstream& OutputStream);
+		bool Tick(float Delta, GEM::NetworkConnection* connection);
 	};
 }

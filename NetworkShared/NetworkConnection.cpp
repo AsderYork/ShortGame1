@@ -3,38 +3,37 @@
 
 namespace GEM
 {
-	void NetworkConnection::Send(std::stringstream & instream)
+
+	std::string& NetworkConnection::SendData()
 	{
-		m_StreamToSend << instream.str();
+		return m_dataToSend;
 	}
-	std::stringstream & NetworkConnection::Recive()
+	std::string& NetworkConnection::ReciveData()
 	{
-		return m_StreamToRecive;
+		return m_dataToRecive;
 	}
-	void NetworkConnection::ClearReciveBuffer()
+
+	
+	BufferIStream NetworkConnection::getReciveStream()
 	{
-		m_StreamToRecive.str(std::string());
+		return BufferIStream(m_dataToRecive);
 	}
+
 	void NetworkConnection::ProcessConnection()
 	{
 		boost::system::error_code ec;
-		auto Sended = m_socket.send(boost::asio::buffer(m_StreamToSend.str()), 0, ec);
+		auto Sended = m_socket.send(boost::asio::buffer(m_dataToSend), 0, ec);
 		if (ec) { m_socket.close();  return; }
 
-		m_StreamToSend.str(m_StreamToSend.str().substr(Sended, std::string::npos));
-		
-		
-		std::string Recive;
-		std::size_t PreviousSize = 0;
+		m_dataToSend.erase(0, Sended);		
+		std::size_t PreviousSize = m_dataToRecive.size();
 		while (m_socket.available() != 0)
 		{
 			auto Avaliable = m_socket.available();
-			PreviousSize = Recive.size();
-			Recive.resize(Recive.size() + Avaliable);
-			boost::asio::read(m_socket, boost::asio::buffer(Recive.data() + PreviousSize, Avaliable), boost::asio::transfer_exactly(Avaliable));
+			PreviousSize = m_dataToRecive.size();
+			m_dataToRecive.resize(m_dataToRecive.size() + Avaliable);
+			boost::asio::read(m_socket, boost::asio::buffer(m_dataToRecive.data() + PreviousSize, Avaliable), boost::asio::transfer_exactly(Avaliable));
 		}
-
-		m_StreamToRecive.str(m_StreamToRecive.str() + Recive);
 	}
 	bool NetworkConnection::isOpen()
 	{
