@@ -22,6 +22,10 @@ namespace GEM::GameSim
 		{
 			archive(x, z, version);
 		}
+
+		inline ChunkRequest() {};
+		inline ChunkRequest(int _x, int _z, uint64_t _ver = 0) : x(_x), z(_z), version(_ver) {}
+
 	};
 	/**!
 	When client connects to a server, or when it moves around, it might request some chunks from the server.

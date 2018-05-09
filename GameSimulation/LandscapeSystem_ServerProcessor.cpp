@@ -33,8 +33,17 @@ namespace GEM::GameSim
 			//If requested chunk, that is also visible is found
 			PorcessedReqChunks++;
 
-			respond->requests.push_back(TmpChunkRequest);
-			ChunkPtrs.push_back(&(m_chunkDispatcher->getStorage().getChunk(TmpChunkRequest.x, TmpChunkRequest.z)->chunk));
+			auto RequestedChunk = m_chunkDispatcher->getStorage().getChunk(TmpChunkRequest.x, TmpChunkRequest.z);
+			if (RequestedChunk == nullptr)
+			{
+				LOGCATEGORY("LandscapeSystem_ServerProcessor").warn("Client requested chunk (%i:%i) that is no avaliable!", TmpChunkRequest.x, TmpChunkRequest.z);
+				respond->requests.push_back(GameSim::ChunkRequest(TmpChunkRequest.x, TmpChunkRequest.z, 0));
+			}
+			else
+			{
+				respond->requests.push_back(GameSim::ChunkRequest(TmpChunkRequest.x, TmpChunkRequest.z, RequestedChunk->chunk.getVersion()));
+				ChunkPtrs.push_back(&(RequestedChunk->chunk));
+			}
 		}
 
 		respond->pack = LandscapeChunkPack(ChunkPtrs);

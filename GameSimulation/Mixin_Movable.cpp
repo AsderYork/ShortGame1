@@ -191,8 +191,8 @@ namespace GEM::GameSim
 		}
 		switch (Strafe)
 		{
-		case StrafeMovement::RIGHT: {NewVelocity += btVector3(1.0f, 0.0f, 0.0f); break; }
-		case StrafeMovement::LEFT: {NewVelocity -= btVector3(1.0f, 0.0f, 0.0f); break; }
+		case StrafeMovement::RIGHT: {NewVelocity -= btVector3(1.0f, 0.0f, 0.0f); break; }
+		case StrafeMovement::LEFT: {NewVelocity += btVector3(1.0f, 0.0f, 0.0f); break; }
 		default: {break; }
 		}
 
