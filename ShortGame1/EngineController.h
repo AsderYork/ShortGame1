@@ -79,7 +79,7 @@ namespace GEM
 
 		/**!
 		If we need to start shuting down after this frame, this method should be called.
-		But remember, only after this frame. So don't call shutdown and then destroy all resources, that might be used someone later in the pipeline of this
+		But remember, only after this frame. So don't call shutdown and then destroy all resources, that might be used by someone later in the pipeline of this
 		frame!
 		*/
 		void shutdown();
