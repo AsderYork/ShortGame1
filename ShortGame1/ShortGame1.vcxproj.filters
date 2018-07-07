@@ -112,9 +112,6 @@
     <Filter Include="PlayerInputEventGenerator">
       <UniqueIdentifier>{ffda274c-e8b0-4bcc-be53-63c1aef7a59a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="LandscapeVisualization">
-      <UniqueIdentifier>{2ab2cdb3-87d7-420c-99ce-b9045b123689}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameClient">
       <UniqueIdentifier>{fbb4683d-ca07-48b9-9ca6-a155207aaa45}</UniqueIdentifier>
     </Filter>
@@ -129,6 +126,9 @@
     </Filter>
     <Filter Include="GameClient\LandscapeSystem\NetworkProcessor">
       <UniqueIdentifier>{e0780e30-2c5f-4896-afe7-5d0a563abf09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameVisualization\LandscapeVisualization">
+      <UniqueIdentifier>{2ab2cdb3-87d7-420c-99ce-b9045b123689}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -226,10 +226,10 @@
       <Filter>PlayerInputEventGenerator</Filter>
     </ClInclude>
     <ClInclude Include="LandscapeVisualization.h">
-      <Filter>LandscapeVisualization</Filter>
+      <Filter>GameVisualization\LandscapeVisualization</Filter>
     </ClInclude>
     <ClInclude Include="LandscapeVisualizationController.h">
-      <Filter>LandscapeVisualization</Filter>
+      <Filter>GameVisualization\LandscapeVisualization</Filter>
     </ClInclude>
     <ClInclude Include="GS_Client.h">
       <Filter>GameClient\GS_Client</Filter>
@@ -318,10 +318,10 @@
       <Filter>PlayerInputEventGenerator</Filter>
     </ClCompile>
     <ClCompile Include="LandscapeVisualization.cpp">
-      <Filter>LandscapeVisualization</Filter>
+      <Filter>GameVisualization\LandscapeVisualization</Filter>
     </ClCompile>
     <ClCompile Include="LandscapeVisualizationController.cpp">
-      <Filter>LandscapeVisualization</Filter>
+      <Filter>GameVisualization\LandscapeVisualization</Filter>
     </ClCompile>
     <ClCompile Include="GS_Client.cpp">
       <Filter>GameClient\GS_Client</Filter>

@@ -23,7 +23,7 @@
     <ProjectGuid>{356C0E2A-5A7A-4B1E-8C2E-04F3AB378A63}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>NetworkShared</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
