@@ -196,8 +196,10 @@
     <ClInclude Include="PlayerInputEventGenerator.h" />
     <ClInclude Include="ScreenController.h" />
     <ClInclude Include="SDL2_Service.h" />
+    <ClInclude Include="SkyVisualization.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="VisualController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEGUI_Service.cpp" />
@@ -229,7 +231,9 @@
     <ClCompile Include="ScreenController.cpp" />
     <ClCompile Include="SDL2_Service.cpp" />
     <ClCompile Include="ShortGame1.cpp" />
+    <ClCompile Include="SkyVisualization.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="VisualController.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

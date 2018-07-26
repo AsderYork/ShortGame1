@@ -85,13 +85,6 @@ namespace GEM
 		m_workspace = createWorkspace();
 		//CreateCube();
 
-		Ogre::Light *light = m_sceneManager->createLight();
-		Ogre::SceneNode *lightNode = m_sceneManager->getRootSceneNode()->createChildSceneNode();
-		lightNode->attachObject(light);
-		light->setPowerScale(Ogre::Math::PI); //Since we don't do HDR, counter the PBS' division by PI
-		light->setType(Ogre::Light::LT_DIRECTIONAL);
-		light->setDirection(Ogre::Vector3(-1, -1, -1).normalisedCopy());
-
 		return ActionResult::AR_OK;
 	}
 
