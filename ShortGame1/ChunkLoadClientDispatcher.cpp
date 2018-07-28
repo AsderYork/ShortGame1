@@ -53,4 +53,8 @@ namespace GEM
 		m_chunkController.ProcessChunks();
 		FormRequest(MessageDispatcher);
 	}
+	void ChunkLoadClientDispatcher::Clear()
+	{
+		m_chunks.Clear();
+	}
 }

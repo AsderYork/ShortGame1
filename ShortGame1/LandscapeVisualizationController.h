@@ -12,7 +12,7 @@ namespace GEM
 		GS_Client* m_client;
 		
 	public:
-		inline LandscapeVisualizationController(GS_Client* client, Ogre_Service* ogre) : m_client(client)
+		inline LandscapeVisualizationController(GS_Client* client) : m_client(client)
 		{
 			client->m_chunkDispatcher.m_chunks.RegisterListener(this);
 		}

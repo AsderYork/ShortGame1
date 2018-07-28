@@ -13,7 +13,6 @@
 #include "GameSimService.h"
 
 #include "LoginScreen.h"
-#include "GameVisualization.h"
 
 #include <LandscapeMeshGenerator.h>
 #include "LandscapeVisualization.h"
@@ -272,7 +271,6 @@ int main(int argc, char *argv[])
 
 	auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
 	auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
-	auto GameVisualization = Controller.AddService<GEM::GameVisualization>(GameSimService, OgreController);
 
 
 

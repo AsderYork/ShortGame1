@@ -121,4 +121,9 @@ namespace GEM
 		return Retval;
 	}
 
+	void GS_Client::SimulationShutdown()
+	{
+		m_chunkDispatcher.Clear();
+	}
+
 }

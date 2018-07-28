@@ -33,6 +33,7 @@ namespace GEM
 
 	void GEM::GameSimController::shutdown()
 	{
+		SimulationShutdown();
 	}
 
 	Service::ActionResult GEM::GameSimController::preFrame(float timeDelta)

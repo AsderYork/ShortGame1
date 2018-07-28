@@ -55,6 +55,8 @@ namespace GEM
 
 		void Process(GameSim::ClientCommandDispatcher* MessageDispatcher);
 
+		void Clear();
+
 
 	};
 }

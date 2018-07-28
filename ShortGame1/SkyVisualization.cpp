@@ -2,6 +2,7 @@
 #include "SkyVisualization.h"
 #include <LogHelper.h>
 #include <OGRE\OgreRoot.h>
+#include <LinearMath/btVector3.h>
 
 #define TICK_TIME 20
 
@@ -41,7 +42,7 @@ namespace GEM
 		auto ActualColor = NightColor + DiffVal * (TimeInSeconds - (((int)round(TimeInSeconds))% TICK_TIME) );
 
 
-		m_light->setDiffuseColour(ActualColor.x, ActualColor.y, ActualColor.z);
+		m_light->setDiffuseColour(ActualColor.x(), ActualColor.y(), ActualColor.z());
 
 		}
 	}

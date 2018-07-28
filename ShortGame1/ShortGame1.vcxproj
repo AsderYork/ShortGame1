@@ -174,7 +174,7 @@
     <ClInclude Include="EngineController.h" />
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="GameSimService.h" />
-    <ClInclude Include="GameVisualization.h" />
+    <ClInclude Include="ObjectVis_Cubical.h" />
     <ClInclude Include="GS_Client.h" />
     <ClInclude Include="LandscapeSystem_ClientProcessor.h" />
     <ClInclude Include="LandscapeVisualization.h" />
@@ -211,7 +211,7 @@
     <ClCompile Include="EngineController.cpp" />
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="GameSimService.cpp" />
-    <ClCompile Include="GameVisualization.cpp" />
+    <ClCompile Include="ObjectVis_Cubical.cpp" />
     <ClCompile Include="GS_Client.cpp" />
     <ClCompile Include="LandscapeSystem_ClientProcessor.cpp" />
     <ClCompile Include="LandscapeVisualization.cpp" />

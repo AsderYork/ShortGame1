@@ -56,5 +56,7 @@ namespace GEM
 		\returns returns true if simmulation should continue ticking, false if something gone worng and simulation should be stopped.
 		*/
 		bool Tick(float Delta, GEM::NetworkConnection* connection);
+
+		void SimulationShutdown();
 	};
 }

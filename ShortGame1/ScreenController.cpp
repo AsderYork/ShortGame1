@@ -7,6 +7,8 @@ namespace GEM
 	//SCREENCONTROLLER
 	void ScreenController::CleanListUp()
 	{
+		auto TopElement = m_screens.front().get();
+
 		std::vector<std::list<std::unique_ptr<Screen>>::iterator> markedForDelition;
 		for (auto it = m_screens.begin(); it != m_screens.end(); it++)
 		{
@@ -14,6 +16,11 @@ namespace GEM
 		}
 
 		for (auto& it : markedForDelition) { m_screens.erase(it); }
+
+		if (TopElement != m_screens.front().get())//Top element have changed. Notify new top element
+		{
+			m_screens.front().get()->IsOnTop();
+		}
 	}
 	ScreenController::ScreenController(SDL_Controller * SDL)
 	{

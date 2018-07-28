@@ -153,7 +153,7 @@ namespace GEM::GameSim
 			}
 		}
 
-		inline ~ChunkStorage()
+		inline void Clear()
 		{
 			for (auto& ch : m_data)
 			{
@@ -161,6 +161,13 @@ namespace GEM::GameSim
 			}
 			m_data.clear();
 		}
+
+		inline ~ChunkStorage()
+		{
+			Clear();
+		}
+
+		
 
 	};
 }

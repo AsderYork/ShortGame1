@@ -1,24 +1,22 @@
 #include "stdafx.h"
-#include "GameVisualization.h"
+#include "ObjectVis_Cubical.h"
 
+#include <OGRE/OgreRoot.h>
 #include <OGRE\OgreItem.h>
 
 namespace GEM
 {
-	GameVisualization::GameVisualization(GameSimController * gs, Ogre_Service * ogre) : m_gsController(gs), m_ogreController(ogre),
-		m_landscape(gs, ogre)
+	ObjectVis_Cubical::ObjectVis_Cubical(GameSimController * gs) : m_gsController(gs)
 	{}
-	Service::ActionResult GameVisualization::initialize()
-	{
-		return ActionResult::AR_OK;
-	}
-	void GameVisualization::shutdown()
+
+
+	ObjectVis_Cubical::~ObjectVis_Cubical()
 	{
 		m_visibleEntities.clear();
 	}
-	Service::ActionResult GameVisualization::preFrame(float timeDelta)
+
+	void ObjectVis_Cubical::Frame()
 	{
-		if (!m_gsController->getSimulationState()) { return ActionResult::AR_OK; }
 		std::map<GameSim::ENTITY_ID_TYPE, ObjectRAII> newMap;
 
 		//Gather all the changes.
@@ -32,8 +30,8 @@ namespace GEM
 			{
 				auto Visibility = m_visibleEntities.find(MaybeEnityIter->first);
 				if (Visibility == m_visibleEntities.end())
-				{					
-					m_visibleEntities.emplace(MaybeEnityIter->first, ObjectRAII(m_ogreController));
+				{
+					m_visibleEntities.emplace(MaybeEnityIter->first, ObjectRAII());
 					Visibility = m_visibleEntities.find(MaybeEnityIter->first);
 				}
 				Visibility->second.node->setPosition(Ogre::Vector3(Movability->getPos().x(), Movability->getPos().y(), Movability->getPos().z()));
@@ -43,28 +41,16 @@ namespace GEM
 
 			MaybeEnityIter = m_gsController->m_entities.IterateOverEntities(std::move(iter));
 		}
-		
+
 		m_visibleEntities = std::move(newMap);
-
-
-		return ActionResult::AR_OK;
-	}
-	Service::ActionResult GameVisualization::frame(float timeDelta)
-	{
-		return ActionResult::AR_OK;
-	}
-
-	Service::ActionResult GameVisualization::postFrame(float timeDelta)
-	{
-		return ActionResult::AR_OK;
 	}
 	
-	GameVisualization::ObjectRAII::ObjectRAII(ObjectRAII && other)
+	
+	ObjectVis_Cubical::ObjectRAII::ObjectRAII(ObjectRAII && other)
 	{
 		item = other.item;
 		node = other.node;
 		PlayerNode = other.PlayerNode;
-		ogre = other.ogre;
 
 		other.item = nullptr;
 		other.node = nullptr;
@@ -73,9 +59,9 @@ namespace GEM
 
 	}
 
-	GameVisualization::ObjectRAII::ObjectRAII(Ogre_Service * Ogre) : ogre(Ogre)
+	ObjectVis_Cubical::ObjectRAII::ObjectRAII()
 	{
-		auto mSceneMgr = ogre->getRoot()->getSceneManager("ExampleSMInstance");
+		auto mSceneMgr = Ogre::Root::getSingletonPtr()->getSceneManager("ExampleSMInstance");
 		item = mSceneMgr->createItem("Cubexa.mesh");
 
 		
@@ -84,12 +70,12 @@ namespace GEM
 		PlayerNode->attachObject(item);
 	}
 
-	GameVisualization::ObjectRAII::~ObjectRAII()
+	ObjectVis_Cubical::ObjectRAII::~ObjectRAII()
 	{//So yeah, distructor is called even for moved-from objects. So we first have to check state and only then we can destroy
 		if (node == nullptr) { return; }
 		PlayerNode->removeAndDestroyAllChildren();
 		node->removeAndDestroyAllChildren();
-		ogre->getRoot()->getSceneManager("ExampleSMInstance")->destroyItem(item);
+		Ogre::Root::getSingletonPtr()->getSceneManager("ExampleSMInstance")->destroyItem(item);
 	}
 
 }

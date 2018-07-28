@@ -38,10 +38,16 @@ namespace GEM
 		inline ScreenController * getController() { return m_controller; }
 
 		/**!
-		This method is once after registration and only after all services have been initialized.
+		This method is called once after registration and only after all services have been initialized.
 		So do all your initialization there.
 		*/
 		virtual void Init() {};
+
+		/**!
+		This method is called when screen gets on top of the stack
+		It might be called multiple times if other screens are geting created and then deleated in front of this one.
+		*/
+		virtual void IsOnTop() {};
 
 		/**!
 		If there is a need for a regular execution, Screens can access post-frame

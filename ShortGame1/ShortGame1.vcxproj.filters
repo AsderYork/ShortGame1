@@ -133,7 +133,13 @@
     <Filter Include="GameVisualization\Sky">
       <UniqueIdentifier>{6b0762ee-c0f8-432b-9aac-99952a6df804}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameVisualization\MainController">
+    <Filter Include="GameVisualization\GameObjectsVisualization">
+      <UniqueIdentifier>{aa8948d4-59b0-4a84-9d83-370a11731a0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameVisualization\GameObjectsVisualization\Cubical">
+      <UniqueIdentifier>{02921e9e-c793-41c0-89d5-61ed614ea19b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameVisualization\VisualzationController">
       <UniqueIdentifier>{21cddc63-f42c-4e09-b9cb-6d4fd29aedf7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -225,9 +231,6 @@
     <ClInclude Include="MainGameScreen.h">
       <Filter>Screens\MainGameScreen</Filter>
     </ClInclude>
-    <ClInclude Include="GameVisualization.h">
-      <Filter>GameVisualization</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerInputEventGenerator.h">
       <Filter>PlayerInputEventGenerator</Filter>
     </ClInclude>
@@ -250,7 +253,10 @@
       <Filter>GameVisualization\Sky</Filter>
     </ClInclude>
     <ClInclude Include="VisualController.h">
-      <Filter>GameVisualization\MainController</Filter>
+      <Filter>GameVisualization\VisualzationController</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectVis_Cubical.h">
+      <Filter>GameVisualization\GameObjectsVisualization\Cubical</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -323,9 +329,6 @@
     <ClCompile Include="MainGameScreen.cpp">
       <Filter>Screens\MainGameScreen</Filter>
     </ClCompile>
-    <ClCompile Include="GameVisualization.cpp">
-      <Filter>GameVisualization</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerInputEventGenerator.cpp">
       <Filter>PlayerInputEventGenerator</Filter>
     </ClCompile>
@@ -348,7 +351,10 @@
       <Filter>GameVisualization\Sky</Filter>
     </ClCompile>
     <ClCompile Include="VisualController.cpp">
-      <Filter>GameVisualization\MainController</Filter>
+      <Filter>GameVisualization\VisualzationController</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectVis_Cubical.cpp">
+      <Filter>GameVisualization\GameObjectsVisualization\Cubical</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
