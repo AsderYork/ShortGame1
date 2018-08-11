@@ -19,6 +19,15 @@
 
 #include <LandscapeChunkPack.h>
 
+#include <Caelum/Caelum.h>
+
+#include <Ogre/Hlms/Unlit/OgreHlmsUnlit.h>
+#include <OGRE\OgreMesh2.h>
+#include <OGRE\OgreMeshManager2.h>
+#include <OGRE\OgreSubMesh2.h>
+#include <OGRE\OgreItem.h>
+
+
 class TmpService : public GEM::Service
 {
 public:
@@ -249,6 +258,217 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 
 }
 
+class TmpCaelumService : public GEM::Service
+{
+public:
+
+	struct meshVertices
+	{
+		float px = 0, py = 0, pz = 0;   //Position
+		float nx = 0, ny = 1, nz = 0;   //Normals
+		float tu = 0, tv = 0; //Texture Coordinates 1
+
+		void set(float _px, float _py, float _pz, float _nx, float _ny, float _nz, float _tu, float _tv)
+		{
+			px = _px; py = _py;	pz = _pz;
+			nx = _nx; ny = _ny; nz = _nz;
+			tu = _tu; tv = _tv;
+		}
+	};
+
+
+	std::unique_ptr<Caelum::CaelumSystem> mCaelumSystem;
+	std::unique_ptr<Ogre::Item> mItem;//Old Entity and doesn't work with new meshes. So what's the point of keeping them?
+	std::unique_ptr<Ogre::SceneNode> mNode;
+
+	void fillGradientsDomeBuffersV2(meshVertices *pVertex, unsigned short *pIndices, int segments)
+	{
+		const float deltaLatitude = Ogre::Math::PI / (float)segments;
+		const float deltaLongitude = Ogre::Math::PI * 2.0 / (float)segments;
+
+		int TmpVertex = 0;
+
+		// Generate the rings
+		for (int i = 1; i < segments; i++) {
+			float r0 = Ogre::Math::Sin(Ogre::Radian(i * deltaLatitude));
+			float y0 = Ogre::Math::Cos(Ogre::Radian(i * deltaLatitude));
+
+			for (int j = 0; j < segments; j++) {
+				float x0 = r0 * Ogre::Math::Sin(Ogre::Radian(j * deltaLongitude));
+				float z0 = r0 * Ogre::Math::Cos(Ogre::Radian(j * deltaLongitude));
+
+				pVertex[TmpVertex++].set(x0, y0, z0, -x0, -y0, -z0, 0, 1 - y0);
+			}
+		}
+
+		// Generate the "north pole"
+		pVertex[TmpVertex++].set(0, 1, 0, 0, -1, 0, 0, 0);
+
+		// Generate the "south pole"
+		pVertex[TmpVertex++].set(0, -1, 0, 0, 1, 0, 0, 2);
+
+		// Generate the mid segments
+		for (int i = 0; i < segments - 2; i++) {
+			for (int j = 0; j < segments; j++) {
+				*pIndices++ = segments * i + j;
+				*pIndices++ = segments * i + (j + 1) % segments;
+				*pIndices++ = segments * (i + 1) + (j + 1) % segments;
+				*pIndices++ = segments * i + j;
+				*pIndices++ = segments * (i + 1) + (j + 1) % segments;
+				*pIndices++ = segments * (i + 1) + j;
+			}
+		}
+
+		// Generate the upper cap
+		for (int i = 0; i < segments; i++) {
+			*pIndices++ = segments * (segments - 1);
+			*pIndices++ = (i + 1) % segments;
+			*pIndices++ = i;
+		}
+
+		// Generate the lower cap
+		for (int i = 0; i < segments; i++) {
+			*pIndices++ = segments * (segments - 1) + 1;
+			*pIndices++ = segments * (segments - 2) + i;
+			*pIndices++ = segments * (segments - 2) + (i + 1) % segments;
+		}
+	}
+	
+	void generateSphericDomeV2(int segments)
+	{
+		auto vaoManager = Ogre::Root::getSingleton().getRenderSystem()->getVaoManager();
+
+		//Create mesh and it's submesh
+		auto Mesh = Ogre::MeshManager::getSingleton().createManual("Domie", "Caelum");
+		Ogre::SubMesh *subMesh = Mesh->createSubMesh();
+
+		//Definde vertex format
+		Ogre::VertexElement2Vec vertexElements;
+		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_POSITION));
+		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_NORMAL));
+		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES));
+
+		auto VertexCount = segments * (segments - 1) + 2;
+		auto IndexCount = 2 * segments * (segments - 1) * 3;
+
+		//Allocate vertex and index buffers
+		auto Vertices = reinterpret_cast<meshVertices*>(OGRE_MALLOC_SIMD(sizeof(meshVertices) * VertexCount, Ogre::MEMCATEGORY_GEOMETRY));
+		auto Indices = reinterpret_cast<Ogre::uint16*>(OGRE_MALLOC_SIMD(sizeof(Ogre::uint16) * IndexCount, Ogre::MEMCATEGORY_GEOMETRY));
+		//I have no idea, what this shared buffer thing was and why it was here. Quick forum search
+		//showed, that now it is discouraged, to use this feature, so no shared buffers!
+
+		//Fill vertex and index buffers
+		fillGradientsDomeBuffersV2(Vertices, Indices, segments);
+
+		//Create the actual vertex buffer.
+		Ogre::VertexBufferPacked *vertexBuffer = 0;
+		vertexBuffer = vaoManager->createVertexBuffer(vertexElements, VertexCount, Ogre::BT_IMMUTABLE, Vertices, false);	
+		Ogre::VertexBufferPackedVec vertexBuffers;
+		vertexBuffers.push_back(vertexBuffer);
+
+		//Create the actual index buffer
+		Ogre::IndexBufferPacked *indexBuffer = 0;
+		indexBuffer = vaoManager->createIndexBuffer(Ogre::IndexBufferPacked::IT_16BIT, IndexCount, Ogre::BT_IMMUTABLE, Indices, true);
+
+		//Create an object
+		Ogre::VertexArrayObject *vao = vaoManager->createVertexArrayObject(	vertexBuffers, indexBuffer, Ogre::OT_TRIANGLE_LIST);
+
+		//Use it for our submesh
+		subMesh->mVao[Ogre::VpNormal].push_back(vao);
+		//Use the same geometry for shadow casting.
+		subMesh->mVao[Ogre::VpShadow].push_back(vao);
+
+		Mesh->_setBoundingSphereRadius(1.0f);
+
+		Mesh->load();
+	}
+
+	void LocalTest(Ogre::Root* root, Ogre::SceneManager* SceneMgr)
+	{
+		auto RetivedDatablock = root->getHlmsManager()->getDatablock("CaelumSkydomeDatablock");
+
+		generateSphericDomeV2(32);
+
+		mItem.reset(SceneMgr->createItem("Domie", "Caelum"));
+
+		mItem->setDatablock("CaelumSkydomeDatablockPbs");
+
+
+		mNode.reset(SceneMgr->getRootSceneNode()->createChildSceneNode());
+		mNode->attachObject(mItem.get());
+	}
+
+	void CaelumTest(Ogre::Root* root, Ogre::SceneManager* SceneMgr)
+	{
+		mCaelumSystem = std::make_unique<Caelum::CaelumSystem>(root, root->getSceneManager("ExampleSMInstance"),
+			(Caelum::CaelumSystem::CaelumComponent)
+			(
+				Caelum::CaelumSystem::CAELUM_COMPONENT_SKY_DOME |
+				 Caelum::CaelumSystem::CAELUM_COMPONENT_SUN
+				| Caelum::CaelumSystem::CAELUM_COMPONENT_IMAGE_STARFIELD
+				| Caelum::CaelumSystem::CAELUM_COMPONENT_MOON
+				// | Caelum::CaelumSystem::CAELUM_COMPONENT_CLOUDS
+				//Caelum::CaelumSystem::CAELUM_COMPONENTS_NONE
+				)
+			);
+
+		//root->getSceneManager("ExampleSMInstance")->setAmbientLight(Ogre::ColourValue(), Ogre::ColourValue(), Ogre::Vector3::UNIT_Y);
+		mCaelumSystem->setTimeScale(500);
+		//mCaelumSystem->setAutoMoveCameraNode(false);
+		//mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
+		//mCaelumSystem->setManageAmbientLight(false);
+	}
+
+
+	// Унаследовано через Service
+	virtual ActionResult initialize() override
+	{
+		auto root = Ogre::Root::getSingletonPtr();
+		auto SceneMgr = root->getSceneManager("ExampleSMInstance");
+		
+		//LocalTest(root, SceneMgr);
+		CaelumTest(root, SceneMgr);
+
+		
+
+		return ActionResult::AR_OK;
+	}
+	virtual void shutdown() override
+	{
+		mCaelumSystem.reset();
+	}
+	virtual ActionResult preFrame(float timeDelta) override
+	{
+
+		return ActionResult::AR_OK;
+	}
+	virtual ActionResult frame(float timeDelta) override
+	{
+		return ActionResult::AR_OK;
+	}
+	virtual ActionResult postFrame(float timeDelta) override
+	{
+		auto cam = Ogre::Root::getSingletonPtr()->getSceneManager("ExampleSMInstance")->getCameras().front();
+		mCaelumSystem->updateSubcomponents(timeDelta);
+		mCaelumSystem->notifyCameraChanged(cam);
+
+
+		auto root = Ogre::Root::getSingletonPtr();
+		auto SceneMgr = root->getSceneManager("ExampleSMInstance");
+
+		static float Val = 0.0f;
+		Val += timeDelta * 0.3;
+		if (Val > 1.0f) { Val = 0; }
+
+		//SceneMgr->setAmbientLight(Ogre::ColourValue(Val, Val, 0.3f), Ogre::ColourValue(Val, Val, 0.3f), Ogre::Vector3(0.0f, 1.0f, 0.0f));
+
+		//auto params = Ogre::MaterialManager::getSingletonPtr()->getByName("CaelumSkyDomeMaterial2")->getTechnique(0)->getPass(0)->getFragmentProgramParameters();
+		//params->setNamedConstantFromTime("offset", 0.05);
+
+		return ActionResult::AR_OK;
+	}
+};
+
 int main(int argc, char *argv[])
 {
 	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
@@ -263,14 +483,17 @@ int main(int argc, char *argv[])
 	GEM::EngineController Controller;
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
 	auto OgreController = Controller.AddService<GEM::Ogre_Service>(SDLController);
-	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
-	auto NetworkController = Controller.AddService<GEM::NetworkController>();
 
-	//LocalChunkTests(Controller, OgreController);
+	auto CaelumController = Controller.AddService<TmpCaelumService>();
+
+	//auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
+	//auto NetworkController = Controller.AddService<GEM::NetworkController>();
+
+	LocalChunkTests(Controller, OgreController);
 
 
-	auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
-	auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
+	//auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
+	//auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
 
 
 
@@ -290,7 +513,7 @@ int main(int argc, char *argv[])
 	*/
 
 
-	ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
+	//ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
 
 	try
 	{

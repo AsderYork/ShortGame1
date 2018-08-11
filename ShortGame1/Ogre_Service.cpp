@@ -111,6 +111,7 @@ namespace GEM
 	}
 	Ogre_Service::Ogre_Service(SDL_Controller * SDL) : m_sdlController(SDL)
 	{
+		tmpCamera.m_service = this;
 	}
 	Ogre::Root* Ogre_Service::getRoot()
 	{
@@ -169,7 +170,7 @@ namespace GEM
 		m_sceneManager->setShadowFarDistance(500.0f);
 		//m_sceneManager->setAmbientLight(Ogre::ColourValue(0.8, 0.8, 0.8, 1), Ogre::ColourValue(0.8, 0.8, 0.8, 1), Ogre::Vector3(0, 1, 0));
 
-		m_sceneManager->setAmbientLight(Ogre::ColourValue(1 ,1 ,1, 1), Ogre::ColourValue(1, 1, 1, 1), Ogre::Vector3(0, 1, 0));
+		//m_sceneManager->setAmbientLight(Ogre::ColourValue(1 ,1 ,1, 1), Ogre::ColourValue(1, 1, 1, 1), Ogre::Vector3(0, 1, 0));
 	}
 	void Ogre_Service::createCamera()
 	{
@@ -180,13 +181,26 @@ namespace GEM
 	{
 		auto compositorManager = m_root->getCompositorManager2();
 
-		const Ogre::String workspaceName("Demo Workspace");
+		const Ogre::String workspaceName("MainWorkspace");
 		if (!compositorManager->hasWorkspaceDefinition(workspaceName))
 		{
 			compositorManager->createBasicWorkspaceDef(workspaceName, Ogre::ColourValue(0.2f, 0.4f, 0.6f), Ogre::IdString());
 		}
 
 		return compositorManager->addWorkspace(m_sceneManager, m_renderWindow, tmpCamera.getCamera(), workspaceName, true);
+	}
+
+	void Ogre_Service::ResetCompositor(std::string CompositorName)
+	{
+		auto compositorManager = m_root->getCompositorManager2();
+		compositorManager->removeAllWorkspaces();
+
+		const Ogre::String workspaceName("MainWorkspace");
+		if (!compositorManager->hasWorkspaceDefinition(workspaceName))
+		{
+			compositorManager->createBasicWorkspaceDef(workspaceName, Ogre::ColourValue(0.2f, 0.4f, 0.6f), Ogre::IdString());
+		}
+		m_workspace = compositorManager->addWorkspace(m_sceneManager, m_renderWindow, tmpCamera.getCamera(), workspaceName, true);
 	}
 	/*
 	void Ogre_Service::CreateCube()
@@ -340,12 +354,16 @@ namespace GEM
 		library.push_back(archiveLibrary);
 
 		Ogre::Archive *archivePbs = Ogre::ArchiveManager::getSingletonPtr()->load(
-			dataFolder + "Hlms/Pbs/" + shaderSyntax,
-			"FileSystem", true);
+			dataFolder + "Hlms/Pbs/" + shaderSyntax,"FileSystem", true);
 
 		library.push_back(archivePbsLibraryAny);
 		Ogre::HlmsPbs *hlmsPbs = OGRE_NEW Ogre::HlmsPbs(archivePbs, &library);
 		Ogre::Root::getSingleton().getHlmsManager()->registerHlms(hlmsPbs);
+
+		Ogre::Archive *archiveUnlit = Ogre::ArchiveManager::getSingletonPtr()->load(dataFolder + "Hlms/Unlit/" + shaderSyntax,	"FileSystem", true);
+		Ogre::HlmsUnlit *hlmsUnlit = OGRE_NEW Ogre::HlmsUnlit(archiveUnlit, &library);
+		Ogre::Root::getSingleton().getHlmsManager()->registerHlms(hlmsUnlit);
+
 		library.pop_back();
 
 		if (renderSystem->getName() == "Direct3D11 Rendering Subsystem")
@@ -452,6 +470,10 @@ namespace GEM
 		case SDLK_q: {
 			m_camera->setPosition(Ogre::Vector3(1, 40, 15));
 			m_camera->lookAt(Ogre::Vector3(0, 30, 0));
+			break;
+		}
+		case SDLK_f: {
+			m_service->ResetCompositor();
 			break;
 		}
 		}

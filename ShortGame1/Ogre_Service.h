@@ -7,6 +7,8 @@
 
 namespace GEM
 {
+	class Ogre_Service;
+
 	/**
 	Temporary class. Allow camera to be moved with mouse and keys!
 	*/
@@ -28,7 +30,10 @@ namespace GEM
 		Ogre::Camera* getCamera();
 
 	private:
+		friend class Ogre_Service;
 		Ogre::Camera* m_camera;
+		Ogre_Service* m_service;
+
 
 		//Change of position and rotation since last frame;
 		Ogre::Vector3 m_positionChange = Ogre::Vector3::ZERO;
@@ -67,6 +72,8 @@ namespace GEM
 
 		void AllowCameraMovement(bool State);
 		bool isCameraAllowedToMove();
+
+		void ResetCompositor(std::string CompositorName = "MainWorkspace");
 
 
 	private:
