@@ -7,6 +7,7 @@ namespace GEM
 	//SCREENCONTROLLER
 	void ScreenController::CleanListUp()
 	{
+		if (m_screens.empty()) { return; }
 		auto TopElement = m_screens.front().get();
 
 		std::vector<std::list<std::unique_ptr<Screen>>::iterator> markedForDelition;

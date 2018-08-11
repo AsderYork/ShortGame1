@@ -486,14 +486,14 @@ int main(int argc, char *argv[])
 
 	auto CaelumController = Controller.AddService<TmpCaelumService>();
 
-	//auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
-	//auto NetworkController = Controller.AddService<GEM::NetworkController>();
+	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
+	auto NetworkController = Controller.AddService<GEM::NetworkController>();
 
-	LocalChunkTests(Controller, OgreController);
+	//LocalChunkTests(Controller, OgreController);
 
 
-	//auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
-	//auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
+	auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
+	auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
 
 
 
@@ -501,7 +501,7 @@ int main(int argc, char *argv[])
 
 	//SDLController->registerMouseListener(DebugMapController);
 	//CEGUIController->AddLayout<GEM::DebugLayout>(1, OgreController, MapService);
-	//GEM::ConsoleLayout* Console = static_cast<GEM::ConsoleLayout*>(CEGUIController->AddLayout<GEM::ConsoleLayout>(SDLController));
+	GEM::ConsoleLayout* Console = static_cast<GEM::ConsoleLayout*>(CEGUIController->AddLayout<GEM::ConsoleLayout>(SDLController));
 	
 	/*Console->getEvaluator().RegisterFunction("Map.SetDraw", GEM::Evaluator::OBJTYPE::UNDECLARED, MapService, &GEM::MapService::setDrawDistance);
 	Console->getEvaluator().RegisterFunction("Map.GetDraw", GEM::Evaluator::OBJTYPE::NUM, MapService, &GEM::MapService::getDrawDistance);
@@ -513,7 +513,7 @@ int main(int argc, char *argv[])
 	*/
 
 
-	//ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
+	ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
 
 	try
 	{
