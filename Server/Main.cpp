@@ -1,39 +1,11 @@
 #include "stdafx.h"
 #include "Server.h"
-#include <BufferStream.h>
 
 
 int main(int argc, char *argv[])
 {
 	GEM::logHelper::setLog("./logs/log.txt");
-	//GEM::GameSim::DoPhysics();
 
-	std::stringstream stsrs;
-	{
-		std::size_t q = 128;
-		std::size_t v = 128;
-		cereal::BinaryOutputArchive ar(stsrs);
-		ar(q,v);
-	}
-	std::string RealData = stsrs.str();
-
-	{
-		GEM::BufferIStream rtds(RealData);
-
-		std::size_t q;
-		std::size_t v;
-		cereal::BinaryInputArchive ar(rtds);
-		ar(q);
-	}
-
-	{
-		GEM::BufferIStream rtds(RealData);
-
-		std::size_t q;
-		cereal::BinaryInputArchive ar(rtds);
-		ar(q);
-	}
-	
 	try
 	{
 		std::string Servername = "First one!";

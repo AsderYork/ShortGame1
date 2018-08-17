@@ -13,17 +13,25 @@ namespace GEM::GameSim
 	void LandscapePhysics::NewChunkAdded(LandscapeChunk * NewChunk, LandscapeMesh* newMesh, PerChunkCollisionObject * SpecificData)
 	{
 		SpecificData->m_mesh = std::make_unique<btTriangleIndexVertexArray>(
-			newMesh->m_triangles.size(),
+			static_cast<int>(newMesh->m_triangles.size()),
 			(int*)newMesh->m_indices.data(),
-			3 * sizeof(uint32_t),
-			newMesh->m_vertices.size(),
+			static_cast<int>(3 * sizeof(uint32_t)),
+			static_cast<int>(newMesh->m_vertices.size()),
 			(btScalar*)newMesh->m_vertices.data(),
-			sizeof(VertexType));
+			static_cast<int>(sizeof(VertexType)));
 
 		SpecificData->collisionShape = std::make_unique<btBvhTriangleMeshShape>(SpecificData->m_mesh.get(), true);
 
 		auto[PosX, PosZ] = NewChunk->getPosition();
-		SpecificData->motionState =  std::make_unique<btDefaultMotionState>(btTransform(btQuaternion(0, 0, 0, 1), btVector3(PosX*(int)LandscapeChunk_Size, 0, PosZ*(int)LandscapeChunk_Size)));
+		SpecificData->motionState =  
+			std::make_unique<btDefaultMotionState>(
+				btTransform(btQuaternion(0, 0, 0, 1),
+					btVector3(static_cast<btScalar>(PosX*(int)LandscapeChunk_Size),
+					static_cast<btScalar>(0),
+					static_cast<btScalar>(PosZ*(int)LandscapeChunk_Size)
+					)
+				)
+			);
 
 		btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, SpecificData->motionState.get(), SpecificData->collisionShape.get(), btVector3(0, 0, 0));
 

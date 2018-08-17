@@ -136,6 +136,9 @@
     <Filter Include="NetworkCommands\Processors and Commands\LandscapeSystem\Server%27s processor">
       <UniqueIdentifier>{482dfc29-c5c9-49e3-9de9-2a89e3a34d29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NetworkCommands\Processors and Commands\GameTimeSystem">
+      <UniqueIdentifier>{9cae7573-8fb8-4962-b76a-3cfa59c9b379}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -272,6 +275,18 @@
     <ClInclude Include="LandscapeChunkStorageListener.h">
       <Filter>Landscape\ChunkLoadDispatcher\ChunkStorage</Filter>
     </ClInclude>
+    <ClInclude Include="CopyableNetworkCommand.h">
+      <Filter>NetworkCommands\BaseCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimeSystem_Command.h">
+      <Filter>NetworkCommands\Processors and Commands\GameTimeSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimeSystem_ClientProcessor.h">
+      <Filter>NetworkCommands\Processors and Commands\GameTimeSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimeSystem_ServerProcessor.h">
+      <Filter>NetworkCommands\Processors and Commands\GameTimeSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -348,6 +363,12 @@
     </ClCompile>
     <ClCompile Include="Mixin_Movable Singleton.cpp">
       <Filter>Entities\Mixins\Mixin_Movable\Mixin_Movable Singleton</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimeSystem_ClientProcessor.cpp">
+      <Filter>NetworkCommands\Processors and Commands\GameTimeSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimeSystem_Command.cpp">
+      <Filter>NetworkCommands\Processors and Commands\GameTimeSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

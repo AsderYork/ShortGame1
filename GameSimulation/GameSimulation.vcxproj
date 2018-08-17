@@ -149,6 +149,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CopyableNetworkCommand.h" />
+    <ClInclude Include="GameTimeSystem_ClientProcessor.h" />
+    <ClInclude Include="GameTimeSystem_Command.h" />
+    <ClInclude Include="GameTimeSystem_ServerProcessor.h" />
     <ClInclude Include="LandscapeChunkStorageListener.h" />
     <ClInclude Include="ChunkLoadServerDispatcher.h" />
     <ClInclude Include="ChunkLoader_Generator.h" />
@@ -204,6 +208,8 @@
     <ClCompile Include="EntityGenerator.cpp" />
     <ClCompile Include="GamePhysics.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
+    <ClCompile Include="GameTimeSystem_ClientProcessor.cpp" />
+    <ClCompile Include="GameTimeSystem_Command.cpp" />
     <ClCompile Include="GS_EntityController.cpp" />
     <ClCompile Include="GS_PlayerController.cpp" />
     <ClCompile Include="GS_Server.cpp" />

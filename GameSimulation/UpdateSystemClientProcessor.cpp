@@ -1,5 +1,4 @@
 #include "UpdateSystemClientProcessor.h"
-#include "UpdateSystem_Command.h"
 #include "ClientCommandDispatcher.h"
 #include "Helper_VariableSizeSerialization.h"
 #include <algorithm>
@@ -62,14 +61,8 @@ namespace GEM::GameSim
 		auto it = std::lower_bound(m_controlledEntities.begin(), m_controlledEntities.end(), id);
 		if (it != m_controlledEntities.end()) { m_controlledEntities.erase(it); }
 	}
-	void UpdateSystemClientProcessor::RollbackCommand(const NetworkCommand * Command)
-	{
-	}
 
-	bool UpdateSystemClientProcessor::ReapplyCommand(const NetworkCommand * Command)
-	{
-		return false;
-	}
+
 
 	void UpdateSystemClientProcessor::ConfirmCommand(const NetworkCommand * Command)
 	{
@@ -123,18 +116,6 @@ namespace GEM::GameSim
 		}
 	}
 
-	void UpdateSystemClientProcessor::SerializeCommand(cereal::BinaryOutputArchive & ar, const NetworkCommand * Command)
-	{
-		auto CommandRecast = static_cast<const UpdateSystemCommand*>(Command);
-		ar((*CommandRecast));
-	}
-
-	std::unique_ptr<NetworkCommand> GEM::GameSim::UpdateSystemClientProcessor::deserializeCommand(cereal::BinaryInputArchive & ar)
-	{
-		auto NewCommand = std::make_unique<UpdateSystemCommand>();
-		ar((*NewCommand));
-		return NewCommand;
-	}
 
 	void UpdateSystemClientProcessor::EndNetworkProcessing()
 	{

@@ -1,5 +1,4 @@
 #include "LandscapeSystem_ServerProcessor.h"
-#include "LandscapeSystem_Command.h"
 #include "ChunkLoadServerDispatcher.h"
 
 namespace GEM::GameSim
@@ -53,23 +52,7 @@ namespace GEM::GameSim
 		return true;
 	}
 
-	void LandscapeSystemServerProcessor::RollbackCommand(const NetworkCommand * Command)
-	{
-	}
-
-	bool LandscapeSystemServerProcessor::ReapplyCommand(const NetworkCommand * Command)
-	{
-		return false;
-	}
-
-	void LandscapeSystemServerProcessor::ConfirmCommand(const NetworkCommand * Command)
-	{
-	}
-
-	void LandscapeSystemServerProcessor::RejectCommand(const NetworkCommand * Command)
-	{
-	}
-
+	
 	void LandscapeSystemServerProcessor::SerializeCommand(cereal::BinaryOutputArchive & ar, const NetworkCommand * Command)
 	{
 		auto CommandRecast = static_cast<const LandscapeSystemCommand_Responce*>(Command);

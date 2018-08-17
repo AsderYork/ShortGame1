@@ -2,12 +2,13 @@
 #include "NetworkCommandsProcessor.h"
 #include "GameSimulation.h"
 #include "ClientCommandDispatcher.h"
+#include "UpdateSystem_Command.h"
 
 namespace GEM::GameSim
 {
 	class ClientCommandDispatcher;
 
-	class UpdateSystemClientProcessor : public NetworkExchangeProcessor
+	class UpdateSystemClientProcessor : public NetworkExchangeProcessorSingleCommandSerialization<UpdateSystemCommand>
 	{
 	private:
 
@@ -46,12 +47,8 @@ namespace GEM::GameSim
 		void AddControlledEntity(ENTITY_ID_TYPE id);
 		void RemoveControlledEntity(ENTITY_ID_TYPE id);
 
-		virtual void RollbackCommand(const NetworkCommand * Command) override;
-		virtual bool ReapplyCommand(const NetworkCommand * Command) override;
 		virtual void ConfirmCommand(const NetworkCommand * Command) override;
 		virtual void RejectCommand(const NetworkCommand * Command) override;
-		virtual void SerializeCommand(cereal::BinaryOutputArchive & ar, const NetworkCommand * Command) override;
-		virtual std::unique_ptr<NetworkCommand> deserializeCommand(cereal::BinaryInputArchive & ar) override;
 		virtual void EndNetworkProcessing() override;
 
 		virtual bool ApplyCommand(const NetworkCommand * Command, GameTime PacketTime) override;

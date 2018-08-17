@@ -40,6 +40,7 @@ namespace GEM::GameSim
 		ENTITY_ID_TYPE m_lastAddedEntity = 0;
 	protected:
 		GameTime m_simulationTime = 0;
+		float m_simulationTimeScle = 1.0f;
 
 
 	public:
@@ -52,6 +53,10 @@ namespace GEM::GameSim
 		std::queue<std::pair<std::unique_ptr<EventBase>, ENTITY_ID_TYPE>> m_eventsBuffer;
 		
 		inline const GameTime& getGameTime() { return m_simulationTime; }
+		inline float getGameTimeScale() { return m_simulationTimeScle; }
+
+		inline void setGameTime(GameTime NewTime) { m_simulationTime = NewTime; }
+		inline void setGameTimeScale(float NewTimeScle) { m_simulationTimeScle = NewTimeScle; }
 
 		GameSimulation() {
 			RegisterMixins();

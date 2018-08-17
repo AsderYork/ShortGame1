@@ -1,5 +1,6 @@
 #include "GS_Server.h"
 #include "LogHelper.h"
+#include "GameTimeSystem_Command.h"
 
 #include <sstream>
 #include <limits>
@@ -13,10 +14,12 @@ namespace GEM::GameSim
 	GS_Server::GS_Server() :
 		m_updateSystemProcessor(&m_gs),
 		m_chunkLoadDispatcher(m_gs.m_players),
-		m_landscapePhysicsController((&m_gs.m_physics))
+		m_landscapePhysicsController((&m_gs.m_physics)),
+		m_gameTimeServerProcessor(&m_gs)
 	{
 		m_commandDispatcher.AddProcessor(&m_updateSystemProcessor);
 		m_commandDispatcher.AddProcessor(&(m_chunkLoadDispatcher.getProcessor()));
+		m_commandDispatcher.AddProcessor(&m_gameTimeServerProcessor);
 		m_chunkLoadDispatcher.Start();
 
 		m_chunkLoadDispatcher.getStorage().RegisterListener(&m_landscapePhysicsController);
@@ -29,8 +32,15 @@ namespace GEM::GameSim
 		{
 			cereal::BinaryOutputArchive ar(SendStream);
 
+			auto& PlayerHistory = m_gs.m_players.getPlayer(id)->additional_data->ExchangeHistory;
+
+			for (auto& command : m_globalCommands)
+			{
+				PlayerHistory.SendAllreadyPerformedCommand(command->copy());
+			}
+
 			m_commandDispatcher.GatherResults(
-				&(m_gs.m_players.getPlayer(id)->additional_data->ExchangeHistory), m_gs.getGameTime()).
+				&(PlayerHistory), m_gs.getGameTime()).
 				SerealizeIn(ar, m_commandDispatcher.getProcessorsTable());
 		}
 
@@ -68,7 +78,20 @@ namespace GEM::GameSim
 		m_commandDispatcher.ProcessCommands(std::move(ClientCommandPacks), &TmpPlayerInfo->ExchangeHistory, m_gs.getGameTime());
 	}
 	
+	void GS_Server::TimeSyncingUpdate()
+	{
+		static auto LastTime = std::chrono::steady_clock::now();
 
+		auto Time = std::chrono::duration<float>(std::chrono::steady_clock::now() - LastTime).count();
+
+		if ((Time >= m_timeSyncFreqInSecs) || m_isTimeDirty)
+		{
+			m_isTimeDirty = false;
+			LastTime = std::chrono::steady_clock::now();
+
+			m_globalCommands.emplace_back(std::make_unique<GameTimeSystemCommand>(m_gs.getGameTime(), m_gs.getGameTimeScale()));
+		}
+	}
 	
 	std::pair<UpdateSystemCommand, UpdateSystemCommand>  GS_Server::GetEntityUpdate(std::pair<ENTITY_ID_TYPE, EntityBase*>& Entity)
 	{
@@ -106,10 +129,7 @@ namespace GEM::GameSim
 		return std::make_pair(NewPartialUpdate, NewFullUpdate);
 	}
 
-	void GS_Server::ProcessPlayerSyncingUpdates()
-	{
-			
-	}
+
 
 	std::optional<PlayerTicket> GS_Server::NewPlayerRoutine(Player && player)
 	{
@@ -141,6 +161,8 @@ namespace GEM::GameSim
 
 		newPlayer->get().additional_data = std::make_unique<Player::ServerRelatedPart>(m_commandDispatcher, LoaderID, newPlayer->get().id);
 
+		//Queue a time update for a new player
+		newPlayer->get().additional_data->ExchangeHistory.SendAllreadyPerformedCommand(std::make_unique<GameTimeSystemCommand>(m_gs.getGameTime(), m_gs.getGameTimeScale()));
 		
 		return newPlayer;
 	}
@@ -155,8 +177,11 @@ namespace GEM::GameSim
 
 	void  GS_Server::Tick(float Delta)
 	{
+		m_globalCommands.clear();
+
+		Delta *= m_gs.getGameTimeScale();
+
 		m_chunkLoadDispatcher.ProcessChunks();
-		ProcessPlayerSyncingUpdates();
 		//Perform basic tick
 		auto Reval = m_gs.Tick(Delta);
 
@@ -256,6 +281,7 @@ namespace GEM::GameSim
 			Entity = m_gs.m_entities.IterateOverEntities(std::move(iter));
 		}
 
+		TimeSyncingUpdate();
 	}
 
 }

@@ -29,14 +29,6 @@ namespace GEM::GameSim
 		
 		virtual bool ApplyCommand(const NetworkCommand * Command, GameTime PacketTime) override;
 
-		virtual void RollbackCommand(const NetworkCommand * Command) override;
-
-		virtual bool ReapplyCommand(const NetworkCommand * Command) override;
-
-		virtual void ConfirmCommand(const NetworkCommand * Command) override;
-
-		virtual void RejectCommand(const NetworkCommand * Command) override;
-
 		virtual void SerializeCommand(cereal::BinaryOutputArchive & ar, const NetworkCommand * Command) override;
 
 		virtual std::unique_ptr<NetworkCommand> deserializeCommand(cereal::BinaryInputArchive & ar) override;

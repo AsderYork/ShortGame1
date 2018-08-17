@@ -14,10 +14,13 @@ namespace GEM
 {
 	GS_Client::GS_Client() : m_timeIsSet(false),
 		m_updatesProcessor(this),
+		m_gameTimeProcessor(this),
 		m_landPhys((&m_physics)) 
 	{
-		m_dispatcher.AddProcessor(&m_updatesProcessor);
+		m_dispatcher.AddProcessor(&m_updatesProcessor); 
 		m_dispatcher.AddProcessor(&m_chunkDispatcher.getProcessor());
+		m_dispatcher.AddProcessor(&m_gameTimeProcessor);
+
 
 		m_chunkDispatcher.m_chunks.RegisterListener(&m_landPhys);
 	}

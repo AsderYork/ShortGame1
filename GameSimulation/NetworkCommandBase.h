@@ -14,5 +14,6 @@ namespace GEM::GameSim
 
 		NetworkCommand(uint8_t header) : m_header(header) {}
 		NetworkCommand() : m_header(0) {}
+		virtual ~NetworkCommand() {}
 	};
 }

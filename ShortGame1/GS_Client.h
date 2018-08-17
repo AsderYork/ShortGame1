@@ -5,6 +5,7 @@
 #include <UpdateSystemClientProcessor.h>
 #include "ChunkLoadClientDispatcher.h"
 #include "LandscapeSystem_ClientProcessor.h"
+#include <GameTimeSystem_ClientProcessor.h>
 
 #include <LandscapePhysics.h>
 
@@ -26,6 +27,7 @@ namespace GEM
 	protected:
 		GameSim::ClientCommandDispatcher m_dispatcher;
 		GameSim::UpdateSystemClientProcessor m_updatesProcessor;
+		GameSim::GameTimeSystem_ClientProcessor m_gameTimeProcessor;
 
 
 

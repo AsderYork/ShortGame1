@@ -1,5 +1,4 @@
 #include "UpdateSystem_Processor.h"
-#include "UpdateSystem_Command.h"
 #include <cereal\archives\binary.hpp>
 #include <cereal\types\string.hpp>
 #include <cereal\types\utility.hpp>
@@ -7,36 +6,6 @@
 namespace GEM::GameSim
 {
 
-
-	void UpdateSystemProcessor::RollbackCommand(const NetworkCommand * Command)
-	{
-	}
-
-	bool UpdateSystemProcessor::ReapplyCommand(const NetworkCommand * Command)
-	{
-		return false;
-	}
-
-	void UpdateSystemProcessor::ConfirmCommand(const NetworkCommand * Command)
-	{
-	}
-
-	void UpdateSystemProcessor::RejectCommand(const NetworkCommand * Command)
-	{
-	}
-
-	void UpdateSystemProcessor::SerializeCommand(cereal::BinaryOutputArchive & ar, const NetworkCommand * Command)
-	{
-		auto CommandRecast = static_cast<const UpdateSystemCommand*>(Command);
-		ar((*CommandRecast));
-	}
-
-	std::unique_ptr<NetworkCommand> GEM::GameSim::UpdateSystemProcessor::deserializeCommand(cereal::BinaryInputArchive & ar)
-	{
-		auto NewCommand = std::make_unique<UpdateSystemCommand>();
-		ar((*NewCommand));
-		return NewCommand;
-	}
 
 	bool UpdateSystemProcessor::ApplyCommand(const NetworkCommand * Command, GameTime TimeLag)
 	{
@@ -81,6 +50,6 @@ namespace GEM::GameSim
 	}
 	uint8_t UpdateSystemProcessor::getIdOfProcessor() const
 	{
-		return uint8_t();
+		return 0;
 	}
 }
