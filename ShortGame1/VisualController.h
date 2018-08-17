@@ -28,13 +28,15 @@ namespace GEM
 		SkyVisualization m_sky;
 		LandscapeVisualizationController m_landscape;
 		ObjectVis_Cubical m_objCubical;
+		bool m_fullyInited = false;
 
 
 	public:
 		inline VisualController(GameSimController* gsController) :
 			m_gsController(gsController),
 			m_landscape(gsController),
-			m_objCubical(gsController)
+			m_objCubical(gsController),
+			m_sky(gsController)
 		{}
 
 		/**!

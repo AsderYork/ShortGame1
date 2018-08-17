@@ -11,12 +11,16 @@ namespace GEM
 	void VisualController::WaitForInit()
 	{
 		m_sky.StartVisualization();
+		m_fullyInited = true;
 	}
 
 	void VisualController::Frame()
 	{
-		m_objCubical.Frame();
-		m_sky.frame();
+		if (m_fullyInited)
+		{
+			m_objCubical.Frame();
+			m_sky.frame();
+		}
 	}
 
 	VisualController::~VisualController()

@@ -484,7 +484,7 @@ int main(int argc, char *argv[])
 	auto SDLController = Controller.AddService<GEM::SDL_Controller>();
 	auto OgreController = Controller.AddService<GEM::Ogre_Service>(SDLController);
 
-	auto CaelumController = Controller.AddService<TmpCaelumService>();
+	//auto CaelumController = Controller.AddService<TmpCaelumService>();
 
 	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
 	auto NetworkController = Controller.AddService<GEM::NetworkController>();

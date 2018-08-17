@@ -11,7 +11,7 @@ namespace GEM
 
 	void MainGameScreen::IsOnTop()
 	{
-		if (m_basicInitPerformed)//Check if it's the first time this screen gets on top
+		if (!m_basicInitPerformed)//Check if it's the first time this screen gets on top
 		{
 			m_visual.WaitForInit();//If so, perform init
 			m_basicInitPerformed = true;
