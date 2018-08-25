@@ -3,6 +3,8 @@
 #include <GameSimulation.h>
 #include <LogHelper.h>
 #include <OGRE/OgreRoot.h>
+#include <OGRE/OgreSceneNode.h>
+#include <chrono>
 
 namespace GEM
 {
@@ -12,20 +14,22 @@ namespace GEM
 		if (m_entity.expired()) { return; }
 		auto LockedEnt = m_entity.lock();
 		auto Movable = static_cast<GameSim::Mixin_Movable*>(LockedEnt->GetMixinByID(GameSim::Mixin_Movable::MixinID));
-		
-		m_camera = Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance")->getCameras()[0];
 
 		auto Pos = Movable->getPos();
 		auto Rot = Movable->getOrientation();
 
-		btVector3 Shift(4, 2, 0);
+		
+		btVector3 Shift(0, 4, -10);
+
+		static auto znow = std::chrono::steady_clock::now();
 
 		Shift.rotate(Rot.getAxis(), Rot.getAngle());
 		Pos += Shift;
+		Rot *= btQuaternion(SIMD_PI / 2, (SIMD_PI / 2)*0.9f, 0);
 
 		//Shift Camera sligtly, so that object would remain visible
-		m_camera->setPosition(Pos.x(), Pos.y(), Pos.z());
-		m_camera->setOrientation(Ogre::Quaternion(Rot.getW(), Rot.getX(), Rot.getY(), Rot.getZ()));
+		m_cameraNode->setPosition(Pos.x(), Pos.y(), Pos.z());
+		m_cameraNode->setOrientation(Ogre::Quaternion(Rot.getW(), Rot.getX(), Rot.getY(), Rot.getZ()));
 	}
 
 	void FirstPersonGameCamera::TieCamera(GameSim::ENTITY_ID_TYPE entID, GameSim::GameSimulation* gs)
@@ -44,6 +48,10 @@ namespace GEM
 			return;
 		}
 
-		UpdateCamera();
+		m_cameraNode = Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance")->getRootSceneNode()->createChildSceneNode();
+		m_cameraNode->setName("PlayerCameraNode");
+		Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance")->getCameras()[0]->detachFromParent();
+
+		m_cameraNode->attachObject(	Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance")->getCameras()[0]);
 	}
 }

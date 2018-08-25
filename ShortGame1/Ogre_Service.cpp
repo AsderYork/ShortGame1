@@ -412,28 +412,36 @@ namespace GEM
 	//TEMPORAL CAMERA.
 	void MovableCamera::SetCamera(Ogre::SceneManager * sceneManager, SDL_Controller * SDLController)
 	{
-		m_camera = sceneManager->createCamera("Main Camera");
+		m_camera = sceneManager->createCamera("DebugCamera");
 
-		m_camera->setPosition(Ogre::Vector3(0, 0, 15));
+		//m_camera->setPosition(Ogre::Vector3(0, 0, 15));
 		// Look back along -Z
-		m_camera->lookAt(Ogre::Vector3(0, 0, 0));
+		//m_camera->lookAt(Ogre::Vector3(0, 0, 0));
 		m_camera->setNearClipDistance(0.2f);
 		m_camera->setFarClipDistance(1000.0f);
 		m_camera->setAutoAspectRatio(true);
 
 		SDLController->registerKeyboardListener(this);
 		SDLController->registerMouseListener(this);
+
+		m_debugCameraSceneNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 	}
 	void MovableCamera::AjustPosition(float timeDelta)
 	{
-		/*if (!m_reciveInput) { m_positionChange = Ogre::Vector3::ZERO; m_yaw = 0; m_pitch = 0;return; }
-		float MoveSpeed = 7.0f;
-		float TurnSpeed = 0.1f;
-		m_camera->moveRelative(m_positionChange * timeDelta * MoveSpeed);
-		m_camera->yaw(Ogre::Radian(1)*m_yaw*timeDelta*TurnSpeed);
-		m_camera->pitch(Ogre::Radian(1)*m_pitch*timeDelta*TurnSpeed);
-		m_yaw = 0;
-		m_pitch = 0;*/
+		if (m_UseThisCamera)
+		{
+			if (!m_reciveInput) { m_positionChange = Ogre::Vector3::ZERO; m_yaw = 0; m_pitch = 0; return; }
+			float MoveSpeed = 7.0f;
+			float TurnSpeed = 0.1f;
+			
+
+			m_debugCameraSceneNode->yaw(Ogre::Radian(1)*m_yaw*timeDelta*TurnSpeed, Ogre::Node::TS_PARENT);
+			m_debugCameraSceneNode->pitch(Ogre::Radian(1)*m_pitch*timeDelta*TurnSpeed, Ogre::Node::TS_LOCAL);
+
+			m_debugCameraSceneNode->translate(m_positionChange * timeDelta * MoveSpeed, Ogre::Node::TS_LOCAL);
+			m_yaw = 0;
+			m_pitch = 0;
+		}
 	}
 	void MovableCamera::ShouldReciveInput(bool State)
 	{
@@ -468,12 +476,31 @@ namespace GEM
 			m_positionChange.x = 1;
 			break;
 		case SDLK_q: {
-			m_camera->setPosition(Ogre::Vector3(1, 40, 15));
-			m_camera->lookAt(Ogre::Vector3(0, 30, 0));
+			if (m_UseThisCamera)
+			{
+				m_debugCameraSceneNode->setPosition(Ogre::Vector3(1, 40, 15));
+			}
 			break;
 		}
 		case SDLK_f: {
-			m_service->ResetCompositor();
+			if (!m_UseThisCamera)
+			{//Activate Debug camera
+				m_camera->detachFromParent();
+				m_debugCameraSceneNode->attachObject(m_camera);
+			}
+			else
+			{//Activate Player camera
+				for (auto& Child : Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance")->getRootSceneNode()->getChildIterator())
+				{
+					if (Child->getName() == "PlayerCameraNode")
+					{
+						m_camera->detachFromParent();
+						static_cast<Ogre::SceneNode*>(Child)->attachObject(m_camera);
+						break;
+					}
+				}
+			}
+			m_UseThisCamera = !m_UseThisCamera;
 			break;
 		}
 		}

@@ -33,6 +33,8 @@ namespace GEM
 		friend class Ogre_Service;
 		Ogre::Camera* m_camera;
 		Ogre_Service* m_service;
+		bool m_UseThisCamera = false;
+		Ogre::SceneNode* m_debugCameraSceneNode;
 
 
 		//Change of position and rotation since last frame;

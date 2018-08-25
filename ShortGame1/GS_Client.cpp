@@ -104,6 +104,14 @@ namespace GEM
 		//If player have not yet been set, that means that simulation is not initialized enough for all that history
 		//manipulation stuff. So we'll just perform one tick of simulation and skip everything else
 		if (m_entities.GetEntitiesCount() == 0) { return GameSimulation::Tick(Delta); }
+		//Otherwise player is set
+
+		if (!m_stateInitialized)
+		{//If this is the first time when the player is set, then it's a FirstTick Event!
+			for (auto& callback : m_firstTickEventCallbacks) { if (!callback()) { return false; } }
+			m_stateInitialized = true;
+			m_firstTickEventCallbacks.clear();
+		}
 
 
 		m_chunkDispatcher.Process(&m_dispatcher);

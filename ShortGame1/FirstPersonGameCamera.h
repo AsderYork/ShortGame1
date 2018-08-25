@@ -3,6 +3,7 @@
 #include <EntitiesBase.h>
 
 #include <OGRE/OgreCamera.h>
+
 #include <memory>
 
 namespace GEM
@@ -13,6 +14,7 @@ namespace GEM
 	class FirstPersonGameCamera
 	{
 	private:
+		Ogre::SceneNode* m_cameraNode;
 		Ogre::Camera* m_camera;
 		std::weak_ptr<GameSim::EntityBase> m_entity;
 

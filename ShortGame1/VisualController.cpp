@@ -13,7 +13,7 @@ namespace GEM
 		m_sky.StartVisualization();
 		m_fullyInited = true;
 
-		m_camera.TieCamera(m_gsController->m_playerCharacterID, m_gsController);
+		m_gsController->AddFirstTickCallback([this]() {m_camera.TieCamera(m_gsController->m_playerCharacterID, m_gsController); return true; });
 	}
 
 	void VisualController::Frame()
