@@ -10,10 +10,10 @@ namespace GEM::GameSim
 	bool UpdateSystemProcessor::ApplyCommand(const NetworkCommand * Command, GameTime TimeLag)
 	{
 		auto CommandRecast = static_cast<const UpdateSystemCommand*>(Command);
-		EntityBase* EntIt=nullptr;
+		std::shared_ptr<EntityBase> EntIt;
 		
 		
-		EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID);
+		EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID).lock();
 		if (EntIt == nullptr) { return false; }
 
 		bool UpdateFullyAccepted = true;

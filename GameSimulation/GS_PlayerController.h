@@ -19,7 +19,7 @@ namespace GEM::GameSim
 		std::string playerName;
 
 		//!ID of a player character entity
-		EntityBase* characterPtr;
+		std::weak_ptr<EntityBase> characterPtr;
 		ENTITY_ID_TYPE characterID;
 
 		struct ServerRelatedPart

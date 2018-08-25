@@ -172,6 +172,7 @@
     <ClInclude Include="DebugMapGraphicsService.h" />
     <ClInclude Include="DebugLayout.h" />
     <ClInclude Include="EngineController.h" />
+    <ClInclude Include="FirstPersonGameCamera.h" />
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="GameSimService.h" />
     <ClInclude Include="ObjectVis_Cubical.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="DebugLayout.cpp" />
     <ClCompile Include="DebugMapGraphicsService.cpp" />
     <ClCompile Include="EngineController.cpp" />
+    <ClCompile Include="FirstPersonGameCamera.cpp" />
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="GameSimService.cpp" />
     <ClCompile Include="ObjectVis_Cubical.cpp" />

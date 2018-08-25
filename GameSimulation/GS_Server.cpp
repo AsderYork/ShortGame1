@@ -153,10 +153,16 @@ namespace GEM::GameSim
 			Height = static_cast<float>(RayCallback.m_hitPointWorld.y());
 		}
 
-		dynamic_cast<Mixin_Movable*>(CharPtr->GetMixinByID(Mixin_Movable::MixinID))->Shift(0.0f, Height, 0.0f);
+		auto CharPtrLocked = CharPtr.lock();
+		dynamic_cast<Mixin_Movable*>(CharPtrLocked->GetMixinByID(Mixin_Movable::MixinID))->Shift(0.0f, Height, 0.0f);
 
 		auto LoaderID = m_chunkLoadDispatcher.getChunkController().createNewLoader(
-			[CharPtr]() {return dynamic_cast<Mixin_Movable*>(CharPtr->GetMixinByID(Mixin_Movable::MixinID))->getPos(); }
+			[CharPtr, CharId]()
+			{
+			auto CharPtrLocked = CharPtr.lock();
+			if (!CharPtrLocked) { LOGCATEGORY("ChunkLoaderPosLambda").error("Character #%i is no longer exists, but still registered as a loader!", CharId); throw std::exception("Chunk loader no longer exists!"); }
+			return dynamic_cast<Mixin_Movable*>(CharPtrLocked->GetMixinByID(Mixin_Movable::MixinID))->getPos(); 
+			}
 		);
 
 		newPlayer->get().additional_data = std::make_unique<Player::ServerRelatedPart>(m_commandDispatcher, LoaderID, newPlayer->get().id);
@@ -220,7 +226,12 @@ namespace GEM::GameSim
 			{//It is.
 				for (auto& pl : Players)
 				{
-					auto PlayerPos = static_cast<Mixin_Movable*>(pl.characterPtr->GetMixinByID(Mixin_Movable::MixinID))->getPos();
+					auto LockedPlater = pl.characterPtr.lock();
+					if (!LockedPlater) {
+						LOGCATEGORY("GS_Server/Tick").error("Player #%i is listed, but it's character does not exist!", pl.id);
+					}
+
+					auto PlayerPos = static_cast<Mixin_Movable*>(LockedPlater->GetMixinByID(Mixin_Movable::MixinID))->getPos();
 
 					//Check if player have this entity
 					if (pl.trackedEntities.find(Entity->first) != pl.trackedEntities.end())

@@ -12,7 +12,7 @@ namespace GEM::GameSim
 	class EntityController
 	{
 	private:
-		std::unordered_map<ENTITY_ID_TYPE, std::unique_ptr<EntityBase>> m_entityMap;
+		std::unordered_map<ENTITY_ID_TYPE, std::shared_ptr<EntityBase>> m_entityMap;
 	public:
 
 		/**!
@@ -24,7 +24,7 @@ namespace GEM::GameSim
 		\returns A pointer to a newly created entity in controller, or nullptr if entity wasn't added
 		*/
 		template<class T, typename... Args>
-		T*	AddNewEntity(ENTITY_ID_TYPE id, Args&&... args)
+		std::weak_ptr<T>	AddNewEntity(ENTITY_ID_TYPE id, Args&&... args)
 		{
 			auto UniPtr = std::make_unique<T>(std::forward<Args>(args)...);
 			auto Ptr = UniPtr.get();
@@ -33,18 +33,18 @@ namespace GEM::GameSim
 		}
 
 		template<class...TMixins>
-		MixedEntity<TMixins...>* MixNewEntity(ENTITY_ID_TYPE id, TMixins&&... constructors)
+		std::weak_ptr<MixedEntity<TMixins...>> MixNewEntity(ENTITY_ID_TYPE id, TMixins&&... constructors)
 		{
-			auto UniPtr = std::make_unique<MixedEntity<TMixins...>>(std::forward<TMixins>(constructors)...);
+			auto UniPtr = std::make_shared<MixedEntity<TMixins...>>(std::forward<TMixins>(constructors)...);
 			auto Ptr = UniPtr.get();
 			auto EmplaceResult = m_entityMap.emplace(id, std::move(UniPtr));
 			return EmplaceResult.second ? Ptr : nullptr;
 		}
 
-		inline EntityBase* AddFreeEntity(ENTITY_ID_TYPE id, std::unique_ptr<EntityBase>&& ptr) {
+		inline std::weak_ptr<EntityBase> AddFreeEntity(ENTITY_ID_TYPE id, std::unique_ptr<EntityBase>&& ptr) {
 			auto iter = m_entityMap.emplace(id, std::move(ptr));
-			if (!iter.second) { return nullptr; }
-			else {return iter.first->second.get();}
+			if (!iter.second) { return std::weak_ptr<EntityBase>(); }
+			else {return iter.first->second;}
 		}
 
 
@@ -56,7 +56,7 @@ namespace GEM::GameSim
 		/**!
 		Returns a pointer to an entity with given id, if there is one. Otherwise nullptr will be returned.
 		*/
-		EntityBase* GetEntity(ENTITY_ID_TYPE id);
+		std::weak_ptr<EntityBase> GetEntity(ENTITY_ID_TYPE id);
 
 		/**!
 		Returns overall number of entities
@@ -69,7 +69,7 @@ namespace GEM::GameSim
 		class EntityListIterator
 		{
 			friend class EntityController;
-			std::unordered_map<ENTITY_ID_TYPE, std::unique_ptr<EntityBase>>::iterator m_iter;
+			std::unordered_map<ENTITY_ID_TYPE, std::shared_ptr<EntityBase>>::iterator m_iter;
 		public:
 			EntityListIterator(EntityController* Controller) : m_iter(Controller->m_entityMap.begin()) {}
 

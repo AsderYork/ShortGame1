@@ -26,7 +26,7 @@ namespace GEM::GameSim
 		{
 			if (ent.ptr == nullptr) 
 			{
-				ent.ptr = m_gameSim->m_entities.GetEntity(ent.id);
+				ent.ptr = m_gameSim->m_entities.GetEntity(ent.id).lock().get();
 			}
 
 			std::vector<std::pair<MIXIN_ID_TYPE, std::string>> UpdateForEntity;
@@ -77,8 +77,8 @@ namespace GEM::GameSim
 				it->IsInitialized = true;
 				it->IsConfirmedStateApplied = true;
 
-				auto EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID);
-				ApplyState(EntIt, it->lastConfirmedUpdate);
+				auto EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID).lock();
+				ApplyState(EntIt.get(), it->lastConfirmedUpdate);
 			}
 		}
 		else
@@ -110,8 +110,8 @@ namespace GEM::GameSim
 			{
 				it->IsConfirmedStateApplied = true;
 
-				auto EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID);
-				ApplyState(EntIt, it->lastConfirmedUpdate);
+				auto EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID).lock();
+				ApplyState(EntIt.get(), it->lastConfirmedUpdate);
 			}
 		}
 	}
@@ -128,15 +128,15 @@ namespace GEM::GameSim
 	bool UpdateSystemClientProcessor::ApplyCommand(const NetworkCommand * Command, GameTime PacketTime)
 	{
 		auto CommandRecast = static_cast<const UpdateSystemCommand*>(Command);
-		EntityBase* EntIt = nullptr;
+		std::shared_ptr<EntityBase> EntIt;
 
 		if (!CommandRecast->m_mixins.empty())
 		{
-			EntIt = m_gameSim->AddEntity(CommandRecast->m_entityID, CommandRecast->m_mixins);
+			EntIt = m_gameSim->AddEntity(CommandRecast->m_entityID, CommandRecast->m_mixins).lock();
 		}
 		else
 		{
-			EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID);
+			EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID).lock();
 		}
 
 		auto it = std::lower_bound(m_controlledEntities.begin(), m_controlledEntities.end(), CommandRecast->m_entityID);
@@ -148,7 +148,7 @@ namespace GEM::GameSim
 			return true;
 		}
 
-		return ApplyState(EntIt, CommandRecast->m_perMixinUpdates);
+		return ApplyState(EntIt.get(), CommandRecast->m_perMixinUpdates);
 	}
 	uint8_t UpdateSystemClientProcessor::getIdOfProcessor() const
 	{

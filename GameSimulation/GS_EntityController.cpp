@@ -12,12 +12,12 @@ namespace GEM::GameSim
 		}
 		return false;
 	}
-	EntityBase* EntityController::GetEntity(ENTITY_ID_TYPE id)
+	std::weak_ptr<EntityBase> EntityController::GetEntity(ENTITY_ID_TYPE id)
 	{
 		auto& it = m_entityMap.find(id);
 		if (it != m_entityMap.end())
-		{ return it->second.get(); }
-		return nullptr;
+		{ return it->second; }
+		return std::weak_ptr<EntityBase>();
 	}
 
 	ENTITY_ID_TYPE EntityController::GetEntitiesCount() const

@@ -142,6 +142,12 @@
     <Filter Include="GameVisualization\VisualzationController">
       <UniqueIdentifier>{21cddc63-f42c-4e09-b9cb-6d4fd29aedf7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameVisualization\GameCamera">
+      <UniqueIdentifier>{97ca6d91-93d8-454b-8481-d1847dc12818}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameVisualization\GameCamera\FirstPerson">
+      <UniqueIdentifier>{dd1369b3-78d0-4346-9b20-c3f91930f865}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -258,6 +264,9 @@
     <ClInclude Include="ObjectVis_Cubical.h">
       <Filter>GameVisualization\GameObjectsVisualization\Cubical</Filter>
     </ClInclude>
+    <ClInclude Include="FirstPersonGameCamera.h">
+      <Filter>GameVisualization\GameCamera\FirstPerson</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShortGame1.cpp">
@@ -355,6 +364,9 @@
     </ClCompile>
     <ClCompile Include="ObjectVis_Cubical.cpp">
       <Filter>GameVisualization\GameObjectsVisualization\Cubical</Filter>
+    </ClCompile>
+    <ClCompile Include="FirstPersonGameCamera.cpp">
+      <Filter>GameVisualization\GameCamera\FirstPerson</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

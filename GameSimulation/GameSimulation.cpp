@@ -23,16 +23,16 @@ namespace GEM::GameSim
 		//Apply all commands
 		while (!m_commandBuffer.empty())
 		{
-			auto Entity = m_entities.GetEntity(m_commandBuffer.front().second);
+			auto Entity = m_entities.GetEntity(m_commandBuffer.front().second).lock();
 			if (Entity == nullptr) { continue; }
-			Mixin_Controller::Instance().ApplyCommand(Entity, std::move(m_commandBuffer.front().first));
+			Mixin_Controller::Instance().ApplyCommand(Entity.get(), std::move(m_commandBuffer.front().first));
 			m_commandBuffer.pop();
 		}
 
 		//Apply all events. Commands is deprecated now, don't they?
 		while (!m_eventsBuffer.empty()) 
 		{
-			for (auto& mixin : m_entities.GetEntity(m_eventsBuffer.front().second)->getAllMixins())
+			for (auto& mixin : m_entities.GetEntity(m_eventsBuffer.front().second).lock()->getAllMixins())
 			{
 				mixin->ReciveEvent(m_eventsBuffer.front().first.get());
 			}
@@ -57,15 +57,15 @@ namespace GEM::GameSim
 	}
 
 
-	EntityBase* GameSimulation::AddEntity(const ENTITY_ID_TYPE ID, const std::vector<MIXIN_ID_TYPE> mixins)
+	std::weak_ptr<EntityBase> GameSimulation::AddEntity(const ENTITY_ID_TYPE ID, const std::vector<MIXIN_ID_TYPE> mixins)
 	{
 		auto ent = m_entities.AddFreeEntity(ID, m_generator.GenerateEntity(std::move(mixins), this, ID));
 		return ent;
 	}
-	std::pair<EntityBase*, ENTITY_ID_TYPE> GameSimulation::AddEntity(std::vector<MIXIN_ID_TYPE> mixins)
+	std::pair<std::weak_ptr<EntityBase>, ENTITY_ID_TYPE> GameSimulation::AddEntity(std::vector<MIXIN_ID_TYPE> mixins)
 	{
 		m_lastAddedEntity++;
-		while (m_entities.GetEntity(m_lastAddedEntity) != nullptr)
+		while (!m_entities.GetEntity(m_lastAddedEntity).expired())
 		{
 			if (m_lastAddedEntity == (std::numeric_limits<ENTITY_ID_TYPE>::max)())
 			{

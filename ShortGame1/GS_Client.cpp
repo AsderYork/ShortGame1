@@ -27,7 +27,7 @@ namespace GEM
 	void GS_Client::SimulationStarted()
 	{
 		m_updatesProcessor.AddControlledEntity(m_playerCharacterID);
-		m_chunkDispatcher.getController().createNewLoader([&]() {return dynamic_cast<GameSim::Mixin_Movable*>(m_entities.GetEntity(m_playerCharacterID)->GetMixinByID(GameSim::Mixin_Movable::MixinID))->getPos(); });
+		m_chunkDispatcher.getController().createNewLoader([&]() {return dynamic_cast<GameSim::Mixin_Movable*>(m_entities.GetEntity(m_playerCharacterID).lock()->GetMixinByID(GameSim::Mixin_Movable::MixinID))->getPos(); });
 	}
 
 	bool GS_Client::Tick(float Delta, GEM::NetworkConnection* connection)

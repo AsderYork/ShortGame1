@@ -90,13 +90,13 @@ namespace GEM::GameSim
 		Adds entity with some valid id.
 		\returns a pair with first value - pointer to newly created entity and second - ID of that entity
 		*/
-		std::pair<EntityBase*, ENTITY_ID_TYPE> AddEntity(std::vector<MIXIN_ID_TYPE> mixins);
+		std::pair<std::weak_ptr<EntityBase>, ENTITY_ID_TYPE> AddEntity(std::vector<MIXIN_ID_TYPE> mixins);
 
 		/**!
 		Adds entity with a given ID.
 		Returns a pointer to the entity, if it was created or nullptr, if entity wasn't created
 		*/
-		EntityBase* AddEntity(ENTITY_ID_TYPE ID, std::vector<MIXIN_ID_TYPE> mixins);
+		std::weak_ptr<EntityBase> AddEntity(ENTITY_ID_TYPE ID, std::vector<MIXIN_ID_TYPE> mixins);
 
 
 
