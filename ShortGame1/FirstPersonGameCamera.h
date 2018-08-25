@@ -1,5 +1,6 @@
 #pragma once
 #include <Mixin_Movable.h>
+#include <EntitiesBase.h>
 
 #include <OGRE/OgreCamera.h>
 #include <memory>
@@ -13,6 +14,9 @@ namespace GEM
 	{
 	private:
 		Ogre::Camera* m_camera;
+		std::weak_ptr<GameSim::EntityBase> m_entity;
+
+
 	public:
 
 		/**!
@@ -20,5 +24,8 @@ namespace GEM
 		Entity must exist and must be movable.
 		*/
 		void TieCamera(GameSim::ENTITY_ID_TYPE entID, GameSim::GameSimulation* gs);
+
+
+		void UpdateCamera();
 	};
 }

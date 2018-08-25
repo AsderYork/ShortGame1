@@ -16,6 +16,8 @@ namespace GEM::GameSim
 	protected:
 		btVector3 m_pos = btVector3(0, 0, 0);
 		btVector3 m_velocity = btVector3(0, 0, 0);
+		btQuaternion m_orientation;
+
 		//Remembers when was the last time of gathering update from this mixin. If it was too long, it will start asking for an update
 		std::chrono::system_clock::time_point m_lastUpdate;
 
@@ -31,6 +33,7 @@ namespace GEM::GameSim
 			btVector3 GetNewVelociyVectorBasedOnCurrentState();
 		};
 		CurrentMovement m_movementState;
+
 
 	public:
 
@@ -54,6 +57,15 @@ namespace GEM::GameSim
 		bool tick(const GameTime delta);
 
 		inline const btVector3& getPos() {	return m_pos;	}
+
+		/**!
+		Orientation of the object is determied by 3 values(pitch, yaw, roll) between 0 and 360.
+		Values outside of this range will be wraped.
+		*/
+		inline void setOrientation(float Pitch, float Yaw, float Roll) { m_orientation.setEuler(Yaw, Pitch, Roll); }
+		inline void SetOrientation(btQuaternion orient) { m_orientation = orient;}
+		inline void CombineRotation(btQuaternion orient) { m_orientation += orient; }
+		inline btQuaternion getOrientation() { return m_orientation; }
 
 		virtual bool NeedsUpdate() override;
 

@@ -426,14 +426,14 @@ namespace GEM
 	}
 	void MovableCamera::AjustPosition(float timeDelta)
 	{
-		if (!m_reciveInput) { m_positionChange = Ogre::Vector3::ZERO; m_yaw = 0; m_pitch = 0;return; }
+		/*if (!m_reciveInput) { m_positionChange = Ogre::Vector3::ZERO; m_yaw = 0; m_pitch = 0;return; }
 		float MoveSpeed = 7.0f;
 		float TurnSpeed = 0.1f;
 		m_camera->moveRelative(m_positionChange * timeDelta * MoveSpeed);
 		m_camera->yaw(Ogre::Radian(1)*m_yaw*timeDelta*TurnSpeed);
 		m_camera->pitch(Ogre::Radian(1)*m_pitch*timeDelta*TurnSpeed);
 		m_yaw = 0;
-		m_pitch = 0;
+		m_pitch = 0;*/
 	}
 	void MovableCamera::ShouldReciveInput(bool State)
 	{

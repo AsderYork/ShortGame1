@@ -12,6 +12,8 @@ namespace GEM
 	{
 		m_sky.StartVisualization();
 		m_fullyInited = true;
+
+		m_camera.TieCamera(m_gsController->m_playerCharacterID, m_gsController);
 	}
 
 	void VisualController::Frame()
@@ -20,6 +22,7 @@ namespace GEM
 		{
 			m_objCubical.Frame();
 			m_sky.frame();
+			m_camera.UpdateCamera();
 		}
 	}
 

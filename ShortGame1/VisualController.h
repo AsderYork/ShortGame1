@@ -3,6 +3,7 @@
 #include "SkyVisualization.h"
 #include "GameSimService.h"
 #include "LandscapeVisualizationController.h"
+#include "FirstPersonGameCamera.h"
 
 #include "ObjectVis_Cubical.h"
 
@@ -28,6 +29,8 @@ namespace GEM
 		SkyVisualization m_sky;
 		LandscapeVisualizationController m_landscape;
 		ObjectVis_Cubical m_objCubical;
+		FirstPersonGameCamera m_camera;
+
 		bool m_fullyInited = false;
 
 
