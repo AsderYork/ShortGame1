@@ -29,6 +29,7 @@ namespace GEM::GameSim
 
 	bool Mixin_Movable::tick(const GameTime delta)
 	{
+		SetVelocityV(quatRotate(m_orientation, m_movementState.GetNewVelociyVectorBasedOnCurrentState())*m_speed);
 		auto NewPos = m_pos + m_velocity * GameTimeToSeconds(delta);
 		
 		auto Responce = Mixin_Movable_Singleton::Instance().m_landPhys->RayTest(NewPos + btVector3(0.0f, 256.0f, 0.0f), NewPos - btVector3(0.0f, 1.0f, 0.0f));
@@ -63,6 +64,7 @@ namespace GEM::GameSim
 
 		archive(m_pos.x(), m_pos.y(), m_pos.z());
 		archive(m_velocity.x(), m_velocity.y(), m_velocity.z());
+		archive(m_orientation.w(),m_orientation.x(), m_orientation.y(), m_orientation.z());
 	}
 
 	bool Mixin_Movable::CheckAndReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime UpdateLag)
@@ -76,6 +78,11 @@ namespace GEM::GameSim
 		btScalar vex, vey, vez;
 		archive(vex, vey, vez);
 		NewVel.setValue(vex, vey, vez);
+
+
+		btScalar orw, orx, ory, orz;
+		archive(orw, orx, ory, orz);
+		btQuaternion NewOrient(orw, orx, ory, orz);
 
 
 
@@ -156,9 +163,11 @@ namespace GEM::GameSim
 			break;
 		}
 
+		
+
 		default: {break; }
 		}
-		SetVelocityV(m_movementState.GetNewVelociyVectorBasedOnCurrentState()*m_speed);
+		SetVelocityV(quatRotate(m_orientation, m_movementState.GetNewVelociyVectorBasedOnCurrentState())*m_speed);
 		;
 	}
 

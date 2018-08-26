@@ -35,6 +35,7 @@ namespace GEM
 					Visibility = m_visibleEntities.find(MaybeEnityIter->first);
 				}
 				Visibility->second.node->setPosition(Ogre::Vector3(Movability->getPos().x(), Movability->getPos().y(), Movability->getPos().z()));
+				Visibility->second.node->setOrientation(Movability->getOrientation().w(), Movability->getOrientation().x(), Movability->getOrientation().y(), Movability->getOrientation().z());
 				newMap.emplace(std::move(*Visibility));
 
 			}

@@ -15,17 +15,22 @@ namespace GEM
 		auto LockedEnt = m_entity.lock();
 		auto Movable = static_cast<GameSim::Mixin_Movable*>(LockedEnt->GetMixinByID(GameSim::Mixin_Movable::MixinID));
 
+		static auto znow = std::chrono::steady_clock::now();
+		float ChanVal = std::chrono::duration<float>(std::chrono::steady_clock::now() - znow).count();
+		//Movable->SetOrientation(btQuaternion(btVector3(0.0f, 1.0f, 0.0f), ChanVal / 10));
+
 		auto Pos = Movable->getPos();
 		auto Rot = Movable->getOrientation();
 
 		
 		btVector3 Shift(0, 4, -10);
 
-		static auto znow = std::chrono::steady_clock::now();
+	
 
 		Shift.rotate(Rot.getAxis(), Rot.getAngle());
-		Pos += Shift;
-		Rot *= btQuaternion(SIMD_PI / 2, (SIMD_PI / 2)*0.9f, 0);
+		Pos += quatRotate(Rot, Shift);
+		Rot *= btQuaternion(SIMD_PI, -SIMD_PI*0.04f, 0.0f);
+		//Rot *= btQuaternion(std::chrono::duration<float>(std::chrono::steady_clock::now()- znow).count()*0.3, 0.0f, 0);
 
 		//Shift Camera sligtly, so that object would remain visible
 		m_cameraNode->setPosition(Pos.x(), Pos.y(), Pos.z());

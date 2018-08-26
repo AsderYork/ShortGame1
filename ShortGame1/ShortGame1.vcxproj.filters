@@ -106,9 +106,6 @@
     <Filter Include="Screens\MainGameScreen">
       <UniqueIdentifier>{873156d4-0310-4edc-b537-a0854bfadd68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameVisualization">
-      <UniqueIdentifier>{6737b1ab-9774-4eca-9b2f-5903e11464de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PlayerInputEventGenerator">
       <UniqueIdentifier>{ffda274c-e8b0-4bcc-be53-63c1aef7a59a}</UniqueIdentifier>
     </Filter>
@@ -127,26 +124,32 @@
     <Filter Include="GameClient\LandscapeSystem\NetworkProcessor">
       <UniqueIdentifier>{e0780e30-2c5f-4896-afe7-5d0a563abf09}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameVisualization\LandscapeVisualization">
+    <Filter Include="Screens\MainGameScreen\GameVisualization">
+      <UniqueIdentifier>{6737b1ab-9774-4eca-9b2f-5903e11464de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Screens\MainGameScreen\GameVisualization\LandscapeVisualization">
       <UniqueIdentifier>{2ab2cdb3-87d7-420c-99ce-b9045b123689}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameVisualization\Sky">
+    <Filter Include="Screens\MainGameScreen\GameVisualization\Sky">
       <UniqueIdentifier>{6b0762ee-c0f8-432b-9aac-99952a6df804}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameVisualization\GameObjectsVisualization">
+    <Filter Include="Screens\MainGameScreen\GameVisualization\GameObjectsVisualization">
       <UniqueIdentifier>{aa8948d4-59b0-4a84-9d83-370a11731a0b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameVisualization\GameObjectsVisualization\Cubical">
+    <Filter Include="Screens\MainGameScreen\GameVisualization\GameObjectsVisualization\Cubical">
       <UniqueIdentifier>{02921e9e-c793-41c0-89d5-61ed614ea19b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameVisualization\VisualzationController">
+    <Filter Include="Screens\MainGameScreen\GameVisualization\VisualzationController">
       <UniqueIdentifier>{21cddc63-f42c-4e09-b9cb-6d4fd29aedf7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameVisualization\GameCamera">
+    <Filter Include="Screens\MainGameScreen\GameVisualization\GameCamera">
       <UniqueIdentifier>{97ca6d91-93d8-454b-8481-d1847dc12818}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameVisualization\GameCamera\FirstPerson">
+    <Filter Include="Screens\MainGameScreen\GameVisualization\GameCamera\FirstPerson">
       <UniqueIdentifier>{dd1369b3-78d0-4346-9b20-c3f91930f865}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Screens\MainGameScreen\GamePlayerControlls">
+      <UniqueIdentifier>{2e730511-0cd3-46f9-b39c-bc94309088fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -241,10 +244,10 @@
       <Filter>PlayerInputEventGenerator</Filter>
     </ClInclude>
     <ClInclude Include="LandscapeVisualization.h">
-      <Filter>GameVisualization\LandscapeVisualization</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\LandscapeVisualization</Filter>
     </ClInclude>
     <ClInclude Include="LandscapeVisualizationController.h">
-      <Filter>GameVisualization\LandscapeVisualization</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\LandscapeVisualization</Filter>
     </ClInclude>
     <ClInclude Include="GS_Client.h">
       <Filter>GameClient\GS_Client</Filter>
@@ -256,16 +259,16 @@
       <Filter>GameClient\LandscapeSystem\NetworkProcessor</Filter>
     </ClInclude>
     <ClInclude Include="SkyVisualization.h">
-      <Filter>GameVisualization\Sky</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\Sky</Filter>
     </ClInclude>
     <ClInclude Include="VisualController.h">
-      <Filter>GameVisualization\VisualzationController</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\VisualzationController</Filter>
     </ClInclude>
     <ClInclude Include="ObjectVis_Cubical.h">
-      <Filter>GameVisualization\GameObjectsVisualization\Cubical</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\GameObjectsVisualization\Cubical</Filter>
     </ClInclude>
     <ClInclude Include="FirstPersonGameCamera.h">
-      <Filter>GameVisualization\GameCamera\FirstPerson</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\FirstPerson</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -342,10 +345,10 @@
       <Filter>PlayerInputEventGenerator</Filter>
     </ClCompile>
     <ClCompile Include="LandscapeVisualization.cpp">
-      <Filter>GameVisualization\LandscapeVisualization</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\LandscapeVisualization</Filter>
     </ClCompile>
     <ClCompile Include="LandscapeVisualizationController.cpp">
-      <Filter>GameVisualization\LandscapeVisualization</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\LandscapeVisualization</Filter>
     </ClCompile>
     <ClCompile Include="GS_Client.cpp">
       <Filter>GameClient\GS_Client</Filter>
@@ -357,16 +360,16 @@
       <Filter>GameClient\LandscapeSystem\NetworkProcessor</Filter>
     </ClCompile>
     <ClCompile Include="SkyVisualization.cpp">
-      <Filter>GameVisualization\Sky</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\Sky</Filter>
     </ClCompile>
     <ClCompile Include="VisualController.cpp">
-      <Filter>GameVisualization\VisualzationController</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\VisualzationController</Filter>
     </ClCompile>
     <ClCompile Include="ObjectVis_Cubical.cpp">
-      <Filter>GameVisualization\GameObjectsVisualization\Cubical</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\GameObjectsVisualization\Cubical</Filter>
     </ClCompile>
     <ClCompile Include="FirstPersonGameCamera.cpp">
-      <Filter>GameVisualization\GameCamera\FirstPerson</Filter>
+      <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\FirstPerson</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

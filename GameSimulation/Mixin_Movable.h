@@ -16,7 +16,7 @@ namespace GEM::GameSim
 	protected:
 		btVector3 m_pos = btVector3(0, 0, 0);
 		btVector3 m_velocity = btVector3(0, 0, 0);
-		btQuaternion m_orientation;
+		btQuaternion m_orientation = btQuaternion(0.0f, 0.0f, 0.0f);
 
 		//Remembers when was the last time of gathering update from this mixin. If it was too long, it will start asking for an update
 		std::chrono::system_clock::time_point m_lastUpdate;
