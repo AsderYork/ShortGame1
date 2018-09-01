@@ -270,6 +270,9 @@
     <ClInclude Include="FirstPersonGameCamera.h">
       <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\FirstPerson</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerInputManager.h">
+      <Filter>Screens\MainGameScreen\GamePlayerControlls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShortGame1.cpp">
@@ -370,6 +373,9 @@
     </ClCompile>
     <ClCompile Include="FirstPersonGameCamera.cpp">
       <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\FirstPerson</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInputManager.cpp">
+      <Filter>Screens\MainGameScreen\GamePlayerControlls</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

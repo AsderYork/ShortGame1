@@ -25,7 +25,7 @@ namespace GEM
 		Ties a camera to a given entity.
 		Entity must exist and must be movable.
 		*/
-		void TieCamera(GameSim::ENTITY_ID_TYPE entID, GameSim::GameSimulation* gs);
+		void TieCamera(std::weak_ptr<GameSim::EntityBase> PlayerEntity);
 
 
 		void UpdateCamera();

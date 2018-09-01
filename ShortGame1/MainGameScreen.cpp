@@ -43,7 +43,7 @@ namespace GEM
 				NewEvent = m_PIEG.getEvent();
 			}
 
-			m_visual.Frame();
+			m_visual.Frame(timeDelta);
 		}
 		
 	}

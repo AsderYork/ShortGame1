@@ -64,7 +64,7 @@ namespace GEM::GameSim
 		*/
 		inline void setOrientation(float Pitch, float Yaw, float Roll) { m_orientation.setEuler(Yaw, Pitch, Roll); }
 		inline void SetOrientation(btQuaternion orient) { m_orientation = orient;}
-		inline void CombineRotation(btQuaternion orient) { m_orientation += orient; }
+		inline void CombineRotation(btQuaternion orient) { m_orientation *= orient; }
 		inline btQuaternion getOrientation() { return m_orientation; }
 
 		virtual bool NeedsUpdate() override;

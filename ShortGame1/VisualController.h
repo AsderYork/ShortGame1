@@ -4,6 +4,7 @@
 #include "GameSimService.h"
 #include "LandscapeVisualizationController.h"
 #include "FirstPersonGameCamera.h"
+#include "PlayerInputManager.h"
 
 #include "ObjectVis_Cubical.h"
 
@@ -30,17 +31,13 @@ namespace GEM
 		LandscapeVisualizationController m_landscape;
 		ObjectVis_Cubical m_objCubical;
 		FirstPersonGameCamera m_camera;
+		PlayerInputManager m_inputManager;
 
 		bool m_fullyInited = false;
 
 
 	public:
-		inline VisualController(GameSimController* gsController) :
-			m_gsController(gsController),
-			m_landscape(gsController),
-			m_objCubical(gsController),
-			m_sky(gsController)
-		{}
+		VisualController(GameSimController* gsController);
 
 		/**!
 		Some of the components of the visual controller might choose to start
@@ -61,8 +58,9 @@ namespace GEM
 		/**!
 		Updates the states of visualization components for the next frame.
 		This method must be called every frame.
+		\param[in] TimePassed time passed since the last call
 		*/
-		void Frame();
+		void Frame(float TimePassed);
 
 		~VisualController();
 

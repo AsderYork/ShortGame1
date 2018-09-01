@@ -195,6 +195,7 @@
     <ClInclude Include="Ogre_Service.h" />
     <ClInclude Include="PlayerInputController.h" />
     <ClInclude Include="PlayerInputEventGenerator.h" />
+    <ClInclude Include="PlayerInputManager.h" />
     <ClInclude Include="ScreenController.h" />
     <ClInclude Include="SDL2_Service.h" />
     <ClInclude Include="SkyVisualization.h" />
@@ -230,6 +231,7 @@
     <ClCompile Include="OgreLogRedirection.cpp" />
     <ClCompile Include="Ogre_Service.cpp" />
     <ClCompile Include="PlayerInputEventGenerator.cpp" />
+    <ClCompile Include="PlayerInputManager.cpp" />
     <ClCompile Include="ScreenController.cpp" />
     <ClCompile Include="SDL2_Service.cpp" />
     <ClCompile Include="ShortGame1.cpp" />

@@ -37,19 +37,19 @@ namespace GEM
 		m_cameraNode->setOrientation(Ogre::Quaternion(Rot.getW(), Rot.getX(), Rot.getY(), Rot.getZ()));
 	}
 
-	void FirstPersonGameCamera::TieCamera(GameSim::ENTITY_ID_TYPE entID, GameSim::GameSimulation* gs)
+	void FirstPersonGameCamera::TieCamera(std::weak_ptr<GameSim::EntityBase> PlayerEntity)
 	{
-		m_entity = gs->m_entities.GetEntity(entID);
+		m_entity = PlayerEntity;
 		if (m_entity.expired())
 		{
-			LOGCATEGORY("Camera\TieCamera").error("Can't tie camera to entity(#%i). There is no such entity!", entID);
+			LOGCATEGORY("Camera\TieCamera").error("Can't tie camera to provided entity. There is no such entity!");
 			return;
 		}
 
 		auto Movable = static_cast<GameSim::Mixin_Movable*>(m_entity.lock()->GetMixinByID(GameSim::Mixin_Movable::MixinID));
 		if (Movable == nullptr)
 		{
-			LOGCATEGORY("Camera\TieCamera").error("Can't tie camera to entity(#%i). This entity doesn't have a movable mixin!", entID);
+			LOGCATEGORY("Camera\TieCamera").error("Can't tie camera to provided entity. This entity doesn't have a movable mixin!");
 			return;
 		}
 
