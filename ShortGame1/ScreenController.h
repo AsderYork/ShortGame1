@@ -9,21 +9,8 @@
 //ToDelete
 #include <list>
 
-/**!
-\warning For logHelper is in GameSimulation and Hasher is here! Bouth of them MUST be moved to a separate lib!
-Helpers is a set of classes that should help with frequent tasks throught the project. They are not specific to
-any part of the project or even to the project itself and might be used anywhere where they are needed.
-*/
-namespace Helpers
-{
-	/**
-	This class can turn string literals to a hash value of any lenght at compile time. It can even 
-	*/
-	class Hasher
-	{
 
-	};
-}
+
 
 namespace GEM
 {
@@ -97,7 +84,7 @@ namespace GEM
 	/**
 	Describes screen's interface. More on it in \ref DescScreens.
 	*/
-	class NewScreen 
+	/*class NewScreen 
 	{
 	private:	
 
@@ -108,22 +95,22 @@ namespace GEM
 	/**
 	Controlls game screen. More on it in \ref DescScreens.
 	*/
-	class ScreenService : public Service
+	/*class ScreenService : public Service
 	{
 	private:
 		/**
 		Now screens are registered once and for all the lenght of the game.
 		So this vector holds 
 		*/
-		std::vector<std::unique_ptr<Screen>> m_registeredScreens;
+		/*std::vector<std::unique_ptr<Screen>> m_registeredScreens;
 		std::vector<Screen*> m_stack;
 
 	public:
 		
 		RegisterScree
 
-	};
-
+	};*/
+	
 	/**
 	Represent current game state and may have some hooks for CEGUI, SDL2, SOUND
 	*/

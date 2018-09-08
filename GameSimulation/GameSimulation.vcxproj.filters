@@ -13,9 +13,6 @@
     <Filter Include="Entities\Base">
       <UniqueIdentifier>{4a83cd48-530b-4f98-9d7d-38f821a72fb6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Helpers">
-      <UniqueIdentifier>{3970f975-14eb-4c10-b253-099aaabb304b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameSimulation\PlayerController">
       <UniqueIdentifier>{6a7fdf4b-6eef-44db-8b22-18212cfd1d14}</UniqueIdentifier>
     </Filter>
@@ -82,9 +79,6 @@
     <Filter Include="Landscape\ChunkLoadDispatcher\ChunkLoadServerDispatcher">
       <UniqueIdentifier>{63262ac6-ba37-4507-a536-cddc985576fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="LogHelper">
-      <UniqueIdentifier>{e75269f5-b2e3-483e-bf80-ece140cdf23b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Entities\Mixins\Mixin_Movable\Mixin_Movable Singleton">
       <UniqueIdentifier>{d461f87e-c298-4dac-90d5-c69f2f4f6271}</UniqueIdentifier>
     </Filter>
@@ -147,9 +141,6 @@
     <ClInclude Include="EntitiesBase.h">
       <Filter>Entities\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Helper_UniqueInstanceGuarantee.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Words.txt" />
     <ClInclude Include="GS_PlayerController.h">
       <Filter>GameSimulation\PlayerController</Filter>
@@ -160,9 +151,6 @@
     <ClInclude Include="TestPlace.h" />
     <ClInclude Include="Mixin_Base.h">
       <Filter>Entities\Mixins\Mixin_base</Filter>
-    </ClInclude>
-    <ClInclude Include="Helper_TupleForeach.h">
-      <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Mixin_Movable.h">
       <Filter>Entities\Mixins\Mixin_Movable</Filter>
@@ -212,9 +200,6 @@
     <ClInclude Include="LandscapeChunkProvider.h">
       <Filter>Landscape</Filter>
     </ClInclude>
-    <ClInclude Include="Helper_VariableSizeSerialization.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="NetworkCommandsProcessor.h">
       <Filter>NetworkCommands\BaseProcessor</Filter>
     </ClInclude>
@@ -256,9 +241,6 @@
     </ClInclude>
     <ClInclude Include="ChunkLoadServerDispatcher.h">
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoadServerDispatcher</Filter>
-    </ClInclude>
-    <ClInclude Include="LogHelper.h">
-      <Filter>LogHelper</Filter>
     </ClInclude>
     <ClInclude Include="Player_id_type.h">
       <Filter>GameSimulation\PlayerController</Filter>
@@ -351,9 +333,6 @@
     </ClCompile>
     <ClCompile Include="ChunkLoadServerDispatcher.cpp">
       <Filter>Landscape\ChunkLoadDispatcher\ChunkLoadServerDispatcher</Filter>
-    </ClCompile>
-    <ClCompile Include="LogHelper.cpp">
-      <Filter>LogHelper</Filter>
     </ClCompile>
     <ClCompile Include="SharedDataPackets.cpp">
       <Filter>NetworkCommands\SharedDataPackets</Filter>

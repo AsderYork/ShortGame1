@@ -18,6 +18,16 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LogHelper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Helper_TupleForeach.h" />
+    <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
+    <ClInclude Include="Helper_VariableSizeSerialization.h" />
+    <ClInclude Include="LogHelper.h" />
+    <ClInclude Include="Main.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{54AC4294-E9C8-4525-B2F7-AAAB62C2842A}</ProjectGuid>
@@ -72,15 +82,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

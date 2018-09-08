@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(BOOST_HOME);$(SolutionDir)GameSimulation;$(SolutionDir)\ExternalDeps\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(BOOST_HOME);$(SolutionDir)Helpers;$(SolutionDir)GameSimulation;$(SolutionDir)\ExternalDeps\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(BOOST_HOME)\libs;$(BOOST_HOME)\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -83,7 +83,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(BOOST_HOME);$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
+    <IncludePath>$(BOOST_HOME);$(SolutionDir)Helpers;$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(BOOST_HOME)\libs;$(BOOST_HOME)\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

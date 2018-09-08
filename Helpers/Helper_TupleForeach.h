@@ -2,7 +2,7 @@
 
 #include <tuple>
 
-namespace GEM::Helper
+namespace Helper
 {
 	namespace _detail_
 	{

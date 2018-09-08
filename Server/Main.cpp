@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-	GEM::logHelper::setLog("./logs/log.txt");
+	Helper::logHelper::setLog("./logs/log.txt");
 
 	try
 	{

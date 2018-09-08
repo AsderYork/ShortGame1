@@ -6,7 +6,7 @@
 
 int GEM::EngineController::start()
 {
-	GEM::logHelper::setLog("laststart.log");
+	Helper::logHelper::setLog("laststart.log");
 	LOGCATEGORY("EngineController/start").info("Log is set and start have begun!");
 
 	if (!initializeServices()){

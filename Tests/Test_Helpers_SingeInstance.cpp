@@ -4,7 +4,7 @@
 
 #include <Helper_UniqueInstanceGuarantee.h>
 
-class TestClass : public GEM::Helper::UniqueInstanceHelper<TestClass, int>
+class TestClass : public Helper::UniqueInstanceHelper<TestClass, int>
 {
 private:
 	static int MasterID;
@@ -12,15 +12,15 @@ private:
 	int UnqiueID;
 
 public:
-	TestClass() : UnqiueID(MasterID), GEM::Helper::UniqueInstanceHelper<TestClass, int>(MasterID) {
+	TestClass() : UnqiueID(MasterID), Helper::UniqueInstanceHelper<TestClass, int>(MasterID) {
 		MasterID++;
 	}
 
-	TestClass(int ID) : UnqiueID(ID), GEM::Helper::UniqueInstanceHelper<TestClass, int>(ID) {
+	TestClass(int ID) : UnqiueID(ID), Helper::UniqueInstanceHelper<TestClass, int>(ID) {
 	}
 
 };
-std::unordered_set<int> GEM::Helper::UniqueInstanceHelper<TestClass, int>::m_UnqiueProofSet;
+std::unordered_set<int> Helper::UniqueInstanceHelper<TestClass, int>::m_UnqiueProofSet;
 
 int TestClass::MasterID = 0;
 

@@ -3,7 +3,7 @@
 #include <limits>
 #include "LogHelper.h"
 
-namespace GEM::Helper
+namespace Helper
 {
 	template <class SizeTagType, class Archive, class T, class A> inline
 		typename std::enable_if<cereal::traits::is_output_serializable<cereal::BinaryData<T>, Archive>::value

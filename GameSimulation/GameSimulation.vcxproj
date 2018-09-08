@@ -72,12 +72,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(BOOST_HOME);$(ZLIB_HOME)\x64\include;$(BULLETPHYSICS_HOME)\Repo\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(BOOST_HOME);$(ZLIB_HOME)\x64\include;$(BULLETPHYSICS_HOME)\Repo\src;$(SolutionDir)Helpers;$(IncludePath)</IncludePath>
     <LibraryPath>$(ZLIB_HOME)\x64\lib;$(BULLETPHYSICS_HOME)\$(Platform)\Build\Lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(BOOST_HOME);$(ZLIB_HOME)\x64\include;$(BULLETPHYSICS_HOME)\Repo\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(BOOST_HOME);$(ZLIB_HOME)\x64\include;$(BULLETPHYSICS_HOME)\Repo\src;$(SolutionDir)Helpers;$(IncludePath)</IncludePath>
     <LibraryPath>$(ZLIB_HOME)\x64\lib;$(BULLETPHYSICS_HOME)\$(Platform)\Build\Lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -170,7 +170,6 @@
     <ClInclude Include="GS_EntityController.h" />
     <ClInclude Include="GS_PlayerController.h" />
     <ClInclude Include="GS_Server.h" />
-    <ClInclude Include="Helper_VariableSizeSerialization.h" />
     <ClInclude Include="LandscapeChunk.h" />
     <ClInclude Include="LandscapeChunkController.h" />
     <ClInclude Include="LandscapeChunkPack.h" />
@@ -180,11 +179,9 @@
     <ClInclude Include="LandscapePhysics.h" />
     <ClInclude Include="LandscapeSystem_Command.h" />
     <ClInclude Include="LandscapeSystem_ServerProcessor.h" />
-    <ClInclude Include="LogHelper.h" />
     <ClInclude Include="Mixin_Movable Singleton.h" />
     <ClInclude Include="NetworkCommandBase.h" />
     <ClInclude Include="NetworkCommandsProcessor.h" />
-    <ClInclude Include="Helper_TupleForeach.h" />
     <ClInclude Include="KeyboardEvents.h" />
     <ClInclude Include="Mixin_Base.h" />
     <ClInclude Include="Mixin_Controller.h" />
@@ -198,7 +195,6 @@
     <ClInclude Include="UpdateSystem_Command.h" />
     <ClInclude Include="UpdateSystem_Processor.h" />
     <ClInclude Include="Words.txt" />
-    <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChunkLoadServerDispatcher.cpp" />
@@ -218,7 +214,6 @@
     <ClCompile Include="LandscapeMeshGenerator.cpp" />
     <ClCompile Include="LandscapePhysics.cpp" />
     <ClCompile Include="LandscapeSystem_ServerProcessor.cpp" />
-    <ClCompile Include="LogHelper.cpp" />
     <ClCompile Include="Mixin_Base.cpp" />
     <ClCompile Include="Mixin_Controller.cpp" />
     <ClCompile Include="Mixin_Health.cpp" />

@@ -61,7 +61,7 @@ namespace GEM::GameSim
 		Mixin_base* GetMixinByID(int id) const
 		{
 			Mixin_base* retptr;
-			GEM::Helper::for_each(m_mixins, [&](int index, auto&& T) {
+			Helper::for_each(m_mixins, [&](int index, auto&& T) {
 				if (T.MixinID == id) { retptr = &T; }
 			});
 			return retptr;

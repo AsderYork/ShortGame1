@@ -120,7 +120,7 @@
 				return std::function<void(EntityBase*, cereal::BinaryInputArchive &)>(
 					[=](EntityBase* base, cereal::BinaryInputArchive & ar) {
 					std::tuple<funcargs...> args;
-					GEM::Helper::for_each(args, [&](int index, auto&& T) {ar(T); });
+					Helper::for_each(args, [&](int index, auto&& T) {ar(T); });
 
 
 					auto Ptr = dynamic_cast<classname*>(base->GetMixinByID(classname::MixinID));

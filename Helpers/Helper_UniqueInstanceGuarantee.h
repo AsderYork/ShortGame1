@@ -1,9 +1,9 @@
 #pragma once
 #include <unordered_set>
 #include <cassert>
-namespace GEM::Helper
+namespace Helper
 {
-	/**!
+	/**
 	CRTP this class to guarantee, that every instance of the class will have unique value
 
 	Derived - A type of class, that derives from this template

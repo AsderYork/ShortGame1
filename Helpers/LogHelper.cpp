@@ -8,7 +8,7 @@
 #include <log4cpp/PatternLayout.hh>
 #include <log4cpp/Priority.hh>
 
-namespace GEM
+namespace Helper
 {
 	void logHelper::setLog(std::string path)
 	{
