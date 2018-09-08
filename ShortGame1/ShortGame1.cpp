@@ -27,6 +27,24 @@
 #include <OGRE\OgreSubMesh2.h>
 #include <OGRE\OgreItem.h>
 
+/**
+\mainpage ShortGame1
+ShortGame1 is a multipart project. Two main parts of it is A \b Client and a \b Server. And two more specialized parts - a \b GameSimulation
+and a \b NetworkShared. First two is an executables, and the second two is a libraries, that contain shared code.
+\par Client
+A client is the part that will be shipped to the
+players. It's responsible for reciveing player input, sending it to the server, maintaning partial game simulation and syncing it with the
+server and visualizing said simulation.
+
+If yow want to know more about intricasies of a Client, a good place to start would be an EngineController
+
+\par Server
+Server's job is to maintaing one true game simulation and apply player input, recived from connected clients to it if said input is within the rules
+of the simulation. After applying input, it retranslates changes in the simulation to all connected clients.
+
+Server is a pretty thin by itself, most of it's code comes from \c GameSimulation.
+*/
+
 
 class TmpService : public GEM::Service
 {
