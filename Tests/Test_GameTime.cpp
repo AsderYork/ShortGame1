@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
+/*#define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
 #include <boost/test/unit_test.hpp>
 
 #include <GameTime.h>
@@ -18,4 +18,4 @@ BOOST_AUTO_TEST_CASE(Comparison)
 }
 
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END()*/

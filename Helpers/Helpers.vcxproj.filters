@@ -18,5 +18,6 @@
     <ClInclude Include="Helper_UniqueInstanceGuarantee.h" />
     <ClInclude Include="Helper_VariableSizeSerialization.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="Hasher.h" />
   </ItemGroup>
 </Project>
