@@ -1,120 +1,141 @@
 #include "stdafx.h"
 #include "ScreenController.h"
 
+#include <algorithm>
+
 
 namespace GEM
 {
-	//SCREENCONTROLLER
-	void ScreenController::CleanListUp()
-	{
-		if (m_screens.empty()) { return; }
-		auto TopElement = m_screens.front().get();
 
-		std::vector<std::list<std::unique_ptr<Screen>>::iterator> markedForDelition;
-		for (auto it = m_screens.begin(); it != m_screens.end(); it++)
+	void ScreenService::ActivateScreen(int32_t screenId)
+	{
+		Screen* Ptr = nullptr;
+
+		for (auto& RequestedScreen : m_registeredScreens)
 		{
-			if (it->get()->m_shouldBeDeleated) { markedForDelition.push_back(it); }
+			if (RequestedScreen.first == screenId) {
+				Ptr = RequestedScreen.second.get();
+				break;
+			}
+		}
+		if (Ptr == nullptr)
+		{
+			LOGCATEGORY("ScreenService/ActivateScreen").error("Can't activate screen with id %i. There is no such screen.", screenId);
+			throw std::exception("Can't activate screen with id %i. There is no such screen.", screenId);
 		}
 
-		for (auto& it : markedForDelition) { m_screens.erase(it); }
+		Screen* OldTop = nullptr;
+		if (!m_stack.empty())	{
+			OldTop = m_stack.back();
+		}
 
-		if (TopElement != m_screens.front().get())//Top element have changed. Notify new top element
-		{
-			m_screens.front().get()->IsOnTop();
+		auto RemoveIter = std::remove(m_stack.begin(), m_stack.end(), Ptr);
+		if (RemoveIter < m_stack.end()) {
+			(*RemoveIter) = Ptr;
 		}
-	}
-	ScreenController::ScreenController(SDL_Controller * SDL)
-	{
-		SDL->registerKeyboardListener(this);
-		SDL->registerMouseListener(this);
-	}
+		else {
+			m_stack.push_back(Ptr);
+		}
 
-	void ScreenController::textInput(const SDL_TextInputEvent & arg)
-	{
-		CleanListUp();
-		for (auto& screen : m_screens)
+
+		if (m_isInitted && OldTop != nullptr && (OldTop != m_stack.back()))
 		{
-			screen->textInput(arg);
-		}
-	}
-	void ScreenController::keyPressed(const SDL_KeyboardEvent & arg)
-	{
-		CleanListUp();
-		for (auto& screen : m_screens)
-		{
-			screen->keyPressed(arg);
-		}
-	}
-	void ScreenController::keyReleased(const SDL_KeyboardEvent & arg)
-	{
-		CleanListUp();
-		for (auto& screen : m_screens)
-		{
-			screen->keyReleased(arg);
-		}
-	}
-	void ScreenController::mouseMoved(const SDL_Event & arg)
-	{
-		CleanListUp();
-		for (auto& screen : m_screens)
-		{
-			screen->mouseMoved(arg);
-		}
-	}
-	void ScreenController::mousePressed(const SDL_MouseButtonEvent & arg)
-	{
-		CleanListUp();
-		for (auto& screen : m_screens)
-		{
-			screen->mousePressed(arg);
-		}
-	}
-	void ScreenController::mouseReleased(const SDL_MouseButtonEvent & arg)
-	{
-		CleanListUp();
-		for (auto& screen : m_screens)
-		{
-			screen->mouseReleased(arg);
+			m_stack.back()->OnTop();
+			if (!m_stack.back()->m_isTransparent)
+			{
+				for (auto it = m_stack.rbegin() + 1; it != m_stack.rend(); it++)
+				{
+					(*it)->NoLongerOnTop();
+					if (!(*it)->m_isTransparent) { break; }
+				}
+			}
 		}
 	}
 
-	Service::ActionResult ScreenController::initialize()
+
+	Service::ActionResult ScreenService::initialize()
 	{
-		m_initialized = true;
-		for (auto& screen : m_screens)
+		for (auto& RegisteredScreen : m_registeredScreens)
 		{
-			screen->Init();
+			if (!RegisteredScreen.second->Init())
+			{
+				LOGCATEGORY("ScreenService/initialize").error("Screen #%i return false on it's init!", RegisteredScreen.first);
+				return ActionResult::AR_ERROR;
+			}
+		}
+		m_isInitted = true;
+
+		if (!m_stack.empty())
+		{
+			m_stack.back()->OnTop();
+		}
+
+		return ActionResult::AR_OK;
+	}
+	void ScreenService::shutdown()
+	{
+		m_stack.clear();
+		m_registeredScreens.clear();
+	}
+
+	Service::ActionResult ScreenService::preFrame(float timeDelta)
+	{
+		bool Continue = true;
+		for (auto Iter = m_stack.rbegin(); Iter != m_stack.rend(); Iter++)
+		{
+			if (!Continue) { break; }
+			(*Iter)->PreFrame(timeDelta);
+			Continue = (*Iter)->m_isTransparent;
 		}
 		return ActionResult::AR_OK;
 	}
-	void ScreenController::shutdown()
-	{
-		m_screens.clear();
-	}
-	Service::ActionResult ScreenController::preFrame(float timeDelta)
+	Service::ActionResult ScreenService::frame(float timeDelta)
 	{
 		return ActionResult::AR_OK;
 	}
-	Service::ActionResult ScreenController::frame(float timeDelta)
+	Service::ActionResult ScreenService::postFrame(float timeDelta)
 	{
-		return ActionResult::AR_OK;
-	}
-	Service::ActionResult ScreenController::postFrame(float timeDelta)
-	{
-		CleanListUp();
-		for (auto& screen : m_screens)
+		bool Continue = true;
+		//Stack is copied to protect against cases, when Screens add other screen in a queue on this step
+		auto LocalExecStack = m_stack;
+		for (auto Iter = LocalExecStack.rbegin(); Iter != LocalExecStack.rend(); Iter++)
 		{
-			screen->PostFrame(timeDelta);
+			if (!Continue) { break; }
+			(*Iter)->PostFrame(timeDelta);
+			Continue = (*Iter)->m_isTransparent;
 		}
+
+		//Removal
+		std::vector<Screen*> NewStack;
+		auto OldTop = m_stack.back();
+		bool NeedVisibilityRechek = !OldTop->m_isTransparent;
+		for (auto& Scr : m_stack)
+		{
+			if (Scr->m_markedForRemoval) { Scr->LeaveStack(); }
+			else { NewStack.push_back(Scr); }
+		}
+		if (NewStack.size() != m_stack.size())
+		{
+			m_stack.swap(NewStack);
+		}
+
+		if (OldTop != m_stack.back() && NeedVisibilityRechek)
+		{
+			for (auto it = m_stack.rbegin() + 1; it != m_stack.rend(); it++)
+			{
+				if (!(*it)->m_isTransparent) { break; }
+				(*it)->NoLongerOnTop();
+			}
+		}
+
 		return ActionResult::AR_OK;
 	}
-
-
-
-
-	//SCREEN
-	void Screen::Finish()
+	void Screen::ActivateAnotherScreen(int32_t id)
 	{
-		m_shouldBeDeleated = true;
+		if (m_service == nullptr) {
+			LOGCATEGORY("Screen/ActivateAnotherScreen").error("Can't Activate another screen. This screen doesn't belong to any ScreenServive!");
+			throw std::exception("Cant' Activate screen from unregistered screen!");
+		}
+		m_service->ActivateScreen(id);
 	}
 }

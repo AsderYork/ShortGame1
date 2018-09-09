@@ -13,6 +13,7 @@
 #include "GameSimService.h"
 
 #include "LoginScreen.h"
+#include "MainGameScreen.h"
 
 #include <LandscapeMeshGenerator.h>
 #include "LandscapeVisualization.h"
@@ -26,6 +27,8 @@
 #include <OGRE\OgreMeshManager2.h>
 #include <OGRE\OgreSubMesh2.h>
 #include <OGRE\OgreItem.h>
+
+#include <Hasher.h>
 
 /**
 \mainpage ShortGame1
@@ -487,15 +490,10 @@ public:
 	}
 };
 
+
 int main(int argc, char *argv[])
 {
 	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
-
-
-	
-	
-
-
 	
 	
 	GEM::EngineController Controller;
@@ -509,9 +507,9 @@ int main(int argc, char *argv[])
 
 	//LocalChunkTests(Controller, OgreController);
 
-
-	auto ScreenController = Controller.AddService<GEM::ScreenController>(SDLController);
+	auto ScreenController = Controller.AddService<GEM::ScreenService>();
 	auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
+
 
 
 
@@ -531,7 +529,10 @@ int main(int argc, char *argv[])
 	*/
 
 
-	ScreenController->AddScreen<GEM::LoginScreen>(NetworkController, GameSimService);
+	ScreenController->RegisterScreen<GEM::LoginScreen>(Helper::Hasher<int32_t>::Hash("LoginScreen","Screens"),NetworkController, GameSimService);
+	ScreenController->ActivateScreen(Helper::Hasher<int32_t>::Hash("LoginScreen", "Screens"));
+
+	ScreenController->RegisterScreen<GEM::MainGameScreen>(Helper::Hasher<int32_t>::Hash("MainGameScreen", "Screens"), NetworkController, GameSimService);
 
 	try
 	{

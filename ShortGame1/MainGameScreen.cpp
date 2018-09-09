@@ -2,6 +2,8 @@
 #include "MainGameScreen.h"
 #include "LoginScreen.h"
 
+#include <chrono>
+
 namespace GEM
 {
 	MainGameScreen::MainGameScreen(NetworkController * network, GameSimController * gs) : m_network(network), m_gsController(gs), m_visual(gs)
@@ -9,7 +11,7 @@ namespace GEM
 	}
 
 
-	void MainGameScreen::IsOnTop()
+	void MainGameScreen::OnTop()
 	{
 		if (!m_basicInitPerformed)//Check if it's the first time this screen gets on top
 		{
@@ -18,18 +20,19 @@ namespace GEM
 		}
 	}
 
-	void MainGameScreen::Init()
+	bool MainGameScreen::Init()
 	{
 		m_visual.StartBackgroundInit();
+		return true;
 	}
 	void MainGameScreen::PostFrame(float timeDelta)
 	{
+
 		if (!m_gsController->getSimulationState())
 		{
 			m_network->Disconnect();
 			LOGCATEGORY("MainGameScreen/PostFrame").info("Simmulation is stopped!");
-			getController()->AddScreen<LoginScreen>(m_network, m_gsController, "Simulation were terminated. Try to reconnect");
-			Finish();
+			MarkForRemoval();
 		}
 		else
 		{
@@ -46,5 +49,12 @@ namespace GEM
 			m_visual.Frame(timeDelta);
 		}
 		
+	}
+
+	void MainGameScreen::NoLongerOnTop()
+	{
+	}
+	void MainGameScreen::LeaveStack()
+	{
 	}
 }

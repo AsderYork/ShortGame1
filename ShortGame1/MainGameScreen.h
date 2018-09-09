@@ -21,11 +21,14 @@ namespace GEM
 
 	public:
 		MainGameScreen(NetworkController* network, GameSimController* gs);
-
-		virtual void IsOnTop();
-
-		virtual void Init();
+		
+		virtual bool Init();
 
 		virtual void PostFrame(float timeDelta) override;
+
+		// Унаследовано через Screen
+		virtual void OnTop() override;
+		virtual void NoLongerOnTop() override;
+		virtual void LeaveStack() override;
 	};
 }

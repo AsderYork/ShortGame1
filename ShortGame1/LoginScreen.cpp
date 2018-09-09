@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "LoginScreen.h"
 
-#include "MainGameScreen.h"
+#include <Hasher.h>
 
 #include <string>         // std::string, std::u32string
 #include <locale>         // std::wstring_convert
@@ -13,25 +13,9 @@
 namespace GEM
 {
 	
-	void LoginScreen::Init()
+	bool LoginScreen::Init()
 	{
-		m_mainWindow = CEGUI::WindowManager::getSingleton().loadLayoutFromFile("LoginScreen.layout");
-		auto LogWindow = m_mainWindow->getChild("FrameWindow");
-		m_editboxUsername = (CEGUI::Editbox*)LogWindow->getChild("Editbox_Username");
-		m_editboxAddr = (CEGUI::Editbox*)LogWindow->getChild("Editbox_Addr");
-		m_editboxPort = (CEGUI::Editbox*)LogWindow->getChild("Editbox_Port");
-		m_lableStatus = (CEGUI::Window*)LogWindow->getChild("StatusLable");
-
-		auto DefWindow = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
-		DefWindow->addChild(m_mainWindow);
-
-		LogWindow->getChild("Button")->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&LoginScreen::ButtonPressed, this));
-
-		if (m_stateLineBeginningMessage.size() != 0)
-		{
-			m_lableStatus->setText(m_stateLineBeginningMessage);
-		}
-
+		return true;
 	}
 
 	void LoginScreen::PostFrame(float timeDelta)
@@ -68,12 +52,42 @@ namespace GEM
 			case NetworkController::state::NOT_CONNECTED:{ break; }
 			case NetworkController::state::READY: {
 				m_gameSim->ActivateSimulation();
-				getController()->AddScreen<MainGameScreen>(m_gameClient, m_gameSim);
-				Finish();
+
+				ActivateAnotherScreen(Helper::Hasher<int32_t>::Hash("MainGameScreen", "Screens"));
 				break; }
 			
 			}
 		}
+	}
+
+	void LoginScreen::OnTop()
+	{
+		m_mainWindow = CEGUI::WindowManager::getSingleton().loadLayoutFromFile("LoginScreen.layout");
+		auto LogWindow = m_mainWindow->getChild("FrameWindow");
+		m_editboxUsername = (CEGUI::Editbox*)LogWindow->getChild("Editbox_Username");
+		m_editboxAddr = (CEGUI::Editbox*)LogWindow->getChild("Editbox_Addr");
+		m_editboxPort = (CEGUI::Editbox*)LogWindow->getChild("Editbox_Port");
+		m_lableStatus = (CEGUI::Window*)LogWindow->getChild("StatusLable");
+
+		auto DefWindow = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+		DefWindow->addChild(m_mainWindow);
+
+		LogWindow->getChild("Button")->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&LoginScreen::ButtonPressed, this));
+
+		if (m_stateLineBeginningMessage.size() != 0)
+		{
+			m_lableStatus->setText(m_stateLineBeginningMessage);
+		}
+
+	}
+
+	void LoginScreen::NoLongerOnTop()
+	{
+		CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow()->removeChild(m_mainWindow);
+	}
+
+	void LoginScreen::LeaveStack()
+	{
 	}
 
 	bool LoginScreen::ButtonPressed(const CEGUI::EventArgs & e)

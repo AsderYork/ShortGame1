@@ -36,7 +36,7 @@ namespace GEM
 	screen may take ptrs on services they depend on through constructor, but it's they still will be unitilialized, so it's adviced to just
 	keep them for later use.
 	
-	\li \c ServicesReady. Most of the screens will be registered in the \main before the GameEngine even starts working, whcih means that
+	\li \c Init. Most of the screens will be registered in the \main before the GameEngine even starts working, whcih means that
 	screen, that do want to pre-load their resources in the background woldn't know, when to start, if this process depends on Services.
 	To deal with this problem, this method is called for every registered state on ScreenController's \c init phase and for every screen
 	right after the're added to the Controller.
@@ -79,128 +79,155 @@ namespace GEM
 	 being registered, otherwise all that Stateful thing would lose any sence.
 
 	*/
-	class ScreenController;
+
+	class ScreenService;
 
 	/**
 	Describes screen's interface. More on it in \ref DescScreens.
 	*/
-	/*class NewScreen 
+	class Screen 
 	{
 	private:	
+		friend class ScreenService;
 
+		bool m_isTransparent;
+		bool m_markedForRemoval;
+		ScreenService* m_service;
 	public:
+
+		/**
+		\param[in] isTransparant Determines if this screen is \c Transparant. More on it in \ref DescScreens
+		*/
+		inline Screen(bool isTransparant = false) : m_isTransparent(isTransparant), m_markedForRemoval(false), m_service(nullptr) {}
+		virtual ~Screen() {}
+
+	protected:
+
+		/**
+		\brief Marks a screen for removal from stack
+		A screen can't be deleated just like that. It can only be removed between frames. Call this method
+		to ask ScreenService, that holds this screen to remove it on the next opportunity.
+		\note Screen is removed only from the stack. It will recive \c NoLongerOnTop if it was on top
+		and \c LeaveStack, but it's instance would remain alive untill the ScreenService would get \c Unloaded.
+		*/
+		inline void MarkForRemoval() { m_markedForRemoval = true; }
+
+		/**
+		\brief Activates screen with provided ID.
+		This method just provides easier access to ScreenService's \c ActivateScreen
+		*/
+		void ActivateAnotherScreen(int32_t id);
+
+		/**
+		\brief Start of the init phase
+		This method is called on registered screens when ScreenService is getting \c initialized.
+		\note If a screen is added to an allready initialized ScreenService, it will be \c Inited during it's registration.
+		*/
+		virtual bool Init() { return true; };
+
+		/**
+		\brief Called when a screen is on top of an inited queue.
+		*/
+		virtual void OnTop() = 0;
+
+		/**
+		\brief Called for a screen, that is no longer \c visible.
+		Screen can lose \c Visibility ither by being overshadowed by another screen
+		or when it lefts the stack.
+		\warn DO NOT add other screens from this method!
+		*/
+		virtual void NoLongerOnTop() = 0;
+
+		/**
+		\brief Called for a screen that have left the stack
+		Screens can require to leave the stack by calling \c MarkForRemoval, but int won't couse immidiate removal.
+		This method is called right before when the screen is actually leaving the stack.
+		\warn DO NOT add other screens from this method!
+		*/
+		virtual void LeaveStack() = 0;
+
+		/**
+		\brief Called for \c visible Screens on Game's \c PreFrame
+		*/
+		virtual void PreFrame(float Delta) {}
+
+		/**
+		\brief Called for \c visible Screens on Game's \c PostFrame
+		*/
+		virtual void PostFrame(float Delta) {}
 
 	};
 
 	/**
-	Controlls game screen. More on it in \ref DescScreens.
+	\brief Controlls game screen. More on it in \ref DescScreens.
 	*/
-	/*class ScreenService : public Service
+	class ScreenService : public Service
 	{
 	private:
 		/**
 		Now screens are registered once and for all the lenght of the game.
 		So this vector holds 
 		*/
-		/*std::vector<std::unique_ptr<Screen>> m_registeredScreens;
+		std::vector<std::pair<int32_t,std::unique_ptr<Screen>>> m_registeredScreens;
 		std::vector<Screen*> m_stack;
 
+		bool m_isInitted = false;
+
 	public:
 		
-		RegisterScree
-
-	};*/
-	
-	/**
-	Represent current game state and may have some hooks for CEGUI, SDL2, SOUND
-	*/
-
-	class Screen
-	{
-	private:
-		ScreenController * m_controller;
-		bool m_shouldBeDeleated = false;
-		friend class ScreenController;
-
-
-	protected:
-		inline ScreenController * getController() { return m_controller; }
-
 		/**
-		This method is called once after registration and only after all services have been initialized.
-		So do all your initialization there.
+		\brief Registeres new screen.
+		\tparam ScreenType  A screen type, that should be added in a service
+		\tparam Params  Param types that will be transfered to Screen's constructor
+		\param[in] id ID of the screen. Must be unique for every in a service!
+		\param[in] Params Params, that will be transfered to a Screen's constructor
+		\note It is adviced to use Hasher to name Screens with a logical names in code, but translate this names
+		in int32_t on compile time
 		*/
-		virtual void Init() {};
-
-		/**
-		This method is called when screen gets on top of the stack
-		It might be called multiple times if other screens are geting created and then deleated in front of this one.
-		*/
-		virtual void IsOnTop() {};
-
-		/**
-		If there is a need for a regular execution, Screens can access post-frame
-		*/
-		virtual void PostFrame(float timeDelta) {};
-
-		/**
-		If screens finished all its job and is need no more, it should call
-		this method, to mark itself for deltition. After this call, any use of this instance
-		is prohibited.
-		*/
-		void Finish();
-
-		virtual void textInput(const SDL_TextInputEvent & arg) {};
-		virtual void keyPressed(const SDL_KeyboardEvent & arg) {};
-		virtual void keyReleased(const SDL_KeyboardEvent & arg) {};
-
-
-		virtual void mouseMoved(const SDL_Event & arg) {};
-		virtual void mousePressed(const SDL_MouseButtonEvent & arg) {};
-		virtual void mouseReleased(const SDL_MouseButtonEvent & arg) {};
-
-	public:
-
-		virtual ~Screen() {};
-		
-	};
-
-	class ScreenController : public Service, SDL_KeyboardListener, SDL_MouseListener
-	{
-	private:
-		std::list<std::unique_ptr<Screen>> m_screens;
-
-		void CleanListUp();
-
-		bool m_initialized = false;
-
-	public:
-
-		ScreenController(SDL_Controller* SDL);
-
-		template<class T, typename... Args>
-		T* AddScreen(Args&&...args)
+		template<typename ScreenType, typename... Params>
+		void RegisterScreen(int32_t id, Params&& ...params)
 		{
-			auto Ptr = std::make_unique<T>(std::forward<Args>(args)...);
-			Ptr->m_controller = this;
-			if (m_initialized) { Ptr->Init(); }
-			return dynamic_cast<T*>(m_screens.emplace_back(std::move(Ptr)).get());
+			for(auto& screen : m_registeredScreens)
+			{
+				if (screen.first == id)
+				{
+					LOGCATEGORY("ScreenService/RegisterScreen").crit("Can't register screen with id:%i; It's allready registered!", id);
+					throw std::exception("Can't register screen");
+				}
+
+			}
+
+			m_registeredScreens.emplace_back(id, std::make_unique<ScreenType>(std::forward<Params>(params)...));
+			m_registeredScreens.back().second->m_service = this;
+
+			if (m_isInitted)
+			{
+				if (!m_registeredScreens.back().second->Init())
+				{
+					LOGCATEGORY("ScreenService/RegisterScreen").error("Init stage of a screen #%i (init-on-register) returned false.", id);
+					throw std::exception("Init stage of a screen (init-on-register) returned false.");
+				}
+			}
 		}
 
+		/**
+		\brief Adds screen with a given ID on top of the stack.
 
+		\note For now there is no conclusive argument on what should happen if this method is called
+		with id of a screen, that is allready in stack. There is several possible outcomes
+		\li Throw an exception. This makes sence, becouse if a behaviour is uncertain, it really looks like an error
 
+		\li Do nothing.  This is like previous option, but wthout introducing implicing dependecy between callers,
+		that would have to know about other calls to avoid causing error.
 
-		
-		virtual void textInput(const SDL_TextInputEvent & arg) override;
-		virtual void keyPressed(const SDL_KeyboardEvent & arg) override;
-		virtual void keyReleased(const SDL_KeyboardEvent & arg) override;
+		\li Remove screen from where it is now and move it on top of the stack. This is like previous option, but assumes
+		that if a call is done, it should be executed.
 
+		For now the last option is implemented
+		*/
+		void ActivateScreen(int32_t screenId);
 
-		virtual void mouseMoved(const SDL_Event & arg) override;
-		virtual void mousePressed(const SDL_MouseButtonEvent & arg) override;
-		virtual void mouseReleased(const SDL_MouseButtonEvent & arg) override;
-
-
+	protected:
 		virtual ActionResult initialize() override;
 		virtual void shutdown() override;
 		virtual ActionResult preFrame(float timeDelta) override;

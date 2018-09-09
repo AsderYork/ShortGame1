@@ -38,8 +38,13 @@ namespace GEM
 			m_stateLineBeginningMessage(StateLine){}
 
 
-		void Init() override;
+		bool Init() override;
 
-		virtual void PostFrame(float timeDelta);
+		virtual void PostFrame(float timeDelta) override;
+
+		// Унаследовано через Screen
+		virtual void OnTop() override;
+		virtual void NoLongerOnTop() override;
+		virtual void LeaveStack() override;
 	};
 }
