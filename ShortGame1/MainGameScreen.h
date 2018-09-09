@@ -1,8 +1,11 @@
 #pragma once
 #include "ScreenController.h"
 #include "GameSimService.h"
+#include "SDL2_Service.h"
 #include "NetworkController.h"
 #include "VisualController.h"
+#include "PlayerInputManager.h"
+
 
 #include "PlayerInputEventGenerator.h"
 
@@ -16,11 +19,12 @@ namespace GEM
 
 		PlayerInputEventGenerator m_PIEG;
 		VisualController m_visual;
+		PlayerInputManager m_inputManager;
 
 		bool m_basicInitPerformed = false;
 
 	public:
-		MainGameScreen(NetworkController* network, GameSimController* gs);
+		MainGameScreen(NetworkController* network, GameSimController* gs, SDL_Controller* SDL_Cntrlr);
 		
 		virtual bool Init();
 

@@ -4,7 +4,6 @@
 #include "GameSimService.h"
 #include "LandscapeVisualizationController.h"
 #include "FirstPersonGameCamera.h"
-#include "PlayerInputManager.h"
 
 #include "ObjectVis_Cubical.h"
 
@@ -31,7 +30,6 @@ namespace GEM
 		LandscapeVisualizationController m_landscape;
 		ObjectVis_Cubical m_objCubical;
 		FirstPersonGameCamera m_camera;
-		PlayerInputManager m_inputManager;
 
 		bool m_fullyInited = false;
 

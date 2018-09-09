@@ -51,7 +51,15 @@ namespace GEM
 
 	public:
 
-		/**!
+		/**
+		\brief Show wether actual player entity is acuired by the Manager
+		*/
+		inline bool isPlayerEntityAccuried()
+		{
+			return !m_playerEnt.expired();
+		}
+
+		/**
 		\returns Propagation state
 
 		If PIM is propagating, then it is sending recived input to a GameSimulation.
@@ -59,14 +67,14 @@ namespace GEM
 		*/
 		inline bool const getPropagationState() { return m_isPropagating; }
 
-		/**!
+		/**
 		Sets the propagation state
 		If PIM is propagating, then it is sending recived input to a GameSimulation.
 		Otherwise PIM will not affect GameSim.
 		*/
 		inline void setProagationState(bool NewState) { m_isPropagating = NewState; }
 
-		/**!
+		/**
 		Registers internalController to the SDLService
 		This method must be called before user input is actually needed
 		*/
@@ -75,7 +83,7 @@ namespace GEM
 			SDLController->registerMouseListener(&m_listener);
 		}
 
-		/**!
+		/**
 		Provides PlayerEntity to a PIM
 
 		PIM can't controll an entity, if it doesn't now, what entity to controll
@@ -86,7 +94,7 @@ namespace GEM
 		*/
 		inline void AccuirePlayerEntity(std::weak_ptr<GameSim::EntityBase> Ent) { m_playerEnt = Ent; }
 
-		/**!
+		/**
 		Applies input actions to the simulation
 
 		InputSystem is connected to the input controller throgh the callbacks which that changes can occur in any moment

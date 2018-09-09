@@ -26,7 +26,6 @@ namespace GEM
 				LOGCATEGORY("VisualController/WaitForInitCallback").error("Can't tie to a player! Entity is invalid");
 				return false;
 			}
-			m_inputManager.AccuirePlayerEntity(PlayerPtr);
 			m_camera.TieCamera(PlayerPtr);
 			return true;
 		});
@@ -38,7 +37,6 @@ namespace GEM
 		{
 			m_objCubical.Frame();
 			m_sky.frame();
-			m_inputManager.Apply(TimePassed);
 			m_camera.UpdateCamera();
 		}
 	}

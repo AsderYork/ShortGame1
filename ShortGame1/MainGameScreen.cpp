@@ -6,8 +6,12 @@
 
 namespace GEM
 {
-	MainGameScreen::MainGameScreen(NetworkController * network, GameSimController * gs) : m_network(network), m_gsController(gs), m_visual(gs)
+	MainGameScreen::MainGameScreen(NetworkController * network, GameSimController * gs, SDL_Controller* SDL_Cntrlr) :
+		m_network(network),
+		m_gsController(gs),
+		m_visual(gs)
 	{
+		m_inputManager.RegisterListener(SDL_Cntrlr);
 	}
 
 
@@ -15,6 +19,16 @@ namespace GEM
 	{
 		if (!m_basicInitPerformed)//Check if it's the first time this screen gets on top
 		{
+			m_gsController->AddFirstTickCallback([this]() {
+				auto PlayerPtr = m_gsController->m_entities.GetEntity(m_gsController->m_playerCharacterID);
+				if (PlayerPtr.expired())
+				{
+					LOGCATEGORY("MainGameScreen/WaitForInitCallback").error("Can't tie to a player! Entity is invalid");
+					return false;
+				}
+				m_inputManager.AccuirePlayerEntity(PlayerPtr);
+				return true;
+			});
 			m_visual.WaitForInit();//If so, perform init
 			m_basicInitPerformed = true;
 		}
@@ -46,6 +60,10 @@ namespace GEM
 				NewEvent = m_PIEG.getEvent();
 			}
 
+			if (m_inputManager.isPlayerEntityAccuried())
+			{
+				m_inputManager.Apply(timeDelta);
+			}
 			m_visual.Frame(timeDelta);
 		}
 		

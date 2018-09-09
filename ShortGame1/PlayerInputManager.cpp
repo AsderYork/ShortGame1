@@ -38,7 +38,7 @@ namespace GEM
 	}
 	void PlayerInputManager::Apply(float TimeDelta)
 	{
-		/*auto LockedPlayerEntity = m_playerEnt.lock();
+		auto LockedPlayerEntity = m_playerEnt.lock();
 		if (!LockedPlayerEntity)
 		{
 			LOGCATEGORY("PlayerInputManager/Apply").error("Can't apply input changes. PlayerEntity is unavaliable!");
@@ -46,12 +46,13 @@ namespace GEM
 		}
 		auto MixinMovablePtr = static_cast<GameSim::Mixin_Movable*>(LockedPlayerEntity->GetMixinByID(GameSim::Mixin_Movable::MixinID));
 
-		MixinMovablePtr->CombineRotation(btQuaternion(m_listener.m_mouseShiftX, m_listener.m_mouseShiftY, 0.0f));
+		//MixinMovablePtr->CombineRotation(btQuaternion(-m_listener.m_mouseShiftX*0.004f, m_listener.m_mouseShiftY*0.01f, 0.0f));
+		MixinMovablePtr->CombineRotation(btQuaternion(-m_listener.m_mouseShiftX*0.004f,0.0f, 0.0f));
 
 
 
 		m_listener.m_mouseShiftX = 0.0f;
 		m_listener.m_mouseShiftY = 0.0f;
-		m_listener.m_mouseShiftY = 0.0f;*/
+		m_listener.m_mouseShiftY = 0.0f;
 	}
 }

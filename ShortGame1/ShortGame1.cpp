@@ -532,7 +532,7 @@ int main(int argc, char *argv[])
 	ScreenController->RegisterScreen<GEM::LoginScreen>(Helper::Hasher<int32_t>::Hash("LoginScreen","Screens"),NetworkController, GameSimService);
 	ScreenController->ActivateScreen(Helper::Hasher<int32_t>::Hash("LoginScreen", "Screens"));
 
-	ScreenController->RegisterScreen<GEM::MainGameScreen>(Helper::Hasher<int32_t>::Hash("MainGameScreen", "Screens"), NetworkController, GameSimService);
+	ScreenController->RegisterScreen<GEM::MainGameScreen>(Helper::Hasher<int32_t>::Hash("MainGameScreen", "Screens"), NetworkController, GameSimService, SDLController);
 
 	try
 	{
