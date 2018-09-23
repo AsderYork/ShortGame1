@@ -16,7 +16,12 @@ namespace GEM::GameSim
 	protected:
 		btVector3 m_pos = btVector3(0, 0, 0);
 		btVector3 m_velocity = btVector3(0, 0, 0);
+
 		btQuaternion m_orientation = btQuaternion(0.0f, 0.0f, 0.0f);
+		btQuaternion m_rotation = btQuaternion(0.0f, 0.0f, 0.0f);
+		/*Just like velocity is a rate at which position is changing(It better be called speed)
+		rotation is a rate, at which entity changes it's orientation.
+		*/
 
 		//Remembers when was the last time of gathering update from this mixin. If it was too long, it will start asking for an update
 		std::chrono::system_clock::time_point m_lastUpdate;
@@ -64,8 +69,24 @@ namespace GEM::GameSim
 		*/
 		inline void setOrientation(float Pitch, float Yaw, float Roll) { m_orientation.setEuler(Yaw, Pitch, Roll); }
 		inline void SetOrientation(btQuaternion orient) { m_orientation = orient;}
-		inline void CombineRotation(btQuaternion orient) { m_orientation *= orient; }
+
+		inline void addOrientation(float Pitch, float Yaw, float Roll) { m_orientation *= btQuaternion(Yaw, Pitch, Roll); }
+		inline void addOrientation(btQuaternion orient) { m_orientation *= orient; }
+
 		inline btQuaternion getOrientation() { return m_orientation; }
+
+		/**Set rotation speed per second
+		*/
+		inline void setRotation(float Pitch, float Yaw, float Roll) { m_rotation.setEuler(Yaw, Pitch, Roll); }
+		inline void setRotation(btQuaternion rot) { m_rotation = rot; }
+
+		/**Adds given rotation to an object 
+		*/
+		inline void addRotation(float Pitch, float Yaw, float Roll) { m_rotation *= btQuaternion(Yaw, Pitch, Roll); }
+		inline void addRotation(btQuaternion rot) { m_rotation *= rot; }
+
+		inline btQuaternion getRotation() { return m_rotation; }
+
 
 		virtual bool NeedsUpdate() override;
 

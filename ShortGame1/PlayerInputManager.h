@@ -30,6 +30,12 @@ namespace GEM
 		class InputReciver : public SDL_KeyboardListener, SDL_MouseListener
 		{
 		public:
+			bool m_moveForward = false;
+			bool m_moveBackwards = false;
+			bool m_moveLeft = false;
+			bool m_moveRight = false;
+
+
 			float m_mouseShiftX = 0.0f;
 			float m_mouseShiftY = 0.0f;
 			float m_mouseWheelShift = 0.0f;

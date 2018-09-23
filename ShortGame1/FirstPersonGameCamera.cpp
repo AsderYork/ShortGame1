@@ -22,7 +22,7 @@ namespace GEM
 		auto Pos = Movable->getPos();
 		auto Rot = Movable->getOrientation();
 
-		
+		//Rot = btQuaternion(0.0f, 0.0f, 0.0f);
 		btVector3 Shift(0, 4, -10);
 
 	

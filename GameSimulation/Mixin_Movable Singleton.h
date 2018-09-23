@@ -11,7 +11,7 @@ namespace GEM::GameSim
 	parameters into the Mixin_Movable instances.
 	
 	\note This is a recomended way of providing outside data to mixins for now. It's definetly bad that
-	this solution is so obscure, but right now it's the best a can think of.
+	this solution is so obscure, but right now it's the best I can think of.
 	*/
 	class Mixin_Movable_Singleton
 	{
