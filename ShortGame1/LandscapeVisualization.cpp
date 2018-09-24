@@ -54,7 +54,7 @@ namespace GEM
 
 		MeshVertices *meshVertices = reinterpret_cast<MeshVertices*>(OGRE_MALLOC_SIMD(sizeof(MeshVertices) * Orientations.size(), Ogre::MEMCATEGORY_GEOMETRY));
 
-
+		
 		//Translate VertexList from Generator to Ogre
 		for (int i = 0; i < Orientations.size(); i++)
 		{
@@ -123,13 +123,12 @@ namespace GEM
 		float meshSize = GameSim::LandscapeChunk_Size / 2;
 		float meshRadius = (float)pow(((GameSim::LandscapeChunk_Size*GameSim::LandscapeChunk_Size) / 2) + ((GameSim::LandscapeChunk_Height*GameSim::LandscapeChunk_Height) / 4), 0.5f);
 		ReturnMesh.mesh->_setBounds(Ogre::Aabb(
-			Ogre::Vector3::ZERO + Ogre::Vector3(ChunkPosX + meshSize, GameSim::LandscapeChunk_Height / 2, ChunkPosZ + meshSize),
-			Ogre::Vector3(GameSim::LandscapeChunk_Size / 2, GameSim::LandscapeChunk_Height / 2, GameSim::LandscapeChunk_Size / 2)),
+			Ogre::Vector3(meshSize, GameSim::LandscapeChunk_Height / 2, meshSize),
+			Ogre::Vector3(meshSize, GameSim::LandscapeChunk_Height / 2, meshSize)),
 			false);
 		ReturnMesh.mesh->_setBoundingSphereRadius(meshRadius);
 
 		subMesh->setMaterialName("HlmsPbs1");
-
 
 
 		ReturnMesh.marchingCubesItem = SceneManager->createItem(MeshName);
