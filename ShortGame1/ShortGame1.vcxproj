@@ -171,6 +171,7 @@
     <ClInclude Include="ConsoleParserHelper.h" />
     <ClInclude Include="DebugMapGraphicsService.h" />
     <ClInclude Include="DebugLayout.h" />
+    <ClInclude Include="DebugOverlayScreen.h" />
     <ClInclude Include="EngineController.h" />
     <ClInclude Include="FirstPersonGameCamera.h" />
     <ClInclude Include="FPS_Layout.h" />
@@ -210,6 +211,7 @@
     <ClCompile Include="ConsoleParser.cpp" />
     <ClCompile Include="DebugLayout.cpp" />
     <ClCompile Include="DebugMapGraphicsService.cpp" />
+    <ClCompile Include="DebugOverlayScreen.cpp" />
     <ClCompile Include="EngineController.cpp" />
     <ClCompile Include="FirstPersonGameCamera.cpp" />
     <ClCompile Include="FPS_Layout.cpp" />

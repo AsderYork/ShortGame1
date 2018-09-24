@@ -14,6 +14,7 @@
 
 #include "LoginScreen.h"
 #include "MainGameScreen.h"
+#include "DebugOverlayScreen.h"
 
 #include <LandscapeMeshGenerator.h>
 #include "LandscapeVisualization.h"
@@ -517,7 +518,7 @@ int main(int argc, char *argv[])
 
 	//SDLController->registerMouseListener(DebugMapController);
 	//CEGUIController->AddLayout<GEM::DebugLayout>(1, OgreController, MapService);
-	GEM::ConsoleLayout* Console = static_cast<GEM::ConsoleLayout*>(CEGUIController->AddLayout<GEM::ConsoleLayout>(SDLController));
+	//GEM::ConsoleLayout* Console = static_cast<GEM::ConsoleLayout*>(CEGUIController->AddLayout<GEM::ConsoleLayout>(SDLController));
 	
 	/*Console->getEvaluator().RegisterFunction("Map.SetDraw", GEM::Evaluator::OBJTYPE::UNDECLARED, MapService, &GEM::MapService::setDrawDistance);
 	Console->getEvaluator().RegisterFunction("Map.GetDraw", GEM::Evaluator::OBJTYPE::NUM, MapService, &GEM::MapService::getDrawDistance);
@@ -533,6 +534,7 @@ int main(int argc, char *argv[])
 	ScreenController->ActivateScreen(Helper::Hasher<int32_t>::Hash("LoginScreen", "Screens"));
 
 	ScreenController->RegisterScreen<GEM::MainGameScreen>(Helper::Hasher<int32_t>::Hash("MainGameScreen", "Screens"), NetworkController, GameSimService, SDLController);
+	ScreenController->RegisterScreen<GEM::DebugOverlayScreen>(Helper::Hasher<int32_t>::Hash("DebugOverlayScreen", "Screens"), SDLController);
 
 	try
 	{

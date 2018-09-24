@@ -31,7 +31,12 @@ namespace GEM
 			break;
 		default:
 			break;
-		}		
+		}
+
+		if (arg.keysym.scancode == SDL_SCANCODE_GRAVE)
+		{
+			m_debugOverlay = true;
+		}
 	}
 
 	void PlayerInputManager::InputReciver::keyReleased(const SDL_KeyboardEvent & arg)
@@ -52,6 +57,11 @@ namespace GEM
 			break;
 		default:
 			break;
+		}
+
+		if (arg.keysym.scancode == SDL_SCANCODE_GRAVE)
+		{
+			m_debugOverlay = false;
 		}
 	}
 
@@ -99,5 +109,7 @@ namespace GEM
 		m_listener.m_mouseShiftX = 0.0f;
 		m_listener.m_mouseShiftY = 0.0f;
 		m_listener.m_mouseShiftY = 0.0f;
+
+		m_showDebugOverlay = m_listener.m_debugOverlay;
 	}
 }

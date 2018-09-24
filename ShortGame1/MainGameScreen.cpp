@@ -2,6 +2,7 @@
 #include "MainGameScreen.h"
 #include "LoginScreen.h"
 
+#include <Hasher.h>
 #include <chrono>
 
 namespace GEM
@@ -65,6 +66,11 @@ namespace GEM
 				m_inputManager.Apply(timeDelta);
 			}
 			m_visual.Frame(timeDelta);
+		}
+
+		if (m_inputManager.ShouldShowDebugOverlay())
+		{
+			ActivateAnotherScreen(Helper::Hasher<int32_t>::Hash("DebugOverlayScreen", "Screens"));
 		}
 		
 	}

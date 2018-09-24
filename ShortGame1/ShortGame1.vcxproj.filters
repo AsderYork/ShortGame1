@@ -151,6 +151,9 @@
     <Filter Include="Screens\MainGameScreen\GamePlayerControlls">
       <UniqueIdentifier>{2e730511-0cd3-46f9-b39c-bc94309088fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Screens\DebugOverlayScreen">
+      <UniqueIdentifier>{7d2918b1-b536-4195-8f80-98de2dc0ee17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -273,6 +276,9 @@
     <ClInclude Include="PlayerInputManager.h">
       <Filter>Screens\MainGameScreen\GamePlayerControlls</Filter>
     </ClInclude>
+    <ClInclude Include="DebugOverlayScreen.h">
+      <Filter>Screens\DebugOverlayScreen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShortGame1.cpp">
@@ -376,6 +382,9 @@
     </ClCompile>
     <ClCompile Include="PlayerInputManager.cpp">
       <Filter>Screens\MainGameScreen\GamePlayerControlls</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugOverlayScreen.cpp">
+      <Filter>Screens\DebugOverlayScreen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

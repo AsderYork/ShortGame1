@@ -20,6 +20,7 @@ namespace GEM
 	class PlayerInputManager
 	{
 	private:
+		bool m_showDebugOverlay = false;
 		bool m_isPropagating = true;
 		std::weak_ptr<GameSim::EntityBase> m_playerEnt;
 
@@ -34,6 +35,8 @@ namespace GEM
 			bool m_moveBackwards = false;
 			bool m_moveLeft = false;
 			bool m_moveRight = false;
+
+			bool m_debugOverlay = false;
 
 
 			float m_mouseShiftX = 0.0f;
@@ -56,6 +59,14 @@ namespace GEM
 		InputReciver m_listener;
 
 	public:
+
+		/**
+		\brief Shows weather MainGameScreenShould call a DeubugOvrlay over itself
+		*/
+		inline bool ShouldShowDebugOverlay()
+		{
+			return m_showDebugOverlay;
+		}
 
 		/**
 		\brief Show wether actual player entity is acuired by the Manager
