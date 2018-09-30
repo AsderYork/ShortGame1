@@ -42,14 +42,14 @@ namespace GEM
 		m_entity = PlayerEntity;
 		if (m_entity.expired())
 		{
-			LOGCATEGORY("Camera\TieCamera").error("Can't tie camera to provided entity. There is no such entity!");
+			LOGCATEGORY("Camera/TieCamera").error("Can't tie camera to provided entity. There is no such entity!");
 			return;
 		}
 
 		auto Movable = static_cast<GameSim::Mixin_Movable*>(m_entity.lock()->GetMixinByID(GameSim::Mixin_Movable::MixinID));
 		if (Movable == nullptr)
 		{
-			LOGCATEGORY("Camera\TieCamera").error("Can't tie camera to provided entity. This entity doesn't have a movable mixin!");
+			LOGCATEGORY("Camera/TieCamera").error("Can't tie camera to provided entity. This entity doesn't have a movable mixin!");
 			return;
 		}
 

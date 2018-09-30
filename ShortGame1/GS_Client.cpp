@@ -85,18 +85,7 @@ namespace GEM
 					//return 0;
 				}*/
 			}
-
-			static auto CurrTime = std::chrono::steady_clock::now();
-			static int CoughtPackets = 0;
-			CoughtPackets += ServerPacks.size();
-			if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - CurrTime).count() >= 1)
-			{
-				CurrTime = std::chrono::steady_clock::now();
-				LOGCATEGORY("CoughtPackets").info("Cought %i packets in last second", CoughtPackets);
-				CoughtPackets = 0;
-
-			}
-
+						
 			m_dispatcher.ProcessCommands(std::move(ServerPacks));
 		}
 

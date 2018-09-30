@@ -45,10 +45,7 @@ namespace GEM
 
 		inline void Reset() { m_timeIsSet = false; }
 
-		inline void InsertPlayerEvent(std::unique_ptr<GameSim::EventBase>&& Event) {
-			InsertEvent(std::move(Event), m_playerCharacterID);
-		}
-
+		
 		GS_Client();
 
 		/**!

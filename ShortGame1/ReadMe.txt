@@ -35,3 +35,8 @@ StdAfx.h, StdAfx.cpp
 Можно ли разукрасить куб текстурой. Ровно. Используя только 8 вершин? Я думаю нет. Могу ли я это доказать? Нет. Мне лень. Но делать с проблемой что-то нужно.
 Решение вот какое. Необходимо выделить 3 группы поверхностей. Слева-направо. Сверху-вних, С передней части, по заднюю часть. Каждый треугольник, в зависимости от своей направленности
 попадает в одну из трех этих категорий. Причем если поверхность под углом, то в преоритете верх-низ, затем слева-направо, затем вперед-назад.
+
+TODO:
+This is a list of TODOs of this project. Probably all of then should be done at some point, but they are not on a critical path
+
+-Rotation prediction. Right now rotating objects are movign very sharply. There must be some interpolation to smooth it all out.

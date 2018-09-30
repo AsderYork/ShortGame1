@@ -243,7 +243,6 @@ namespace GEM
 
 		//Push in a pool
 		m_chunkPool.push_back(std::make_pair(pos,std::weak_ptr<ChunkType>(ptr)));
-		m_chunkPool.back();
 
 		return ptr;
 	}

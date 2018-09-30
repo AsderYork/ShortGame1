@@ -39,7 +39,7 @@ namespace GEM::GameSim
 				for (auto& oldState : PrevStates)
 				{
 					cereal::BinaryInputArchive ar(oldState.second);
-					EntIt->GetMixinByID(oldState.first)->ApplyEvent(ar);
+					EntIt->GetMixinByID(oldState.first)->ApplyUpdate(ar);
 				}
 
 				return false;

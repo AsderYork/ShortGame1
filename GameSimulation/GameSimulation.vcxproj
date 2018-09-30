@@ -162,8 +162,6 @@
     <ClInclude Include="EntitiesBase.h" />
     <ClInclude Include="EntityGenerator.h" />
     <ClInclude Include="EntityIDType.h" />
-    <ClInclude Include="EventBase.h" />
-    <ClInclude Include="EventSerializator.h" />
     <ClInclude Include="GamePhysics.h" />
     <ClInclude Include="GameSimulation.h" />
     <ClInclude Include="GameTime.h" />
@@ -182,7 +180,6 @@
     <ClInclude Include="Mixin_Movable Singleton.h" />
     <ClInclude Include="NetworkCommandBase.h" />
     <ClInclude Include="NetworkCommandsProcessor.h" />
-    <ClInclude Include="KeyboardEvents.h" />
     <ClInclude Include="Mixin_Base.h" />
     <ClInclude Include="Mixin_Controller.h" />
     <ClInclude Include="Mixin_Health.h" />
@@ -223,9 +220,6 @@
     <ClCompile Include="SharedDataPackets.cpp" />
     <ClCompile Include="UpdateSystemClientProcessor.cpp" />
     <ClCompile Include="UpdateSystem_Processor.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="KeyboardEvents.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -51,15 +51,7 @@ namespace GEM
 		}
 		else
 		{
-			//If simulation is really working still
-
-			m_PIEG.CheckForEvents();
-			auto NewEvent = m_PIEG.getEvent();
-			while (NewEvent != nullptr)
-			{						
-				m_gsController->InsertPlayerEvent(std::move(NewEvent));
-				NewEvent = m_PIEG.getEvent();
-			}
+			//If simulation is really working still					
 
 			if (m_inputManager.isPlayerEntityAccuried())
 			{

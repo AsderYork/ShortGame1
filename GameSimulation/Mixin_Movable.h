@@ -29,17 +29,6 @@ namespace GEM::GameSim
 		bool m_keepUpdating = true;
 		float m_speed;
 
-		struct CurrentMovement
-		{
-			enum class NormalMovement:char{FORWARD,BACKWARD,NONE} Normal;
-			enum class StrafeMovement:char{LEFT,RIGHT,NONE} Strafe;
-			
-			CurrentMovement();
-			btVector3 GetNewVelociyVectorBasedOnCurrentState();
-		};
-		CurrentMovement m_movementState;
-
-
 	public:
 
 	 MIXIN_ID(43)
@@ -54,10 +43,10 @@ namespace GEM::GameSim
 			m_pos += btVector3(X, Y, Z);
 		}
 		void SetPosition(float x, float y, float z);
-		void SetPositionV(const btVector3 Pos);
+		void SetPosition(const btVector3 Pos);
 
 		void SetVelocity(float X, float Y, float Z);
-		void SetVelocityV(const btVector3 Vel);
+		void SetVelocity(const btVector3 Vel);
 
 		bool tick(const GameTime delta);
 
@@ -94,9 +83,8 @@ namespace GEM::GameSim
 
 		virtual bool CheckAndReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime UpdateLag) override;
 
-		virtual void ApplyEvent(cereal::BinaryInputArchive& archive) override;
+		virtual void ApplyUpdate(cereal::BinaryInputArchive& archive) override;
 
-		virtual void ReciveEvent(const EventBase * const Event) override;
 
 	};
 }

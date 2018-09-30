@@ -79,9 +79,6 @@
     <Filter Include="MapSystemV2\NodesToMCGenerator\MultiLod">
       <UniqueIdentifier>{c800d5e8-64e9-4ecb-a217-b41f5f7cfea4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PlayerInputController">
-      <UniqueIdentifier>{de2add77-852d-42fb-aeca-c7e9e8312eb5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Networking">
       <UniqueIdentifier>{f5b81a9f-3816-4101-a564-df7c28e65217}</UniqueIdentifier>
     </Filter>
@@ -105,9 +102,6 @@
     </Filter>
     <Filter Include="Screens\MainGameScreen">
       <UniqueIdentifier>{873156d4-0310-4edc-b537-a0854bfadd68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PlayerInputEventGenerator">
-      <UniqueIdentifier>{ffda274c-e8b0-4bcc-be53-63c1aef7a59a}</UniqueIdentifier>
     </Filter>
     <Filter Include="GameClient">
       <UniqueIdentifier>{fbb4683d-ca07-48b9-9ca6-a155207aaa45}</UniqueIdentifier>
@@ -222,9 +216,6 @@
     <ClInclude Include="NTMCG_MultiLOD.h">
       <Filter>MapSystemV2\NodesToMCGenerator\MultiLod</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerInputController.h">
-      <Filter>PlayerInputController</Filter>
-    </ClInclude>
     <ClInclude Include="NetworkClient.h">
       <Filter>Networking\NetworkClient</Filter>
     </ClInclude>
@@ -242,9 +233,6 @@
     </ClInclude>
     <ClInclude Include="MainGameScreen.h">
       <Filter>Screens\MainGameScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerInputEventGenerator.h">
-      <Filter>PlayerInputEventGenerator</Filter>
     </ClInclude>
     <ClInclude Include="LandscapeVisualization.h">
       <Filter>Screens\MainGameScreen\GameVisualization\LandscapeVisualization</Filter>
@@ -349,9 +337,6 @@
     </ClCompile>
     <ClCompile Include="MainGameScreen.cpp">
       <Filter>Screens\MainGameScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerInputEventGenerator.cpp">
-      <Filter>PlayerInputEventGenerator</Filter>
     </ClCompile>
     <ClCompile Include="LandscapeVisualization.cpp">
       <Filter>Screens\MainGameScreen\GameVisualization\LandscapeVisualization</Filter>

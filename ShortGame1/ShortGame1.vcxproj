@@ -79,7 +79,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)Helpers;$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(BULLETPHYSICS_HOME)\Repo\src;C:\ProjDependecies\caelum\CaelumCustom\Install_x64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);C:\ProjDependecies\caelum\CaelumCustom\Install_x64\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);C:\ProjDependecies\caelum\CaelumCustom\ogre-caelum-master\lib\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -91,7 +91,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)Helpers;$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(BULLETPHYSICS_HOME)\Repo\src;C:\ProjDependecies\caelum\CaelumCustom\Install_x64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);C:\ProjDependecies\caelum\CaelumCustom\Install_x64\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);C:\ProjDependecies\caelum\CaelumCustom\ogre-caelum-master\lib\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -194,8 +194,6 @@
     <ClInclude Include="NTMCG_TestSpeed.h" />
     <ClInclude Include="OgreLogRedirection.h" />
     <ClInclude Include="Ogre_Service.h" />
-    <ClInclude Include="PlayerInputController.h" />
-    <ClInclude Include="PlayerInputEventGenerator.h" />
     <ClInclude Include="PlayerInputManager.h" />
     <ClInclude Include="ScreenController.h" />
     <ClInclude Include="SDL2_Service.h" />
@@ -232,7 +230,6 @@
     <ClCompile Include="NTMCG_Naive.cpp" />
     <ClCompile Include="OgreLogRedirection.cpp" />
     <ClCompile Include="Ogre_Service.cpp" />
-    <ClCompile Include="PlayerInputEventGenerator.cpp" />
     <ClCompile Include="PlayerInputManager.cpp" />
     <ClCompile Include="ScreenController.cpp" />
     <ClCompile Include="SDL2_Service.cpp" />

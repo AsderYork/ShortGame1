@@ -7,8 +7,6 @@
 #include "PlayerInputManager.h"
 
 
-#include "PlayerInputEventGenerator.h"
-
 namespace GEM
 {
 	class MainGameScreen : public Screen
@@ -17,7 +15,6 @@ namespace GEM
 		GameSimController* m_gsController;
 		NetworkController* m_network;
 
-		PlayerInputEventGenerator m_PIEG;
 		VisualController m_visual;
 		PlayerInputManager m_inputManager;
 

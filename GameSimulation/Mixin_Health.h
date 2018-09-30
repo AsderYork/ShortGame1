@@ -63,7 +63,7 @@ namespace GEM::GameSim
 
 		virtual bool CheckAndReciveUpdate(cereal::BinaryInputArchive & archive, const GameTime LagTime) override;
 
-		virtual void ApplyEvent(cereal::BinaryInputArchive& archive) override;
+		virtual void ApplyUpdate(cereal::BinaryInputArchive& archive) override;
 
 	};
 }

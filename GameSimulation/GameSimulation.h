@@ -5,7 +5,6 @@
 #include "GS_EntityController.h"
 #include "Mixin_Controller.h"
 #include "EntityGenerator.h"
-#include "EventBase.h"
 #include "GameTime.h"
 #include "GamePhysics.h"
 
@@ -21,16 +20,6 @@ namespace GEM::GameSim
 
 	class GameSimulation {
 	private:
-		void RegisterMixins()
-		{
-			REGISTER_MIXIN_CLASS(Mixin_Movable);
-				REGISTER_MIXIN_METHOD(Mixin_Movable, Shift, 1);
-				REGISTER_MIXIN_METHOD(Mixin_Movable, SetVelocity, 2);
-
-			REGISTER_MIXIN_CLASS(Mixin_Health);
-			REGISTER_MIXIN_METHOD(Mixin_Health, SetHealth, 1);
-		}
-
 		std::queue<std::pair<MixinCommandRetranslator, ENTITY_ID_TYPE>> m_commandBuffer;
 
 
@@ -49,9 +38,7 @@ namespace GEM::GameSim
 		PlayerController m_players;
 		GamePhysics m_physics;
 
-
-		std::queue<std::pair<std::unique_ptr<EventBase>, ENTITY_ID_TYPE>> m_eventsBuffer;
-		
+			
 		inline const GameTime& getGameTime() { return m_simulationTime; }
 		inline float getGameTimeScale() { return m_simulationTimeScle; }
 
@@ -59,16 +46,8 @@ namespace GEM::GameSim
 		inline void setGameTimeScale(float NewTimeScle) { m_simulationTimeScle = NewTimeScle; }
 
 		GameSimulation() {
-			RegisterMixins();
 			m_physics.Initialize();
 		}
-
-		/**!
-		Inserts an event into simulation. Event will be applied to a all mixin of
-		specified entity with the next call of \c Tick.
-		*/
-		void InsertEvent(std::unique_ptr<EventBase>&& Event, const ENTITY_ID_TYPE  id);
-
 
 
 		/**!

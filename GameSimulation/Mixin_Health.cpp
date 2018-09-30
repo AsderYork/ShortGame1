@@ -9,7 +9,7 @@ bool GEM::GameSim::Mixin_Health::CheckAndReciveUpdate(cereal::BinaryInputArchive
 	return true;
 }
 
-void GEM::GameSim::Mixin_Health::ApplyEvent(cereal::BinaryInputArchive& archive)
+void GEM::GameSim::Mixin_Health::ApplyUpdate(cereal::BinaryInputArchive& archive)
 {
 
 }

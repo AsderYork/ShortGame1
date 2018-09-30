@@ -18,7 +18,7 @@ namespace GEM
 		CEGUI::Window* m_text;
 
 		float m_timePassed = 0.0f;
-		int m_framesPassed = 0.0f;
+		int m_framesPassed = 0;
 
 		class InputListener : public SDL_KeyboardListener
 		{

@@ -40,15 +40,6 @@
     <Filter Include="GameSimulation\GS_Server">
       <UniqueIdentifier>{e922a798-589d-4b44-86d7-78fc429719c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Events">
-      <UniqueIdentifier>{f0debbd5-f40e-4f68-8307-d9efc3f5ef68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Events\EventBase">
-      <UniqueIdentifier>{7c050646-be78-4017-b058-8930a336a90f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Events\KeyboardEvents">
-      <UniqueIdentifier>{0f1dc085-7670-4a0d-9337-3640cc3606da}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameSimulation\GameTime">
       <UniqueIdentifier>{612e9852-2cca-4181-a411-f0550470f79f}</UniqueIdentifier>
     </Filter>
@@ -166,15 +157,6 @@
     </ClInclude>
     <ClInclude Include="GS_Server.h">
       <Filter>GameSimulation\GS_Server</Filter>
-    </ClInclude>
-    <ClInclude Include="EventBase.h">
-      <Filter>Events\EventBase</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardEvents.h">
-      <Filter>Events\KeyboardEvents</Filter>
-    </ClInclude>
-    <ClInclude Include="EventSerializator.h">
-      <Filter>Events\EventBase</Filter>
     </ClInclude>
     <ClInclude Include="EntityIDType.h">
       <Filter>Entities\Base</Filter>
@@ -349,10 +331,5 @@
     <ClCompile Include="GameTimeSystem_Command.cpp">
       <Filter>NetworkCommands\Processors and Commands\GameTimeSystem</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="KeyboardEvents.def">
-      <Filter>Events\KeyboardEvents</Filter>
-    </None>
   </ItemGroup>
 </Project>

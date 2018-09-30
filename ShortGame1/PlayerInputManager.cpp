@@ -102,7 +102,7 @@ namespace GEM
 		{
 			tmpVel.normalize();
 		}
-		MixinMovablePtr->SetVelocityV(tmpVel*speed);
+		MixinMovablePtr->SetVelocity(tmpVel*speed);
 
 		//MixinMovablePtr->setRotation(btQuaternion(btVector3(0.0f, 1.0f, 0.0f), m_listener._debugshift));
 

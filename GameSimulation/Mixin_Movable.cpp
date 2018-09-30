@@ -1,5 +1,4 @@
 #include "Mixin_Movable.h"
-#include "KeyboardEvents.h"
 #include <cereal\archives\binary.hpp>
 #include "GameSimulation.h"
 
@@ -11,7 +10,7 @@ namespace GEM::GameSim
 	{
 		m_pos = btVector3(x,y,z);
 	}
-	void Mixin_Movable::SetPositionV(const btVector3 pos)
+	void Mixin_Movable::SetPosition(const btVector3 pos)
 	{
 		m_pos = pos;
 	}
@@ -21,7 +20,7 @@ namespace GEM::GameSim
 		//LOGCATEGORY("SETVELOCITY").info("Velocity changed from(%f,%f,%f) to (%f,%f,%f)", m_velocity.x(), m_velocity.y(), m_velocity.z(),X,Z,Y);
 		m_velocity = NewVel;
 	}
-	void Mixin_Movable::SetVelocityV(const btVector3 vel)
+	void Mixin_Movable::SetVelocity(const btVector3 vel)
 	{
 		//LOGCATEGORY("SETVELOCITY").info("V_Velocity changed from(%f,%f,%f) to (%f,%f,%f)", m_velocity.x(), m_velocity.y(), m_velocity.z(), vel.x(), vel.y(), vel.z());
 		m_velocity = vel;
@@ -43,7 +42,7 @@ namespace GEM::GameSim
 		auto Responce = Mixin_Movable_Singleton::Instance().m_landPhys->RayTest(NewPos + btVector3(0.0f, 256.0f, 0.0f), NewPos - btVector3(0.0f, 1.0f, 0.0f));
 		if (!Responce) { return true; }
 
-		SetPositionV(*Responce);
+		SetPosition(*Responce);
 
 		return true;
 	}
@@ -111,7 +110,7 @@ namespace GEM::GameSim
 		if (!Responce) { return true; }
 
 		float MaxVelocity = 1.0f;
-		MaxVelocity *= 1.01;//float calculatons are not perfect so we account for some error
+		MaxVelocity *= 1.01f;//float calculatons are not perfect so we account for some error
 		if (NewVel.length2() > MaxVelocity*MaxVelocity)
 		{//Velocity is bigger then the allowed maximum
 			return false;
@@ -119,8 +118,8 @@ namespace GEM::GameSim
 
 		
 
-		SetPositionV(*Responce);
-		SetVelocityV(NewVel);
+		SetPosition(*Responce);
+		SetVelocity(NewVel);
 		m_orientation = NewOrient;
 		m_rotation = NewRot;
 
@@ -128,68 +127,8 @@ namespace GEM::GameSim
 
 
 	}
-
-	void Mixin_Movable::ReciveEvent(const EventBase * const Event)
-	{
-		static int EventCount = 0;
-		EventCount++;
-		switch (Event->getEventID())
-		{
-		case KeyboardEvent_PlayerMoveBackward::id: {
-			if (static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
-			{
-				m_movementState.Normal = CurrentMovement::NormalMovement::BACKWARD;
-			}
-			else
-			{
-				m_movementState.Normal = CurrentMovement::NormalMovement::NONE;
-			}
-			break;
-		}
-		case KeyboardEvent_PlayerMoveForward::id: {
-			if (static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
-			{
-				m_movementState.Normal = CurrentMovement::NormalMovement::FORWARD;
-			}
-			else
-			{
-				m_movementState.Normal = CurrentMovement::NormalMovement::NONE;
-			}
-			break;
-		}
-
-		case KeyboardEvent_PlayerMoveLeft::id: {
-			if (static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
-			{
-				m_movementState.Strafe = CurrentMovement::StrafeMovement::LEFT;
-			}
-			else
-			{
-				m_movementState.Strafe = CurrentMovement::StrafeMovement::NONE;
-			}
-			break;
-		}
-		case KeyboardEvent_PlayerMoveRight::id: {
-			if (static_cast<const KeyboardEventBase*>(Event)->m_isPressed)
-			{
-				m_movementState.Strafe = CurrentMovement::StrafeMovement::RIGHT;
-			}
-			else
-			{
-				m_movementState.Strafe = CurrentMovement::StrafeMovement::NONE;
-			}
-			break;
-		}
-
-		
-
-		default: {break; }
-		}
-		SetVelocityV(quatRotate(m_orientation, m_movementState.GetNewVelociyVectorBasedOnCurrentState())*m_speed);
-		;
-	}
-
-	void Mixin_Movable::ApplyEvent(cereal::BinaryInputArchive& archive)
+	
+	void Mixin_Movable::ApplyUpdate(cereal::BinaryInputArchive& archive)
 	{
 		btScalar posx, posy, posz;
 		archive(posx, posy, posz);
@@ -209,33 +148,5 @@ namespace GEM::GameSim
 		m_rotation = btQuaternion(Rotx, Roty, Rotz, Rotw);
 
 	}
-
-	Mixin_Movable::CurrentMovement::CurrentMovement() : 
-		Normal(NormalMovement::NONE), Strafe(StrafeMovement::NONE)
-	{
-	}
-
-	btVector3 Mixin_Movable::CurrentMovement::GetNewVelociyVectorBasedOnCurrentState()
-	{
-		btVector3 NewVelocity = btVector3(0.0f, 0.0f, 0.0f);
-		switch (Normal)
-		{
-		case NormalMovement::FORWARD: {NewVelocity += btVector3(0.0f, 0.0f, 1.0f); break; }
-		case NormalMovement::BACKWARD: {NewVelocity -= btVector3(0.0f, 0.0f, 1.0f); break; }
-		default: {break; }
-		}
-		switch (Strafe)
-		{
-		case StrafeMovement::RIGHT: {NewVelocity -= btVector3(1.0f, 0.0f, 0.0f); break; }
-		case StrafeMovement::LEFT: {NewVelocity += btVector3(1.0f, 0.0f, 0.0f); break; }
-		default: {break; }
-		}
-
-		if (NewVelocity.fuzzyZero()) { return btVector3(0.0f, 0.0f, 0.0f); }
-		else
-		{
-			return	NewVelocity.normalized();
-		}
-	}
-
+	
 }

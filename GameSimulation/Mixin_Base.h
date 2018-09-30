@@ -1,6 +1,5 @@
 #pragma once
 #include <cereal\cereal.hpp>
-#include "EventBase.h"
 #include "EntityIDType.h"
 #include "GameTime.h"
 
@@ -124,21 +123,12 @@ namespace GEM::GameSim
 		/**!
 		Applies event to a mixin. Unlike \c ReciveUpdate this method MUST apply the update as-is, without any tests.
 		*/
-		virtual void ApplyEvent(cereal::BinaryInputArchive& archive) = 0;
+		virtual void ApplyUpdate(cereal::BinaryInputArchive& archive) = 0;
 
 		/**!
 		Called every simulation tick. Must return true, if everything is ok, false will terminate simulation, probably
 		*/
 		virtual bool tick(const GameTime delta) = 0;
-
-		/**!
-		Recives an event, that were sent to the entity, that this mixin is part of. It's up to mixin to check the
-		id of that event and then decide whether it will react on that event in some way, or just ignore it.
-
-		\note Technicaly mixins may want to send an event as a reaction to some other event. This event will be placed
-		in the queue and processed on the same frame, so beware of infinite loops, were two or more mixins exchange events indefinitely.
-		*/
-		virtual void ReciveEvent(const EventBase * const event) {};
 
 		virtual ~Mixin_base() {};
 	};

@@ -15,7 +15,7 @@ namespace GEM::GameSim
 		{
 			std::stringstream sstream(mixin.second);
 			cereal::BinaryInputArchive ar(sstream);
-			ent->GetMixinByID(mixin.first)->ApplyEvent(ar);
+			ent->GetMixinByID(mixin.first)->ApplyUpdate(ar);
 		}
 		return UpdateFullyAccepted;
 	}
