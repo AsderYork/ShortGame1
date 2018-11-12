@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <optional>
+#include <LinearMath/btVector3.h>
 
 namespace GEM::GameSim
 {
@@ -62,6 +63,8 @@ namespace GEM::GameSim
 		Returns overall number of entities
 		*/
 		ENTITY_ID_TYPE GetEntitiesCount() const;
+
+		std::list<std::weak_ptr<EntityBase>> getAllEntitiesInASphere(btVector3 center, float Radius);
 
 		/**!
 		This structure is used to hide the iterator of actual hash map

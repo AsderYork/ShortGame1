@@ -3,6 +3,7 @@
 
 #include <OGRE/OgreRoot.h>
 #include <OGRE\OgreItem.h>
+#include <Ogre/Hlms/Pbs/OgreHlmsPbsDatablock.h>
 
 namespace GEM
 {
@@ -36,8 +37,17 @@ namespace GEM
 				}
 				Visibility->second.node->setPosition(Ogre::Vector3(Movability->getPos().x(), Movability->getPos().y(), Movability->getPos().z()));
 				Visibility->second.node->setOrientation(Movability->getOrientation().w(), Movability->getOrientation().x(), Movability->getOrientation().y(), Movability->getOrientation().z());
-				newMap.emplace(std::move(*Visibility));
+				
+				auto Health = static_cast<GameSim::Mixin_Health*>(MaybeEnityIter->second->GetMixinByID(GameSim::Mixin_Health::MixinID));
 
+				auto HealthPercent = Health->m_health / Health->m_maxHealth;
+
+				auto FullHealthColor = Ogre::Vector3(0.2f, 1.0f, 0.2f);
+				auto NoHealthColor = Ogre::Vector3(1.0f, 0.1f, 0.1f);
+				auto ActualColor = FullHealthColor * HealthPercent + NoHealthColor * (1 - HealthPercent);
+
+				static_cast<Ogre::HlmsPbsDatablock*>(Visibility->second.item->getSubItem(0)->getDatablock())->setDiffuse(ActualColor);
+				newMap.emplace(std::move(*Visibility));
 			}
 
 			MaybeEnityIter = m_gsController->m_entities.IterateOverEntities(std::move(iter));
@@ -64,7 +74,8 @@ namespace GEM
 	{
 		auto mSceneMgr = Ogre::Root::getSingletonPtr()->getSceneManager("ExampleSMInstance");
 		item = mSceneMgr->createItem("Cubexa.mesh");
-
+		static int TmpNames = 0;
+		item->getSubItem(0)->setDatablock(item->getSubItem(0)->getDatablock()->clone("PerPlayer" + std::to_string(TmpNames++)));
 		
 		node = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 		PlayerNode = node->createChildSceneNode(Ogre::SCENE_DYNAMIC, Ogre::Vector3(0.0f, 1.0f, 0.0f));

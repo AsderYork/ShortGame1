@@ -15,11 +15,13 @@ namespace GEM
 	GS_Client::GS_Client() : m_timeIsSet(false),
 		m_updatesProcessor(this),
 		m_gameTimeProcessor(this),
-		m_landPhys((&m_physics)) 
+		m_landPhys((&m_physics)),
+		m_eventsController(&m_entities, &m_simulationTime, &m_dispatcher)
 	{
 		m_dispatcher.AddProcessor(&m_updatesProcessor); 
 		m_dispatcher.AddProcessor(&m_chunkDispatcher.getProcessor());
 		m_dispatcher.AddProcessor(&m_gameTimeProcessor);
+		m_dispatcher.AddProcessor(&m_gameEventsProcessor);
 
 
 		m_chunkDispatcher.m_chunks.RegisterListener(&m_landPhys);
@@ -102,7 +104,7 @@ namespace GEM
 			m_firstTickEventCallbacks.clear();
 		}
 
-
+		m_eventsController.ProcessEvents();
 		m_chunkDispatcher.Process(&m_dispatcher);
 
 

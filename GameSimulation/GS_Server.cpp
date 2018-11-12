@@ -20,6 +20,7 @@ namespace GEM::GameSim
 		m_commandDispatcher.AddProcessor(&m_updateSystemProcessor);
 		m_commandDispatcher.AddProcessor(&(m_chunkLoadDispatcher.getProcessor()));
 		m_commandDispatcher.AddProcessor(&m_gameTimeServerProcessor);
+		m_commandDispatcher.AddProcessor(&m_gameEventsServerProcessor);
 		m_chunkLoadDispatcher.Start();
 
 		m_chunkLoadDispatcher.getStorage().RegisterListener(&m_landscapePhysicsController);

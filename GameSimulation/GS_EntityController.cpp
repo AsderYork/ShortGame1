@@ -1,5 +1,7 @@
 #include "GS_EntityController.h"
 
+#include "Mixin_Movable.h"
+
 namespace GEM::GameSim
 {
 	bool EntityController::RemoveEntity(ENTITY_ID_TYPE id)
@@ -25,4 +27,18 @@ namespace GEM::GameSim
 		return static_cast<ENTITY_ID_TYPE>(m_entityMap.size());
 	}
 
+
+	std::list<std::weak_ptr<EntityBase>> EntityController::getAllEntitiesInASphere(const btVector3 center, const float Radius)
+	{
+		std::list<std::weak_ptr<EntityBase>> result;
+		for (auto& ent : m_entityMap)
+		{
+			auto EntMovable = static_cast<Mixin_Movable*>(ent.second->GetMixinByID(Mixin_Movable::MixinID));
+			if (EntMovable != nullptr  && EntMovable->getPos().distance(center) <= Radius)
+			{
+				result.push_back(std::weak_ptr(ent.second));
+			}
+		}
+		return result;
+	}
 }

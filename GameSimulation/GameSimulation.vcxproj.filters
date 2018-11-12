@@ -124,6 +124,30 @@
     <Filter Include="NetworkCommands\Processors and Commands\GameTimeSystem">
       <UniqueIdentifier>{9cae7573-8fb8-4962-b76a-3cfa59c9b379}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\Objects">
+      <UniqueIdentifier>{40a076ce-4d8d-459a-aeb7-386afbc60444}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Objects\Base">
+      <UniqueIdentifier>{25165aa8-9ad1-45e3-8f02-cf9d42fc1d45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events">
+      <UniqueIdentifier>{16c78e20-3a3d-4046-9ce2-e118637ae8f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events\GameEvent_Base">
+      <UniqueIdentifier>{801b46d5-728e-444b-b846-70f05063fe7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Objects\Player">
+      <UniqueIdentifier>{c56e10f8-40f1-464c-8e9e-2da78ba7a3dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\Processors and Commands\GameEventsSystem">
+      <UniqueIdentifier>{bb8a1c48-6f57-400b-bc0b-b52c15ec7c49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkCommands\Processors and Commands\GameEventsSystem\Server">
+      <UniqueIdentifier>{89da99cf-a428-46cc-b8cd-501b1c10a719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events\EventsFactory">
+      <UniqueIdentifier>{07963ac4-f1a4-4d5a-b8b2-adc412f16190}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -251,6 +275,24 @@
     <ClInclude Include="GameTimeSystem_ServerProcessor.h">
       <Filter>NetworkCommands\Processors and Commands\GameTimeSystem</Filter>
     </ClInclude>
+    <ClInclude Include="GameEvent_Base.h">
+      <Filter>Events\GameEvent_Base</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Entities\Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Object_Player.h">
+      <Filter>Entities\Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEventsSystem_Command.h">
+      <Filter>NetworkCommands\Processors and Commands\GameEventsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEventsSystem_ServerProcessor.h">
+      <Filter>NetworkCommands\Processors and Commands\GameEventsSystem\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="EventsFactory.h">
+      <Filter>Events\EventsFactory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -330,6 +372,15 @@
     </ClCompile>
     <ClCompile Include="GameTimeSystem_Command.cpp">
       <Filter>NetworkCommands\Processors and Commands\GameTimeSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Object_Player.cpp">
+      <Filter>Entities\Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEventsSystem_ServerProcessor.cpp">
+      <Filter>NetworkCommands\Processors and Commands\GameEventsSystem\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="EventsFactory.cpp">
+      <Filter>Events\EventsFactory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -40,3 +40,4 @@ TODO:
 This is a list of TODOs of this project. Probably all of then should be done at some point, but they are not on a critical path
 
 -Rotation prediction. Right now rotating objects are movign very sharply. There must be some interpolation to smooth it all out.
+Entity ID's must be removed from mixins along with any behavior. Except tick()?

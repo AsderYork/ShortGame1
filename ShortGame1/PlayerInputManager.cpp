@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "PlayerInputManager.h"
 
+#include <Object_Player.h>
+
 #include <Mixin_Movable.h>
 #include <LogHelper.h>
 
@@ -29,6 +31,8 @@ namespace GEM
 		case SDLK_LEFT:
 			m_moveLeft = true;
 			break;
+		case SDLK_SPACE:
+			m_attack = true;
 		default:
 			break;
 		}
@@ -55,6 +59,8 @@ namespace GEM
 		case SDLK_LEFT:
 			m_moveLeft = false;
 			break;
+		case SDLK_SPACE:
+			m_attack = false;
 		default:
 			break;
 		}
@@ -79,6 +85,12 @@ namespace GEM
 	void PlayerInputManager::InputReciver::mouseReleased(const SDL_MouseButtonEvent & arg)
 	{
 	}
+
+	PlayerInputManager::PlayerInputManager(GameEventsController * eventsController) : m_events(eventsController)
+	{
+		m_events->AddEventType<GameSim::Object_Player_DeathBlast>();
+	}
+
 	void PlayerInputManager::Apply(float TimeDelta)
 	{
 		auto LockedPlayerEntity = m_playerEnt.lock();
@@ -105,11 +117,22 @@ namespace GEM
 		MixinMovablePtr->SetVelocity(tmpVel*speed);
 
 		//MixinMovablePtr->setRotation(btQuaternion(btVector3(0.0f, 1.0f, 0.0f), m_listener._debugshift));
-
 		m_listener.m_mouseShiftX = 0.0f;
 		m_listener.m_mouseShiftY = 0.0f;
 		m_listener.m_mouseShiftY = 0.0f;
 
 		m_showDebugOverlay = m_listener.m_debugOverlay;
+
+		static float Cooldown = 0;
+		if (Cooldown > 0) { Cooldown -= TimeDelta; }
+		if (Cooldown < 0) { Cooldown = 0; }
+
+		if (m_listener.m_attack && Cooldown == 0)
+		{
+			Cooldown += 0.5;
+		
+			m_events->AddEvent(GameSim::Object_Player_DeathBlast::staticid(), LockedPlayerEntity->m_id);
+			//m_eventsController->AddEvent<GameSim::Object_Player_DeathBlast>(LockedPlayerEntity->m_id);
+		}
 	}
 }

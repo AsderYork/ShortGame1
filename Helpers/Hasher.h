@@ -12,7 +12,14 @@ namespace Helper
 	public:
 		constexpr static NumericType Hash(std::string_view Name, std::string_view CollisionSpace)
 		{
-			return NumericType();
+			//Hashing algorithm djb2. Source:http://www.cse.yorku.ca/~oz/hash.html
+			NumericType hash = 5381;
+
+			for (auto letter : Name)
+			{
+				hash = ((hash << 5) + hash) + letter; /* hash * 33 + c */
+			}
+			return hash;
 		}
 	};
 	
@@ -32,4 +39,6 @@ namespace Helper
 			return hash;
 		}
 	};
+
+
 }

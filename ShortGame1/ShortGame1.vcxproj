@@ -173,8 +173,10 @@
     <ClInclude Include="DebugLayout.h" />
     <ClInclude Include="DebugOverlayScreen.h" />
     <ClInclude Include="EngineController.h" />
+    <ClInclude Include="EventsController.h" />
     <ClInclude Include="FirstPersonGameCamera.h" />
     <ClInclude Include="FPS_Layout.h" />
+    <ClInclude Include="GameEventsSystem_ClientProcessor.h" />
     <ClInclude Include="GameSimService.h" />
     <ClInclude Include="ObjectVis_Cubical.h" />
     <ClInclude Include="GS_Client.h" />
@@ -211,8 +213,10 @@
     <ClCompile Include="DebugMapGraphicsService.cpp" />
     <ClCompile Include="DebugOverlayScreen.cpp" />
     <ClCompile Include="EngineController.cpp" />
+    <ClCompile Include="EventsController.cpp" />
     <ClCompile Include="FirstPersonGameCamera.cpp" />
     <ClCompile Include="FPS_Layout.cpp" />
+    <ClCompile Include="GameEventsSystem_ClientProcessor.cpp" />
     <ClCompile Include="GameSimService.cpp" />
     <ClCompile Include="ObjectVis_Cubical.cpp" />
     <ClCompile Include="GS_Client.cpp" />

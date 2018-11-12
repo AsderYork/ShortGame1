@@ -25,6 +25,9 @@
     <Filter Include="Server">
       <UniqueIdentifier>{4ce75aa3-ad2b-4199-929e-9bd663ee4c8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NetworkProcessors">
+      <UniqueIdentifier>{86655327-09f5-42c2-9e44-e2a6f8954acd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

@@ -150,6 +150,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CopyableNetworkCommand.h" />
+    <ClInclude Include="EventsFactory.h" />
+    <ClInclude Include="GameEventsSystem_Command.h" />
+    <ClInclude Include="GameEventsSystem_ServerProcessor.h" />
+    <ClInclude Include="GameEvent_Base.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimeSystem_ClientProcessor.h" />
     <ClInclude Include="GameTimeSystem_Command.h" />
     <ClInclude Include="GameTimeSystem_ServerProcessor.h" />
@@ -184,6 +189,7 @@
     <ClInclude Include="Mixin_Controller.h" />
     <ClInclude Include="Mixin_Health.h" />
     <ClInclude Include="Mixin_Movable.h" />
+    <ClInclude Include="Object_Player.h" />
     <ClInclude Include="Player_id_type.h" />
     <ClInclude Include="ServerCommandDispatcher.h" />
     <ClInclude Include="SharedDataPackets.h" />
@@ -199,6 +205,8 @@
     <ClCompile Include="ChunkLoader_Storage.cpp" />
     <ClCompile Include="ClientCommandDispatcher.cpp" />
     <ClCompile Include="EntityGenerator.cpp" />
+    <ClCompile Include="EventsFactory.cpp" />
+    <ClCompile Include="GameEventsSystem_ServerProcessor.cpp" />
     <ClCompile Include="GamePhysics.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
     <ClCompile Include="GameTimeSystem_ClientProcessor.cpp" />
@@ -216,6 +224,7 @@
     <ClCompile Include="Mixin_Health.cpp" />
     <ClCompile Include="Mixin_Movable Singleton.cpp" />
     <ClCompile Include="Mixin_Movable.cpp" />
+    <ClCompile Include="Object_Player.cpp" />
     <ClCompile Include="ServerCommandDispatcher.cpp" />
     <ClCompile Include="SharedDataPackets.cpp" />
     <ClCompile Include="UpdateSystemClientProcessor.cpp" />

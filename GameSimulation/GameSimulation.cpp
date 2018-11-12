@@ -16,6 +16,7 @@ namespace GEM::GameSim
 			delta = 1.0;
 		}
 		auto GameTimeDelta = SecondsToGameTimeInterval(delta);
+
 		//Apply all commands
 		while (!m_commandBuffer.empty())
 		{

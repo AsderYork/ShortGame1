@@ -6,6 +6,8 @@
 #include "ChunkLoadClientDispatcher.h"
 #include "LandscapeSystem_ClientProcessor.h"
 #include <GameTimeSystem_ClientProcessor.h>
+#include "GameEventsSystem_ClientProcessor.h"
+#include "EventsController.h"
 
 #include <LandscapePhysics.h>
 
@@ -31,6 +33,7 @@ namespace GEM
 		GameSim::ClientCommandDispatcher m_dispatcher;
 		GameSim::UpdateSystemClientProcessor m_updatesProcessor;
 		GameSim::GameTimeSystem_ClientProcessor m_gameTimeProcessor;
+		GameEventsSystem_ClientProcessor m_gameEventsProcessor;
 		
 		std::vector<std::function<bool()>> m_firstTickEventCallbacks;
 
@@ -38,6 +41,7 @@ namespace GEM
 	public:
 		ChunkLoadClientDispatcher m_chunkDispatcher;
 		GameSim::LandscapePhysics m_landPhys;
+		GameEventsController m_eventsController;
 
 		std::chrono::system_clock::time_point m_lastUpdateTime;
 		GameSim::ENTITY_ID_TYPE m_playerCharacterID;

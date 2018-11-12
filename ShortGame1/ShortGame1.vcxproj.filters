@@ -148,6 +148,12 @@
     <Filter Include="Screens\DebugOverlayScreen">
       <UniqueIdentifier>{7d2918b1-b536-4195-8f80-98de2dc0ee17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameClient\EventsSystem">
+      <UniqueIdentifier>{355eb40f-7237-4bea-aaaa-04fa465de10a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\EventsSystem\CommandProcessor">
+      <UniqueIdentifier>{9bce2620-02d5-43ab-b194-cc69af88899a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -267,6 +273,12 @@
     <ClInclude Include="DebugOverlayScreen.h">
       <Filter>Screens\DebugOverlayScreen</Filter>
     </ClInclude>
+    <ClInclude Include="GameEventsSystem_ClientProcessor.h">
+      <Filter>GameClient\EventsSystem\CommandProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="EventsController.h">
+      <Filter>GameClient\EventsSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShortGame1.cpp">
@@ -370,6 +382,12 @@
     </ClCompile>
     <ClCompile Include="DebugOverlayScreen.cpp">
       <Filter>Screens\DebugOverlayScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEventsSystem_ClientProcessor.cpp">
+      <Filter>GameClient\EventsSystem\CommandProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="EventsController.cpp">
+      <Filter>GameClient\EventsSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -14,13 +14,15 @@ namespace GEM::GameSim
 	private:
 		const std::vector<std::unique_ptr<Mixin_base>> m_mixins;
 	public:
-		StaticlyMixedEntity(std::vector<std::unique_ptr<Mixin_base>>&& vec) : m_mixins(std::move(vec)) {}
+		inline StaticlyMixedEntity(ENTITY_ID_TYPE id, std::vector<std::unique_ptr<Mixin_base>>&& vec) : m_mixins(std::move(vec)),
+			EntityBase(id)
+		{}
 
-		virtual Mixin_base * GetMixinByID(int i) const override;
+		virtual Mixin_base * GetMixinByID(int i) override;
 		virtual bool tick(const GameTime delta) override;
 
 
-		virtual std::vector<Mixin_base*> const getAllMixins() const override;
+		virtual std::vector<Mixin_base*> getAllMixins() override;
 	};
 
 	template<typename...TMixins>
@@ -70,7 +72,7 @@ namespace GEM::GameSim
 				vec.emplace_back(std::move(Ptr));
 			}
 
-			return std::make_unique<StaticlyMixedEntity>(std::move(vec));
+			return std::make_unique<StaticlyMixedEntity>(EntID, std::move(vec));
 		}
 
 	};

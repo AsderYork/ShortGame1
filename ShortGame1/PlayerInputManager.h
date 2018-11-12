@@ -1,5 +1,6 @@
 #pragma once
 #include "SDL2_Service.h"
+#include "EventsController.h"
 #include <EntitiesBase.h>
 #include <memory>
 
@@ -37,6 +38,7 @@ namespace GEM
 			bool m_moveRight = false;
 
 			bool m_debugOverlay = false;
+			bool m_attack = false;
 
 
 			float m_mouseShiftX = 0.0f;
@@ -58,8 +60,15 @@ namespace GEM
 
 		InputReciver m_listener;
 
+		GameEventsController* m_events;
+
 	public:
 
+
+
+		PlayerInputManager(GameEventsController* eventsController);
+
+		int m_playerID;
 		/**
 		\brief Shows weather MainGameScreenShould call a DeubugOvrlay over itself
 		*/

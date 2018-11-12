@@ -45,7 +45,8 @@ namespace GEM::GameSim
 		inline void setGameTime(GameTime NewTime) { m_simulationTime = NewTime; }
 		inline void setGameTimeScale(float NewTimeScle) { m_simulationTimeScle = NewTimeScle; }
 
-		GameSimulation() {
+		inline GameSimulation()
+		{
 			m_physics.Initialize();
 		}
 

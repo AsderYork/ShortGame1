@@ -10,9 +10,11 @@ namespace GEM
 	MainGameScreen::MainGameScreen(NetworkController * network, GameSimController * gs, SDL_Controller* SDL_Cntrlr) :
 		m_network(network),
 		m_gsController(gs),
-		m_visual(gs)
+		m_visual(gs),
+		m_inputManager(&(gs->m_eventsController))
 	{
 		m_inputManager.RegisterListener(SDL_Cntrlr);
+		//m_inputManager.m_eventsController = &m_gsController->m_events;
 	}
 
 

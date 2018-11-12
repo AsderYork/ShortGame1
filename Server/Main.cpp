@@ -1,10 +1,14 @@
 #include "stdafx.h"
 #include "Server.h"
 
+#include <Object_Player.h>
 
 int main(int argc, char *argv[])
 {
 	Helper::logHelper::setLog("./logs/log.txt");
+	
+	GEM::GameSim::GameTime Time = 0;
+
 
 	try
 	{

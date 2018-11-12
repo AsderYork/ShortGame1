@@ -9,6 +9,7 @@
 #include "LandscapePhysics.h"
 #include "CopyableNetworkCommand.h"
 #include "GameTimeSystem_ServerProcessor.h"
+#include "GameEventsSystem_ServerProcessor.h"
 
 
 #include <string>
@@ -53,6 +54,7 @@ namespace GEM::GameSim
 		ServerCommandDispatcher m_commandDispatcher;
 		UpdateSystemProcessor m_updateSystemProcessor;
 		GameTimeSystem_ServerProcessor m_gameTimeServerProcessor;
+		GameEventsSystem_ServerProcessor m_gameEventsServerProcessor;
 
 		ChunkLoadServerDispatcher m_chunkLoadDispatcher;
 		LandscapePhysics m_landscapePhysicsController;

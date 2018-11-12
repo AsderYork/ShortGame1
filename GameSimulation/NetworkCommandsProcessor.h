@@ -113,7 +113,7 @@ namespace GEM::GameSim
 		virtual inline std::unique_ptr<NetworkCommand> deserializeCommand(cereal::BinaryInputArchive & ar)
 		{
 			auto NewCommand = std::make_unique<CommandName>();
-			ar((*NewCommand));
+			ar(*NewCommand);
 			return NewCommand;
 		}
 	};

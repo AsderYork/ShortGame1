@@ -2,7 +2,7 @@
 
 namespace GEM::GameSim
 {
-	Mixin_base * GEM::GameSim::StaticlyMixedEntity::GetMixinByID(int i) const
+	Mixin_base * GEM::GameSim::StaticlyMixedEntity::GetMixinByID(int i)
 	{
 		for (auto& m : m_mixins)
 		{
@@ -20,9 +20,9 @@ namespace GEM::GameSim
 		return true;
 	}
 
-	std::vector<Mixin_base*> const StaticlyMixedEntity::getAllMixins() const
+	std::vector<Mixin_base*> StaticlyMixedEntity::getAllMixins()
 	{
-		std::vector<Mixin_base*> ret;
+		std::vector< Mixin_base*> ret;
 		for (auto& m : m_mixins)
 		{
 			ret.emplace_back(m.get());
