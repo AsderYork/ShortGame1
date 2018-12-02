@@ -85,7 +85,7 @@ namespace GEM::GameSim
 		GameTime m_CreationTime;//A time at which this event was created;
 
 		//True if event can require multiple frames for comlition, false if it's only require one frame
-		bool isEventLong = false;
+		bool m_isEventLong = false;
 
 		inline void Initialize(ObjectIDType AuthorID, GameTime currTime) {
 			m_AuthorID = AuthorID;
@@ -100,6 +100,7 @@ namespace GEM::GameSim
 	public:
 
 		virtual EventIDType id() const = 0;
+		inline bool isEventLong() { return m_isEventLong; }
 
 
 		inline auto getAuthorID() const { return m_AuthorID; }

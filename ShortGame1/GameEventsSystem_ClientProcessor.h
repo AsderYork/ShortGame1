@@ -21,6 +21,7 @@ namespace GEM
 
 		virtual void RejectCommand(const GameSim::NetworkCommand* Command) override;
 
+		void addEvent(GameSim::NetworkCommandIDType, GameSim::GameEvent*);
 
 		inline virtual uint8_t getIdOfProcessor() const { return 3; };
 

@@ -1,6 +1,7 @@
 #include "GS_Server.h"
 #include "LogHelper.h"
 #include "GameTimeSystem_Command.h"
+#include "EventsFactory.h"
 
 #include <sstream>
 #include <limits>
@@ -15,7 +16,8 @@ namespace GEM::GameSim
 		m_updateSystemProcessor(&m_gs),
 		m_chunkLoadDispatcher(m_gs.m_players),
 		m_landscapePhysicsController((&m_gs.m_physics)),
-		m_gameTimeServerProcessor(&m_gs)
+		m_gameTimeServerProcessor(&m_gs),
+		m_gameEventsServerProcessor(&m_gs.m_entities)
 	{
 		m_commandDispatcher.AddProcessor(&m_updateSystemProcessor);
 		m_commandDispatcher.AddProcessor(&(m_chunkLoadDispatcher.getProcessor()));
@@ -24,6 +26,7 @@ namespace GEM::GameSim
 		m_chunkLoadDispatcher.Start();
 
 		m_chunkLoadDispatcher.getStorage().RegisterListener(&m_landscapePhysicsController);
+		EventsFactory::RegisterAllEventTypes();
 	}
 
 
@@ -136,6 +139,7 @@ namespace GEM::GameSim
 	{
 		auto newPlayer = m_gs.m_players.addPlayer(std::move(player));
 		if (!newPlayer) { return std::nullopt; }
+		m_gameEventsServerProcessor.newPlayerAdded(newPlayer->get().id);
 		
 		auto [CharPtr, CharId] = m_gs.AddEntity({ Mixin_Movable::MixinID, Mixin_Health::MixinID});
 		newPlayer->get().characterPtr = CharPtr;
@@ -179,7 +183,9 @@ namespace GEM::GameSim
 		m_chunkLoadDispatcher.getChunkController().RemoveLoader(player.get().additional_data->MapLoaderId);
 
 		m_gs.m_entities.RemoveEntity(player.get().characterID);
+		m_gameEventsServerProcessor.playerRemoved(player.get().id);
 		m_gs.m_players.RemovePlayer(std::move(player));
+
 	}
 
 	void  GS_Server::Tick(float Delta)

@@ -16,7 +16,7 @@ namespace GEM
 		m_updatesProcessor(this),
 		m_gameTimeProcessor(this),
 		m_landPhys((&m_physics)),
-		m_eventsController(&m_entities, &m_simulationTime, &m_dispatcher)
+		m_eventsController(&m_entities, &m_simulationTime, &m_dispatcher, &m_gameEventsProcessor)
 	{
 		m_dispatcher.AddProcessor(&m_updatesProcessor); 
 		m_dispatcher.AddProcessor(&m_chunkDispatcher.getProcessor());

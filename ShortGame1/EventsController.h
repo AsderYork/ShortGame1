@@ -26,16 +26,21 @@ namespace GEM
 
 		const GameSim::GameTime* const m_gameTime;
 
+		GameEventsSystem_ClientProcessor* const m_eventsClientProcessor;
+
 	public:
+		
+		inline GameEventsController(GameSim::EntityController* entityController, 
+			const GameSim::GameTime* GameTimePtr,
+			GameSim::ClientCommandDispatcher* commandDispatcher,
+			GameEventsSystem_ClientProcessor* eventClientProcessor) :
 
-		void RegisterEventTypes();
-
-		inline GameEventsController(GameSim::EntityController* entityController,const GameSim::GameTime* GameTimePtr, GameSim::ClientCommandDispatcher* commandDispatcher) :
 			m_entityController(entityController),
 			m_gameTime(GameTimePtr),
-			m_commandDispatcher(commandDispatcher)
+			m_commandDispatcher(commandDispatcher),
+			m_eventsClientProcessor(eventClientProcessor)
 		{
-			RegisterEventTypes();
+			GameSim::EventsFactory::RegisterAllEventTypes();
 		}
 
 		//Provide a way to check the state of an added Entity.
@@ -76,17 +81,6 @@ namespace GEM
 		\brief Adds new event.
 		*/
 		EventTicket&& AddEvent(GameSim::EventIDType EventID, GameSim::ENTITY_ID_TYPE authorId);
-
-		/**
-		Adds specific type factory to GameEventFactory.
-		/tparam EventType A type of event, that should be added.
-		/todo Runtime search (along with the ability to add new events at runtime) must be raplaced with a static O(1) search.
-		*/
-		template<typename EventType>
-		void AddEventType()
-		{
-			GameSim::EventsFactory::AddEventType<EventType>();
-		}
 
 
 		void ProcessEvents();

@@ -18,9 +18,9 @@ namespace GEM::GameSim
 			auto TheirHealth = static_cast<Mixin_Health*>(static_cast<EntityBase*>(&*LockedObject)->GetMixinByID(Mixin_Health::MixinID));
 			if (TheirHealth != nullptr)
 			{
-				if ((LockedObject->m_id != Deps.thisObject->m_id) && TheirHealth->m_health > 0)
+				if ((LockedObject->m_id != Deps.thisObject->m_id))
 				{
-					TheirHealth->m_health -= 10;
+					TheirHealth->changeHealth(-10);
 				}
 			}
 		}
@@ -47,9 +47,9 @@ namespace GEM::GameSim
 			auto TheirHealth = static_cast<Mixin_Health*>(static_cast<EntityBase*>(&*LockedObject)->GetMixinByID(Mixin_Health::MixinID));
 			if (TheirHealth != nullptr)
 			{
-				if ((LockedObject->m_id != Deps.thisObject->m_id) && TheirHealth->m_health > 0)
+				if ((LockedObject->m_id != Deps.thisObject->m_id))
 				{
-					TheirHealth->m_health -= 10;
+					TheirHealth->changeHealth(10);
 				}
 			}
 		}

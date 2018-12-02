@@ -16,7 +16,7 @@ namespace GEM
 
 			if (TrackedEvent->m_state == GameSim::GameEvent::Sended)
 			{
-				if (TrackedEvent->isEventLong)
+				if (TrackedEvent->isEventLong())
 				{
 					TrackedEvent->m_state = GameSim::GameEvent::AwaitingServer;
 				}
@@ -28,7 +28,7 @@ namespace GEM
 			}
 			else if (TrackedEvent->m_state == GameSim::GameEvent::Stopping)
 			{
-				if (!TrackedEvent->isEventLong)
+				if (!TrackedEvent->isEventLong())
 				{
 					TrackedEvent->m_state = GameSim::GameEvent::Completed;
 				}//Otherwise continue stopping
@@ -84,6 +84,16 @@ namespace GEM
 				m_trackedEvents.erase(Refrence.m_instanceId);
 			}
 		}
+	}
+
+	void GameEventsSystem_ClientProcessor::addEvent(GameSim::NetworkCommandIDType id, GameSim::GameEvent* event)
+	{
+		auto evt = m_trackedEvents.find(id);
+		if (evt != m_trackedEvents.end()) {
+			LOGCATEGORY("GameEventsSystem_ClientProcessor/addEvent").error("Event with id %i allready exists!");
+			return;
+		}
+		m_trackedEvents.emplace(id, event);
 	}
 }
 

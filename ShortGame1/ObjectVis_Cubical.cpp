@@ -40,7 +40,7 @@ namespace GEM
 				
 				auto Health = static_cast<GameSim::Mixin_Health*>(MaybeEnityIter->second->GetMixinByID(GameSim::Mixin_Health::MixinID));
 
-				auto HealthPercent = Health->m_health / Health->m_maxHealth;
+				auto HealthPercent = Health->getHealth() / Health->getMaxHealth();
 
 				auto FullHealthColor = Ogre::Vector3(0.2f, 1.0f, 0.2f);
 				auto NoHealthColor = Ogre::Vector3(1.0f, 0.1f, 0.1f);

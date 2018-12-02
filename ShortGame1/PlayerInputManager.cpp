@@ -88,7 +88,6 @@ namespace GEM
 
 	PlayerInputManager::PlayerInputManager(GameEventsController * eventsController) : m_events(eventsController)
 	{
-		m_events->AddEventType<GameSim::Object_Player_DeathBlast>();
 	}
 
 	void PlayerInputManager::Apply(float TimeDelta)

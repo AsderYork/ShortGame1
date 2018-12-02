@@ -79,6 +79,9 @@ namespace GEM::GameSim
 
 				auto EntIt = m_gameSim->m_entities.GetEntity(CommandRecast->m_entityID).lock();
 				ApplyState(EntIt.get(), it->lastConfirmedUpdate);
+
+				bool UpdateFullyAccepted = true;
+
 			}
 		}
 		else
@@ -145,6 +148,14 @@ namespace GEM::GameSim
 			//This is a controlled entity. Which means that it doesn't have to apply Server's state immediately
 			//Instead it's state will be applied only when server discards it's state
 			//So just skip it and let Confirm and Reject do all the work
+			//TODO UpdateSystem is really not a thing to translate player-made changes.
+			for (auto& mixin : CommandRecast->m_perMixinUpdates)
+			{
+				if (mixin.first == Mixin_Movable::MixinID) { continue; }
+				std::stringstream sstream(mixin.second);
+				cereal::BinaryInputArchive ar(sstream);
+				EntIt->GetMixinByID(mixin.first)->ApplyUpdate(ar);
+			}
 			return true;
 		}
 
