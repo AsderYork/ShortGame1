@@ -154,6 +154,9 @@
     <Filter Include="GameClient\EventsSystem\CommandProcessor">
       <UniqueIdentifier>{9bce2620-02d5-43ab-b194-cc69af88899a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Screens\MainGameScreen\GameVisualization\GameObjectsVisualization\Simplistic">
+      <UniqueIdentifier>{1556e42e-c0e8-492d-ab2b-386ca7b342ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -279,6 +282,9 @@
     <ClInclude Include="EventsController.h">
       <Filter>GameClient\EventsSystem</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectVis_Simplistic.h">
+      <Filter>Screens\MainGameScreen\GameVisualization\GameObjectsVisualization\Simplistic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShortGame1.cpp">
@@ -388,6 +394,9 @@
     </ClCompile>
     <ClCompile Include="EventsController.cpp">
       <Filter>GameClient\EventsSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectVis_Simplistic.cpp">
+      <Filter>Screens\MainGameScreen\GameVisualization\GameObjectsVisualization\Simplistic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

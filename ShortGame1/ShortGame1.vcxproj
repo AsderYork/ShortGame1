@@ -194,6 +194,7 @@
     <ClInclude Include="NTMCG_MultiLOD.h" />
     <ClInclude Include="NTMCG_Naive.h" />
     <ClInclude Include="NTMCG_TestSpeed.h" />
+    <ClInclude Include="ObjectVis_Simplistic.h" />
     <ClInclude Include="OgreLogRedirection.h" />
     <ClInclude Include="Ogre_Service.h" />
     <ClInclude Include="PlayerInputManager.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="NodeChunk.cpp" />
     <ClCompile Include="NodesToMC.cpp" />
     <ClCompile Include="NTMCG_Naive.cpp" />
+    <ClCompile Include="ObjectVis_Simplistic.cpp" />
     <ClCompile Include="OgreLogRedirection.cpp" />
     <ClCompile Include="Ogre_Service.cpp" />
     <ClCompile Include="PlayerInputManager.cpp" />

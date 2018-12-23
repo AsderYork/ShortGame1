@@ -1,5 +1,6 @@
 #include "GameSimulation.h"
 #include "LogHelper.h"
+#include "GameObjectsFactory.h"
 
 
 namespace GEM::GameSim
@@ -50,6 +51,7 @@ namespace GEM::GameSim
 		auto ent = m_entities.AddFreeEntity(ID, m_generator.GenerateEntity(std::move(mixins), this, ID));
 		return ent;
 	}
+
 	std::pair<std::weak_ptr<EntityBase>, ENTITY_ID_TYPE> GameSimulation::AddEntity(std::vector<MIXIN_ID_TYPE> mixins)
 	{
 		m_lastAddedEntity++;
@@ -66,5 +68,46 @@ namespace GEM::GameSim
 		}
 		return std::make_pair(AddEntity(m_lastAddedEntity, std::move(mixins)), m_lastAddedEntity);
 	}
+
+	std::pair<std::weak_ptr<EntityBase>, ENTITY_ID_TYPE> GameSimulation::AddEntity(std::unique_ptr<EntityBase> ent)
+	{
+		m_lastAddedEntity++;
+		while (!m_entities.GetEntity(m_lastAddedEntity).expired())
+		{
+			if (m_lastAddedEntity == (std::numeric_limits<ENTITY_ID_TYPE>::max)())
+			{
+				m_lastAddedEntity = 0;
+			}
+			else
+			{
+				m_lastAddedEntity++;
+			}
+		}
+		return std::make_pair(AddEntity(m_lastAddedEntity, std::move(ent)), m_lastAddedEntity);
+	}
+
+	std::weak_ptr<EntityBase> GameSimulation::AddEntity(ENTITY_ID_TYPE ID, std::unique_ptr<EntityBase> ent)
+	{
+		auto retent = m_entities.AddFreeEntity(ID, std::move(ent));
+		return retent;
+	}
+	
+	std::pair<std::weak_ptr<EntityBase>, ENTITY_ID_TYPE> GameSimulation::AddObject(GAMEOBJECT_TYPE_ID TypeID)
+	{
+		m_lastAddedEntity++;
+		while (!m_entities.GetEntity(m_lastAddedEntity).expired())
+		{
+			if (m_lastAddedEntity == (std::numeric_limits<ENTITY_ID_TYPE>::max)())
+			{
+				m_lastAddedEntity = 0;
+			}
+			else
+			{
+				m_lastAddedEntity++;
+			}
+		}
+		return std::make_pair(m_entities.AddFreeEntity(m_lastAddedEntity, GameObjectFactory::CreateObject(TypeID, m_lastAddedEntity)), m_lastAddedEntity);
+	}
+
 
 }

@@ -26,7 +26,7 @@ namespace GEM::GameSim
 			auto EventGen = m_eventGenerators.find(id);
 			if (EventGen == m_eventGenerators.end())
 			{
-				LOGCATEGORY("EventsFactory, GenerateEvent").error("Event %i is have no registered generator!");
+				LOGCATEGORY("EventsFactory, GenerateEvent").error("Event %i have no registered generator!");
 				return std::unique_ptr<GameSim::GameEvent>();
 			}
 			auto NewEvent = m_eventGenerators[id]();

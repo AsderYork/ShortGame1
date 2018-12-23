@@ -155,6 +155,7 @@
     <ClInclude Include="GameEventsSystem_ServerProcessor.h" />
     <ClInclude Include="GameEvent_Base.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectsFactory.h" />
     <ClInclude Include="GameTimeSystem_ClientProcessor.h" />
     <ClInclude Include="GameTimeSystem_Command.h" />
     <ClInclude Include="GameTimeSystem_ServerProcessor.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="LandscapeSystem_Command.h" />
     <ClInclude Include="LandscapeSystem_ServerProcessor.h" />
     <ClInclude Include="Mixin_Movable Singleton.h" />
+    <ClInclude Include="Mixin_Objecttype.h" />
     <ClInclude Include="NetworkCommandBase.h" />
     <ClInclude Include="NetworkCommandsProcessor.h" />
     <ClInclude Include="Mixin_Base.h" />
@@ -207,6 +209,7 @@
     <ClCompile Include="EntityGenerator.cpp" />
     <ClCompile Include="EventsFactory.cpp" />
     <ClCompile Include="GameEventsSystem_ServerProcessor.cpp" />
+    <ClCompile Include="GameObjectsFactory.cpp" />
     <ClCompile Include="GamePhysics.cpp" />
     <ClCompile Include="GameSimulation.cpp" />
     <ClCompile Include="GameTimeSystem_ClientProcessor.cpp" />
@@ -224,6 +227,7 @@
     <ClCompile Include="Mixin_Health.cpp" />
     <ClCompile Include="Mixin_Movable Singleton.cpp" />
     <ClCompile Include="Mixin_Movable.cpp" />
+    <ClCompile Include="Mixin_Objecttype.cpp" />
     <ClCompile Include="Object_Player.cpp" />
     <ClCompile Include="ServerCommandDispatcher.cpp" />
     <ClCompile Include="SharedDataPackets.cpp" />

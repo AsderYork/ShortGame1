@@ -7,10 +7,12 @@
 #include "EntityGenerator.h"
 #include "GameTime.h"
 #include "GamePhysics.h"
+#include "GameObject.h"
 
 //Mixins
 #include "Mixin_Movable.h"
 #include "Mixin_Health.h"
+#include "Mixin_Objecttype.h"
 
 #include <queue>
 
@@ -34,7 +36,7 @@ namespace GEM::GameSim
 
 	public:
 		EntityController m_entities;
-		EntityGenerator<Mixin_Health, Mixin_Movable> m_generator;
+		EntityGenerator<Mixin_Health, Mixin_Movable, Mixin_Objecttype> m_generator;
 		PlayerController m_players;
 		GamePhysics m_physics;
 
@@ -78,7 +80,22 @@ namespace GEM::GameSim
 		*/
 		std::weak_ptr<EntityBase> AddEntity(ENTITY_ID_TYPE ID, std::vector<MIXIN_ID_TYPE> mixins);
 
+		/**!
+		Adds entity with a given ID.
+		Returns a pointer to the entity, if it was created or nullptr, if entity wasn't created
+		*/
+		std::weak_ptr<EntityBase> AddEntity(ENTITY_ID_TYPE ID, std::unique_ptr<EntityBase> ent);
 
+		/**!
+		Adds entity with some valid id.
+		\returns a pair with first value - pointer to newly created entity and second - ID of that entity
+		*/
+		std::pair<std::weak_ptr<EntityBase>, ENTITY_ID_TYPE> AddEntity(std::unique_ptr<EntityBase> ent);
+
+		/**!
+		Adds new object with given type
+		*/
+		std::pair<std::weak_ptr<EntityBase>, ENTITY_ID_TYPE> AddObject(GAMEOBJECT_TYPE_ID TypeID);
 
 	};
 }

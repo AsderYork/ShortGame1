@@ -148,6 +148,12 @@
     <Filter Include="Events\EventsFactory">
       <UniqueIdentifier>{07963ac4-f1a4-4d5a-b8b2-adc412f16190}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\Mixins\Mixin_Objecttype">
+      <UniqueIdentifier>{5595b2f5-525c-4128-a983-a00b541594a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Objects\Factory">
+      <UniqueIdentifier>{978267ed-cd85-498e-ad8f-6e57f2adc403}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -293,6 +299,12 @@
     <ClInclude Include="EventsFactory.h">
       <Filter>Events\EventsFactory</Filter>
     </ClInclude>
+    <ClInclude Include="Mixin_Objecttype.h">
+      <Filter>Entities\Mixins\Mixin_Objecttype</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectsFactory.h">
+      <Filter>Entities\Objects\Factory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -381,6 +393,12 @@
     </ClCompile>
     <ClCompile Include="EventsFactory.cpp">
       <Filter>Events\EventsFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="Mixin_Objecttype.cpp">
+      <Filter>Entities\Mixins\Mixin_Objecttype</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectsFactory.cpp">
+      <Filter>Entities\Objects\Factory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

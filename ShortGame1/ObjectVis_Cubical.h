@@ -17,6 +17,7 @@ namespace GEM
 		Ogre_Service* m_ogreController;
 
 
+
 		struct ObjectRAII
 		{
 		public:
@@ -30,7 +31,7 @@ namespace GEM
 			ObjectRAII();
 			~ObjectRAII();
 		};
-
+		
 		std::map<GameSim::ENTITY_ID_TYPE, ObjectRAII> m_visibleEntities;
 	public:
 		ObjectVis_Cubical(GameSimController* gs);

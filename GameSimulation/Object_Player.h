@@ -39,10 +39,8 @@ namespace GEM::GameSim
 	};
 
 
-	class Object_Player : public MixedEntity<Mixin_Movable, Mixin_Health>
+	class Object_Player : public GameObject<Mixin_Movable, Mixin_Health>
 	{
-	public:
-		
 	};
 
 	

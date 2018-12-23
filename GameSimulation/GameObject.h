@@ -1,5 +1,6 @@
 #pragma once
 #include "EntitiesBase.h"
+#include "Mixin_Objecttype.h"
 
 namespace GEM::GameSim
 {
@@ -29,15 +30,12 @@ namespace GEM::GameSim
 
 	*/
 
-	class GameObjectBase
-	{};
 	/**\brief A base class of GameObject.
 	More on what GameObject is in \ref ObjectsAndEntities
 	\tparam Mixins Mixins, that should contain object's state.
 	*/
 	template<typename...Mixins>
-	class GameObject : public MixedEntity<Mixins...>, public GameObjectBase
-	{
-
+	class GameObject : public MixedEntity<Mixin_Objecttype, Mixins...>
+	{	
 	};
 }

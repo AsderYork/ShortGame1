@@ -14,7 +14,7 @@ namespace GEM::GameSim
 	class EntityBase
 	{
 	public:
-		const ENTITY_ID_TYPE m_id;
+		ENTITY_ID_TYPE m_id;
 		inline EntityBase(ENTITY_ID_TYPE id) : m_id(id) {}
 		virtual Mixin_base* GetMixinByID(int i) = 0;
 		virtual std::vector<Mixin_base*> getAllMixins() = 0;
@@ -42,6 +42,11 @@ namespace GEM::GameSim
 		MixedEntity(ENTITY_ID_TYPE id, Mixins&&... mixins) : m_mixins(std::move(mixins)...),
 			EntityBase(id)
 		{}
+
+		MixedEntity() : m_mixins(Mixins()...),
+			EntityBase(0)
+		{}
+
 
 		/**!
 		Return mixin of certain type

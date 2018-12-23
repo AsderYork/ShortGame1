@@ -2,6 +2,7 @@
 #include "LogHelper.h"
 #include "GameTimeSystem_Command.h"
 #include "EventsFactory.h"
+#include "GameObjectsFactory.h"
 
 #include <sstream>
 #include <limits>
@@ -27,6 +28,7 @@ namespace GEM::GameSim
 
 		m_chunkLoadDispatcher.getStorage().RegisterListener(&m_landscapePhysicsController);
 		EventsFactory::RegisterAllEventTypes();
+		GameObjectFactory::RegisterAllObjects();
 	}
 
 
@@ -140,8 +142,9 @@ namespace GEM::GameSim
 		auto newPlayer = m_gs.m_players.addPlayer(std::move(player));
 		if (!newPlayer) { return std::nullopt; }
 		m_gameEventsServerProcessor.newPlayerAdded(newPlayer->get().id);
+
 		
-		auto [CharPtr, CharId] = m_gs.AddEntity({ Mixin_Movable::MixinID, Mixin_Health::MixinID});
+		auto [CharPtr, CharId] = m_gs.AddObject(Helper::Hasher<GAMEOBJECT_TYPE_ID>::Hash("Object_Player", "GameObjectTypes"));
 		newPlayer->get().characterPtr = CharPtr;
 		newPlayer->get().characterID = CharId;
 
