@@ -7,7 +7,8 @@ namespace GEM
 		m_gsController(gsController),
 		m_landscape(gsController),
 		m_objCubical(gsController),
-		m_sky(gsController)
+		m_sky(gsController),
+		m_objSimplistic(gsController)
 	{}
 
 	void VisualController::StartBackgroundInit()
@@ -38,6 +39,7 @@ namespace GEM
 			m_objCubical.Frame();
 			m_sky.frame();
 			m_camera.UpdateCamera();
+			//m_objSimplistic.Frame();
 		}
 	}
 

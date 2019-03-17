@@ -4,11 +4,19 @@
 
 namespace GEM::GameSim
 {
+	EntityController::~EntityController()
+	{
+		for (auto& elem : m_entityMap)
+		{
+			m_destroyListeners(elem.second);
+		}
+	}
 	bool EntityController::RemoveEntity(ENTITY_ID_TYPE id)
 	{
 		auto& it = m_entityMap.find(id);
 		if (it != m_entityMap.end())
 		{
+			m_destroyListeners(it->second);
 			m_entityMap.erase(it);
 			return true;
 		}

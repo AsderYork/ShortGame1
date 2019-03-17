@@ -5,6 +5,8 @@
 #include <memory>
 #include <vector>
 #include <optional>
+#include <functional>
+#include <boost/signals2.hpp>
 #include <LinearMath/btVector3.h>
 
 namespace GEM::GameSim
@@ -14,7 +16,23 @@ namespace GEM::GameSim
 	{
 	private:
 		std::unordered_map<ENTITY_ID_TYPE, std::shared_ptr<EntityBase>> m_entityMap;
+		boost::signals2::signal<void(std::shared_ptr<EntityBase>)> m_createListeners;
+		boost::signals2::signal<void(std::shared_ptr<EntityBase>)> m_destroyListeners;
 	public:
+		~EntityController();
+
+		//*Signals
+
+		inline auto registerCreateListener(std::function<void(std::shared_ptr<EntityBase>)> callback) {
+			return m_createListeners.connect(callback);
+		}
+
+		inline auto registerDestroyListener(std::function<void(std::shared_ptr<EntityBase>)> callback) {
+			return m_destroyListeners.connect(callback);
+		}
+
+
+		//Entity-addition/removal
 
 		/**!
 		Adds new entity of specified class.
@@ -30,7 +48,12 @@ namespace GEM::GameSim
 			auto UniPtr = std::make_unique<T>(std::forward<Args>(args)...);
 			auto Ptr = UniPtr.get();
 			auto EmplaceResult = m_entityMap.emplace(id, std::move(UniPtr));
-			return EmplaceResult.second ? Ptr : nullptr;
+			if (EmplaceResult.second)
+			{
+				m_createListeners(UniPtr);
+				return Ptr;
+			}
+			return nullptr;
 		}
 
 		template<class...TMixins>
@@ -39,20 +62,24 @@ namespace GEM::GameSim
 			auto UniPtr = std::make_shared<MixedEntity<TMixins...>>(std::forward<TMixins>(constructors)...);
 			auto Ptr = UniPtr.get();
 			auto EmplaceResult = m_entityMap.emplace(id, std::move(UniPtr));
-			return EmplaceResult.second ? Ptr : nullptr;
+			if (EmplaceResult.second)
+			{
+				m_createListeners(UniPtr);
+				return Ptr;
+			}
+			return nullptr;
+
 		}
 
 		inline std::weak_ptr<EntityBase> AddFreeEntity(ENTITY_ID_TYPE id, std::unique_ptr<EntityBase>&& ptr) {
 			auto iter = m_entityMap.emplace(id, std::move(ptr));
 			if (!iter.second) { return std::weak_ptr<EntityBase>(); }
-			else {return iter.first->second;}
+			else 
+			{
+				m_createListeners(iter.first->second);
+				return iter.first->second;
+			}
 		}
-
-
-		/**!
-		Remove entity with given id if there is one. Return true if entity is removed, false otherwise
-		*/
-		bool RemoveEntity(ENTITY_ID_TYPE id);
 
 		/**!
 		Returns a pointer to an entity with given id, if there is one. Otherwise nullptr will be returned.
@@ -63,6 +90,16 @@ namespace GEM::GameSim
 		Returns overall number of entities
 		*/
 		ENTITY_ID_TYPE GetEntitiesCount() const;
+
+		/**!
+		Remove entity with given id if there is one. Return true if entity is removed, false otherwise
+		*/
+		bool RemoveEntity(ENTITY_ID_TYPE id);
+
+		//Exposed iterators
+
+		inline auto begin() { return m_entityMap.begin(); }
+		inline auto end() { return m_entityMap.end(); }
 
 		std::list<std::weak_ptr<EntityBase>> getAllEntitiesInASphere(btVector3 center, float Radius);
 

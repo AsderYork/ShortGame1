@@ -1,34 +1,31 @@
 #pragma once
+#include "GameSimService.h"
+
+#include <memory>
 #include <map>
-#include <functional>
 
 namespace GEM
 {
-	/**
-	Describes a visualization of an object type
-	*/
-	class GameObjectModel
-	{
-	public:
-		/**
-		\brief Creates an object's visualization 
-		*/
-		virtual bool Init()=0;
 
-		/**
-		\brief updates object's visual according to game state changes
-		*/
-		virtual bool Frame()=0;
-	};
-
-	/**
-	\brief Provides simplistic visualization of GameSim entities with respect to Object Model
-	*/
 	class ObjectVis_Simplistic {
+	private:
+		boost::signals2::connection m_createdConnection;
+		boost::signals2::connection m_destroyedConnection;
 
 	public:
 
-		void Frame();
+		ObjectVis_Simplistic(GameSimController * gsController);
+		~ObjectVis_Simplistic();
+
+
+		void onEntitiyCreated(std::shared_ptr<GameSim::EntityBase> ent) {
+			LOGCATEGORY("ObjectVis_Simplistic/onEntitiyCreated").info("Something was created!");
+		}
+
+		void onEntitiyDestroyed(std::shared_ptr<GameSim::EntityBase> ent) {
+			LOGCATEGORY("ObjectVis_Simplistic/onEntitiyCreated").info("Something was destroyed!");
+		}
 
 	};
+
 }
