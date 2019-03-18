@@ -18,4 +18,17 @@ namespace GEM {
 		m_destroyedConnection.disconnect();
 	}
 
+
+	void ObjectVis_Simplistic::onEntitiyCreated(std::shared_ptr<GameSim::EntityBase> ent) {
+		m_models.emplace(ent->m_id, ent);
+	}
+
+	void ObjectVis_Simplistic::onEntitiyDestroyed(std::shared_ptr<GameSim::EntityBase> ent) {
+		m_models.erase(ent->m_id);
+	}
+
+	GameModel::GameModel(std::shared_ptr<GameSim::EntityBase> ent)
+	{
+	}
+
 }
