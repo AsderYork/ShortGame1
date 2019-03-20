@@ -2,13 +2,14 @@
 #include "ObjectVis_Simplistic.h"
 
 
+
 namespace GEM {
 
 
 	ObjectVis_Simplistic::ObjectVis_Simplistic(GameSimController * gsController) 
 	{
-		gsController->m_entities.registerCreateListener([this](auto& val) {onEntitiyCreated(val); });
-		gsController->m_entities.registerDestroyListener([this](auto& val) {onEntitiyDestroyed(val); });
+		m_createdConnection = gsController->m_entities.registerCreateListener([this](auto& val) {onEntitiyCreated(val); });
+		m_destroyedConnection = gsController->m_entities.registerDestroyListener([this](auto& val) {onEntitiyDestroyed(val); });
 
 	}
 
@@ -27,8 +28,12 @@ namespace GEM {
 		m_models.erase(ent->m_id);
 	}
 
-	GameModel::GameModel(std::shared_ptr<GameSim::EntityBase> ent)
-	{
+	void ObjectVis_Simplistic::frame() {
+
+		for (auto& model : m_models) {
+			model.second.frame();
+		}
+
 	}
 
 }

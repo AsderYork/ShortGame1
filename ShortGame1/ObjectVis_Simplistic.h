@@ -1,22 +1,13 @@
 #pragma once
 #include "GameSimService.h"
+#include "ObjectVis_Simplistic_model.h"
 
 #include <memory>
 #include <map>
 
 namespace GEM
 {
-	/**
-	Encapsulates lifecycle of a game model
-	*/
-	class GameModel {
-	public:
-		GameModel(std::shared_ptr<GameSim::EntityBase> ent);
-		virtual ~GameModel();
 
-		GameModel(const GameModel&) = delete;
-		GameModel& operator= (const GameModel&) = delete;		
-	};
 
 
 	class ObjectVis_Simplistic {
@@ -30,6 +21,8 @@ namespace GEM
 
 		ObjectVis_Simplistic(GameSimController * gsController);
 		~ObjectVis_Simplistic();
+
+		void frame();
 
 		void onEntitiyCreated(std::shared_ptr<GameSim::EntityBase> ent);
 		void onEntitiyDestroyed(std::shared_ptr<GameSim::EntityBase> ent);

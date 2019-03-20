@@ -36,10 +36,10 @@ namespace GEM
 	{
 		if (m_fullyInited)
 		{
-			m_objCubical.Frame();
+			//m_objCubical.Frame();
 			m_sky.frame();
 			m_camera.UpdateCamera();
-			//m_objSimplistic.Frame();
+			m_objSimplistic.frame();
 		}
 	}
 
