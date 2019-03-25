@@ -15,7 +15,17 @@ namespace GEM
 		auto Movability = static_cast<GameSim::Mixin_Movable*>(ent->GetMixinByID(GameSim::Mixin_Movable::MixinID));
 
 		auto mSceneMgr = Ogre::Root::getSingletonPtr()->getSceneManager("ExampleSMInstance");
-		m_item = mSceneMgr->createItem("Cubexa.mesh");
+		m_item = mSceneMgr->createItem("dummy.mesh");
+
+		m_skeleton = m_item->getSkeletonInstance();
+		m_animation = m_skeleton->getAnimation("my_animation");
+
+
+		m_animation->setLoop(true);
+		m_animation->setEnabled(true);
+
+
+
 		static int TmpNames = 0;
 		m_item->getSubItem(0)->setDatablock(m_item->getSubItem(0)->getDatablock()->clone("PerPlayer" + std::to_string(TmpNames++)));
 
@@ -27,7 +37,7 @@ namespace GEM
 
 	}
 
-	void GameModel::frame() {
+	void GameModel::frame(float delta) {
 
 		auto locked_ptr = m_entity.lock();
 
@@ -50,6 +60,8 @@ namespace GEM
 
 			static_cast<Ogre::HlmsPbsDatablock*>(m_item->getSubItem(0)->getDatablock())->setDiffuse(ActualColor);
 		}
+
+		m_animation->addTime(delta);
 
 	}
 

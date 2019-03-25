@@ -39,7 +39,7 @@ namespace GEM
 			//m_objCubical.Frame();
 			m_sky.frame();
 			m_camera.UpdateCamera();
-			m_objSimplistic.frame();
+			m_objSimplistic.frame(TimePassed);
 		}
 	}
 

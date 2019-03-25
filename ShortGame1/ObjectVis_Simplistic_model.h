@@ -1,6 +1,8 @@
 #pragma once
 #include "Ogre_Service.h"
 #include "GameSimService.h"
+#include <Ogre/Animation/OgreSkeletonAnimation.h>
+#include <Ogre/Animation/OgreSkeletonInstance.h>
 
 #include <memory>
 
@@ -14,6 +16,8 @@ namespace GEM {
 		Ogre::Item* m_item;
 		Ogre::SceneNode* m_node;
 		Ogre::SceneNode* m_PlayerNode;
+		Ogre::SkeletonAnimation* m_animation;
+		Ogre::SkeletonInstance* m_skeleton;
 
 		std::weak_ptr<GameSim::EntityBase> m_entity;
 
@@ -21,7 +25,7 @@ namespace GEM {
 		GameModel(std::shared_ptr<GameSim::EntityBase> ent);
 		virtual ~GameModel();
 
-		void frame();
+		void frame(float delta);
 
 		GameModel(const GameModel&) = delete;
 		GameModel& operator= (const GameModel&) = delete;

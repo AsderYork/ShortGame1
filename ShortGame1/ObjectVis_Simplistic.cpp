@@ -28,10 +28,10 @@ namespace GEM {
 		m_models.erase(ent->m_id);
 	}
 
-	void ObjectVis_Simplistic::frame() {
+	void ObjectVis_Simplistic::frame(float delta) {
 
 		for (auto& model : m_models) {
-			model.second.frame();
+			model.second.frame(delta);
 		}
 
 	}

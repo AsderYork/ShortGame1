@@ -22,7 +22,7 @@ namespace GEM
 		ObjectVis_Simplistic(GameSimController * gsController);
 		~ObjectVis_Simplistic();
 
-		void frame();
+		void frame(float delta);
 
 		void onEntitiyCreated(std::shared_ptr<GameSim::EntityBase> ent);
 		void onEntitiyDestroyed(std::shared_ptr<GameSim::EntityBase> ent);
