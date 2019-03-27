@@ -6,6 +6,41 @@
 
 #include "ObjectVis_Simplistic_model.h"
 
+static Ogre::SkeletonAnimation* anim;
+
+class VariableWithDamping {
+
+public:
+	float m_currValue;
+	float m_dampingCoef;
+	float m_targetValue;
+
+	void reset(float currVal, float dampingCoef)
+	{
+		m_currValue = currVal;
+		m_dampingCoef = dampingCoef;
+		m_targetValue = currVal;
+
+	}
+
+	void frame(float delta)
+	{
+		if (m_dampingCoef*delta > 1) 
+		{
+			m_currValue = m_targetValue;
+		}
+		else
+		{
+			m_currValue += ((m_targetValue - m_currValue)*m_dampingCoef)*delta;
+		}
+	}
+
+};
+
+
+static VariableWithDamping damping;
+
+
 
 namespace GEM 
 {
@@ -18,11 +53,27 @@ namespace GEM
 		m_item = mSceneMgr->createItem("dummy.mesh");
 
 		m_skeleton = m_item->getSkeletonInstance();
-		m_animation = m_skeleton->getAnimation("my_animation");
+		//m_animations.emplace("Idle", m_skeleton->getAnimation("Idle"));
+		//m_animations.emplace("Walk", m_skeleton->getAnimation("Walk"));
+
+		//anim = m_skeleton->getAnimation("Walk");
+
+		for (auto& item : m_skeleton->getAnimations()) {
+			LOGCATEGORY("GameModel/GameModel").info("Anim:" + item.getName().getFriendlyText());
+			m_animations.emplace(item.getName().getFriendlyText(), m_skeleton->getAnimation(item.getName().getFriendlyText()));
+		}
+
+		m_animations["Idle"]->setLoop(true);
+		m_animations["Idle"]->setEnabled(true);
+		m_animations["Walk"]->setLoop(true);
+		m_animations["Walk"]->setEnabled(true);
 
 
-		m_animation->setLoop(true);
-		m_animation->setEnabled(true);
+		damping.reset(0.0f, 10.0f);
+
+		//anim->setLoop(true);
+		//anim->setEnabled(true);
+		//anim->mWeight = 1.0f;
 
 
 
@@ -47,6 +98,18 @@ namespace GEM
 			auto pos = Movability->getPos();
 			m_node->setPosition(Ogre::Vector3(pos.x(), pos.y(), pos.z()));
 
+			auto spd = Movability->getVelocity().length();
+			auto max_spd = Movability->getSpeed();
+
+			auto spd_fract = spd / max_spd;
+			damping.m_targetValue = spd_fract;
+			damping.frame(delta);
+
+			m_animations["Walk"]->mWeight = damping.m_currValue;
+			m_animations["Idle"]->mWeight = 1 - damping.m_currValue;
+
+
+
 			auto orient = Movability->getOrientation();
 			m_node->setOrientation(orient.w(), orient.x(), orient.y(), orient.z());
 
@@ -61,7 +124,10 @@ namespace GEM
 			static_cast<Ogre::HlmsPbsDatablock*>(m_item->getSubItem(0)->getDatablock())->setDiffuse(ActualColor);
 		}
 
-		m_animation->addTime(delta);
+		//anim->addTime(delta);
+		for (auto& item : m_animations) {
+			item.second->addTime(delta);
+		}
 
 	}
 

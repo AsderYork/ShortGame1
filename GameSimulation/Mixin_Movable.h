@@ -47,6 +47,9 @@ namespace GEM::GameSim
 
 		void SetVelocity(float X, float Y, float Z);
 		void SetVelocity(const btVector3 Vel);
+		inline btVector3 getVelocity() { return m_velocity; }
+		inline float getSpeed() { return m_speed; }
+
 
 		bool tick(const GameTime delta);
 

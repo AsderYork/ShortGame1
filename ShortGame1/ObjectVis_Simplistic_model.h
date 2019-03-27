@@ -4,6 +4,7 @@
 #include <Ogre/Animation/OgreSkeletonAnimation.h>
 #include <Ogre/Animation/OgreSkeletonInstance.h>
 
+#include <map>
 #include <memory>
 
 namespace GEM {
@@ -16,7 +17,7 @@ namespace GEM {
 		Ogre::Item* m_item;
 		Ogre::SceneNode* m_node;
 		Ogre::SceneNode* m_PlayerNode;
-		Ogre::SkeletonAnimation* m_animation;
+		std::map<std::string, Ogre::SkeletonAnimation*> m_animations;
 		Ogre::SkeletonInstance* m_skeleton;
 
 		std::weak_ptr<GameSim::EntityBase> m_entity;
