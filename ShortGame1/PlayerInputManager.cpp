@@ -17,6 +17,7 @@ namespace GEM
 
 	void PlayerInputManager::InputReciver::keyPressed(const SDL_KeyboardEvent & arg)
 	{
+		m_lastButtonPresses.emplace_back(arg.keysym.scancode, true);
 		switch (arg.keysym.sym)
 		{
 		case SDLK_UP:
@@ -45,6 +46,7 @@ namespace GEM
 
 	void PlayerInputManager::InputReciver::keyReleased(const SDL_KeyboardEvent & arg)
 	{
+		m_lastButtonPresses.emplace_back(arg.keysym.scancode, true);
 		switch (arg.keysym.sym)
 		{
 		case SDLK_UP:
@@ -73,25 +75,70 @@ namespace GEM
 
 	void PlayerInputManager::InputReciver::mouseMoved(const SDL_Event & arg)
 	{
+		m_lastMouseState.curr_x = arg.motion.x;
+		m_lastMouseState.curr_y = arg.motion.y;
+		m_lastMouseState.rel_x += arg.motion.xrel;
+		m_lastMouseState.rel_y += arg.motion.yrel;
+
+		if (arg.type == SDL_MOUSEWHEEL) {
+			m_lastMouseState.rel_wheel += arg.wheel.y;
+			m_mouseWheelShift += arg.wheel.y;
+		}
+
 		m_mouseShiftX += arg.motion.xrel;
 		m_mouseShiftY += arg.motion.yrel;
-		m_mouseWheelShift += arg.wheel.y;
 	}
 
 	void PlayerInputManager::InputReciver::mousePressed(const SDL_MouseButtonEvent & arg)
 	{
+		switch (arg.button)
+		{
+		case SDL_BUTTON_LEFT:	{m_lastMouseState.leftButton = true; break;}
+		case SDL_BUTTON_RIGHT:	{m_lastMouseState.rightButton = true; break;}
+		case SDL_BUTTON_MIDDLE: {m_lastMouseState.middleButton = true; break;}
+		default:
+			break;
+		}
 	}
 
 	void PlayerInputManager::InputReciver::mouseReleased(const SDL_MouseButtonEvent & arg)
 	{
+		switch (arg.button)
+		{
+		case SDL_BUTTON_LEFT: {m_lastMouseState.leftButton = false; break; }
+		case SDL_BUTTON_RIGHT: {m_lastMouseState.rightButton = false; break; }
+		case SDL_BUTTON_MIDDLE: {m_lastMouseState.middleButton = false; break; }
+		default:
+			break;
+		}
 	}
 
 	PlayerInputManager::PlayerInputManager(GameEventsController * eventsController) : m_events(eventsController)
 	{
 	}
 
-	void PlayerInputManager::Apply(float TimeDelta)
+	void PlayerInputManager::Apply(float TimeDelta, btQuaternion CameraOrient)
 	{
+		m_lastMouseState.curr_x = m_listener.m_lastMouseState.curr_x;
+		m_lastMouseState.curr_y = m_listener.m_lastMouseState.curr_y;
+		
+		m_lastMouseState.leftButton = m_listener.m_lastMouseState.leftButton;
+		m_lastMouseState.rightButton = m_listener.m_lastMouseState.rightButton;
+		m_lastMouseState.middleButton = m_listener.m_lastMouseState.middleButton;
+
+		m_lastMouseState.rel_x = m_listener.m_lastMouseState.rel_x;
+		m_listener.m_lastMouseState.rel_x = 0;
+
+		m_lastMouseState.rel_y = m_listener.m_lastMouseState.rel_y;
+		m_listener.m_lastMouseState.rel_y = 0;
+
+		m_lastMouseState.rel_wheel = m_listener.m_lastMouseState.rel_wheel;
+		m_listener.m_lastMouseState.rel_wheel = 0;
+
+		m_lastButtonPresses.clear();
+		m_lastButtonPresses.swap(m_listener.m_lastButtonPresses);
+
+
 		auto LockedPlayerEntity = m_playerEnt.lock();
 		if (!LockedPlayerEntity)
 		{
@@ -102,13 +149,21 @@ namespace GEM
 
 		//MixinMovablePtr->CombineRotation(btQuaternion(-m_listener.m_mouseShiftX*0.004f, m_listener.m_mouseShiftY*0.01f, 0.0f));
 		//MixinMovablePtr->CombineRotation(btQuaternion(-m_listener.m_mouseShiftX*0.004f,0.0f, 0.0f));
-		MixinMovablePtr->setRotation(btQuaternion(-m_listener.m_mouseShiftX*0.008f, 0.0f, 0.0f));
+		//MixinMovablePtr->setRotation(btQuaternion(-m_listener.m_mouseShiftX*0.008f, 0.0f, 0.0f));
 
 		float ForwardBackward = m_listener.m_moveForward - m_listener.m_moveBackwards;
 		float LeftRight = m_listener.m_moveLeft - m_listener.m_moveRight;
 		
 		float speed = 1.0f;
 		auto tmpVel = btVector3(static_cast<float>(LeftRight), 0.0f, static_cast<float>(ForwardBackward));
+
+		if (m_lastMouseState.rightButton) {
+			float theta = atan2(CameraOrient.y(), CameraOrient.w());
+
+			// quaternion representing rotation about the y axis
+			MixinMovablePtr->SetOrientation(btQuaternion(0, sin(theta), 0, cos(theta)));
+		}
+
 		if (!tmpVel.fuzzyZero())
 		{
 			tmpVel.normalize();

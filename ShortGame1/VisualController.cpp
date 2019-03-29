@@ -19,17 +19,6 @@ namespace GEM
 	{
 		m_sky.StartVisualization();
 		m_fullyInited = true;
-
-		m_gsController->AddFirstTickCallback([this]() {
-			auto PlayerPtr = m_gsController->m_entities.GetEntity(m_gsController->m_playerCharacterID);
-			if (PlayerPtr.expired())
-			{
-				LOGCATEGORY("VisualController/WaitForInitCallback").error("Can't tie to a player! Entity is invalid");
-				return false;
-			}
-			m_camera.TieCamera(PlayerPtr);
-			return true;
-		});
 	}
 
 	void VisualController::Frame(float TimePassed)
@@ -38,7 +27,6 @@ namespace GEM
 		{
 			//m_objCubical.Frame();
 			m_sky.frame();
-			m_camera.UpdateCamera();
 			m_objSimplistic.frame(TimePassed);
 		}
 	}

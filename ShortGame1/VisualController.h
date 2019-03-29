@@ -1,9 +1,8 @@
 #pragma once
-
 #include "SkyVisualization.h"
 #include "GameSimService.h"
 #include "LandscapeVisualizationController.h"
-#include "FirstPersonGameCamera.h"
+
 
 #include "ObjectVis_Cubical.h"
 #include "ObjectVis_Simplistic.h"
@@ -27,11 +26,11 @@ namespace GEM
 
 		GameSimController* m_gsController;
 
+
 		SkyVisualization m_sky;
 		LandscapeVisualizationController m_landscape;
 		ObjectVis_Cubical m_objCubical;
 		ObjectVis_Simplistic m_objSimplistic;
-		FirstPersonGameCamera m_camera;
 
 		bool m_fullyInited = false;
 

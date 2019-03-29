@@ -1,8 +1,12 @@
 #pragma once
 #include "SDL2_Service.h"
 #include "EventsController.h"
+#include "InputEvent.h"
+
+#include <LinearMath/btQuaternion.h>
 #include <EntitiesBase.h>
 #include <memory>
+#include <vector>
 
 namespace GEM
 {
@@ -12,7 +16,7 @@ namespace GEM
 	There is alrready a system, that basically does the same. It's PlayerInputEventGenerator
 	and the whole Events Systems. But it's extremely inconvinent to use. For every change you want to apply to an entity,
 	you must register an event, describe, what this event means to a PIEG and provide a reaction description to a Mixin.
-	It get's even messier when you consider the fact, that the Effect of the player input does not depend on the type of mixins
+	It gets even messier when you consider the fact, that the Effect of the player input does not depend on the type of mixins
 	in an entity, but instead it depends on the overall state of the game, and of the GUI!
 	So That system just wasn't up to the task, and that's why this sistem is being created.
 
@@ -24,6 +28,9 @@ namespace GEM
 		bool m_showDebugOverlay = false;
 		bool m_isPropagating = true;
 		std::weak_ptr<GameSim::EntityBase> m_playerEnt;
+
+		std::vector<InputEvent_Button> m_lastButtonPresses;
+		InputEvent_MouseState m_lastMouseState;
 
 		/**!
 		PlayerInput Listener.
@@ -39,6 +46,9 @@ namespace GEM
 
 			bool m_debugOverlay = false;
 			bool m_attack = false;
+
+			std::vector<InputEvent_Button> m_lastButtonPresses;
+			InputEvent_MouseState m_lastMouseState;
 
 
 			float m_mouseShiftX = 0.0f;
@@ -131,7 +141,10 @@ namespace GEM
 
 		\param[in] TimeDelta A time passed since the last call
 		*/
-		void Apply(float TimeDelta);
+		void Apply(float TimeDelta, btQuaternion CameraOrient);
+
+		const InputEvent_MouseState& MouseState() { return m_lastMouseState; }
+		const std::vector<InputEvent_Button>& ButtonHistory() { return m_lastButtonPresses; }
 
 	};
 }

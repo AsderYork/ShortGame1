@@ -5,6 +5,7 @@
 #include "NetworkController.h"
 #include "VisualController.h"
 #include "PlayerInputManager.h"
+#include "MainCamera.h"
 
 
 namespace GEM
@@ -17,6 +18,7 @@ namespace GEM
 
 		VisualController m_visual;
 		PlayerInputManager m_inputManager;
+		MainCamera m_camera;
 
 		bool m_basicInitPerformed = false;
 

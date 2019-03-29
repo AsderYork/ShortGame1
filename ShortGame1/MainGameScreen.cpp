@@ -30,6 +30,7 @@ namespace GEM
 					return false;
 				}
 				m_inputManager.AccuirePlayerEntity(PlayerPtr);
+				m_camera.TieCamera(PlayerPtr);
 				return true;
 			});
 			m_visual.WaitForInit();//If so, perform init
@@ -57,9 +58,10 @@ namespace GEM
 
 			if (m_inputManager.isPlayerEntityAccuried())
 			{
-				m_inputManager.Apply(timeDelta);
+				m_inputManager.Apply(timeDelta, m_camera.getOrientation());
 			}
 			m_visual.Frame(timeDelta);
+			m_camera.UpdateCamera(timeDelta, m_inputManager.MouseState(), m_inputManager.ButtonHistory());
 		}
 
 		if (m_inputManager.ShouldShowDebugOverlay())

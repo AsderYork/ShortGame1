@@ -157,6 +157,9 @@
     <Filter Include="Screens\MainGameScreen\GameVisualization\GameObjectsVisualization\Simplistic">
       <UniqueIdentifier>{1556e42e-c0e8-492d-ab2b-386ca7b342ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Screens\MainGameScreen\GameVisualization\GameCamera\MainCamera">
+      <UniqueIdentifier>{42eacf87-f47d-4937-aeb2-20ca9c51b9c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -288,6 +291,12 @@
     <ClInclude Include="ObjectVis_Simplistic_model.h">
       <Filter>Screens\MainGameScreen\GameVisualization\GameObjectsVisualization\Simplistic</Filter>
     </ClInclude>
+    <ClInclude Include="MainCamera.h">
+      <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\MainCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="InputEvent.h">
+      <Filter>Screens\MainGameScreen\GamePlayerControlls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShortGame1.cpp">
@@ -403,6 +412,9 @@
     </ClCompile>
     <ClCompile Include="ObjectVis_Simplistic_model.cpp">
       <Filter>Screens\MainGameScreen\GameVisualization\GameObjectsVisualization\Simplistic</Filter>
+    </ClCompile>
+    <ClCompile Include="MainCamera.cpp">
+      <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\MainCamera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
