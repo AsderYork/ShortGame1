@@ -11,7 +11,7 @@ namespace GEM
 {
 	void MainCamera::UpdateCamera(float delta, const InputEvent_MouseState mouse, const std::vector<InputEvent_Button> buttons)
 	{
-		if (m_entity.expired()) { return; }
+		if (m_entity.expired() || !m_isActive) { return; }
 		auto LockedEnt = m_entity.lock();
 		auto Movable = static_cast<GameSim::Mixin_Movable*>(LockedEnt->GetMixinByID(GameSim::Mixin_Movable::MixinID));
 
@@ -69,11 +69,35 @@ namespace GEM
 			return;
 		}
 
+		m_camera = Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance")->getCameras()[0];
+
 		m_cameraNode = Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance")->getRootSceneNode()->createChildSceneNode();
 		m_cameraNode->setName("PlayerCameraNode");
-		Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance")->getCameras()[0]->detachFromParent();
+	}
 
-		m_cameraNode->attachObject(Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance")->getCameras()[0]);
+	bool MainCamera::getActive()
+	{
+		return m_isActive;
+	}
+
+	void MainCamera::setActive(bool state) 
+	{
+		if (m_isActive != state && state) {
+			m_camera->detachFromParent();
+			m_cameraNode->attachObject(m_camera);		
+
+		}
+
+		m_isActive = state;
+	}
+
+	MainCamera::~MainCamera() 
+	{
+		if (m_cameraNode)
+		{
+			m_cameraNode->removeAndDestroyAllChildren();
+			Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance")->destroySceneNode(m_cameraNode);
+		}
 	}
 
 
@@ -82,5 +106,15 @@ namespace GEM
 		btQuaternion Rot(0, m_elevation, 0);
 		Rot = btQuaternion(m_azimuth, 0, 0) * Rot;
 		return Rot;
+	}
+
+
+	Ogre::Quaternion MainCamera::getNodeOrientation() {
+		return m_cameraNode->getOrientation();
+	}
+
+	Ogre::Vector3 MainCamera::getPos()
+	{
+		return m_cameraNode->getPosition();
 	}
 }

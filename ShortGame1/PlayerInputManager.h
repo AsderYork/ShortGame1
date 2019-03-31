@@ -25,6 +25,8 @@ namespace GEM
 	class PlayerInputManager
 	{
 	private:
+
+
 		bool m_showDebugOverlay = false;
 		bool m_isPropagating = true;
 		std::weak_ptr<GameSim::EntityBase> m_playerEnt;
@@ -109,6 +111,7 @@ namespace GEM
 		Otherwise PIM will not affect GameSim.
 		*/
 		inline void setProagationState(bool NewState) { m_isPropagating = NewState; }
+		inline bool getProagationState(){ return m_isPropagating; }
 
 		/**
 		Registers internalController to the SDLService
@@ -145,6 +148,5 @@ namespace GEM
 
 		const InputEvent_MouseState& MouseState() { return m_lastMouseState; }
 		const std::vector<InputEvent_Button>& ButtonHistory() { return m_lastButtonPresses; }
-
 	};
 }

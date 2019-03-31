@@ -5,7 +5,9 @@
 #include "NetworkController.h"
 #include "VisualController.h"
 #include "PlayerInputManager.h"
+
 #include "MainCamera.h"
+#include "DebugCamera.h"
 
 
 namespace GEM
@@ -18,16 +20,22 @@ namespace GEM
 
 		VisualController m_visual;
 		PlayerInputManager m_inputManager;
+
 		MainCamera m_camera;
+		DebugCamera m_debugCamera;
 
 		bool m_basicInitPerformed = false;
-
+		
 	public:
 		MainGameScreen(NetworkController* network, GameSimController* gs, SDL_Controller* SDL_Cntrlr);
-		
+				
 		virtual bool Init();
 
 		virtual void PostFrame(float timeDelta) override;
+
+
+		void CamerasAndControlls(float delta);
+
 
 		// Унаследовано через Screen
 		virtual void OnTop() override;

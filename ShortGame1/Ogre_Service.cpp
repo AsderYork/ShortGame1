@@ -500,7 +500,7 @@ namespace GEM
 					}
 				}
 			}
-			m_UseThisCamera = !m_UseThisCamera;
+			//m_UseThisCamera = !m_UseThisCamera;
 			break;
 		}
 		}

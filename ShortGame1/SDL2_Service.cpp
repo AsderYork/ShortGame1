@@ -91,6 +91,7 @@ namespace GEM
 					m_captureMouse = !m_captureMouse;
 					SDL_SetRelativeMouseMode(m_captureMouse ? SDL_TRUE : SDL_FALSE);
 				}
+				if (evt.key.repeat) { break; }
 				for (auto& obj : m_keyboardVector) { obj->keyPressed(evt.key); }
 				break;
 

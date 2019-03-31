@@ -169,12 +169,12 @@
     <ClInclude Include="ConsoleLayout.h" />
     <ClInclude Include="ConsoleParser.h" />
     <ClInclude Include="ConsoleParserHelper.h" />
+    <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="DebugMapGraphicsService.h" />
     <ClInclude Include="DebugLayout.h" />
     <ClInclude Include="DebugOverlayScreen.h" />
     <ClInclude Include="EngineController.h" />
     <ClInclude Include="EventsController.h" />
-    <ClInclude Include="FirstPersonGameCamera.h" />
     <ClInclude Include="FPS_Layout.h" />
     <ClInclude Include="GameEventsSystem_ClientProcessor.h" />
     <ClInclude Include="GameSimService.h" />
@@ -213,12 +213,12 @@
     <ClCompile Include="ChunkLoadClientDispatcher.cpp" />
     <ClCompile Include="ConsoleLayout.cpp" />
     <ClCompile Include="ConsoleParser.cpp" />
+    <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="DebugLayout.cpp" />
     <ClCompile Include="DebugMapGraphicsService.cpp" />
     <ClCompile Include="DebugOverlayScreen.cpp" />
     <ClCompile Include="EngineController.cpp" />
     <ClCompile Include="EventsController.cpp" />
-    <ClCompile Include="FirstPersonGameCamera.cpp" />
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="GameEventsSystem_ClientProcessor.cpp" />
     <ClCompile Include="GameSimService.cpp" />

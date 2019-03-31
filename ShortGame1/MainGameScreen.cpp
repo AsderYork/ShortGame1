@@ -31,6 +31,10 @@ namespace GEM
 				}
 				m_inputManager.AccuirePlayerEntity(PlayerPtr);
 				m_camera.TieCamera(PlayerPtr);
+				m_camera.setActive(true);
+
+				m_debugCamera.init();
+
 				return true;
 			});
 			m_visual.WaitForInit();//If so, perform init
@@ -61,7 +65,9 @@ namespace GEM
 				m_inputManager.Apply(timeDelta, m_camera.getOrientation());
 			}
 			m_visual.Frame(timeDelta);
-			m_camera.UpdateCamera(timeDelta, m_inputManager.MouseState(), m_inputManager.ButtonHistory());
+
+			CamerasAndControlls(timeDelta);
+
 		}
 
 		if (m_inputManager.ShouldShowDebugOverlay())
@@ -71,10 +77,55 @@ namespace GEM
 		
 	}
 
+	void MainGameScreen::CamerasAndControlls(float delta)
+	{
+		bool ChangeCamera = false;
+		bool ChangePlayerControll = false;
+
+		for (auto& press : m_inputManager.ButtonHistory())
+		{
+			if (press.code == SDL_SCANCODE_F2 && press.is_pressed) {
+				ChangeCamera = !ChangeCamera;
+			}
+
+			if (press.code == SDL_SCANCODE_F3 && press.is_pressed) {
+				ChangePlayerControll = !ChangePlayerControll;
+			}
+
+		
+		}
+
+		if (ChangeCamera) {
+			auto currCamState = m_debugCamera.isActive();
+			m_debugCamera.setActive(!currCamState);
+			m_camera.setActive(currCamState);
+		}
+
+		if (m_debugCamera.isActive())
+		{
+			if (ChangePlayerControll) {m_inputManager.setProagationState(!m_inputManager.getProagationState());}
+		}
+		else
+		{
+			m_inputManager.setProagationState(true);
+		}
+
+		if (m_debugCamera.isActive() && SDL_GetKeyboardState(nullptr)[SDL_SCANCODE_F4])
+		{
+			m_debugCamera.setOrientation(m_camera.getNodeOrientation());
+			m_debugCamera.setPosition(m_camera.getPos());
+
+		}
+
+		m_camera.UpdateCamera(delta, m_inputManager.MouseState(), m_inputManager.ButtonHistory());
+		m_debugCamera.frame(delta, m_inputManager.MouseState(), m_inputManager.ButtonHistory());
+	}
+
 	void MainGameScreen::NoLongerOnTop()
 	{
 	}
 	void MainGameScreen::LeaveStack()
 	{
 	}
+
 }

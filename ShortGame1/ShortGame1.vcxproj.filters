@@ -139,9 +139,6 @@
     <Filter Include="Screens\MainGameScreen\GameVisualization\GameCamera">
       <UniqueIdentifier>{97ca6d91-93d8-454b-8481-d1847dc12818}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Screens\MainGameScreen\GameVisualization\GameCamera\FirstPerson">
-      <UniqueIdentifier>{dd1369b3-78d0-4346-9b20-c3f91930f865}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Screens\MainGameScreen\GamePlayerControlls">
       <UniqueIdentifier>{2e730511-0cd3-46f9-b39c-bc94309088fb}</UniqueIdentifier>
     </Filter>
@@ -159,6 +156,9 @@
     </Filter>
     <Filter Include="Screens\MainGameScreen\GameVisualization\GameCamera\MainCamera">
       <UniqueIdentifier>{42eacf87-f47d-4937-aeb2-20ca9c51b9c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Screens\MainGameScreen\GameVisualization\GameCamera\DebugCamera">
+      <UniqueIdentifier>{eed30f34-5b37-493e-9a05-3fef0fed28e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -270,9 +270,6 @@
     <ClInclude Include="ObjectVis_Cubical.h">
       <Filter>Screens\MainGameScreen\GameVisualization\GameObjectsVisualization\Cubical</Filter>
     </ClInclude>
-    <ClInclude Include="FirstPersonGameCamera.h">
-      <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\FirstPerson</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerInputManager.h">
       <Filter>Screens\MainGameScreen\GamePlayerControlls</Filter>
     </ClInclude>
@@ -296,6 +293,9 @@
     </ClInclude>
     <ClInclude Include="InputEvent.h">
       <Filter>Screens\MainGameScreen\GamePlayerControlls</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugCamera.h">
+      <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\DebugCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -392,9 +392,6 @@
     <ClCompile Include="ObjectVis_Cubical.cpp">
       <Filter>Screens\MainGameScreen\GameVisualization\GameObjectsVisualization\Cubical</Filter>
     </ClCompile>
-    <ClCompile Include="FirstPersonGameCamera.cpp">
-      <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\FirstPerson</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerInputManager.cpp">
       <Filter>Screens\MainGameScreen\GamePlayerControlls</Filter>
     </ClCompile>
@@ -415,6 +412,9 @@
     </ClCompile>
     <ClCompile Include="MainCamera.cpp">
       <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\MainCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugCamera.cpp">
+      <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\DebugCamera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
