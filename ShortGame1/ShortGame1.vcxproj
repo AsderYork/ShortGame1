@@ -173,6 +173,7 @@
     <ClInclude Include="DebugMapGraphicsService.h" />
     <ClInclude Include="DebugLayout.h" />
     <ClInclude Include="DebugOverlayScreen.h" />
+    <ClInclude Include="DebugVisualization.h" />
     <ClInclude Include="EngineController.h" />
     <ClInclude Include="EventsController.h" />
     <ClInclude Include="FPS_Layout.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="DebugLayout.cpp" />
     <ClCompile Include="DebugMapGraphicsService.cpp" />
     <ClCompile Include="DebugOverlayScreen.cpp" />
+    <ClCompile Include="DebugVisualization.cpp" />
     <ClCompile Include="EngineController.cpp" />
     <ClCompile Include="EventsController.cpp" />
     <ClCompile Include="FPS_Layout.cpp" />

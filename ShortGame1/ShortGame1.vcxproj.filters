@@ -160,6 +160,9 @@
     <Filter Include="Screens\MainGameScreen\GameVisualization\GameCamera\DebugCamera">
       <UniqueIdentifier>{eed30f34-5b37-493e-9a05-3fef0fed28e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Screens\MainGameScreen\GameVisualization\DebugVisualization">
+      <UniqueIdentifier>{5eba66d6-1aa5-4304-b08f-91262bddaa2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -297,6 +300,9 @@
     <ClInclude Include="DebugCamera.h">
       <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\DebugCamera</Filter>
     </ClInclude>
+    <ClInclude Include="DebugVisualization.h">
+      <Filter>Screens\MainGameScreen\GameVisualization\DebugVisualization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShortGame1.cpp">
@@ -415,6 +421,9 @@
     </ClCompile>
     <ClCompile Include="DebugCamera.cpp">
       <Filter>Screens\MainGameScreen\GameVisualization\GameCamera\DebugCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugVisualization.cpp">
+      <Filter>Screens\MainGameScreen\GameVisualization\DebugVisualization</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

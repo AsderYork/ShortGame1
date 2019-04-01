@@ -95,7 +95,6 @@ namespace GEM
 
 	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::preFrame(float timeDelta)
 	{
-		tmpCamera.AjustPosition(timeDelta);
 		return ActionResult();
 	}
 

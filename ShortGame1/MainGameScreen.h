@@ -8,6 +8,7 @@
 
 #include "MainCamera.h"
 #include "DebugCamera.h"
+#include "DebugVisualization.h"
 
 
 namespace GEM
@@ -22,7 +23,9 @@ namespace GEM
 		PlayerInputManager m_inputManager;
 
 		MainCamera m_camera;
+
 		DebugCamera m_debugCamera;
+		DebugVisualization m_debugVis;
 
 		bool m_basicInitPerformed = false;
 		

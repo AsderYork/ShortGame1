@@ -34,6 +34,7 @@ namespace GEM
 				m_camera.setActive(true);
 
 				m_debugCamera.init();
+				m_debugVis.init();
 
 				return true;
 			});
@@ -66,6 +67,7 @@ namespace GEM
 			}
 			m_visual.Frame(timeDelta);
 
+
 			CamerasAndControlls(timeDelta);
 
 		}
@@ -75,6 +77,8 @@ namespace GEM
 			ActivateAnotherScreen(Helper::Hasher<int32_t>::Hash("DebugOverlayScreen", "Screens"));
 		}
 		
+
+		m_debugVis.frame(timeDelta, m_inputManager.MouseState(), m_inputManager.ButtonHistory());
 	}
 
 	void MainGameScreen::CamerasAndControlls(float delta)
