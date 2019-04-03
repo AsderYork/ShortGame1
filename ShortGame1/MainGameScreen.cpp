@@ -11,7 +11,8 @@ namespace GEM
 		m_network(network),
 		m_gsController(gs),
 		m_visual(gs),
-		m_inputManager(&(gs->m_eventsController))
+		m_inputManager(&(gs->m_eventsController)),
+		m_debugVis(gs)
 	{
 		m_inputManager.RegisterListener(SDL_Cntrlr);
 		//m_inputManager.m_eventsController = &m_gsController->m_events;
@@ -45,6 +46,7 @@ namespace GEM
 
 	bool MainGameScreen::Init()
 	{
+		m_debugVis.init();
 		m_visual.StartBackgroundInit();
 		return true;
 	}
@@ -69,6 +71,8 @@ namespace GEM
 
 
 			CamerasAndControlls(timeDelta);
+
+			m_debugVis.frame(timeDelta, m_inputManager.MouseState(), m_inputManager.ButtonHistory());
 
 		}
 

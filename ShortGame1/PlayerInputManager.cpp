@@ -136,6 +136,11 @@ namespace GEM
 		m_lastMouseState.rel_wheel = m_listener.m_lastMouseState.rel_wheel;
 		m_listener.m_lastMouseState.rel_wheel = 0;
 
+		auto ScreenSpace = m_listener.MousePosToScreenSpace(m_listener.m_lastMouseState.curr_x, m_listener.m_lastMouseState.curr_y);
+		m_lastMouseState.screenSpaceX = ScreenSpace.first;
+		m_lastMouseState.screenSpaceY = ScreenSpace.second;
+
+
 		m_lastButtonPresses.clear();
 		m_lastButtonPresses.swap(m_listener.m_lastButtonPresses);
 

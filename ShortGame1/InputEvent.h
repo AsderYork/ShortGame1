@@ -7,6 +7,7 @@ namespace GEM {
 	{
 		int curr_x = 0, curr_y= 0 , rel_x = 0, rel_y = 0;
 		int rel_wheel=0;
+		float screenSpaceX, screenSpaceY;
 
 		bool leftButton = false, rightButton = false, middleButton = false;
 

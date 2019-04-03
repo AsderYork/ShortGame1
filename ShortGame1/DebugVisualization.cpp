@@ -2,20 +2,37 @@
 #include "DebugVisualization.h"
 
 
+#include <OGRE/OgreRay.h>
 #include <OGRE/OgreCamera.h>
 #include <OGRE/OgreRoot.h>
-#include <OGRE/OgreSceneNode.h>
+#include <OGRE\OgreItem.h>
+#include <Ogre/Hlms/Pbs/OgreHlmsPbsDatablock.h>
+
+#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 
 namespace GEM
 {
 
-	void DebugVisualization::init() {
+	DebugVisualization::DebugVisualization(GameSim::GameSimulation* gsController)
+	{
+		m_gsController = gsController;
+	}
+
+	void DebugVisualization::init()
+	{
 		m_isInited = true;
 
 		m_sceneManager = Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance");
 
 		m_camera = m_sceneManager->getCameras()[0];
-		m_query = m_sceneManager->createRayQuery(m_ray);
+
+		auto mSceneMgr = Ogre::Root::getSingletonPtr()->getSceneManager("ExampleSMInstance");
+		item = mSceneMgr->createItem("Cubexa.mesh");
+		static int TmpNames = 0;
+
+		node = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::SCENE_DYNAMIC, Ogre::Vector3(0.0f, 1.0f, 0.0f));
+		node->setScale(0.3f, 0.3f, 0.3f);
+
 
 	}
 
@@ -25,31 +42,31 @@ namespace GEM
 			return;
 		}
 
-		bool SelectButton = false;
-		for (auto& button : buttonEvents)
-		{
-			if (button.code == SDL_SCANCODE_LCTRL && mouse.leftButton && button.is_pressed)
-			{
-				SelectButton = true;
-			}
-		}
+		bool SelectButton = mouse.leftButton;
+			
 
 		if (SelectButton)
 		{
-			auto RealDirection = m_camera->getRealDirection();
-			auto RealPosition = m_camera->getRealPosition();
+			auto ScreenRay = m_camera->getCameraToViewportRay(mouse.screenSpaceX, mouse.screenSpaceY);
+			auto RayOrigin = ScreenRay.getOrigin();
+			auto OgreEnd = ScreenRay.getPoint(m_pickingRange);
 
-			m_ray.setDirection(RealDirection);
-			m_ray.setOrigin(RealPosition);
+			auto from = btVector3(RayOrigin.x, RayOrigin.y, RayOrigin.z);
+			auto to = btVector3(OgreEnd.x, OgreEnd.y, OgreEnd.z);
 
-			auto result = m_query->execute();
+			btCollisionWorld::ClosestRayResultCallback closestResults(from, to);
+			closestResults.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 
-			if (result.size() > 0)
+			m_gsController->m_physics.getWorld()->rayTest(from, to, closestResults);
+
+			if (closestResults.hasHit())
 			{
-				for (auto& item : result)
-				{
-					item.distance;
-				}
+				btVector3 p = from.lerp(to, closestResults.m_closestHitFraction);
+				node->setPosition(Ogre::Vector3(p.x(), p.y(), p.z()));
+				if (!item->isAttached()) { node->attachObject(item);}
+			}
+			else {
+				node->detachAllObjects();
 			}
 
 		}

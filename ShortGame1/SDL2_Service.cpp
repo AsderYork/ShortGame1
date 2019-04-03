@@ -5,6 +5,14 @@
 
 namespace GEM
 {
+	int SDL_MouseListener::screen_x = 1.0f;
+	int SDL_MouseListener::screen_y = 1.0f;
+
+	std::pair<float, float> SDL_MouseListener::MousePosToScreenSpace(int MouseX, int MouseY) {
+		return std::pair(MouseX / static_cast<float>(screen_x), MouseY / static_cast<float>(screen_y));
+	}
+
+
 	SDL_Controller::SDL_Controller() : m_sdlWindow(nullptr)
 	{
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -46,6 +54,9 @@ namespace GEM
 			LOGCATEGORY("SDL_Controller/MakeWindow").crit("Can't get info about window. %s", SDL_GetError());
 			return std::string();
 		}
+		
+
+		SDL_GetWindowSize(m_sdlWindow, &SDL_MouseListener::screen_x, &SDL_MouseListener::screen_y);
 
 		SDL_SetRelativeMouseMode(m_captureMouse ? SDL_TRUE : SDL_FALSE);
 		//SDL_CaptureMouse( m_captureMouse ? SDL_TRUE : SDL_FALSE );

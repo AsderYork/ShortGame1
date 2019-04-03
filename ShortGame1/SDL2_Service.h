@@ -12,13 +12,20 @@ namespace GEM
 	*/
 	class SDL_MouseListener
 	{
+	private:
+		static int screen_x;
+		static int screen_y;
 	protected:
 		//Receives SDL_MOUSEMOTION and SDL_MOUSEWHEEL events
 		virtual void mouseMoved(const SDL_Event &arg) = 0;
 		virtual void mousePressed(const SDL_MouseButtonEvent &arg) = 0;
 		virtual void mouseReleased(const SDL_MouseButtonEvent &arg) = 0;
 
+
 		friend class SDL_Controller;
+
+	public:
+		std::pair<float, float> MousePosToScreenSpace(int MouseX, int MouseY);
 	};
 
 	/**
