@@ -26,17 +26,6 @@ namespace GEM::GameSim
 	class EventsFactory;
 
 	/**
-	Provides Additional methods, that might be required for the object.
-	*/
-	template<typename base>
-	struct StaticGameEvent : public GameEvent {
-		//! Returns ID of this Event, derived from it's name hashed.
-		inline static EventIDType staticid() { return Helper::Hasher<EventIDType>::Hash(__FUNCTION__, "GameEvent"); }
-		inline EventIDType id() const { return staticid(); }
-	};
-
-
-	/**
 	/brief Encapsulates in-game interractions.
 	/warn Every event must include GameEventIDHolder as it's base CRTP;	
 	*/
@@ -144,6 +133,16 @@ namespace GEM::GameSim
 
 		virtual ~GameEvent() {}
 
+	};
+
+	/**
+	Provides Additional methods, that might be required for the object.
+	*/
+	template<typename base>
+	struct StaticGameEvent : public GameEvent {
+		//! Returns ID of this Event, derived from it's name hashed.
+		inline static EventIDType staticid() { return Helper::Hasher<EventIDType>::Hash(__FUNCTION__, "GameEvent"); }
+		inline EventIDType id() const { return staticid(); }
 	};
 
 	/**

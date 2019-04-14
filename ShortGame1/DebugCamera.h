@@ -13,8 +13,8 @@ namespace GEM {
 	class DebugCamera {
 
 	private:
-		Ogre::Camera* m_camera;
-		Ogre::SceneNode* m_cameraNode;
+		Ogre::Camera* m_camera = nullptr;
+		Ogre::SceneNode* m_cameraNode = nullptr;
 
 		btQuaternion m_yawRot = btQuaternion(0.0f, 0.0f, 0.0f);
 		btQuaternion m_pitchRot = btQuaternion(0.0f, 0.0f, 0.0f);

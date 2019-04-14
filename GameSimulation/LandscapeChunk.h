@@ -1,4 +1,5 @@
 #pragma once
+#include "LandscapeNode.h"
 #include <cstdint>
 #include <cereal\cereal.hpp>
 
@@ -8,7 +9,7 @@ namespace GEM::GameSim
 	constexpr uint32_t LandscapeChunk_Size = 16;
 	constexpr uint32_t LandscapeChunk_Height = 64;
 
-	struct LandscapeChunk_NodeData
+	/*struct LandscapeChunk_NodeData
 	{
 		//Values
 		uint8_t Value;
@@ -22,14 +23,14 @@ namespace GEM::GameSim
 		For empty node, 0 must be return. For completely full node, 255 should be returned and every intermediate amount of stuff
 		in a node must result in some number in (0, 255) so that the more stuff there is in a node, the bigger the resulting value
 		*/
-		uint8_t getOverallAmount() const { return Value; }
+		/*uint8_t getOverallAmount() const { return Value; }
 
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
 			archive(Value);
 		}
-	};
+	};*/
 
 	/**!
 	incapsulates small change in chunk data.
@@ -40,7 +41,7 @@ namespace GEM::GameSim
 		struct Change
 		{
 			uint8_t nodePosX, nodePosY, nodePosZ;
-			LandscapeChunk_NodeData newNodeData;
+			LandscapeNode newNodeData;
 
 			template<class Archive>
 			void serialize(Archive & archive)
@@ -76,7 +77,7 @@ namespace GEM::GameSim
 
 	class LandscapeChunk
 	{
-		LandscapeChunk_NodeData m_nodes[LandscapeChunk_Size][LandscapeChunk_Size][LandscapeChunk_Height];
+		LandscapeNode m_nodes[LandscapeChunk_Size][LandscapeChunk_Size][LandscapeChunk_Height];
 
 
 		/**!
@@ -94,9 +95,11 @@ namespace GEM::GameSim
 		LandscapeChunk() :	m_posX(0), m_posZ(0), m_version(0) {}
 
 		inline uint8_t getNodeValue (uint32_t x, uint32_t y, uint32_t z) const
-		{return m_nodes[x][z][y].getOverallAmount();}
+		{
+			return m_nodes[x][z][y].SolidAmount;
+		}
 
-		inline LandscapeChunk_NodeData& getNode(uint32_t x, uint32_t y, uint32_t z)
+		inline LandscapeNode& getNode(uint32_t x, uint32_t y, uint32_t z)
 		{
 			return m_nodes[x][z][y];
 		}
@@ -112,6 +115,7 @@ namespace GEM::GameSim
 		void serialize(Archive & archive)
 		{
 			archive(m_version, m_posX, m_posZ, m_nodes);
+			//archive(cereal::binary_data(m_nodes, sizeof m_nodes));
 		}
 
 		void ApplySmallChanges(const LandscapeChunkSmallChange& changes, uint64_t newVersion)

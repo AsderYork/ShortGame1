@@ -10,8 +10,10 @@ namespace GEM::GameSim
 	{
 		btVector3 pos;
 		btVector3 normal;
+		LandscapeNode* OriginalNode1;
+		LandscapeNode* OriginalNode2;
 
-		VertexType(btVector3 _pos) : pos(_pos), normal((btScalar)0, (btScalar)0, (btScalar)0) {}
+		VertexType(btVector3 _pos, LandscapeNode* Node1, LandscapeNode* Node2) : pos(_pos), normal((btScalar)0, (btScalar)0, (btScalar)0), OriginalNode1(Node1), OriginalNode2(Node2) {}
 	};
 
 	/**!
@@ -111,6 +113,37 @@ namespace GEM::GameSim
 				else
 				{
 					return tmpData.m_chunkForwardRight->getNodeValue(x + 1 - LandscapeChunk_Size, y, z + 1 - LandscapeChunk_Size);
+				}
+			}
+		};
+
+		/**
+		Returns a node from chunks quadrant with a shift of -1 so that Marching Cubes could work with less chunks at a time
+		\warn Values if y < 0 will be clamped to 0
+		*/
+		static inline LandscapeNode& getNode(int x, int y, int z, ProcessingData& tmpData)
+		{
+			if (y < 0) { y = 0; }
+			if (x < static_cast<int>(LandscapeChunk_Size - 1))
+			{
+				if (z < static_cast<int>(LandscapeChunk_Size - 1))
+				{
+					return tmpData.m_chunkCenter->getNode(x + 1, y, z + 1);
+				}
+				else
+				{
+					return tmpData.m_chunkForward->getNode(x + 1, y, z + 1 - LandscapeChunk_Size);
+				}
+			}
+			else
+			{
+				if (z < static_cast<int>(LandscapeChunk_Size - 1))
+				{
+					return tmpData.m_chunkRight->getNode(x + 1 - LandscapeChunk_Size, y, z + 1);
+				}
+				else
+				{
+					return tmpData.m_chunkForwardRight->getNode(x + 1 - LandscapeChunk_Size, y, z + 1 - LandscapeChunk_Size);
 				}
 			}
 		};

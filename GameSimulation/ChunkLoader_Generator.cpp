@@ -19,11 +19,22 @@ namespace GEM::GameSim
 				int ThisZ = (ActualX * 16) + z;
 				float NodeHeight = 20 + sin(ThisX / 3.0f) * 2 + sin(ThisZ / 3.83f + 1)*1.43f;
 
+
 				for (int y = 0; y < (int)floor(NodeHeight); y++)
 				{
-					target->getNode(z, y, x).Value = 255;
+					target->getNode(z, y, x).SolidAmount = 255;
 				}
-				target->getNode(z, (int)floor(NodeHeight), x).Value = (int)(255 * (NodeHeight - floor(NodeHeight)));
+				target->getNode(z, (int)floor(NodeHeight), x).SolidAmount = (int)(255 * (NodeHeight - floor(NodeHeight)));
+
+				if (NodeHeight < 22) {
+					target->getNode(z, (int)floor(NodeHeight), x).Solid = LandscapeNode::SolidType::Sand;
+				}
+				if (NodeHeight < 23) {
+					target->getNode(z, (int)floor(NodeHeight), x).Solid = LandscapeNode::SolidType::Soil_normal;
+				}
+				else if (NodeHeight > 24) {
+					target->getNode(z, (int)floor(NodeHeight), x).Solid = LandscapeNode::SolidType::Rock_Granite;
+				}
 
 			}
 		}

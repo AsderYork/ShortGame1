@@ -154,6 +154,9 @@
     <Filter Include="Entities\Objects\Factory">
       <UniqueIdentifier>{978267ed-cd85-498e-ad8f-6e57f2adc403}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Landscape\Chunk\Node">
+      <UniqueIdentifier>{cc451776-f27f-4698-94c4-1c3409f23753}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -304,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="GameObjectsFactory.h">
       <Filter>Entities\Objects\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeNode.h">
+      <Filter>Landscape\Chunk\Node</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -77,7 +77,7 @@ namespace GEM
 	public:
 
 
-		static LandscapeVisualMesh GenerateVisualMesh(GameSim::LandscapeMesh* Chunk, std::pair<int, int> ChunkPos);
+		static LandscapeVisualMesh GenerateVisualMesh(GameSim::LandscapeMesh* Chunk, GameSim::LandscapeChunk* ChunkData);
 
 		static LandscapeVisualMesh DoCube();
 	};

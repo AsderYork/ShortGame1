@@ -49,7 +49,7 @@ of the simulation. After applying input, it retranslates changes in the simulati
 Server is a pretty thin by itself, most of it's code comes from \c GameSimulation.
 */
 
-
+/*
 class TmpService : public GEM::Service
 {
 public:
@@ -110,13 +110,13 @@ auto LandscapeTest = [](GEM::GameSim::LandscapeChunk * NewChunk)
 
 			for (int y = 0; y < (int)floor(NodeHeight); y++)
 			{
-				if (NewChunk->getNode(z, y, x).Value != 255) {
-					printf("Chunk[%i;%i] differs in position (%i;%i;%i); Have %i but should %i!\n", ActualX, ActualZ, x, y, z, NewChunk->getNode(z, y, x).Value, 255);
+				if (NewChunk->getNode(z, y, x).SolidAmount != 255) {
+					printf("Chunk[%i;%i] differs in position (%i;%i;%i); Have %i but should %i!\n", ActualX, ActualZ, x, y, z, NewChunk->getNode(z, y, x).SolidAmount, 255);
 				}
 			}
 
-			if (NewChunk->getNode(z, (int)floor(NodeHeight), x).Value != (int)(255 * (NodeHeight - floor(NodeHeight)))) {
-				printf("Chunk[%i;%i] differs in position (%i;%i;%i); Have %i but should %i!\n", ActualX, ActualZ, x, (int)floor(NodeHeight), z, NewChunk->getNode(z, (int)floor(NodeHeight), x).Value, (int)(255 * (NodeHeight - floor(NodeHeight))));
+			if (NewChunk->getNode(z, (int)floor(NodeHeight), x).SolidAmount != (int)(255 * (NodeHeight - floor(NodeHeight)))) {
+				printf("Chunk[%i;%i] differs in position (%i;%i;%i); Have %i but should %i!\n", ActualX, ActualZ, x, (int)floor(NodeHeight), z, NewChunk->getNode(z, (int)floor(NodeHeight), x).SolidAmount, (int)(255 * (NodeHeight - floor(NodeHeight))));
 			}
 		}
 	}
@@ -132,7 +132,7 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 			{
 				for (int z = 0; z < 16; z++)
 				{
-					LC.getNode(z, y, x).Value = 255;
+					LC.getNode(z, y, x).SolidAmount = 255;
 				}
 			}
 		}
@@ -146,7 +146,7 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 			{
 				for (int z = 0; z < 16; z++)
 				{
-					LC.getNode(x, y, z).Value = 255;
+					LC.getNode(x, y, z).SolidAmount = 255;
 				}
 			}
 		}
@@ -156,7 +156,7 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 		{
 			for (int z = 6; z < 9; z++)
 			{
-				LC.getNode(x, Height - 1, z).Value = 0;
+				LC.getNode(x, Height - 1, z).SolidAmount = 0;
 			}
 		}
 
@@ -170,7 +170,7 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 			{
 				for (int z = 0; z < 16; z++)
 				{
-					LC.getNode(z, y, x).Value = 255;
+					LC.getNode(z, y, x).SolidAmount = 255;
 				}
 			}
 		}
@@ -182,7 +182,7 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 			{
 				for (int z = 8 - q; z <= 8 + q; z++)
 				{
-					LC.getNode(z, y, x).Value = 255;
+					LC.getNode(z, y, x).SolidAmount = 255;
 				}
 			}
 			y++;
@@ -206,9 +206,9 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 
 				for (int y = 0; y < (int)floor(NodeHeight); y++)
 				{
-					LC.getNode(z, y, x).Value = 255;
+					LC.getNode(z, y, x).SolidAmount = 255;
 				}
-				LC.getNode(z, (int)floor(NodeHeight), x).Value = (int)(255 * (NodeHeight - floor(NodeHeight)));
+				LC.getNode(z, (int)floor(NodeHeight), x).SolidAmount = (int)(255 * (NodeHeight - floor(NodeHeight)));
 
 			}
 		}
@@ -235,7 +235,7 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 		}
 		}
 		}
-		*/
+		*//*
 		int bx = 0, by = 0, bz = 0;
 
 		/*LC.getNode(bx + 0, by + 0, bz + 0).Value = 255;//0
@@ -247,8 +247,8 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 		LC.getNode(bx + 0, by + 1, bz + 1).Value = 255;//6
 		LC.getNode(bx + 1, by + 1, bz + 1).Value = 0;//7
 		*/
-
-		LC.getNode(bx + 0, by + 0, bz + 0).Value = 255;//0
+/*
+		LC.getNode(bx + 0, by + 0, bz + 0).SolidAmount = 255;//0
 
 	};
 
@@ -491,7 +491,7 @@ public:
 	}
 };
 
-
+*/
 int main(int argc, char *argv[])
 {
 	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));

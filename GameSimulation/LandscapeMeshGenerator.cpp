@@ -319,6 +319,25 @@ namespace GEM::GameSim
 	{}
 	};
 
+	struct Cords3d {
+		int x, y, z;
+	};
+
+	inline Cords3d getNodeCordsByIndex(Cords3d cubePos, int nodeIndex)
+	{
+		switch (nodeIndex)
+		{
+			case 0: return Cords3d{ cubePos.x - 1, cubePos.y, cubePos.z - 1 };
+			case 1: return Cords3d{cubePos.x, cubePos.y, cubePos.z - 1};
+			case 2: return Cords3d{cubePos.x - 1, cubePos.y, cubePos.z};
+			case 3: return Cords3d{cubePos.x, cubePos.y, cubePos.z};
+			case 4: return Cords3d{cubePos.x - 1, cubePos.y + 1, cubePos.z - 1};
+			case 5: return Cords3d{cubePos.x, cubePos.y + 1, cubePos.z - 1};
+			case 6: return Cords3d{cubePos.x - 1, cubePos.y + 1, cubePos.z};
+			case 7: return Cords3d{cubePos.x, cubePos.y + 1, cubePos.z};			
+		}
+	}
+
 void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNewVertices, ProcessingData& tmpData)
 {
 	int8_t corner[8];
@@ -397,7 +416,13 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNe
 				*/
 				if (RegisterNewVertices)
 				{
-					tmpData.tmpMesh.m_vertices.push_back(NewVertex);
+					auto v0Cords = getNodeCordsByIndex({ x,y,z }, v0);
+					auto v1Cords = getNodeCordsByIndex({ x,y,z }, v1);
+
+					tmpData.tmpMesh.m_vertices.emplace_back(NewVertex,
+						&getNode(v0Cords.x, v0Cords.y, v0Cords.z, tmpData),
+						&getNode(v1Cords.x, v1Cords.y, v1Cords.z, tmpData));
+
 					CurrVertex = static_cast<uint32_t>(tmpData.tmpMesh.m_vertices.size() - 1);
 					IndexHolder[Vertex] = CurrVertex;
 				}

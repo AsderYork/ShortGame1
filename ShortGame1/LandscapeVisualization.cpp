@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "LandscapeVisualization.h"
+#include "LandscapeChunk.h"
 
 #include <OGRE\OgreMesh2.h>
 #include <OGRE\OgreMeshManager2.h>
@@ -24,13 +25,16 @@ namespace GEM
 		float nx = 0, ny = 1, nz = 0;   //Normals
 		float nu = 0, nv = 0; //Texture Coordinates 1
 		float TBR = 1.0f, TBG = 0.5f, TBB = 0.5f, TBA = 1.0f;
+		uint16_t LandType1; uint8_t LandSubtype1; uint8_t LandFill1;
+		uint16_t LandType2; uint8_t LandSubtype2; uint8_t LandFill2;
 
 		MeshVertices() {}
 	};
 
-	LandscapeVisualMesh LandscapeVisualization::GenerateVisualMesh(GameSim::LandscapeMesh* Chunk, std::pair<int, int> ChunkPos)
+	LandscapeVisualMesh LandscapeVisualization::GenerateVisualMesh(GameSim::LandscapeMesh* Chunk, GameSim::LandscapeChunk* ChunkData)
 	{
-		auto[ChunkPosX, ChunkPosZ] = ChunkPos;
+		
+		auto[ChunkPosX, ChunkPosZ] = ChunkData->getPosition();
 		Ogre::RenderSystem *renderSystem = Ogre::Root::getSingleton().getRenderSystem();
 		Ogre::VaoManager *vaoManager = renderSystem->getVaoManager();
 		auto SceneManager = Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance");
@@ -49,6 +53,8 @@ namespace GEM
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_NORMAL));
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES));
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT4, Ogre::VES_SPECULAR));
+		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_BYTE4, Ogre::VES_TEXTURE_COORDINATES));
+		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_BYTE4, Ogre::VES_TEXTURE_COORDINATES));
 		
 		auto[Orientations, NewIndices] = processTriangles(Chunk);
 
@@ -66,8 +72,6 @@ namespace GEM
 			meshVertices[i].py = static_cast<float>(Vertex.pos.y());
 			meshVertices[i].pz = static_cast<float>(Vertex.pos.z());
 
-			Vertex.normal.normalize();
-			
 			meshVertices[i].nx = static_cast<float>(Vertex.normal.x());
 			meshVertices[i].ny = static_cast<float>(Vertex.normal.y());
 			meshVertices[i].nz = static_cast<float>(Vertex.normal.z());
@@ -88,9 +92,33 @@ namespace GEM
 				break; }
 			}
 
-			meshVertices[i].TBR = 1.0;
-			meshVertices[i].TBG = 0.0;
-			meshVertices[i].TBB = 0.0;
+			meshVertices[i].LandType1 = static_cast<uint16_t>(Vertex.OriginalNode1->Solid);
+			meshVertices[i].LandSubtype1 = Vertex.OriginalNode1->SolidSubtype;
+			meshVertices[i].LandFill1 = Vertex.OriginalNode1->SolidAmount;
+
+			meshVertices[i].LandType2 = static_cast<uint16_t>(Vertex.OriginalNode2->Solid);
+			meshVertices[i].LandSubtype2 = Vertex.OriginalNode2->SolidSubtype;
+			meshVertices[i].LandFill2 = Vertex.OriginalNode2->SolidAmount;
+
+			switch (Vertex.OriginalNode1->Solid)
+			{
+			case GameSim::LandscapeNode::SolidType::Sand:
+				meshVertices[i].TBR = 0.0;
+				meshVertices[i].TBG = 1.0;
+				meshVertices[i].TBB = 0.0;
+				break;
+			case GameSim::LandscapeNode::SolidType::Soil_normal:
+				meshVertices[i].TBR = 0.0;
+				meshVertices[i].TBG = 0.0;
+				meshVertices[i].TBB = 1.0;
+				break;
+			default:
+				meshVertices[i].TBR = 1.0;
+				meshVertices[i].TBG = 0.0;
+				meshVertices[i].TBB = 0.0;
+				break;
+			}
+					
 
 		}
 
