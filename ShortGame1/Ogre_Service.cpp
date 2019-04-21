@@ -98,6 +98,8 @@ namespace GEM
 
 	GEM::Ogre_Service::ActionResult GEM::Ogre_Service::preFrame(float timeDelta)
 	{
+
+		tmpCamera.AjustPosition(timeDelta);
 		return ActionResult();
 	}
 
@@ -426,9 +428,6 @@ namespace GEM
 	{
 		m_camera = sceneManager->createCamera("DebugCamera");
 
-		//m_camera->setPosition(Ogre::Vector3(0, 0, 15));
-		// Look back along -Z
-		//m_camera->lookAt(Ogre::Vector3(0, 0, 0));
 		m_camera->setNearClipDistance(0.2f);
 		m_camera->setFarClipDistance(1000.0f);
 		m_camera->setAutoAspectRatio(true);
@@ -436,7 +435,15 @@ namespace GEM
 		SDLController->registerKeyboardListener(this);
 		SDLController->registerMouseListener(this);
 
+		m_camera->detachFromParent();
+
 		m_debugCameraSceneNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+		m_debugCameraSceneNode->attachObject(m_camera);
+
+		m_debugCameraSceneNode->setPosition(Ogre::Vector3(0, 30, 15));
+		// Look back along -Z
+		//m_debugCameraSceneNode->lookAt(Ogre::Vector3(0, 0, 0), Ogre::Node::TransformSpace::TS_WORLD);
+
 	}
 	void MovableCamera::AjustPosition(float timeDelta)
 	{
@@ -444,7 +451,7 @@ namespace GEM
 		{
 			if (!m_reciveInput) { m_positionChange = Ogre::Vector3::ZERO; m_yaw = 0; m_pitch = 0; return; }
 			float MoveSpeed = 7.0f;
-			float TurnSpeed = 0.1f;
+			float TurnSpeed = 0.3f;
 			
 
 			m_debugCameraSceneNode->yaw(Ogre::Radian(1)*m_yaw*timeDelta*TurnSpeed, Ogre::Node::TS_PARENT);
@@ -458,6 +465,7 @@ namespace GEM
 	void MovableCamera::ShouldReciveInput(bool State)
 	{
 		m_reciveInput = State;
+		m_UseThisCamera = State;
 	}
 	bool MovableCamera::isRecivingInput()
 	{
@@ -504,17 +512,17 @@ namespace GEM
 				"FileSystem", true);
 
 			Ogre::Archive* archivePbsLibraryAny = Ogre::ArchiveManager::getSingletonPtr()->load(
-				dataFolder + "Hlms/Pbs/Any",
+				dataFolder + "Hlms/Landscape/Any",
 				"FileSystem", true);
 
 			Ogre::ArchiveVec library;
 			library.push_back(archiveLibrary);
 
 			Ogre::Archive* archivePbs = Ogre::ArchiveManager::getSingletonPtr()->load(
-				dataFolder + "Hlms/Pbs/" + shaderSyntax, "FileSystem", true);
+				dataFolder + "Hlms/Landscape/" + shaderSyntax, "FileSystem", true);
 
 			library.push_back(archivePbsLibraryAny);
-			Ogre::Root::getSingleton().getHlmsManager()->getHlms(Ogre::HlmsTypes::HLMS_PBS)->reloadFrom(archivePbs, &library);
+			Ogre::Root::getSingleton().getHlmsManager()->getHlms(Ogre::HlmsTypes::HLMS_USER0)->reloadFrom(archivePbs, &library);
 
 			break;			
 		}

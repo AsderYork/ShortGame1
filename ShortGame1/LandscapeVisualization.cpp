@@ -91,22 +91,28 @@ namespace GEM
 				break; }
 			}
 
-			switch (Vertex.OriginalNode1->Solid)
+			float BlendWeight = Vertex.pos.x() + Vertex.pos.y() + Vertex.pos.z();
+			BlendWeight = BlendWeight - floorf(BlendWeight);
+
+			GameSim::LandscapeNode* DominantNode = BlendWeight > 0.5f ? Vertex.OriginalNode2 : Vertex.OriginalNode1;
+
+
+			switch (DominantNode->Solid)
 			{
 			case GameSim::LandscapeNode::SolidType::Sand:
-				meshVertices[i].LandType1 = 0x0000ff00;
+				meshVertices[i].LandType1 = 0x00000001;
 				//meshVertices[i].val = 0.0f;
 
 				break;
 			case GameSim::LandscapeNode::SolidType::Soil_normal:
 
 
-				meshVertices[i].LandType1 = 0x0000ff00;
+				meshVertices[i].LandType1 = 0x00000002;
 				//meshVertices[i].val = 1.0f;
 				break;
 			default:
 
-				meshVertices[i].LandType1 = 0x0000ff00;
+				meshVertices[i].LandType1 = 0x00000003;
 				//meshVertices[i].val = 0.5f;
 				break;
 			}

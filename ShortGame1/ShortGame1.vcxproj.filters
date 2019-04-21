@@ -166,6 +166,9 @@
     <Filter Include="Ogre\LandscapeHLMS">
       <UniqueIdentifier>{c5891a8b-a710-4bff-931a-fd03453125a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests\Landscape">
+      <UniqueIdentifier>{bf1a19d4-e32a-49e8-a555-13f4a6cedbff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -309,6 +312,9 @@
     <ClInclude Include="LandscapeHLMS.h">
       <Filter>Ogre\LandscapeHLMS</Filter>
     </ClInclude>
+    <ClInclude Include="LandscapeTest.h">
+      <Filter>Tests\Landscape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShortGame1.cpp">
@@ -432,5 +438,8 @@
       <Filter>Screens\MainGameScreen\GameVisualization\DebugVisualization</Filter>
     </ClCompile>
     <ClCompile Include="LandscapeHLMS.cpp" />
+    <ClCompile Include="LandscapeTest.cpp">
+      <Filter>Tests\Landscape</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

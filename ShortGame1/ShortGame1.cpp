@@ -16,20 +16,7 @@
 #include "MainGameScreen.h"
 #include "DebugOverlayScreen.h"
 
-#include <LandscapeMeshGenerator.h>
-#include "LandscapeVisualization.h"
-
-#include <LandscapeChunkPack.h>
-
-#include <Caelum/Caelum.h>
-
-#include <Ogre/Hlms/Unlit/OgreHlmsUnlit.h>
-#include <OGRE\OgreMesh2.h>
-#include <OGRE\OgreMeshManager2.h>
-#include <OGRE\OgreSubMesh2.h>
-#include <OGRE\OgreItem.h>
-
-#include <Hasher.h>
+#include "LandscapeTest.h"
 
 /**
 \mainpage ShortGame1
@@ -52,30 +39,15 @@ Server is a pretty thin by itself, most of it's code comes from \c GameSimulatio
 /*
 class TmpService : public GEM::Service
 {
+
 public:
-	struct LandMesh
-	{
-		GEM::LandscapeVisualMesh vm;
-		GEM::GameSim::LandscapeMesh *lm;
-		std::pair<int, int> pos;
 
-		LandMesh(GEM::GameSim::LandscapeMesh *_lm, std::pair<int, int> p ) : lm(_lm), pos(p) {}
-
-		void Generate()
-		{
-			vm = GEM::LandscapeVisualization::GenerateVisualMesh(lm, pos);
-		}
-	};
-
-
-	std::vector<LandMesh> Lands;
 	GEM::LandscapeVisualMesh Cube;
 	GEM::Ogre_Service* ogs;
 	bool done = false;
 
 	virtual ActionResult initialize() override
 	{
-		for (auto& q : Lands) { q.Generate(); }
 		Cube = GEM::LandscapeVisualization::DoCube();
 		return ActionResult::AR_OK;
 	}
@@ -218,7 +190,7 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 
 	auto FillChunk = [](GEM::GameSim::LandscapeChunk& LC)
 	{
-		/*for (int y = 0; y < 64; y++)
+		for (int y = 0; y < 64; y++)
 		{
 		for (int x = 0; x < 16; x++)
 		{
@@ -226,28 +198,28 @@ void LocalChunkTests(GEM::EngineController& Controller, GEM::Ogre_Service* OgreC
 		{
 		if( y < 12 + x)
 		{
-		LC.getNode(x, y, z).Value = 255;
+		LC.getNode(x, y, z).SolidAmount = 255;
 		}
 		else
 		{
-		LC.getNode(x, y, z).Value = 0;
+		LC.getNode(x, y, z).SolidAmount = 0;
 		}
 		}
 		}
 		}
-		*//*
+		
 		int bx = 0, by = 0, bz = 0;
 
-		/*LC.getNode(bx + 0, by + 0, bz + 0).Value = 255;//0
-		LC.getNode(bx + 1, by + 0, bz + 0).Value = 255;//1
-		LC.getNode(bx + 0, by + 0, bz + 1).Value = 255;//2
-		LC.getNode(bx + 1, by + 0, bz + 1).Value = 255;//3
-		LC.getNode(bx + 0, by + 1, bz + 0).Value = 255;//4
-		LC.getNode(bx + 1, by + 1, bz + 0).Value = 0;//5
-		LC.getNode(bx + 0, by + 1, bz + 1).Value = 255;//6
-		LC.getNode(bx + 1, by + 1, bz + 1).Value = 0;//7
-		*/
-/*
+		LC.getNode(bx + 0, by + 0, bz + 0).SolidAmount = 255;//0
+		LC.getNode(bx + 1, by + 0, bz + 0).SolidAmount = 255;//1
+		LC.getNode(bx + 0, by + 0, bz + 1).SolidAmount = 255;//2
+		LC.getNode(bx + 1, by + 0, bz + 1).SolidAmount = 255;//3
+		LC.getNode(bx + 0, by + 1, bz + 0).SolidAmount = 255;//4
+		LC.getNode(bx + 1, by + 1, bz + 0).SolidAmount = 0;//5
+		LC.getNode(bx + 0, by + 1, bz + 1).SolidAmount = 255;//6
+		LC.getNode(bx + 1, by + 1, bz + 1).SolidAmount = 0;//7
+		
+
 		LC.getNode(bx + 0, by + 0, bz + 0).SolidAmount = 255;//0
 
 	};
@@ -490,8 +462,8 @@ public:
 		return ActionResult::AR_OK;
 	}
 };
-
 */
+
 int main(int argc, char *argv[])
 {
 	SetThreadUILanguage(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT));
@@ -503,13 +475,15 @@ int main(int argc, char *argv[])
 
 	//auto CaelumController = Controller.AddService<TmpCaelumService>();
 
-	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
-	auto NetworkController = Controller.AddService<GEM::NetworkController>();
+	//auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
+	//auto NetworkController = Controller.AddService<GEM::NetworkController>();
 
 	//LocalChunkTests(Controller, OgreController);
 
-	auto ScreenController = Controller.AddService<GEM::ScreenService>();
-	auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
+	//auto ScreenController = Controller.AddService<GEM::ScreenService>();
+	//auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
+
+	auto LandscapeTest = Controller.AddService<GEMTest::LandscapeTest>(OgreController);
 
 
 
@@ -530,11 +504,11 @@ int main(int argc, char *argv[])
 	*/
 
 
-	ScreenController->RegisterScreen<GEM::LoginScreen>(Helper::Hasher<int32_t>::Hash("LoginScreen","Screens"),NetworkController, GameSimService);
-	ScreenController->ActivateScreen(Helper::Hasher<int32_t>::Hash("LoginScreen", "Screens"));
+	//ScreenController->RegisterScreen<GEM::LoginScreen>(Helper::Hasher<int32_t>::Hash("LoginScreen","Screens"),NetworkController, GameSimService);
+	//ScreenController->ActivateScreen(Helper::Hasher<int32_t>::Hash("LoginScreen", "Screens"));
 
-	ScreenController->RegisterScreen<GEM::MainGameScreen>(Helper::Hasher<int32_t>::Hash("MainGameScreen", "Screens"), NetworkController, GameSimService, SDLController);
-	ScreenController->RegisterScreen<GEM::DebugOverlayScreen>(Helper::Hasher<int32_t>::Hash("DebugOverlayScreen", "Screens"), SDLController);
+	//ScreenController->RegisterScreen<GEM::MainGameScreen>(Helper::Hasher<int32_t>::Hash("MainGameScreen", "Screens"), NetworkController, GameSimService, SDLController);
+	//ScreenController->RegisterScreen<GEM::DebugOverlayScreen>(Helper::Hasher<int32_t>::Hash("DebugOverlayScreen", "Screens"), SDLController);
 
 	/*try
 	{*/

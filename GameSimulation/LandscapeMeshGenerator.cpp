@@ -474,7 +474,7 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNe
 		NormalsPtrHolder[Ind1]->normal += norm;
 		NormalsPtrHolder[Ind2]->normal += norm;
 		NormalsPtrHolder[Ind3]->normal += norm;
-
+		
 		if (RegisterNewVertices)
 		{
 			tmpData.tmpMesh.m_indices.push_back(IndexHolder[Ind1]);
