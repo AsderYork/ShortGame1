@@ -180,6 +180,7 @@
     <ClInclude Include="GameEventsSystem_ClientProcessor.h" />
     <ClInclude Include="GameSimService.h" />
     <ClInclude Include="InputEvent.h" />
+    <ClInclude Include="LandscapeHLMS.h" />
     <ClInclude Include="MainCamera.h" />
     <ClInclude Include="ObjectVis_Cubical.h" />
     <ClInclude Include="GS_Client.h" />
@@ -224,6 +225,7 @@
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="GameEventsSystem_ClientProcessor.cpp" />
     <ClCompile Include="GameSimService.cpp" />
+    <ClCompile Include="LandscapeHLMS.cpp" />
     <ClCompile Include="MainCamera.cpp" />
     <ClCompile Include="ObjectVis_Cubical.cpp" />
     <ClCompile Include="GS_Client.cpp" />

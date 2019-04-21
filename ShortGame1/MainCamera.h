@@ -16,8 +16,8 @@ namespace GEM
 	class MainCamera
 	{
 	private:
-		Ogre::SceneNode* m_cameraNode;
-		Ogre::Camera* m_camera;
+		Ogre::SceneNode* m_cameraNode = nullptr;
+		Ogre::Camera* m_camera = nullptr;
 		std::weak_ptr<GameSim::EntityBase> m_entity;
 
 		btVector3 m_cameraCenter;

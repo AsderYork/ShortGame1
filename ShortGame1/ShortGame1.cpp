@@ -536,10 +536,10 @@ int main(int argc, char *argv[])
 	ScreenController->RegisterScreen<GEM::MainGameScreen>(Helper::Hasher<int32_t>::Hash("MainGameScreen", "Screens"), NetworkController, GameSimService, SDLController);
 	ScreenController->RegisterScreen<GEM::DebugOverlayScreen>(Helper::Hasher<int32_t>::Hash("DebugOverlayScreen", "Screens"), SDLController);
 
-	try
-	{
+	/*try
+	{*/
 		return Controller.start();
-	}
+	/*}
 	catch (std::exception &e)
 	{
 		LOGCATEGORY("Main").crit("Exception reached main! Exception:%s", e.what());
@@ -547,7 +547,7 @@ int main(int argc, char *argv[])
 	catch (...)
 	{
 		LOGCATEGORY("Main").crit("Exception reached main! And it's not std::excpetion!");
-	}
+	}*/
 	return 0;
 }
 

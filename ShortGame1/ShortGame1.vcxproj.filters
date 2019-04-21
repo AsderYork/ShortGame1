@@ -163,6 +163,9 @@
     <Filter Include="Screens\MainGameScreen\GameVisualization\DebugVisualization">
       <UniqueIdentifier>{5eba66d6-1aa5-4304-b08f-91262bddaa2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ogre\LandscapeHLMS">
+      <UniqueIdentifier>{c5891a8b-a710-4bff-931a-fd03453125a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -303,6 +306,9 @@
     <ClInclude Include="DebugVisualization.h">
       <Filter>Screens\MainGameScreen\GameVisualization\DebugVisualization</Filter>
     </ClInclude>
+    <ClInclude Include="LandscapeHLMS.h">
+      <Filter>Ogre\LandscapeHLMS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShortGame1.cpp">
@@ -425,5 +431,6 @@
     <ClCompile Include="DebugVisualization.cpp">
       <Filter>Screens\MainGameScreen\GameVisualization\DebugVisualization</Filter>
     </ClCompile>
+    <ClCompile Include="LandscapeHLMS.cpp" />
   </ItemGroup>
 </Project>

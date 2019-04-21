@@ -24,11 +24,10 @@ namespace GEM
 		float px = 0, py = 0, pz = 0;   //Position
 		float nx = 0, ny = 1, nz = 0;   //Normals
 		float nu = 0, nv = 0; //Texture Coordinates 1
-		float TBR = 1.0f, TBG = 0.5f, TBB = 0.5f, TBA = 1.0f;
-		uint16_t LandType1; uint8_t LandSubtype1; uint8_t LandFill1;
-		uint16_t LandType2; uint8_t LandSubtype2; uint8_t LandFill2;
+		//float val = 0.0f;
+		uint32_t LandType1 = 0;
+		uint32_t LandType2 = 0;
 
-		MeshVertices() {}
 	};
 
 	LandscapeVisualMesh LandscapeVisualization::GenerateVisualMesh(GameSim::LandscapeMesh* Chunk, GameSim::LandscapeChunk* ChunkData)
@@ -52,9 +51,9 @@ namespace GEM
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_POSITION));
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT3, Ogre::VES_NORMAL));
 		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES));
-		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_FLOAT4, Ogre::VES_SPECULAR));
-		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_BYTE4, Ogre::VES_TEXTURE_COORDINATES));
-		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_BYTE4, Ogre::VES_TEXTURE_COORDINATES));
+		vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_UINT2, Ogre::VES_TEXTURE_COORDINATES));
+		//vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_BYTE4, Ogre::VES_TEXTURE_COORDINATES));
+		//vertexElements.push_back(Ogre::VertexElement2(Ogre::VET_BYTE4, Ogre::VES_TEXTURE_COORDINATES));
 		
 		auto[Orientations, NewIndices] = processTriangles(Chunk);
 
@@ -92,33 +91,26 @@ namespace GEM
 				break; }
 			}
 
-			meshVertices[i].LandType1 = static_cast<uint16_t>(Vertex.OriginalNode1->Solid);
-			meshVertices[i].LandSubtype1 = Vertex.OriginalNode1->SolidSubtype;
-			meshVertices[i].LandFill1 = Vertex.OriginalNode1->SolidAmount;
-
-			meshVertices[i].LandType2 = static_cast<uint16_t>(Vertex.OriginalNode2->Solid);
-			meshVertices[i].LandSubtype2 = Vertex.OriginalNode2->SolidSubtype;
-			meshVertices[i].LandFill2 = Vertex.OriginalNode2->SolidAmount;
-
 			switch (Vertex.OriginalNode1->Solid)
 			{
 			case GameSim::LandscapeNode::SolidType::Sand:
-				meshVertices[i].TBR = 0.0;
-				meshVertices[i].TBG = 1.0;
-				meshVertices[i].TBB = 0.0;
+				meshVertices[i].LandType1 = 0x0000ff00;
+				//meshVertices[i].val = 0.0f;
+
 				break;
 			case GameSim::LandscapeNode::SolidType::Soil_normal:
-				meshVertices[i].TBR = 0.0;
-				meshVertices[i].TBG = 0.0;
-				meshVertices[i].TBB = 1.0;
+
+
+				meshVertices[i].LandType1 = 0x0000ff00;
+				//meshVertices[i].val = 1.0f;
 				break;
 			default:
-				meshVertices[i].TBR = 1.0;
-				meshVertices[i].TBG = 0.0;
-				meshVertices[i].TBB = 0.0;
+
+				meshVertices[i].LandType1 = 0x0000ff00;
+				//meshVertices[i].val = 0.5f;
 				break;
 			}
-					
+								
 
 		}
 
@@ -156,7 +148,7 @@ namespace GEM
 			false);
 		ReturnMesh.mesh->_setBoundingSphereRadius(meshRadius);
 
-		subMesh->setMaterialName("HlmsPbs1");
+		subMesh->setMaterialName("Landscape1");
 
 
 		ReturnMesh.marchingCubesItem = SceneManager->createItem(MeshName);

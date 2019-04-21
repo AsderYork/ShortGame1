@@ -26,13 +26,13 @@ namespace GEM::GameSim
 				}
 				target->getNode(z, (int)floor(NodeHeight), x).SolidAmount = (int)(255 * (NodeHeight - floor(NodeHeight)));
 
-				if (NodeHeight < 22) {
+				if (NodeHeight < 19) {
 					target->getNode(z, (int)floor(NodeHeight), x).Solid = LandscapeNode::SolidType::Sand;
 				}
-				if (NodeHeight < 23) {
+				else if (NodeHeight < 22) {
 					target->getNode(z, (int)floor(NodeHeight), x).Solid = LandscapeNode::SolidType::Soil_normal;
 				}
-				else if (NodeHeight > 24) {
+				else {
 					target->getNode(z, (int)floor(NodeHeight), x).Solid = LandscapeNode::SolidType::Rock_Granite;
 				}
 

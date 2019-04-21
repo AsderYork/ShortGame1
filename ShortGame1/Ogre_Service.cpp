@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Ogre_Service.h"
+#include "LandscapeHLMS.h"
+
 #include <OGRE\OgreRenderWindow.h>
 #include <OGRE\OgreCamera.h>
 #include <OGRE\Compositor\OgreCompositorManager2.h>
@@ -16,6 +18,7 @@
 
 namespace GEM
 {
+
 	struct CubeVertices
 	{
 		float px, py, pz;   //Position
@@ -358,6 +361,16 @@ namespace GEM
 		library.push_back(archivePbsLibraryAny);
 		Ogre::HlmsPbs *hlmsPbs = OGRE_NEW Ogre::HlmsPbs(archivePbs, &library);
 		Ogre::Root::getSingleton().getHlmsManager()->registerHlms(hlmsPbs);
+		
+
+
+		Ogre::Archive* archiveLandscape = Ogre::ArchiveManager::getSingletonPtr()->load(
+			dataFolder + "Hlms/Landscape/" + shaderSyntax, "FileSystem", true);
+
+		library.push_back(archiveLandscape);
+		LadnscapeHLMS* hlmsLandscape = OGRE_NEW LadnscapeHLMS(archivePbs, &library);
+		Ogre::Root::getSingleton().getHlmsManager()->registerHlms(hlmsLandscape);
+
 
 		Ogre::Archive *archiveUnlit = Ogre::ArchiveManager::getSingletonPtr()->load(dataFolder + "Hlms/Unlit/" + shaderSyntax,	"FileSystem", true);
 		Ogre::HlmsUnlit *hlmsUnlit = OGRE_NEW Ogre::HlmsUnlit(archiveUnlit, &library);
@@ -482,25 +495,28 @@ namespace GEM
 			break;
 		}
 		case SDLK_f: {
-			if (!m_UseThisCamera)
-			{//Activate Debug camera
-				m_camera->detachFromParent();
-				m_debugCameraSceneNode->attachObject(m_camera);
-			}
-			else
-			{//Activate Player camera
-				for (auto& Child : Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance")->getRootSceneNode()->getChildIterator())
-				{
-					if (Child->getName() == "PlayerCameraNode")
-					{
-						m_camera->detachFromParent();
-						static_cast<Ogre::SceneNode*>(Child)->attachObject(m_camera);
-						break;
-					}
-				}
-			}
-			//m_UseThisCamera = !m_UseThisCamera;
-			break;
+
+			Ogre::String shaderSyntax = "GLSL";
+			Ogre::String dataFolder = "../Resources/media/";
+			
+			Ogre::Archive* archiveLibrary = Ogre::ArchiveManager::getSingletonPtr()->load(
+				dataFolder + "Hlms/Common/" + shaderSyntax,
+				"FileSystem", true);
+
+			Ogre::Archive* archivePbsLibraryAny = Ogre::ArchiveManager::getSingletonPtr()->load(
+				dataFolder + "Hlms/Pbs/Any",
+				"FileSystem", true);
+
+			Ogre::ArchiveVec library;
+			library.push_back(archiveLibrary);
+
+			Ogre::Archive* archivePbs = Ogre::ArchiveManager::getSingletonPtr()->load(
+				dataFolder + "Hlms/Pbs/" + shaderSyntax, "FileSystem", true);
+
+			library.push_back(archivePbsLibraryAny);
+			Ogre::Root::getSingleton().getHlmsManager()->getHlms(Ogre::HlmsTypes::HLMS_PBS)->reloadFrom(archivePbs, &library);
+
+			break;			
 		}
 		}
 		
