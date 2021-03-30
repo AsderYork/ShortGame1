@@ -157,6 +157,21 @@
     <Filter Include="Landscape\Chunk\Node">
       <UniqueIdentifier>{cc451776-f27f-4698-94c4-1c3409f23753}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Landscape_Transvoxel">
+      <UniqueIdentifier>{1b4df252-6a32-4e25-b65d-79940ed9f0f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape_Transvoxel\include">
+      <UniqueIdentifier>{bc1d551b-dfc7-4fe5-a725-5e27ddaef27b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape2">
+      <UniqueIdentifier>{04bfb0f7-faf1-43be-b7b5-0a07f630b294}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSimulation\Landscape3">
+      <UniqueIdentifier>{b29218f5-fec3-4c09-9c19-1e3938902447}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSimulation\Landscape3\LandscapeVisibilityManager">
+      <UniqueIdentifier>{4146a84a-73d8-49b6-bf6d-52e0b8a11c2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSimulation.h">
@@ -311,6 +326,27 @@
     <ClInclude Include="LandscapeNode.h">
       <Filter>Landscape\Chunk\Node</Filter>
     </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Landscape_Transvoxel\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Structs.h">
+      <Filter>Landscape_Transvoxel\include</Filter>
+    </ClInclude>
+    <ClInclude Include="VoxelSurface.h">
+      <Filter>Landscape_Transvoxel\include</Filter>
+    </ClInclude>
+    <ClInclude Include="VoxelGrid.h">
+      <Filter>Landscape_Transvoxel</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapePolygonization.h">
+      <Filter>Landscape2</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeVisibilityManager.h">
+      <Filter>GameSimulation\Landscape3\LandscapeVisibilityManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Landscape3Common.h">
+      <Filter>GameSimulation\Landscape3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GS_PlayerController.cpp">
@@ -405,6 +441,18 @@
     </ClCompile>
     <ClCompile Include="GameObjectsFactory.cpp">
       <Filter>Entities\Objects\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxels.cpp">
+      <Filter>Landscape_Transvoxel</Filter>
+    </ClCompile>
+    <ClCompile Include="VoxelGrid.cpp">
+      <Filter>Landscape_Transvoxel</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapePolygonization.cpp">
+      <Filter>Landscape2</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeVisibilityManager.cpp">
+      <Filter>GameSimulation\Landscape3\LandscapeVisibilityManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

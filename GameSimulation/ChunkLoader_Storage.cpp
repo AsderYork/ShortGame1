@@ -15,7 +15,7 @@ namespace GEM::GameSim
 	{
 		auto SupposedRecord = MagistralRecord(x, z);
 
-		auto& It = std::lower_bound(m_magistral.begin(), m_magistral.end(), SupposedRecord);
+		auto It = std::lower_bound(m_magistral.begin(), m_magistral.end(), SupposedRecord);
 		if ((It != m_magistral.end()) && (*It == SupposedRecord))
 		{
 			return It->ChunkVersion;
@@ -40,7 +40,8 @@ namespace GEM::GameSim
 	void ChunkLoader_Storage::SaveChunk(LandscapeChunk * target)
 	{
 		auto[TargetPosX, TargetPosZ] = target->getPosition();
-		auto& It = std::lower_bound(m_magistral.begin(), m_magistral.end(), MagistralRecord(TargetPosX, TargetPosZ));
+		auto magistralRecord = MagistralRecord(TargetPosX, TargetPosZ);
+		auto It = std::lower_bound(m_magistral.begin(), m_magistral.end(), magistralRecord);
 		if ((It != m_magistral.end()) && (*It == MagistralRecord(TargetPosX, TargetPosZ)))
 		{
 			if (It->ChunkVersion == target->getVersion()) { return; }

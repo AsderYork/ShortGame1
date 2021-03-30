@@ -23,7 +23,7 @@ namespace GEM::GameSim
 		{
 			auto Entity = m_entities.GetEntity(m_commandBuffer.front().second).lock();
 			if (Entity == nullptr) { continue; }
-			Mixin_Controller::Instance().ApplyCommand(Entity.get(), std::move(m_commandBuffer.front().first));
+			Mixin_Controller::Instance().ApplyCommand(Entity.get(), m_commandBuffer.front().first);
 			m_commandBuffer.pop();
 		}
 

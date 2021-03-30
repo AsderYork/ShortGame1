@@ -457,8 +457,8 @@ namespace GEM
 			MidPointBase* Ps[3] = { &p1, &p2, &p3 };
 
 			//Calculate normals			
-			auto& From1To2 = p1.pos - p2.pos;
-			auto& From1To3 = p1.pos - p3.pos;
+			auto From1To2 = p1.pos - p2.pos;
+			auto From1To3 = p1.pos - p3.pos;
 
 			Ogre::Vector3 Normal = From1To2.crossProduct(From1To3);
 			Normal.normalise();
@@ -539,8 +539,8 @@ namespace GEM
 			MidPointBase* Ps[3] = { &p1, &p2, &p3 };
 
 			//Calculate normals			
-			auto& From1To2 = p1.pos - p2.pos;
-			auto& From1To3 = p1.pos - p3.pos;
+			auto From1To2 = p1.pos - p2.pos;
+			auto From1To3 = p1.pos - p3.pos;
 
 			Ogre::Vector3 Normal = From1To2.crossProduct(From1To3);
 			Normal.normalise();

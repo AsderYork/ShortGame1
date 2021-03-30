@@ -19,5 +19,6 @@
     <ClInclude Include="Helper_VariableSizeSerialization.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Hasher.h" />
+    <ClInclude Include="PerlinNoise.h" />
   </ItemGroup>
 </Project>

@@ -34,7 +34,7 @@ namespace GEM
 			for (int y = CameraChunk.second - m_prepareDistance; y <= CameraChunk.second + m_prepareDistance; y++)
 			{
 				//Check if it's prepared
-				auto& it = std::find(m_preparingChunks.begin(), m_preparingChunks.end(), std::make_pair(x, y));
+				auto it = std::find(m_preparingChunks.begin(), m_preparingChunks.end(), std::make_pair(x, y));
 				//Check if it's allready preparing
 				if (it != m_preparingChunks.end())
 				{//If it is, then move it to survivers
@@ -50,7 +50,7 @@ namespace GEM
 				//If it's also a chunk to be shown, then process it more
 				if ((abs(CameraChunk.first - x) < m_drawDistance) && (abs(CameraChunk.second - y) < m_drawDistance))
 				{
-					auto& it = std::find(m_shownChunks.begin(), m_shownChunks.end(), std::make_pair(x, y));
+					auto it = std::find(m_shownChunks.begin(), m_shownChunks.end(), std::make_pair(x, y));
 					if (it != m_shownChunks.end())//Check if it's shown
 					{
 						SurvivedShownChunks.push_back(*it);//If it is, then move it to survived chunks

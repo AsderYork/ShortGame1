@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)Helpers;$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(BULLETPHYSICS_HOME)\Repo\src;C:\ProjDependecies\caelum\CaelumCustom\Install_x64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);C:\ProjDependecies\caelum\CaelumCustom\ogre-caelum-master\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)Helpers;$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(CAELUM_HOME)\Install_x64\include;$(BULLETPHYSICS_HOME)\Repo\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(CAELUM_HOME)\ogre-caelum-master\lib\$(Configuration);$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -90,8 +90,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)Helpers;$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(BULLETPHYSICS_HOME)\Repo\src;C:\ProjDependecies\caelum\CaelumCustom\Install_x64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);C:\ProjDependecies\caelum\CaelumCustom\ogre-caelum-master\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SDL2_HOME)\include;$(OGRE_HOME)\include;$(CEGUI_DEPS_HOME)\include;$(CEGUI_INSTALL_HOME)\include\cegui-9999;$(BOOST_HOME);$(ProjectDir)\..\ExternalDeps\include;$(OGRE_HOME)\include\OGRE;$(SolutionDir)Helpers;$(SolutionDir)NetworkShared;$(SolutionDir)GameSimulation;$(CAELUM_HOME)\Install_x64\include;$(BULLETPHYSICS_HOME)\Repo\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(CEGUI_DEPS_HOME)\lib\static;$(SDL2_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(CEGUI_INSTALL_HOME)\lib;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(OGRE_DEPS)\Build\ogredeps\lib\Release;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(CAELUM_HOME)\ogre-caelum-master\lib\Debug;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -106,6 +106,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>log4cpp.lib;zlib.lib;OgreMain_d.lib;CEGUIBase-9999_d.lib;CEGUIOgreRenderer-9999_d.lib;SDL2.lib;SDL2main.lib;OgreHlmsPbs_d.lib;OgreHlmsUnlit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -118,8 +119,9 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>log4cpp.lib;zlib.lib;Helpers.lib;GameSimulation.lib;NetworkShared.lib;Caelum.lib;OgreMain_d.lib;CEGUIBase-9999_d.lib;CEGUIOgreRenderer-9999_d.lib;SDL2.lib;SDL2main.lib;OgreHlmsPbs_d.lib;OgreHlmsUnlit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>log4cpp.lib;zlib.lib;Helpers.lib;GameSimulation.lib;NetworkShared.lib;Caelum.lib;SDL2.lib;SDL2main.lib;OgreMain_d.lib;CEGUIBase-9999_d.lib;CEGUIOgreRenderer-9999_d.lib;OgreHlmsPbs_d.lib;OgreHlmsUnlit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,6 +140,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>log4cpp.lib;zlib.lib;OgreMain.lib;CEGUIBase-9999.lib;CEGUIOgreRenderer-9999.lib;SDL2.lib;SDL2main.lib;OgreHlmsPbs.lib;OgreHlmsUnlit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -155,8 +158,9 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>log4cpp.lib;zlib.lib;Helpers.lib;GameSimulation.lib;NetworkShared.lib;Caelum.lib;OgreMain.lib;CEGUIBase-9999.lib;CEGUIOgreRenderer-9999.lib;SDL2main.lib;SDL2.lib;OgreHlmsPbs.lib;OgreHlmsUnlit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>log4cpp.lib;zlib.lib;Helpers.lib;GameSimulation.lib;NetworkShared.lib;Caelum.lib;SDL2.lib;SDL2main.lib;OgreMain.lib;CEGUIBase-9999.lib;CEGUIOgreRenderer-9999.lib;OgreHlmsPbs.lib;OgreHlmsUnlit.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -180,9 +184,12 @@
     <ClInclude Include="GameEventsSystem_ClientProcessor.h" />
     <ClInclude Include="GameSimService.h" />
     <ClInclude Include="InputEvent.h" />
+    <ClInclude Include="Landscape3.h" />
+    <ClInclude Include="LadnscapeLODTriangulator.h" />
     <ClInclude Include="LandscapeHLMS.h" />
     <ClInclude Include="LandscapeTest.h" />
     <ClInclude Include="MainCamera.h" />
+    <ClInclude Include="MapManagerV3.h" />
     <ClInclude Include="ObjectVis_Cubical.h" />
     <ClInclude Include="GS_Client.h" />
     <ClInclude Include="LandscapeSystem_ClientProcessor.h" />
@@ -226,6 +233,7 @@
     <ClCompile Include="FPS_Layout.cpp" />
     <ClCompile Include="GameEventsSystem_ClientProcessor.cpp" />
     <ClCompile Include="GameSimService.cpp" />
+    <ClCompile Include="Landscape3.cpp" />
     <ClCompile Include="LandscapeHLMS.cpp" />
     <ClCompile Include="LandscapeTest.cpp" />
     <ClCompile Include="MainCamera.cpp" />

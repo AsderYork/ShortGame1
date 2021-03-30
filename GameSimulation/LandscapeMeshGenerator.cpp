@@ -350,6 +350,9 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNe
 	corner[6] = getNodeValue(x - 1	, y +1	, z		, tmpData) - 128;
 	corner[7] = getNodeValue(x   	, y +1	, z		, tmpData) - 128;
 
+	auto v0Cords = getNodeCordsByIndex({ x,y,z }, 0);
+	auto CubeMaterial = getNode(v0Cords.x, v0Cords.y, v0Cords.z, tmpData).Solid;
+
 	unsigned long caseCode = 0;
 	caseCode += corner[0] > 0 ? 1   : 0;
 	caseCode += corner[1] > 0 ? 2   : 0;
@@ -416,12 +419,15 @@ void LandscapeMeshGenerator::ProcessOneCube(int x, int y, int z, bool RegisterNe
 				*/
 				if (RegisterNewVertices)
 				{
-					auto v0Cords = getNodeCordsByIndex({ x,y,z }, v0);
-					auto v1Cords = getNodeCordsByIndex({ x,y,z }, v1);
+					auto v0Cords = getNodeCordsByIndex({ x,y,z }, 0);
+					auto v0node = &getNode(v0Cords.x, v0Cords.y, v0Cords.z, tmpData);
 
-					tmpData.tmpMesh.m_vertices.emplace_back(NewVertex,
-						&getNode(v0Cords.x, v0Cords.y, v0Cords.z, tmpData),
-						&getNode(v1Cords.x, v1Cords.y, v1Cords.z, tmpData));
+					auto v1Cords = getNodeCordsByIndex({ x,y,z }, v1);
+					auto v1node = &getNode(v1Cords.x, v1Cords.y, v1Cords.z, tmpData);
+
+					tmpData.tmpMesh.m_vertices.emplace_back(NewVertex, v0node, v0node);
+						//t > 0.5 ? v1node : v0node,
+						//t > 0.5 ? v0node : v1node);
 
 					CurrVertex = static_cast<uint32_t>(tmpData.tmpMesh.m_vertices.size() - 1);
 					IndexHolder[Vertex] = CurrVertex;

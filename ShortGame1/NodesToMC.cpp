@@ -60,7 +60,7 @@ namespace GEM
 
 	void NodesToMCGeneratorController::UnloadChunk(int x, int z)
 	{
-		for (auto& it = m_ChunkUnits.begin(); it != m_ChunkUnits.end(); it++)
+		for (auto it = m_ChunkUnits.begin(); it != m_ChunkUnits.end(); it++)
 		{
 			if ((it->x == x) && (it->z == z))
 			{//Then the chunk is allready not unloaded

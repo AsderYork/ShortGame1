@@ -243,7 +243,7 @@ namespace GEM {
 
 	void LogicalParser::CollapseFunctions(std::list<LogicalUnit>& Units)
 	{
-		for (auto& it = Units.begin(); it != Units.end(); it++)
+		for (auto it = Units.begin(); it != Units.end(); it++)
 		{
 			if (it->second == UnitType::VAR)
 			{
@@ -267,7 +267,7 @@ namespace GEM {
 		std::list<LogicalUnit> Result;
 
 		auto	IAITF_ButOnlyIfItsZero = [&]() {
-			for (auto& rit = Stack.rbegin(); rit != Stack.rend(); rit++)
+			for (auto rit = Stack.rbegin(); rit != Stack.rend(); rit++)
 			{
 				if (rit->second == UnitType::FUNC) {
 					if (std::get<Function>(rit->first).Arity == 0) {
@@ -353,19 +353,19 @@ namespace GEM {
 		return Result;
 	}
 
-	std::vector<std::list<LogicalParser::LogicalUnit>> LogicalParser::Parse(std::vector<std::vector<LexicalParser::Lexema>> & Lexemics)
+	std::vector<std::list<LogicalParser::LogicalUnit>> LogicalParser::Parse(std::vector<std::vector<LexicalParser::Lexema>> Lexemics)
 	{
 		std::vector<std::list<LogicalParser::LogicalUnit>> Units;
 		for (auto LexList : Lexemics)
 		{
-			auto& List = ParseCommand(LexList);
+			auto List = ParseCommand(LexList);
 			CollapseFunctions(List);
 			Units.push_back(ToPostfix(List));
 		}
 		return Units;
 	}
 
-	void LogicalParser::Print(std::vector<std::list<LogicalParser::LogicalUnit>>& Input)
+	void LogicalParser::Print(std::vector<std::list<LogicalParser::LogicalUnit>> Input)
 	{
 		for (auto& Command : Input)
 		{
@@ -560,8 +560,8 @@ namespace GEM {
 			if (op == "+") {
 				if (CanBeNUM(Buffer[Buffer.size() - 1]) && CanBeNUM(Buffer[Buffer.size() - 2])) {
 					LogicalParser::NumericalValue Numval;
-					auto& Left = GetAsNUM(Buffer[Buffer.size() - 2]);
-					auto& Right = GetAsNUM(Buffer[Buffer.size() - 1]);
+					auto Left = GetAsNUM(Buffer[Buffer.size() - 2]);
+					auto Right = GetAsNUM(Buffer[Buffer.size() - 1]);
 					if (Left.second || Right.second)
 					{
 						Numval.isDotted = true;
@@ -573,8 +573,8 @@ namespace GEM {
 				}
 				else if (CanBeLiteral(Buffer[Buffer.size() - 1]) && CanBeLiteral(Buffer[Buffer.size() - 2])) {
 					LogicalParser::Literal LitVal;
-					auto& Left = GetAsLiteral(Buffer[Buffer.size() - 2]);
-					auto& Right = GetAsLiteral(Buffer[Buffer.size() - 1]);
+					auto Left = GetAsLiteral(Buffer[Buffer.size() - 2]);
+					auto Right = GetAsLiteral(Buffer[Buffer.size() - 1]);
 					LitVal.LiteralValue = Left + Right;
 					Buffer.pop_back(); Buffer.pop_back();
 					Buffer.push_back(LogicalParser::LogicalUnit(LitVal, LogicalParser::UnitType::LIETARL));
@@ -584,8 +584,8 @@ namespace GEM {
 			else if (op == "-") {
 				if (CanBeNUM(Buffer[Buffer.size() - 1]) && CanBeNUM(Buffer[Buffer.size() - 2])) {
 					LogicalParser::NumericalValue Numval;
-					auto& Left = GetAsNUM(Buffer[Buffer.size() - 2]);
-					auto& Right = GetAsNUM(Buffer[Buffer.size() - 1]);
+					auto Left = GetAsNUM(Buffer[Buffer.size() - 2]);
+					auto Right = GetAsNUM(Buffer[Buffer.size() - 1]);
 					if (Left.second || Right.second)
 					{
 						Numval.isDotted = true;
@@ -599,8 +599,8 @@ namespace GEM {
 			else if (op == "*") {
 				if (CanBeNUM(Buffer[Buffer.size() - 1]) && CanBeNUM(Buffer[Buffer.size() - 2])) {
 					LogicalParser::NumericalValue Numval;
-					auto& Left = GetAsNUM(Buffer[Buffer.size() - 2]);
-					auto& Right = GetAsNUM(Buffer[Buffer.size() - 1]);
+					auto Left = GetAsNUM(Buffer[Buffer.size() - 2]);
+					auto Right = GetAsNUM(Buffer[Buffer.size() - 1]);
 					if (Left.second || Right.second)
 					{
 						Numval.isDotted = true;
@@ -614,8 +614,8 @@ namespace GEM {
 			else if (op == "/") {
 				if (CanBeNUM(Buffer[Buffer.size() - 1]) && CanBeNUM(Buffer[Buffer.size() - 2])) {
 					LogicalParser::NumericalValue Numval;
-					auto& Left = GetAsNUM(Buffer[Buffer.size() - 2]);
-					auto& Right = GetAsNUM(Buffer[Buffer.size() - 1]);
+					auto Left = GetAsNUM(Buffer[Buffer.size() - 2]);
+					auto Right = GetAsNUM(Buffer[Buffer.size() - 1]);
 					if (Left.second || Right.second)
 					{
 						Numval.isDotted = true;
@@ -629,8 +629,8 @@ namespace GEM {
 			else if (op == "%") {
 				if (CanBeNUM(Buffer[Buffer.size() - 1]) && CanBeNUM(Buffer[Buffer.size() - 2])) {
 					LogicalParser::NumericalValue Numval;
-					auto& Left = GetAsNUM(Buffer[Buffer.size() - 2]);
-					auto& Right = GetAsNUM(Buffer[Buffer.size() - 1]);
+					auto Left = GetAsNUM(Buffer[Buffer.size() - 2]);
+					auto Right = GetAsNUM(Buffer[Buffer.size() - 1]);
 					if (Left.second || Right.second)
 					{
 						throw std::exception("Operator % cannot be called for dotted numerics!");
@@ -644,8 +644,8 @@ namespace GEM {
 			else if (op == "<") {
 				if (CanBeNUM(Buffer[Buffer.size() - 1]) && CanBeNUM(Buffer[Buffer.size() - 2])) {
 					LogicalParser::NumericalValue Numval;
-					auto& Left = GetAsNUM(Buffer[Buffer.size() - 2]);
-					auto& Right = GetAsNUM(Buffer[Buffer.size() - 1]);
+					auto Left = GetAsNUM(Buffer[Buffer.size() - 2]);
+					auto Right = GetAsNUM(Buffer[Buffer.size() - 1]);
 					if (Left.second || Right.second)
 					{
 						Numval.Value = std::to_string(std::stof(Left.first) < std::stof(Right.first) ? 1 : 0);
@@ -658,8 +658,8 @@ namespace GEM {
 			else if (op == ">") {
 				if (CanBeNUM(Buffer[Buffer.size() - 1]) && CanBeNUM(Buffer[Buffer.size() - 2])) {
 					LogicalParser::NumericalValue Numval;
-					auto& Left = GetAsNUM(Buffer[Buffer.size() - 2]);
-					auto& Right = GetAsNUM(Buffer[Buffer.size() - 1]);
+					auto Left = GetAsNUM(Buffer[Buffer.size() - 2]);
+					auto Right = GetAsNUM(Buffer[Buffer.size() - 1]);
 					if (Left.second || Right.second)
 					{
 						Numval.Value = std::to_string(std::stof(Left.first) > std::stof(Right.first) ? 1 : 0);
@@ -672,8 +672,8 @@ namespace GEM {
 			else if (op == "==") {
 				if (CanBeNUM(Buffer[Buffer.size() - 1]) && CanBeNUM(Buffer[Buffer.size() - 2])) {
 					LogicalParser::NumericalValue Numval;
-					auto& Left = GetAsNUM(Buffer[Buffer.size() - 2]);
-					auto& Right = GetAsNUM(Buffer[Buffer.size() - 1]);
+					auto Left = GetAsNUM(Buffer[Buffer.size() - 2]);
+					auto Right = GetAsNUM(Buffer[Buffer.size() - 1]);
 					if (Left.second || Right.second)
 					{
 						Numval.Value = std::to_string(std::stof(Left.first) == std::stof(Right.first) ? 1 : 0);
@@ -686,8 +686,8 @@ namespace GEM {
 			else if (op == "<=") {
 				if (CanBeNUM(Buffer[Buffer.size() - 1]) && CanBeNUM(Buffer[Buffer.size() - 2])) {
 					LogicalParser::NumericalValue Numval;
-					auto& Left = GetAsNUM(Buffer[Buffer.size() - 2]);
-					auto& Right = GetAsNUM(Buffer[Buffer.size() - 1]);
+					auto Left = GetAsNUM(Buffer[Buffer.size() - 2]);
+					auto Right = GetAsNUM(Buffer[Buffer.size() - 1]);
 					if (Left.second || Right.second)
 					{
 						Numval.Value = std::to_string(std::stof(Left.first) <= std::stof(Right.first) ? 1 : 0);
@@ -700,8 +700,8 @@ namespace GEM {
 			else if (op == ">=") {
 				if (CanBeNUM(Buffer[Buffer.size() - 1]) && CanBeNUM(Buffer[Buffer.size() - 2])) {
 					LogicalParser::NumericalValue Numval;
-					auto& Left = GetAsNUM(Buffer[Buffer.size() - 2]);
-					auto& Right = GetAsNUM(Buffer[Buffer.size() - 1]);
+					auto Left = GetAsNUM(Buffer[Buffer.size() - 2]);
+					auto Right = GetAsNUM(Buffer[Buffer.size() - 1]);
 					if (Left.second || Right.second)
 					{
 						Numval.Value = std::to_string(std::stof(Left.first) >= std::stof(Right.first) ? 1 : 0);
@@ -721,7 +721,7 @@ namespace GEM {
 					}
 					else if (CanBeNUM(Buffer[Buffer.size() - 1]))
 					{
-						auto& Val = GetAsNUM(Buffer[Buffer.size() - 1]);
+						auto Val = GetAsNUM(Buffer[Buffer.size() - 1]);
 						if (Found.get<Variable>().Type == OBJTYPE::NUM_DOTTED)
 						{
 							Found.get<Variable>().set(std::to_string(std::stof(Val.first)));
@@ -791,7 +791,7 @@ namespace GEM {
 				}
 				std::reverse(Params.begin(), Params.end());
 				while (Params.size() < FuncObj.get<Function>().Arity) { Params.push_back(""); }
-				auto& Ret = FuncFunc.Eval(Params);
+				auto Ret = FuncFunc.Eval(Params);
 				switch (FuncFunc.RetType)
 				{
 				case OBJTYPE::STR: {
@@ -819,7 +819,7 @@ namespace GEM {
 				}
 				case OBJTYPE::VAR: {
 					LogicalParser::VariableName RetVar;
-					auto& Name = NameToHierarchy(Ret);
+					auto Name = NameToHierarchy(Ret);
 					if (!Name) { throw std::exception("Function claims that its returning a Variable name, but it's return value cannot be used as a name!"); }
 					RetVar.Hierarchy = (*Name);
 					Buffer.emplace_back(RetVar, LogicalParser::UnitType::VAR);
@@ -873,7 +873,7 @@ namespace GEM {
 
 		//Creates new string with the name of the provided literal and default value in second provided parameter
 		FuncType NewStr = [this](std::vector<std::string>& In) -> std::string {
-			auto& Hierarchy = NameToHierarchy(In[0]);
+			auto Hierarchy = NameToHierarchy(In[0]);
 			if (!Hierarchy) { throw std::exception("First parameter must be a variable name!"); }
 
 			if (In.size() == 2)
@@ -890,7 +890,7 @@ namespace GEM {
 		//Creates new Numeric with the name of the provided literal and default value in second provided parameter
 		FuncType NewNum = [this](std::vector<std::string>& In) -> std::string {
 
-			auto& Hierarchy = NameToHierarchy(In[0]);
+			auto Hierarchy = NameToHierarchy(In[0]);
 			if (!Hierarchy) { throw std::exception("First parameter must be a variable name!"); }
 			if (In.size() == 2)
 			{
@@ -906,7 +906,7 @@ namespace GEM {
 
 		//Creates new DottedNumeric with the name of the provided literal and default value in second provided parameter
 		FuncType NewNumDot = [this](std::vector<std::string>& In) -> std::string {
-			auto& Hierarchy = NameToHierarchy(In[0]);
+			auto Hierarchy = NameToHierarchy(In[0]);
 			if (!Hierarchy) { throw std::exception("First parameter must be a variable name!"); }
 			if (In.size() == 2)
 			{
@@ -957,7 +957,7 @@ namespace GEM {
 		{throw std::exception("Variable can't have that type!"); }
 		default: {break; }
 		}
-		auto& InResult = Sub.emplace(VarName[0], Holder());
+		auto InResult = Sub.emplace(VarName[0], Holder());
 
 		for (int i = 1; i < VarName.size(); i++)
 		{
@@ -978,7 +978,7 @@ namespace GEM {
 
 	bool Evaluator::CreateFunction(std::vector<std::string> VarName, OBJTYPE ReturnType, std::function<std::string(std::vector<std::string>&)> Func, int Arity, bool CanBeAugmented)
 	{
-		auto& InResult = Sub.emplace(VarName[0], Holder());
+		auto InResult = Sub.emplace(VarName[0], Holder());
 
 		for (int i = 1; i < VarName.size(); i++)
 		{
@@ -998,8 +998,8 @@ namespace GEM {
 
 	std::optional<std::vector<std::string>> Evaluator::NameToHierarchy(std::string & name)
 	{
-		auto& Result = Lexical.Parse(name);
-		auto& LogResult = Logical.Parse(Result);
+		auto Result = Lexical.Parse(name);
+		auto LogResult = Logical.Parse(Result);
 
 		if ((LogResult.size() != 1) ||
 			(LogResult.front().size() != 1) ||
@@ -1010,7 +1010,7 @@ namespace GEM {
 		return std::optional<std::vector<std::string>>(std::get<LogicalParser::VariableName>(LogResult.front().front().first).Hierarchy);
 	}
 
-	void Evaluator::SetPrinter(std::function<void(std::string&)> Printer)
+	void Evaluator::SetPrinter(std::function<void(std::string)> Printer)
 	{
 		m_printer = Printer;
 	}
@@ -1024,9 +1024,9 @@ namespace GEM {
 	{
 
 		try {
-			auto& ParseRes = Logical.Parse(Lexical.Parse(Input));
+			auto ParseRes = Logical.Parse(Lexical.Parse(Input));
 			//Logical.Print(ParseRes);
-			for (auto& Command : ParseRes)
+			for (auto Command : ParseRes)
 			{
 				ParseCommand(Command);
 			}

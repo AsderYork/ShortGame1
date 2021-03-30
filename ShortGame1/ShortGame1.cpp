@@ -16,6 +16,7 @@
 #include "MainGameScreen.h"
 #include "DebugOverlayScreen.h"
 
+#include "Landscape3.h"
 #include "LandscapeTest.h"
 
 /**
@@ -475,7 +476,7 @@ int main(int argc, char *argv[])
 
 	//auto CaelumController = Controller.AddService<TmpCaelumService>();
 
-	//auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
+	auto CEGUIController = Controller.AddService<GEM::CEGUI_Service>(OgreController, SDLController);
 	//auto NetworkController = Controller.AddService<GEM::NetworkController>();
 
 	//LocalChunkTests(Controller, OgreController);
@@ -483,7 +484,7 @@ int main(int argc, char *argv[])
 	//auto ScreenController = Controller.AddService<GEM::ScreenService>();
 	//auto GameSimService = Controller.AddService<GEM::GameSimController>(NetworkController);
 
-	auto LandscapeTest = Controller.AddService<GEMTest::LandscapeTest>(OgreController);
+	auto LandscapeTest = Controller.AddService<GEMTest::Landscape3Test>(OgreController, SDLController);
 
 
 
@@ -491,7 +492,7 @@ int main(int argc, char *argv[])
 
 
 	//SDLController->registerMouseListener(DebugMapController);
-	//CEGUIController->AddLayout<GEM::DebugLayout>(1, OgreController, MapService);
+	CEGUIController->AddLayout<GEM::DebugLayout>(1, OgreController, nullptr);
 	//GEM::ConsoleLayout* Console = static_cast<GEM::ConsoleLayout*>(CEGUIController->AddLayout<GEM::ConsoleLayout>(SDLController));
 	
 	/*Console->getEvaluator().RegisterFunction("Map.SetDraw", GEM::Evaluator::OBJTYPE::UNDECLARED, MapService, &GEM::MapService::setDrawDistance);

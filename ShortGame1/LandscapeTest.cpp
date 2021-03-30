@@ -139,7 +139,7 @@ namespace GEMTest {
 
 		void Start() {
 			auto SceneMgr = Ogre::Root::getSingleton().getSceneManager("ExampleSMInstance");
-			SceneMgr->setAmbientLight(Ogre::ColourValue(0.8, 0.8, 0.8, 1), Ogre::ColourValue(0.8, 0.8, 0.8, 1), Ogre::Vector3(0, 1, 0));
+			SceneMgr->setAmbientLight(Ogre::ColourValue(0.8, 0.8, 0.8, 1.0), Ogre::ColourValue(0.8, 0.8, 0.8, 1), Ogre::Vector3(0.0f, 1.0f, 0.0f));
 
 			m_OgreService->AllowCameraMovement(true);
 

@@ -28,6 +28,7 @@
     <ClInclude Include="Helper_VariableSizeSerialization.h" />
     <ClInclude Include="LogHelper.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="PerlinNoise.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -73,7 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(BOOST_HOME);$(SolutionDir)Helpers;$(SolutionDir)\ExternalDeps\include;$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
+    <IncludePath>$(BOOST_HOME)\;$(SolutionDir)Helpers;$(SolutionDir)\ExternalDeps\include;$(SolutionDir)GameSimulation;$(IncludePath)</IncludePath>
     <LibraryPath>$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(ProjectDir)\..\ExternalDeps\$(Configuration)\x64;$(SolutionDir)InternalDeps\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

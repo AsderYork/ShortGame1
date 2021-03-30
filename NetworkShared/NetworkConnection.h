@@ -4,7 +4,7 @@
 #endif // !_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 #include "BufferStream.h"
 
-#include <boost\asio.hpp>
+//#include <boost\asio.hpp>
 #include <sstream>
 #include <cereal\cereal.hpp>
 #include <cereal\archives\binary.hpp>
@@ -14,13 +14,15 @@ namespace GEM
 	class NetworkConnection
 	{
 	private:
-		boost::asio::ip::tcp::socket m_socket;
+		//boost::asio::ip::tcp::socket m_socket;
 		
 		std::string m_dataToSend;
 		std::string m_dataToRecive;
 
 	public:
-		NetworkConnection(boost::asio::ip::tcp::socket&& socket);
+		//NetworkConnection(boost::asio::ip::tcp::socket&& socket);
+
+		NetworkConnection();
 
 		NetworkConnection(const NetworkConnection&) = delete;
 		NetworkConnection(NetworkConnection&&) = default;

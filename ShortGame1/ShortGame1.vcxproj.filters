@@ -169,6 +169,15 @@
     <Filter Include="Tests\Landscape">
       <UniqueIdentifier>{bf1a19d4-e32a-49e8-a555-13f4a6cedbff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Screens\MainGameScreen\GameVisualization\LandscapeVisualization\LandscapeLODTriangulator">
+      <UniqueIdentifier>{e92c61f8-9c0f-4ce0-8081-5279bd5d8f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapSystemV3">
+      <UniqueIdentifier>{da87ccec-1312-4017-b4d8-5d7f26c60314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\landscape3">
+      <UniqueIdentifier>{2560bc61-9e5a-417f-a057-da23ac794e04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -315,6 +324,15 @@
     <ClInclude Include="LandscapeTest.h">
       <Filter>Tests\Landscape</Filter>
     </ClInclude>
+    <ClInclude Include="LadnscapeLODTriangulator.h">
+      <Filter>Screens\MainGameScreen\GameVisualization\LandscapeVisualization\LandscapeLODTriangulator</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManagerV3.h">
+      <Filter>MapSystemV3</Filter>
+    </ClInclude>
+    <ClInclude Include="Landscape3.h">
+      <Filter>Tests\landscape3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShortGame1.cpp">
@@ -440,6 +458,9 @@
     <ClCompile Include="LandscapeHLMS.cpp" />
     <ClCompile Include="LandscapeTest.cpp">
       <Filter>Tests\Landscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Landscape3.cpp">
+      <Filter>Tests\landscape3</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

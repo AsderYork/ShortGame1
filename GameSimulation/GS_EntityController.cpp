@@ -13,7 +13,7 @@ namespace GEM::GameSim
 	}
 	bool EntityController::RemoveEntity(ENTITY_ID_TYPE id)
 	{
-		auto& it = m_entityMap.find(id);
+		auto it = m_entityMap.find(id);
 		if (it != m_entityMap.end())
 		{
 			m_destroyListeners(it->second);
@@ -24,7 +24,7 @@ namespace GEM::GameSim
 	}
 	std::weak_ptr<EntityBase> EntityController::GetEntity(ENTITY_ID_TYPE id)
 	{
-		auto& it = m_entityMap.find(id);
+		auto it = m_entityMap.find(id);
 		if (it != m_entityMap.end())
 		{ return it->second; }
 		return std::weak_ptr<EntityBase>();

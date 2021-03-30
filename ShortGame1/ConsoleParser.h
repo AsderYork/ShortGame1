@@ -122,8 +122,8 @@ namespace GEM
 
 	public:
 
-		std::vector<std::list<LogicalUnit>> Parse(std::vector<std::vector<LexicalParser::Lexema>>& Lexemics);
-		void Print(std::vector<std::list<LogicalUnit>>& Input);
+		std::vector<std::list<LogicalUnit>> Parse(std::vector<std::vector<LexicalParser::Lexema>> Lexemics);
+		void Print(std::vector<std::list<LogicalUnit>> Input);
 
 	};
 
@@ -160,7 +160,7 @@ namespace GEM
 		enum class OBJTYPE { STR, NUM, NUM_DOTTED, UNDECLARED, VAR };//VAR - can be used only as a return type for Functions!
 	private:
 
-		std::function<void(std::string&)> m_printer = [](std::string& s) {printf("%s\n", s.c_str());  };
+		std::function<void(std::string)> m_printer = [](std::string s) {printf("%s\n", s.c_str());  };
 
 		//Something, that can be accessed. It can recive
 		struct Variable {
@@ -227,7 +227,7 @@ namespace GEM
 
 	public:
 
-		void SetPrinter(std::function<void(std::string&)> Printer);
+		void SetPrinter(std::function<void(std::string)> Printer);
 
 		template<class ParamClass, typename T>
 		bool RegisterObjectParameter(ParamClass* ObjPointer, std::string ParamName,

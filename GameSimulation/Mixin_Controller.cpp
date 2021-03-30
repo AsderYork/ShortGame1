@@ -9,7 +9,7 @@ namespace GEM
 
 	bool GameSim::Mixin_Controller::RegisterMethod(int classID, int MethodID, std::function<void(EntityBase*, cereal::BinaryInputArchive&)> func, std::string name)
 	{
-		auto& Class = m_methods.find(classID);
+		auto Class = m_methods.find(classID);
 		if (Class == m_methods.end()) { return false; }
 
 		return Class->second.methods.emplace(MethodID, ClassData::MethodData(name, func)).second;

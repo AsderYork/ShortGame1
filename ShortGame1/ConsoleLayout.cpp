@@ -50,7 +50,7 @@ namespace GEM
 		m_editbox->subscribeEvent(CEGUI::Editbox::EventTextAccepted, CEGUI::Event::Subscriber(&ConsoleLayout::ProcessInput, this));
 		turnOff();
 
-		Eval.SetPrinter([this](std::string& Str) {WriteText(Str); });
+		Eval.SetPrinter([this](std::string Str) {WriteText(Str); });
 		return true;
 
 	}

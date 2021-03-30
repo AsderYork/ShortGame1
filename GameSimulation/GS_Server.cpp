@@ -101,7 +101,7 @@ namespace GEM::GameSim
 	
 	std::pair<UpdateSystemCommand, UpdateSystemCommand>  GS_Server::GetEntityUpdate(std::pair<ENTITY_ID_TYPE, EntityBase*>& Entity)
 	{
-		auto& mixinvec = Entity.second->getAllMixins();
+		auto mixinvec = Entity.second->getAllMixins();
 
 		UpdateSystemCommand NewPartialUpdate;
 		UpdateSystemCommand NewFullUpdate;

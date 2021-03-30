@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)InternalDeps\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)\ExternalDeps\include;$(BOOST_HOME);$(ZLIB_HOME)\x64\include;$(BULLETPHYSICS_HOME)\Repo\src;$(SolutionDir)Helpers;$(IncludePath)</IncludePath>
+    <IncludePath>$(BOOST_HOME);$(SolutionDir)\ExternalDeps\include;$(ZLIB_HOME)\x64\include;$(BULLETPHYSICS_HOME)\Repo\src;$(SolutionDir)Helpers;$(IncludePath)</IncludePath>
     <LibraryPath>$(ZLIB_HOME)\x64\lib;$(BULLETPHYSICS_HOME)\$(Platform)\Build\Lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -159,6 +159,9 @@
     <ClInclude Include="GameTimeSystem_ClientProcessor.h" />
     <ClInclude Include="GameTimeSystem_Command.h" />
     <ClInclude Include="GameTimeSystem_ServerProcessor.h" />
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="Landscape3Common.h" />
+    <ClInclude Include="LandscapePolygonization.h" />
     <ClInclude Include="LandscapeChunkStorageListener.h" />
     <ClInclude Include="ChunkLoadServerDispatcher.h" />
     <ClInclude Include="ChunkLoader_Generator.h" />
@@ -184,6 +187,7 @@
     <ClInclude Include="LandscapePhysics.h" />
     <ClInclude Include="LandscapeSystem_Command.h" />
     <ClInclude Include="LandscapeSystem_ServerProcessor.h" />
+    <ClInclude Include="LandscapeVisibilityManager.h" />
     <ClInclude Include="Mixin_Movable Singleton.h" />
     <ClInclude Include="Mixin_Objecttype.h" />
     <ClInclude Include="NetworkCommandBase.h" />
@@ -196,10 +200,13 @@
     <ClInclude Include="Player_id_type.h" />
     <ClInclude Include="ServerCommandDispatcher.h" />
     <ClInclude Include="SharedDataPackets.h" />
+    <ClInclude Include="Structs.h" />
     <ClInclude Include="TestPlace.h" />
     <ClInclude Include="UpdateSystemClientProcessor.h" />
     <ClInclude Include="UpdateSystem_Command.h" />
     <ClInclude Include="UpdateSystem_Processor.h" />
+    <ClInclude Include="VoxelGrid.h" />
+    <ClInclude Include="VoxelSurface.h" />
     <ClInclude Include="Words.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -218,11 +225,13 @@
     <ClCompile Include="GS_EntityController.cpp" />
     <ClCompile Include="GS_PlayerController.cpp" />
     <ClCompile Include="GS_Server.cpp" />
+    <ClCompile Include="LandscapePolygonization.cpp" />
     <ClCompile Include="LandscapeChunkController.cpp" />
     <ClCompile Include="LandscapeChunkPack.cpp" />
     <ClCompile Include="LandscapeMeshGenerator.cpp" />
     <ClCompile Include="LandscapePhysics.cpp" />
     <ClCompile Include="LandscapeSystem_ServerProcessor.cpp" />
+    <ClCompile Include="LandscapeVisibilityManager.cpp" />
     <ClCompile Include="Mixin_Base.cpp" />
     <ClCompile Include="Mixin_Controller.cpp" />
     <ClCompile Include="Mixin_Health.cpp" />
@@ -234,6 +243,8 @@
     <ClCompile Include="SharedDataPackets.cpp" />
     <ClCompile Include="UpdateSystemClientProcessor.cpp" />
     <ClCompile Include="UpdateSystem_Processor.cpp" />
+    <ClCompile Include="VoxelGrid.cpp" />
+    <ClCompile Include="Voxels.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

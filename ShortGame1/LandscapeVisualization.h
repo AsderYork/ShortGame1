@@ -10,19 +10,41 @@ namespace GEM
 		Ogre::SceneNode* marchingCubeNode = nullptr;
 		Ogre::MeshPtr mesh;
 
+
+		LandscapeVisualMesh(const LandscapeVisualMesh& other) = delete;
+
 		inline LandscapeVisualMesh() {}
 		inline LandscapeVisualMesh(LandscapeVisualMesh && other) :
 			marchingCubesItem(other.marchingCubesItem),
 			marchingCubeNode(other.marchingCubeNode),
 			mesh(std::move(other.mesh))
-		{}
+		{
+
+			other.marchingCubesItem = nullptr;
+			other.marchingCubeNode = nullptr;
+		}
 		inline LandscapeVisualMesh & operator=(LandscapeVisualMesh && other)
+		{
+			Clear(); //Who knew, when you move something in to somethoing, the thing you move into is supposed to get invalidated!
+			marchingCubesItem = other.marchingCubesItem;
+			marchingCubeNode = other.marchingCubeNode;
+			mesh = std::move(other.mesh);
+			other.marchingCubesItem = nullptr;
+			other.marchingCubeNode = nullptr;
+			return *this;
+		}
+
+		~LandscapeVisualMesh() {
+			Clear();
+		}
+
+		/*inline LandscapeVisualMesh& operator=(const LandscapeVisualMesh&& other)
 		{
 			marchingCubesItem = other.marchingCubesItem;
 			marchingCubeNode = other.marchingCubeNode;
 			mesh = std::move(other.mesh);
 			return *this;
-		}
+		}*/
 
 		void Clear();
 
@@ -79,6 +101,9 @@ namespace GEM
 
 		static LandscapeVisualMesh GenerateVisualMesh(GameSim::LandscapeMesh* Chunk, GameSim::LandscapeChunk* ChunkData);
 
-		static LandscapeVisualMesh DoCube();
+		static LandscapeVisualMesh DoCube(float x = 0.0f, float y = 20.0f, float z = 0.0f, Ogre::Vector3 colour = Ogre::Vector3(1.0f, 1.0f, 1.0f), float transperency = 1.0f, Ogre::Vector3 scale = Ogre::Vector3(1.0f));
+	
+		static LandscapeVisualMesh GenerateMeshFromVertices(std::vector<Ogre::Vector3> vertices, std::vector<UINT> indices, Ogre::Vector3 originPos, int size);
+	
 	};
 }
