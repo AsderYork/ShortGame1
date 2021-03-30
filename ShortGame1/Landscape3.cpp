@@ -1565,24 +1565,22 @@ namespace GEMTest {
 		}
 
 
-		void RecursiveTriangualteChunkData(lockedChunksBlock& lockedChunks, std::shared_ptr<InnerBlock> block, int lodCenterX, int lodCenterY, int lodCenterZ, int subChunkX = 0, int subChunkY = 0, int subChunkZ = 0, int lod = CHUNK_LOD) {
+		void RecursiveTriangualteChunkData(lockedChunksBlock& lockedChunks, std::shared_ptr<InnerBlock> block, IntCords3 lodCenter, IntCords3 subChunkPos = IntCords3(0), int lod = CHUNK_LOD) {
 
-			int Distance = FindSubblockDistanceSquared(IntCords3(lodCenterX, lodCenterY, lodCenterZ), &(*block), IntCords3(subChunkX, subChunkY, subChunkZ), lod);
+
+			int Distance = FindSubblockDistanceSquared(lodCenter, &(*block), subChunkPos, lod);
 			int chunkRadius = (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2);
 
 			if (lod == 1 || Distance > chunkRadius * std::pow(2, lod)) {
-				TriangulateSubchunk(lockedChunks, block, lod, subChunkX, subChunkY, subChunkZ);
+				TriangulateSubchunk(lockedChunks, block, lod, subChunkPos.x, subChunkPos.y, subChunkPos.z);
 			}
 			else {
 
 				for (int subBlockX = 0; subBlockX < 2; subBlockX++) {
 					for (int subBlockY = 0; subBlockY < 2; subBlockY++) {
 						for (int subBlockZ = 0; subBlockZ < 2; subBlockZ++) {
-							RecursiveTriangualteChunkData(lockedChunks, block, lodCenterX, lodCenterY, lodCenterZ,
-								2 * subChunkX + subBlockX,
-								2 * subChunkY + subBlockY,
-								2 * subChunkZ + subBlockZ,
-								lod / 2);
+							auto newSubBlockPos = subChunkPos.mul(2) + IntCords3(subBlockX, subBlockY, subBlockZ);
+							RecursiveTriangualteChunkData(lockedChunks, block, lodCenter, newSubBlockPos, lod / 2);
 
 						}
 					}
@@ -1594,7 +1592,7 @@ namespace GEMTest {
 		}
 		
 
-		void TriangulateChunkData(std::shared_ptr<InnerBlock> block, int centerX, int centerY, int centerZ) {
+		void TriangulateChunkData(std::shared_ptr<InnerBlock> block, IntCords3 center) {
 
 			auto lockChunks = lockChunkData(block);
 
@@ -1602,7 +1600,7 @@ namespace GEMTest {
 				return;
 			}
 
-			RecursiveTriangualteChunkData(lockChunks.value(), block, centerX, centerY, centerZ);
+			RecursiveTriangualteChunkData(lockChunks.value(), block, center);
 			
 		}
 		
@@ -2030,7 +2028,7 @@ namespace GEMTest {
 				if (blockToUpdate->UpdateLevel()) {
 					chunksRerenderLimit--;
 					if (blockToUpdate->allNeighboursAvaliable()) {
-						m_tester->LTI.TriangulateChunkData(blockToUpdate, 0, 0, 0);
+						m_tester->LTI.TriangulateChunkData(blockToUpdate, IntCords3(0, 0, 0));
 					}
 				}
 			}
