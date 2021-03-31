@@ -40,6 +40,7 @@
 
 #define CHUNK_SIZE 16
 #define CHUNK_LOD 8
+#define SUBCHUNK_COUNT 2
 
 
 //================================================================================
@@ -1117,8 +1118,16 @@ namespace GEMTest {
 			return IntCords3(x * s2.x, y * s2.y, z * s2.z);
 		}
 
+		IntCords3 operator*(const int& s2) const {
+			return IntCords3(x * s2, y * s2, z * s2);
+		}
+
 		int distanceSquared() {
 			return x * x + y * y + z * z;
+		}
+
+		int distanceToSquared(const IntCords3& other) {
+			return (*(this) - other).distanceSquared();
 		}
 
 
@@ -1155,6 +1164,28 @@ namespace GEMTest {
 		int x, y, z;
 
 		ChunkData(int _x, int _y, int _z) : x(_x), y(_y), z(_z) {}
+
+	};
+
+
+	struct SpherePoint {
+		IntCords3 pos;
+		int distance;
+
+		SpherePoint(IntCords3 _pos, int _distance) : pos(_pos), distance(_distance) {}
+		SpherePoint() : pos(0), distance(0) {}
+
+		bool operator<(const SpherePoint& s2) const
+		{
+			return std::tie(pos.x, pos.y, pos.z, distance) < std::tie(s2.pos.x, s2.pos.y, s2.pos.z, s2.distance);
+		}
+
+
+		bool operator==(const SpherePoint& s2) const
+		{
+			return std::tie(pos.x, pos.y, pos.z, distance) == std::tie(s2.pos.x, s2.pos.y, s2.pos.z, s2.distance);
+		}
+
 
 	};
 
@@ -1224,31 +1255,9 @@ namespace GEMTest {
 	};
 
 
-
 	class LandscapeObserversManager {
 
 	public:
-
-		struct SpherePoint {
-			IntCords3 pos;
-			int distance;
-
-			SpherePoint(IntCords3 _pos, int _distance) : pos(_pos), distance(_distance) {}
-
-			bool operator<(const SpherePoint& s2) const
-			{
-				return std::tie(pos.x, pos.y, pos.z, distance) < std::tie(s2.pos.x, s2.pos.y, s2.pos.z, s2.distance);
-			}
-
-
-			bool operator==(const SpherePoint& s2) const
-			{
-				return std::tie(pos.x, pos.y, pos.z, distance) == std::tie(s2.pos.x, s2.pos.y, s2.pos.z, s2.distance);
-			}
-
-
-		};
-
 		struct Observer {
 			IntCords3 Pos;
 			int VisibilityDistance;
@@ -1317,6 +1326,24 @@ namespace GEMTest {
 			return m_observers[index];
 		}
 
+		const std::vector<Observer> getObservers() const {
+			return m_observers;
+		}
+
+		int distanceSquaredToClosestObserver(IntCords3 pos) {
+
+			int closestDistance = -1;
+
+			for (auto observer : m_observers) {
+				auto distance = observer.Pos.distanceToSquared(pos);
+				if (closestDistance < 0 || distance < closestDistance) {
+					closestDistance = distance;
+				}
+			}
+			return closestDistance;
+
+		}
+
 		std::vector<SpherePoint> getPointsVisibleByObservers() {
 
 			std::vector<SpherePoint> result;
@@ -1345,12 +1372,45 @@ namespace GEMTest {
 		
 		struct Block {
 
-			LandscapeObserversManager::SpherePoint spherePoint;
+			SpherePoint spherePoint;
+
+			struct SubBlock {
+				SpherePoint point;
+				int lod;
+			};
+
+			std::array<SubBlock, CHUNK_LOD> subblocks;
 
 			int dissapearanceTimer = 1;//If this goes below zero, this block is no longer visible and should be removed
 			std::shared_ptr<InnerBlock> m_ptr;
 
-			Block(LandscapeObserversManager::SpherePoint point) : spherePoint(point), m_ptr(std::make_shared<InnerBlock>(point.pos.x, point.pos.y, point.pos.z, point.distance)) {}
+			Block(SpherePoint point) : spherePoint(point), m_ptr(std::make_shared<InnerBlock>(point.pos.x, point.pos.y, point.pos.z, point.distance)) 
+			{
+			}
+
+			IntCords3 getSubblockPos(int index) {
+
+				auto shift = IntCords3(index % SUBCHUNK_COUNT, (index / SUBCHUNK_COUNT) % SUBCHUNK_COUNT, index / (SUBCHUNK_COUNT * SUBCHUNK_COUNT));
+
+				return spherePoint.pos + (shift * CHUNK_SIZE);
+			}
+
+			int determineLod(int distance) {
+				int chunkRadius = (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2);
+
+				int lod = 1;
+				while (distance > std::pow(chunkRadius, lod)) {
+					lod++;
+				}
+				return lod;
+			}
+
+			void setSubBlock(int index, SpherePoint value) {
+				subblocks[index].point = value;
+
+
+				subblocks[index].lod = determineLod(value.distance);
+			}
 
 			void resetDistance(int newDistance) {
 				spherePoint.distance = newDistance;
@@ -1363,8 +1423,6 @@ namespace GEMTest {
 			{
 				return spherePoint < s2.spherePoint;
 			}
-
-
 			bool operator==(const Block& s2) const
 			{
 				return spherePoint == s2.spherePoint;
@@ -1390,7 +1448,7 @@ namespace GEMTest {
 			std::vector<Block> newView;
 
 			for (auto point : m_observersManager.getPointsVisibleByObservers()) {
-				point.pos.smul(m_blockSparsity);
+				point.pos = point.pos * m_blockSparsity;
 				newView.emplace_back(point);
 			}
 
@@ -1418,6 +1476,13 @@ namespace GEMTest {
 
 		}
 
+		void fillSubblockDistnaces(Block& block) {
+			for (int i = 0; i < CHUNK_LOD; i++) {
+				auto subBlockPos = block.getSubblockPos(i);
+				block.setSubBlock(i, SpherePoint(subBlockPos, m_observersManager.distanceSquaredToClosestObserver(subBlockPos)));
+			}
+		}
+
 		void CommitNewBlocks(std::vector<Block> visBlocks) {
 
 			std::vector<std::shared_ptr<InnerBlock>> preordered_chunks;
@@ -1428,7 +1493,13 @@ namespace GEMTest {
 
 				if (iter == m_currBlocks.end()) {
 					chunksToFill.push(block.m_ptr);
+
+					fillSubblockDistnaces(block);
+					
+
 					m_currBlocks.insert(std::make_pair(block.spherePoint.pos, block));
+
+
 				}
 				else {
 
@@ -1458,6 +1529,8 @@ namespace GEMTest {
 			}
 
 		}
+
+
 
 
 
@@ -1819,13 +1892,6 @@ namespace GEMTest {
 	};
 
 
-	double Noise2(int x, int y) {
-		int n = x + y * 57;
-		n = (n << 13) ^ n;
-
-		return (1.0 - (double)((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
-
-	};
 
 	class LandscapeChunkLoader {
 
